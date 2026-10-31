@@ -1,0 +1,26 @@
+[
+  {
+    "id": "second_theory",
+    "seller_name": "Second Theory",
+    "sheet_url": "https://docs.google.com/spreadsheets/d/1IoMk77atuzWEX9QibVPzmTruazspYZQ24sXeRmmne90/gviz/tq?tqx=out:csv",
+    "whatsapp": "8076851481",
+    "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+    "dispatch": "24-48 hrs",
+    "brand_col": 0,
+    "product_col": 1,
+    "price_col": 2,
+    "hot_col": 3
+  },
+  {
+    "id": "fragfever",
+    "seller_name": "FragFever",
+    "sheet_url": "https://docs.google.com/spreadsheets/d/13kMrUoW_AHXEkqeTqOCri1szqmh1b1D8T5tPBtZFDfw/gviz/tq?tqx=out:csv&gid=0",
+    "whatsapp": "9716764787",
+    "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+    "dispatch": "24-48 hrs",
+    "brand_col": 0,
+    "product_col": 1,
+    "price_col": 2,
+    "hot_col": -1
+  }
+]

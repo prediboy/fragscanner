@@ -1,0 +1,24 @@
+{
+  "last_synced": "2026-10-31 18:53:03 IST",
+  "total_catalog": 889,
+  "total_in_stock": 399,
+  "multi_seller_comparisons": 189,
+  "sellers": [
+    {
+      "seller_id": "second_theory",
+      "seller_name": "Second Theory",
+      "whatsapp": "8076851481",
+      "matched_items": 409,
+      "total_sheet_items": 409,
+      "status": "success"
+    },
+    {
+      "seller_id": "fragfever",
+      "seller_name": "FragFever",
+      "whatsapp": "9716764787",
+      "matched_items": 265,
+      "total_sheet_items": 441,
+      "status": "success"
+    }
+  ]
+}

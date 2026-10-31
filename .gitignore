@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Production build
+dist
+build
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Environment & OS
+.env
+.env.local
+.DS_Store
+Thumbs.db
