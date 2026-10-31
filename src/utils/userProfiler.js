@@ -1,5 +1,19 @@
 // User Profile & Dual-Preference Recommendation Engine: Mix & Match Likes, Filter Dislikes
 
+// Note normalizer to harmonize olfactory variations across houses
+export function normalizeNote(note) {
+  if (!note) return '';
+  const l = note.toLowerCase().trim();
+  if (l.includes('spearmint') || l.includes('peppermint') || l.includes('wild mint')) return 'mint';
+  if (l.includes('ambroxan') || l.includes('ambergris')) return 'ambroxan';
+  if (l.includes('lavender') || l.includes('wild lavender') || l.includes('sea lavender')) return 'lavender';
+  if (l.includes('bergamot') || l.includes('calabrian bergamot')) return 'bergamot';
+  if (l.includes('cedarwood') || l.includes('virginia cedar') || l.includes('atlas cedar')) return 'cedar';
+  if (l.includes('sandalwood')) return 'sandalwood';
+  if (l.includes('patchouli') || l.includes('indonesian patchouli')) return 'patchouli';
+  return l;
+}
+
 export function analyzeLikedProfile(likedPerfumes) {
   if (!likedPerfumes || likedPerfumes.length === 0) return null;
 
@@ -15,16 +29,16 @@ export function analyzeLikedProfile(likedPerfumes) {
       accordWeights[a.name] = (accordWeights[a.name] || 0) + a.score;
     });
 
-    // Notes
+    // Notes (normalized & deduplicated per perfume bottle)
     const notes = [
       ...(p.notes?.top || []),
       ...(p.notes?.middle || []),
       ...(p.notes?.base || [])
     ];
-    notes.forEach(n => {
-      const lower = n.toLowerCase();
-      noteFrequency[lower] = (noteFrequency[lower] || 0) + 1;
-      allLikedNotes.add(lower);
+    const uniqueNotesInPerfume = new Set(notes.map(n => normalizeNote(n)));
+    uniqueNotesInPerfume.forEach(norm => {
+      noteFrequency[norm] = (noteFrequency[norm] || 0) + 1;
+      allLikedNotes.add(norm);
     });
 
     // DNA
@@ -49,9 +63,24 @@ export function analyzeLikedProfile(likedPerfumes) {
     .slice(0, 8)
     .map(([note]) => note);
 
+  // Core Consensus & Signature Notes (notes recurring across selections)
+  const totalLiked = likedPerfumes.length;
+  const signatureNotes = Object.entries(noteFrequency)
+    .sort((a, b) => b[1] - a[1])
+    .map(([note, count]) => ({
+      note,
+      count,
+      isUniversal: totalLiked > 1 && count === totalLiked
+    }));
+
+  const universalNotes = signatureNotes.filter(s => s.isUniversal).map(s => s.note);
+
   return {
     topAccords,
     topNotes,
+    signatureNotes,
+    universalNotes,
+    noteFrequency,
     allLikedNotes: Array.from(allLikedNotes),
     likedDnas: Array.from(likedDnas),
     seasonWeights,
@@ -125,11 +154,12 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   const userHasBarbershop = likedProfile?.topAccords.some(a => ['Aromatic', 'Green', 'Lavender', 'Earthy / Oakmoss'].includes(a.name));
 
   const scoredList = candidates.map(candidate => {
-    const candidateNotes = [
+    const rawCandidateNotes = [
       ...(candidate.notes?.top || []),
       ...(candidate.notes?.middle || []),
       ...(candidate.notes?.base || [])
-    ].map(n => n.toLowerCase());
+    ];
+    const candidateNotes = rawCandidateNotes.map(n => normalizeNote(n));
 
     // 1. Calculate Accord Harmony with Liked Accords (Positive)
     let accordHarmony = 0;
@@ -150,7 +180,26 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
       : [];
     const noteOverlapScore = candidateNotes.length > 0 ? (sharedLikedNotes.length / candidateNotes.length) : 0;
 
-    // 3. DNA Twin / Synergy with Liked Perfumes (Positive)
+    // 3. Consensus & Universal Signature Notes
+    // Universal notes are notes present in 100% of the user's liked perfumes (e.g. Lavender & Patchouli)
+    const universalNotes = likedProfile?.universalNotes || [];
+    const matchedUniversalNotes = universalNotes.filter(un => candidateNotes.includes(un));
+    const missedUniversalNotes = universalNotes.filter(un => !candidateNotes.includes(un));
+
+    let universalBonus = 0;
+    let missedUniversalPenalty = 0;
+    if (universalNotes.length > 0) {
+      // Strong boost for keeping the user's universal anchor notes
+      universalBonus = matchedUniversalNotes.length * 14;
+      // If user selected 2+ perfumes and candidate completely misses the universal anchor notes:
+      if (matchedUniversalNotes.length === 0) {
+        missedUniversalPenalty = 16;
+      } else if (missedUniversalNotes.length > 0) {
+        missedUniversalPenalty = missedUniversalNotes.length * 6;
+      }
+    }
+
+    // 4. DNA Twin / Synergy with Liked Perfumes (Positive)
     const isLikedDnaTwin = hasLikes && likedPerfumes.some(sp => 
       (sp.dna_inspiration && candidate.dna_inspiration && (
         sp.dna_inspiration.toLowerCase().includes(candidate.dna_inspiration.toLowerCase()) ||
@@ -249,7 +298,7 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     // ==================== NET AFFINITY SCORE ====================
     let rawAffinity = 0;
     if (hasLikes) {
-      rawAffinity = (accordHarmony * 1.6) + (noteOverlapScore * 45) + (isLikedDnaTwin ? 30 : 0);
+      rawAffinity = (accordHarmony * 1.5) + (noteOverlapScore * 30) + universalBonus - missedUniversalPenalty + (isLikedDnaTwin ? 30 : 0);
       // Deduct the dislike penalty directly to actively filter out what the user doesn't like!
       rawAffinity = rawAffinity - (dislikePenalty * 0.9);
       rawAffinity = Math.max(10, Math.min(99, Math.round(rawAffinity)));
@@ -270,11 +319,20 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     if (isLikedDnaTwin) {
       likeReasons.push(`Shares identical DNA lineage with your liked perfumes (${candidate.dna_inspiration}).`);
     }
+    if (matchedUniversalNotes.length > 0) {
+      const formattedNotes = matchedUniversalNotes.map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(', ');
+      likeReasons.push(`Preserves your consensus signature notes: ${formattedNotes} (present in 100% of your selections).`);
+    } else if (universalNotes.length > 0 && missedUniversalNotes.length > 0 && sharedLikedNotes.length > 0) {
+      const formattedShared = sharedLikedNotes.slice(0, 3).map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(', ');
+      const formattedMissed = missedUniversalNotes.map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(', ');
+      likeReasons.push(`Fresh alternative: mirrors your secondary ${formattedShared} notes, swapping ${formattedMissed} for crisp modern tones.`);
+    }
     if (sharedLikedAccords.length > 0) {
       likeReasons.push(`Matches your loved accords: ${sharedLikedAccords.slice(0, 3).join(', ')}.`);
     }
-    if (sharedLikedNotes.length > 0) {
-      likeReasons.push(`Shares signature notes with your go-to scents: ${sharedLikedNotes.slice(0, 3).join(', ')}.`);
+    if (matchedUniversalNotes.length === 0 && sharedLikedNotes.length > 0) {
+      const formattedNotes = sharedLikedNotes.slice(0, 3).map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(', ');
+      likeReasons.push(`Shares signature notes with your go-to scents: ${formattedNotes}.`);
     }
     if (hasDislikes && sharedDislikedNotes.length === 0 && sharedDislikedAccords.length === 0) {
       likeReasons.push(`Safely avoids the notes and profiles you marked as disliked.`);
