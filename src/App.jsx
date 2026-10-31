@@ -3,6 +3,7 @@ import fragrancesData from './data/fragrances.json';
 import syncMeta from './data/sync_meta.json';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import MyWardrobeMatcher from './components/MyWardrobeMatcher';
+import FragScannerAIAgent from './components/FragScannerAIAgent';
 import { Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -124,6 +125,11 @@ export default function App() {
           onSelectOther={(other) => setActiveFragrance(other)}
         />
       )}
+
+      {/* FragScanner AI Sommelier Agent (Powered by Vercel AI SDK) */}
+      <FragScannerAIAgent 
+        onSelectFragrance={(f) => openFragranceModal(f, 'overview')} 
+      />
 
       {/* Footer */}
       <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-6 px-4 text-center text-xs text-slate-400 space-y-1.5">
