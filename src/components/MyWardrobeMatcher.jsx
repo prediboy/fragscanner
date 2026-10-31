@@ -110,8 +110,8 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
   }, [allFragrances, dislikedIds]);
 
   // Run dual recommendation calculation
-  const { likedProfile, dislikedProfile, likes, sellerMatches, dislikes } = useMemo(() => {
-    return getProfileRecommendations(likedPerfumes, dislikedPerfumes, allFragrances);
+  const { likedProfile = null, dislikedProfile = null, likes = [], sellerMatches = [], dislikes = [] } = useMemo(() => {
+    return getProfileRecommendations(likedPerfumes, dislikedPerfumes, allFragrances) || {};
   }, [likedPerfumes, dislikedPerfumes, allFragrances]);
 
   const hasSelections = likedIds.length > 0 || dislikedIds.length > 0;
@@ -817,7 +817,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
           <span className="text-[10px] font-bold">
-            Twins {sellerMatches.length > 0 ? `(${sellerMatches.length})` : ''}
+            Twins {sellerMatches?.length > 0 ? `(${sellerMatches.length})` : ''}
           </span>
         </button>
       </div>

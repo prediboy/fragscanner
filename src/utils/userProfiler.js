@@ -197,7 +197,7 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   const hasDislikes = dislikedPerfumes && dislikedPerfumes.length > 0;
 
   if (!hasLikes && !hasDislikes) {
-    return { likes: [], dislikes: [], likedProfile: null, dislikedProfile: null };
+    return { likes: [], sellerMatches: [], dislikes: [], likedProfile: null, dislikedProfile: null };
   }
 
   const likedProfile = analyzeLikedProfile(likedPerfumes);
