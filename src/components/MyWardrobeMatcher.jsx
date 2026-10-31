@@ -15,11 +15,16 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
   // Selection tab mode: 'like' or 'dislike'
   const [selectionMode, setSelectionMode] = useState('like');
   const [showClashWarnings, setShowClashWarnings] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   
   const [filterBrand, setFilterBrand] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const brands = ['All', 'French Avenue', 'Lattafa', 'Afnan', 'Armaf', 'Titan Skinn', 'Rasasi', 'Mykonos', 'Rayhaan'];
+  const brands = [
+    'All', 'Rasasi', 'Lattafa', 'Armaf', 'Afnan', 'French Avenue', 
+    'Titan Skinn', 'Mykonos', 'Rayhaan', 'Ajmal', 'Maison Alhambra', 
+    'Ahmed Al Maghribi', 'Paris Corner'
+  ];
 
   // Toggle Like handler (max 10)
   const toggleLike = (id) => {
@@ -220,16 +225,16 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
         {/* Filter controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           
-          {/* Brand Pills */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          {/* Brand Pills (Touch swipeable on mobile) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 max-w-full">
             {brands.map(b => (
               <button
                 key={b}
                 onClick={() => setFilterBrand(b)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all border ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border shrink-0 ${
                   filterBrand === b
-                    ? 'bg-amber-500 text-slate-950 border-amber-400'
-                    : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
+                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-800'
                 }`}
               >
                 {b}
@@ -676,10 +681,146 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
             Active Wardrobe is Empty (0 Selected)
           </h3>
           <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
-            Check the boxes for <span className="text-emerald-400 font-semibold">1 to 10 fragrances you love</span> and optionally check <span className="text-rose-400 font-semibold">perfumes you dislike</span> to generate your personalized <span className="text-emerald-400 font-semibold">Top 5 Closest Matches (Out of 5.0)</span> and <span className="text-rose-400 font-semibold">Top 5 Clash Warnings</span>.
+            Check the boxes for <span className="text-emerald-400 font-semibold">1 to 10 fragrances you love</span> and optionally check <span className="text-rose-400 font-semibold">perfumes you dislike</span> to generate your personalized <span className="text-emerald-400 font-semibold">Top 8 Closest Matches</span> and <span className="text-amber-400 font-semibold">Live Community Seller Deals</span>.
           </p>
         </div>
       )}
+
+      {/* ================= MOBILE FLOATING MATCH ACTION PILL (CONCEPT A) ================= */}
+      {hasSelections && sellerMatches && sellerMatches.length > 0 && (
+        <div 
+          onClick={() => setMobileDrawerOpen(true)}
+          className="fixed bottom-16 left-4 right-4 z-40 md:hidden bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 text-slate-950 font-black text-xs py-3 px-4 rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-between cursor-pointer active:scale-95 transition-all border border-amber-300"
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
+            <span>{sellerMatches.length} Scent Twins Found • From ₹{sellerMatches[0]?.fragrance.community_price}</span>
+          </div>
+          <span className="bg-slate-950 text-amber-300 px-2.5 py-1 rounded-xl text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
+            View Deals &uarr;
+          </span>
+        </div>
+      )}
+
+      {/* ================= MOBILE SLIDE-UP COMMUNITY SELLER DRAWER (CONCEPT A) ================= */}
+      {mobileDrawerOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex flex-col justify-end">
+          {/* Backdrop blur */}
+          <div 
+            onClick={() => setMobileDrawerOpen(false)}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+          />
+
+          {/* Drawer Sheet */}
+          <div className="relative bg-[#0b1120] border-t-2 border-amber-500 rounded-t-[32px] p-5 shadow-2xl flex flex-col max-h-[85vh] z-10 animate-in slide-in-from-bottom duration-300">
+            
+            {/* Notch drag bar */}
+            <div className="w-12 h-1 bg-slate-700 rounded-full mx-auto mb-3" />
+
+            <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+              <div>
+                <h4 className="font-extrabold text-base text-white font-serif">
+                  Live Community Scent Twins
+                </h4>
+                <p className="text-[11px] text-emerald-400 font-semibold">
+                  Verified In-Stock with FragFever & Second Theory
+                </p>
+              </div>
+              <button 
+                onClick={() => setMobileDrawerOpen(false)}
+                className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center text-sm"
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* In-Stock Seller Matches List */}
+            <div className="overflow-y-auto space-y-2.5 flex-1 pr-1 pb-4">
+              {sellerMatches.map((item, idx) => {
+                const bestSeller = item.fragrance.community_sellers?.[0];
+                const sellerQuote = item.fragrance.community_price;
+                const waNumber = bestSeller?.whatsapp || '8076851481';
+                const waUrl = `https://wa.me/91${waNumber}?text=${encodeURIComponent(`Hi ${bestSeller?.seller_name || 'Seller'}, I would like to purchase ${item.fragrance.brand} ${item.fragrance.name} quoted at ₹${sellerQuote} on FragScanner. Is it in stock?`)}`;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className="p-3.5 rounded-2xl bg-[#131c31] border border-amber-500/30 flex items-center justify-between gap-3 shadow-md"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-[10px] font-bold text-amber-400 px-1.5 py-0.5 rounded bg-amber-500/10">
+                          {item.fragrance.brand}
+                        </span>
+                        <span className="text-[10px] text-amber-300 font-mono font-bold">
+                          ★ {item.matchOutOfFive.toFixed(1)} Match
+                        </span>
+                      </div>
+                      <h5 
+                        onClick={() => {
+                          setMobileDrawerOpen(false);
+                          onSelectFragrance(item.fragrance);
+                        }}
+                        className="font-extrabold text-xs text-white truncate cursor-pointer hover:text-amber-300"
+                      >
+                        {item.fragrance.name}
+                      </h5>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        Best: <strong className="text-emerald-400 font-mono font-black">₹{sellerQuote}</strong> via {bestSeller?.seller_name || 'Seller'}
+                      </p>
+                    </div>
+
+                    <a 
+                      href={waUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black text-xs shrink-0 shadow-lg shadow-emerald-600/20"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ================= MOBILE STICKY BOTTOM APP BAR (CONCEPT A) ================= */}
+      <div className="fixed bottom-0 inset-x-0 h-14 bg-[#070b14]/95 backdrop-blur-xl border-t border-slate-800/90 flex items-center justify-around px-3 z-30 md:hidden">
+        <button 
+          onClick={() => {
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+          }}
+          className="flex flex-col items-center gap-0.5 text-amber-400"
+        >
+          <Search className="w-4 h-4" />
+          <span className="text-[10px] font-bold">Explore</span>
+        </button>
+        
+        <button 
+          onClick={() => {
+            window.scrollTo({ top: 320, behavior: 'smooth' });
+          }}
+          className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-white relative"
+        >
+          <Heart className="w-4 h-4 text-emerald-400" />
+          <span className="text-[10px] font-bold">
+            Wardrobe ({likedIds.length})
+          </span>
+        </button>
+
+        <button 
+          onClick={() => setMobileDrawerOpen(true)}
+          className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-white"
+        >
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span className="text-[10px] font-bold">
+            Twins {sellerMatches.length > 0 ? `(${sellerMatches.length})` : ''}
+          </span>
+        </button>
+      </div>
 
     </div>
   );
