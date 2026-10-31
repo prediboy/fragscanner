@@ -58998,12 +58998,12 @@
     "id": "st-9026",
     "name": "Hawas Kobra",
     "brand": "Rasasi",
-    "collection": "Rasasi Community Line",
+    "collection": "Hawas Collection",
     "concentration": "Eau de Parfum",
-    "gender": "Unisex",
-    "release_year": 2023,
-    "rating_value": 4.35,
-    "rating_count": 850,
+    "gender": "Men",
+    "release_year": 2024,
+    "rating_value": 4.42,
+    "rating_count": 1450,
     "community_price": "2600",
     "in_second_theory_sheet": true,
     "is_hot_seller": true,
@@ -59014,9 +59014,9 @@
         "price": "2600",
         "stock": "In Stock",
         "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra \u20b950 for Blue Dart / Remote)",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
-        "is_hot": false,
+        "is_hot": true,
         "verified": true
       },
       {
@@ -59025,59 +59025,64 @@
         "price": "2650",
         "stock": "In Stock",
         "whatsapp": "8076851481",
-        "shipping": "Free Pan-India Delivery (Extra \u20b970 for NE, J&K)",
+        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
         "dispatch": "24-48 hrs",
         "is_hot": true,
         "verified": true
       }
     ],
-    "dna_type": "Aromatic Oriental",
-    "dna_inspiration": "Rasasi Signature Creation",
-    "similarity_percentage": 92,
+    "dna_type": "Fresh Citrus Amber Tea",
+    "dna_inspiration": "Louis Vuitton Imagination",
+    "similarity_percentage": 93,
     "primary_season": "All Year",
     "sillage": "Strong",
     "longevity": "8-10 Hours",
     "image_url": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=800",
     "accords": [
       {
-        "name": "Aromatic",
+        "name": "Citrus",
         "score": 95,
-        "color": "#10b981"
-      },
-      {
-        "name": "Woody",
-        "score": 75,
-        "color": "#92400e"
-      },
-      {
-        "name": "Amber",
-        "score": 68,
-        "color": "#d97706"
+        "color": "#eab308"
       },
       {
         "name": "Fresh Spicy",
-        "score": 58,
-        "color": "#10b981"
+        "score": 88,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Green",
+        "score": 82,
+        "color": "#4d7c0f"
+      },
+      {
+        "name": "Amber",
+        "score": 78,
+        "color": "#d97706"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 70,
+        "color": "#c2410c"
       }
     ],
     "notes": {
       "top": [
-        "Bergamot",
-        "Lavender",
-        "Spices"
+        "Ginger",
+        "Tangerine",
+        "Bergamot"
       ],
       "middle": [
-        "Cedarwood",
-        "Patchouli",
-        "Floral Notes"
+        "Cinnamon",
+        "Green Tea",
+        "Neroli"
       ],
       "base": [
-        "Amber",
-        "White Musk",
-        "Woody Notes"
+        "Ambroxan",
+        "Musk",
+        "Woodsy Notes"
       ]
     },
-    "description": "Rasasi Hawas Kobra is a community favorite priced at \u20b92650 by Second Theory. Features aromatic accords with notes of Bergamot, Lavender and Amber.",
+    "description": "Rasasi Hawas Kobra is a viral release in the Hawas line inspired by Louis Vuitton Imagination. Opens with sparkling ginger and tangerine over a refined green tea, cinnamon, and ambroxan base.",
     "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true

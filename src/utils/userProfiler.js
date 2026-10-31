@@ -140,12 +140,19 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   const likedProfile = analyzeLikedProfile(likedPerfumes);
   const dislikedProfile = analyzeDislikedProfile(dislikedPerfumes);
 
-  // Exclude perfumes already chosen by user in either list
+  // Exclude perfumes already chosen by user in either list and unverified placeholder stubs
   const chosenIds = new Set([
     ...likedPerfumes.map(p => p.id),
     ...dislikedPerfumes.map(p => p.id)
   ]);
-  const candidates = allFragrances.filter(f => !chosenIds.has(f.id));
+  const candidates = allFragrances.filter(f => {
+    if (chosenIds.has(f.id)) return false;
+    // Exclude unverified community stubs with generic placeholder notes
+    if (f.id.startsWith('st-9') && f.id !== 'st-9026' && f.description?.includes('Features aromatic accords with notes of Bergamot, Lavender and Amber')) {
+      return false;
+    }
+    return true;
+  });
 
   // Dominant tendency flags from likes
   const userHasSweetGourmand = likedProfile?.topAccords.some(a => ['Sweet', 'Vanilla', 'Warm Spicy'].includes(a.name));
@@ -359,13 +366,13 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   const topLikes = [...scoredList]
     .filter(item => item.dislikePenalty < 35) // strictly exclude perfumes that carry high dislike baggage!
     .sort((a, b) => b.matchOutOfFive - a.matchOutOfFive || b.rawAffinity - a.rawAffinity)
-    .slice(0, 5);
+    .slice(0, 8);
 
   // Section 2: "2. Best Match Available with Seller" (Verified In-Stock with Community Sellers: Second Theory / FragFever)
   const topSellerMatches = [...scoredList]
     .filter(item => item.dislikePenalty < 35 && Boolean(item.fragrance.in_seller_stock) && Boolean(item.fragrance.community_price))
     .sort((a, b) => b.matchOutOfFive - a.matchOutOfFive || b.rawAffinity - a.rawAffinity)
-    .slice(0, 5);
+    .slice(0, 10);
 
   // Clash Warnings: "Top 5 Perfumes You Might Dislike / Avoid"
   const topDislikes = [...scoredList]
