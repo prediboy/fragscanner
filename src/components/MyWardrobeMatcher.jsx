@@ -62,7 +62,11 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
 
   // Filtered fragrances for checkbox selection
   const visibleFragrances = useMemo(() => {
-    return allFragrances.filter(f => {
+    const list = allFragrances.filter(f => {
+      // Filter out unverified sheet placeholder stubs
+      if (f.id.startsWith('st-9') && f.id !== 'st-9026' && f.description?.includes('Features aromatic accords with notes of Bergamot, Lavender and Amber')) {
+        return false;
+      }
       if (filterBrand !== 'All' && f.brand.toLowerCase() !== filterBrand.toLowerCase()) {
         return false;
       }
@@ -72,7 +76,25 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
       }
       return true;
     });
-  }, [allFragrances, filterBrand, searchQuery]);
+
+    // Smart sorting:
+    // 1. Liked or Disliked items first
+    // 2. Verified In-Stock with Community Sellers next
+    // 3. Alphabetical by name so collections (Hawas, Odyssey, Club de Nuit, Yara) group together
+    return list.sort((a, b) => {
+      const aSelected = likedIds.includes(a.id) || dislikedIds.includes(a.id);
+      const bSelected = likedIds.includes(b.id) || dislikedIds.includes(b.id);
+      if (aSelected && !bSelected) return -1;
+      if (!aSelected && bSelected) return 1;
+
+      const aInStock = Boolean(a.in_seller_stock && a.community_price);
+      const bInStock = Boolean(b.in_seller_stock && b.community_price);
+      if (aInStock && !bInStock) return -1;
+      if (!aInStock && bInStock) return 1;
+
+      return a.name.localeCompare(b.name);
+    });
+  }, [allFragrances, filterBrand, searchQuery, likedIds, dislikedIds]);
 
   const likedPerfumes = useMemo(() => {
     return allFragrances.filter(f => likedIds.includes(f.id));
@@ -216,20 +238,33 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
           </div>
 
           {/* Quick search inside checkboxes */}
-          <div className="relative">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search perfumes..."
-              className="pl-8 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 w-44"
-            />
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search name, brand, or note (e.g. Kobra, Hawas)..."
+                className="pl-8 pr-7 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 w-56 sm:w-72"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+            <span className="text-[11px] text-slate-400 font-mono hidden md:inline">
+              {visibleFragrances.length} scents
+            </span>
           </div>
         </div>
 
         {/* Scrollable Checkbox Grid */}
-        <div className="max-h-72 overflow-y-auto pr-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+        <div className="max-h-[440px] overflow-y-auto pr-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
           {visibleFragrances.map(fragrance => {
             const isLiked = likedIds.includes(fragrance.id);
             const isDisliked = dislikedIds.includes(fragrance.id);
