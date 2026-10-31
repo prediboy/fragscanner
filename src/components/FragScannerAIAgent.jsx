@@ -1,21 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Bot, X, Send, Sparkles, ShoppingBag, ArrowRight, 
-  Store, CheckCircle, ExternalLink, ShieldCheck, Flame
+  Store, CheckCircle, ExternalLink, ShieldCheck, Flame, Star
 } from 'lucide-react';
-import { 
-  searchFragrancesTool, 
-  checkSellerPricesTool, 
-  findInStockDealsByBudgetTool 
-} from '../lib/fragranceAgentTools';
+import { processSommelierQuery } from '../lib/sommelierEngine';
 
 export default function FragScannerAIAgent({ onSelectFragrance }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "👋 Hi! I'm your **FragScanner AI Sommelier**. Ask me anything about perfumes, clones, scent twins, or live seller prices across **Second Theory** and **FragFever**!",
-      toolCalls: []
+      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), or comparing live prices across **Second Theory** and **FragFever**!",
+      data: null
     }
   ]);
   const [input, setInput] = useState('');
@@ -27,14 +23,14 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
   }, [messages, isThinking]);
 
   const QUICK_PROMPTS = [
-    "Winter clones under ₹3,000 in stock",
-    "Who has the cheapest Liquid Brun?",
+    "Winter date night scents under ₹3,000",
+    "Cheapest seller for Liquid Brun",
     "Best clones of Kilian Angels' Share",
-    "Fresh summer scents like Hawas",
-    "Compare CDNIM prices between sellers"
+    "Fresh summer beast-mode perfumes",
+    "Tell me about Turathi Blue"
   ];
 
-  const handleSend = (userText) => {
+  const handleSend = async (userText) => {
     const text = userText || input;
     if (!text.trim()) return;
 
@@ -43,76 +39,60 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
     setInput('');
     setIsThinking(true);
 
-    // AI Agent Tool-Calling Reasoning Loop
-    setTimeout(() => {
-      const lower = text.toLowerCase();
-      let responseText = "";
-      let toolData = null;
+    try {
+      // 1. Try Vercel Serverless AI SDK endpoint first
+      let usedServerless = false;
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content }))
+          })
+        });
 
-      if (lower.includes('liquid brun') || lower.includes('khamrah') || lower.includes('hawas') || lower.includes('cdnim') || lower.includes('sillage') || lower.includes('compare') || lower.includes('cheapest') || lower.includes('price')) {
-        // Extract perfume name
-        let target = 'Liquid Brun';
-        if (lower.includes('khamrah')) target = 'Khamrah';
-        else if (lower.includes('hawas')) target = 'Hawas';
-        else if (lower.includes('cdnim') || lower.includes('intense man')) target = 'Club de Nuit Intense Man';
-        else if (lower.includes('sillage')) target = 'Sillage';
-        else if (lower.includes('spectre')) target = 'Spectre Ghost';
-        else if (lower.includes('9 pm') || lower.includes('9pm')) target = '9 PM';
-        else if (lower.includes('kaaf')) target = 'Kaaf';
-        else if (lower.includes('rifaaqat')) target = 'Rifaaqat';
-
-        const result = checkSellerPricesTool({ fragranceName: target });
-        toolData = { type: 'seller_comparison', data: result };
-
-        if (result.found && result.results.length > 0) {
-          const item = result.results[0];
-          responseText = `I scanned the live inventory across our community sellers for **${item.brand} ${item.name}**:\n\n` +
-            `• **Best Deal**: ${item.lowest_price} via **${item.lowest_seller}**\n` +
-            `• **Sellers Carrying It**: ${item.sellers_count} verified ${item.sellers_count === 1 ? 'seller' : 'sellers'}\n\n` +
-            `Here is the live price breakdown and direct WhatsApp order links:`;
-        } else {
-          responseText = `I couldn't find active quotes for "${target}" in current seller sheets. Check Section 1 in the Matcher for similar scent twins!`;
+        if (res.ok) {
+          const contentType = res.headers.get('content-type') || '';
+          if (contentType.includes('text/plain') || contentType.includes('stream')) {
+            const streamedText = await res.text();
+            if (streamedText && streamedText.length > 10) {
+              setMessages(prev => [...prev, { role: 'assistant', content: streamedText }]);
+              usedServerless = true;
+            }
+          }
         }
-      } else if (lower.includes('under') || lower.includes('budget') || lower.includes('cheap') || lower.includes('3000') || lower.includes('2500') || lower.includes('2000')) {
-        let budget = 3000;
-        const matchDigits = lower.match(/\d{4}/);
-        if (matchDigits) budget = parseInt(matchDigits[0]);
-
-        let season = 'all';
-        if (lower.includes('winter')) season = 'Winter';
-        else if (lower.includes('summer')) season = 'Summer';
-
-        const deals = findInStockDealsByBudgetTool({ maxBudget: budget, season, limit: 4 });
-        toolData = { type: 'budget_deals', data: deals, budget, season };
-
-        responseText = `Here are top-rated in-stock fragrance deals under **₹${budget.toLocaleString()}**${season !== 'all' ? ` for **${season}**` : ''} verified ready to buy:`;
-      } else if (lower.includes('angel') || lower.includes('sauvage') || lower.includes('aventus') || lower.includes('tygar') || lower.includes('babycat') || lower.includes('clone')) {
-        let target = "Angels' Share";
-        if (lower.includes('sauvage')) target = "Sauvage";
-        else if (lower.includes('aventus')) target = "Aventus";
-        else if (lower.includes('tygar')) target = "Tygar";
-        else if (lower.includes('babycat')) target = "Babycat";
-
-        const clones = searchFragrancesTool({ query: target, maxResults: 4 });
-        toolData = { type: 'clone_search', data: clones, target };
-
-        responseText = `Here are the top-rated clones inspired by **${target}** in our catalog:`;
-      } else {
-        const matches = searchFragrancesTool({ query: text, maxResults: 4 });
-        toolData = { type: 'clone_search', data: matches, target: text };
-        responseText = `I searched our 889-scent database for "${text}". Here are the closest matches:`;
+      } catch (e) {
+        // Fall through to local sommelier engine
       }
 
+      // 2. If no serverless response, use intelligent Sommelier Engine
+      if (!usedServerless) {
+        // Small delay to simulate thoughtful analysis
+        await new Promise(r => setTimeout(r, 400));
+        const result = processSommelierQuery(text);
+
+        setMessages(prev => [
+          ...prev, 
+          { 
+            role: 'assistant', 
+            content: result.text,
+            data: result 
+          }
+        ]);
+      }
+    } catch (err) {
+      const fallbackResult = processSommelierQuery(text);
       setMessages(prev => [
         ...prev, 
         { 
           role: 'assistant', 
-          content: responseText,
-          toolData 
+          content: fallbackResult.text,
+          data: fallbackResult 
         }
       ]);
+    } finally {
       setIsThinking(false);
-    }, 600);
+    }
   };
 
   return (
@@ -133,7 +113,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
       {/* AI Drawer Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-end p-0 sm:p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="w-full sm:max-w-lg h-[92vh] sm:h-[85vh] bg-[#0d1424] border border-amber-500/30 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="w-full sm:max-w-lg h-[92vh] sm:h-[86vh] bg-[#0d1424] border border-amber-500/30 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
             
             {/* Header */}
             <div className="px-5 py-4 bg-[#111a30] border-b border-slate-800 flex items-center justify-between">
@@ -145,11 +125,11 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-black text-white">FragScanner AI Sommelier</h3>
                     <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
-                      Vercel AI SDK
+                      Active
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400">
-                    Real-time tool calling over 889 perfumes & live sellers
+                    Live olfactory twins • Verified Second Theory & FragFever rates
                   </p>
                 </div>
               </div>
@@ -170,82 +150,104 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                   className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[88%] p-3.5 rounded-2xl ${
+                    className={`max-w-[92%] p-3.5 rounded-2xl ${
                       msg.role === 'user'
-                        ? 'bg-amber-500 text-slate-950 font-medium rounded-tr-none'
-                        : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-tl-none space-y-2'
+                        ? 'bg-amber-500 text-slate-950 font-semibold rounded-tr-none shadow-md'
+                        : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-tl-none space-y-3'
                     }`}
                   >
-                    <p className="whitespace-pre-line leading-relaxed">{msg.content}</p>
+                    <div className="whitespace-pre-line leading-relaxed">
+                      {msg.content}
+                    </div>
 
-                    {/* Tool Data Rendering: Seller Comparison */}
-                    {msg.toolData?.type === 'seller_comparison' && msg.toolData.data?.results && (
-                      <div className="space-y-3 pt-2">
-                        {msg.toolData.data.results.map((r, rIdx) => (
-                          <div key={rIdx} className="p-3 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
-                            <div className="flex items-baseline justify-between">
-                              <span className="font-extrabold text-white text-xs">{r.brand} {r.name}</span>
-                              <span className="text-emerald-400 font-bold font-mono text-xs">{r.lowest_price}</span>
-                            </div>
-                            {r.dna_inspiration && (
-                              <p className="text-[10px] text-slate-400">Target: {r.dna_inspiration}</p>
-                            )}
-                            <div className="space-y-1.5 pt-1 border-t border-slate-800">
-                              {r.sellers.map((s, sIdx) => (
-                                <div key={sIdx} className="flex items-center justify-between text-[11px] p-1.5 rounded bg-slate-900 border border-slate-800">
-                                  <div>
-                                    <span className="font-bold text-white">{s.seller_name}</span>
-                                    <span className="text-[10px] text-slate-400 ml-1.5">{s.price}</span>
-                                  </div>
-                                  <a
-                                    href={s.whatsapp_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1"
-                                  >
-                                    <span>WhatsApp</span>
-                                    <ArrowRight className="w-2.5 h-2.5" />
-                                  </a>
+                    {/* Rich Card: Fragrance Spotlight */}
+                    {msg.data?.cardType === 'fragrance_spotlight' && msg.data.fragrance && (
+                      <div className="mt-2 p-3 rounded-xl bg-slate-950 border border-emerald-500/40 space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-amber-400">{msg.data.fragrance.brand}</span>
+                          <span className="text-xs font-mono font-bold text-emerald-400">
+                            {msg.data.fragrance.community_price ? `₹${msg.data.fragrance.community_price}` : 'Unquoted'}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-extrabold text-white">{msg.data.fragrance.name}</h4>
+
+                        {/* Sellers list */}
+                        {msg.data.sellers && msg.data.sellers.length > 0 && (
+                          <div className="space-y-1.5 pt-2 border-t border-slate-800">
+                            {msg.data.sellers.map((s, sIdx) => (
+                              <div key={sIdx} className="flex items-center justify-between text-[11px] p-2 rounded-lg bg-slate-900 border border-slate-800">
+                                <div>
+                                  <span className="font-bold text-white">{s.seller_name}</span>
+                                  <span className="text-emerald-400 font-mono font-bold ml-2">₹{s.price}</span>
                                 </div>
-                              ))}
-                            </div>
+                                <a
+                                  href={`https://wa.me/91${s.whatsapp}?text=${encodeURIComponent(`Hi ${s.seller_name}, I want to order ${msg.data.fragrance.brand} ${msg.data.fragrance.name} quoted at ₹${s.price}. Is it in stock?`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1 shadow"
+                                >
+                                  <span>WhatsApp</span>
+                                  <ArrowRight className="w-2.5 h-2.5" />
+                                </a>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
+
+                        <button
+                          onClick={() => onSelectFragrance?.(msg.data.fragrance)}
+                          className="w-full mt-1 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors"
+                        >
+                          View Full Perfume Details
+                        </button>
                       </div>
                     )}
 
-                    {/* Tool Data Rendering: Budget In-Stock Deals */}
-                    {msg.toolData?.type === 'budget_deals' && msg.toolData.data && (
-                      <div className="grid grid-cols-1 gap-2 pt-2">
-                        {msg.toolData.data.map((d, dIdx) => (
-                          <div key={dIdx} className="p-2.5 rounded-xl bg-slate-950 border border-amber-500/30 flex items-center justify-between">
-                            <div>
-                              <span className="font-bold text-white text-xs block">{d.brand} {d.name}</span>
-                              <span className="text-[10px] text-slate-400">{d.dna_inspiration || d.accords?.join(', ')}</span>
-                            </div>
-                            <div className="text-right shrink-0 ml-2">
-                              <span className="text-emerald-400 font-extrabold font-mono text-xs block">{d.community_price}</span>
-                              <span className="text-[9px] text-slate-400">{d.lowest_seller}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Tool Data Rendering: Clone Search */}
-                    {msg.toolData?.type === 'clone_search' && msg.toolData.data && (
-                      <div className="grid grid-cols-1 gap-2 pt-2">
-                        {msg.toolData.data.map((c, cIdx) => (
+                    {/* Rich Card: Multi-Seller Compare / Budget Picks */}
+                    {(msg.data?.cardType === 'multi_seller_compare' || msg.data?.cardType === 'budget_picks' || msg.data?.cardType === 'clone_recommendations') && msg.data.items && (
+                      <div className="grid grid-cols-1 gap-2 pt-1">
+                        {msg.data.items.map((item, iIdx) => (
                           <div 
-                            key={cIdx} 
-                            onClick={() => onSelectFragrance?.(c)}
-                            className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer transition-all flex items-center justify-between"
+                            key={iIdx}
+                            className="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400/50 transition-all flex flex-col justify-between space-y-2"
                           >
-                            <div>
-                              <span className="font-bold text-white text-xs block">{c.brand} {c.name}</span>
-                              <span className="text-[10px] text-amber-300">Inspired by {c.dna_inspiration || c.dna_type}</span>
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <span className="text-[10px] text-amber-400 font-bold block">{item.brand}</span>
+                                <h5 className="font-bold text-white text-xs">{item.name}</h5>
+                                {item.dna_inspiration && (
+                                  <span className="text-[10px] text-slate-400 block">Inspired by {item.dna_inspiration}</span>
+                                )}
+                              </div>
+                              <div className="text-right shrink-0">
+                                {item.in_seller_stock && item.community_price ? (
+                                  <>
+                                    <span className="text-xs font-mono font-black text-emerald-400 block">₹{item.community_price}</span>
+                                    <span className="text-[9px] text-slate-400">{item.lowest_seller}</span>
+                                  </>
+                                ) : (
+                                  <span className="text-[10px] text-slate-500">Archive</span>
+                                )}
+                              </div>
                             </div>
-                            <span className="text-xs text-amber-400 font-mono">★ {c.rating_value}</span>
+
+                            {/* Direct WhatsApp button for best seller if in stock */}
+                            {item.in_seller_stock && item.community_sellers?.[0] && (
+                              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                                <span className="text-[10px] text-slate-400">
+                                  {item.community_sellers.length > 1 ? `${item.community_sellers.length} Sellers Available` : '1 Seller'}
+                                </span>
+                                <a
+                                  href={`https://wa.me/91${item.community_sellers[0].whatsapp}?text=${encodeURIComponent(`Hi ${item.community_sellers[0].seller_name}, I would like to purchase ${item.brand} ${item.name} quoted at ₹${item.community_sellers[0].price}. Is it available?`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1 shadow"
+                                >
+                                  <span>Order via WhatsApp</span>
+                                  <ArrowRight className="w-2.5 h-2.5" />
+                                </a>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -258,7 +260,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
               {isThinking && (
                 <div className="flex items-center gap-2 text-xs text-amber-400 bg-slate-900/60 p-3 rounded-2xl border border-slate-800 w-max">
                   <div className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                  <span>Agent scanning olfactory database & seller sheets...</span>
+                  <span>Sommelier analyzing notes, clone DNA & seller inventory...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -290,7 +292,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about perfumes, twin clones, or seller prices..."
+                  placeholder="Ask for date night scents, clone twins, or seller rates..."
                   className="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700/80 focus:border-amber-400 focus:outline-none text-xs sm:text-sm text-white placeholder-slate-500 shadow-inner"
                 />
                 <button
