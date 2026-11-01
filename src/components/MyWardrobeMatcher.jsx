@@ -175,17 +175,18 @@ export default function MyWardrobeMatcher({
       <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Dual-Preference Engine (Mix & Match Likes, Filter Out Dislikes)</span>
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-xl sm:text-2xl font-black text-white font-serif-luxury tracking-wide">
+              Scent Wardrobe & Matcher
+            </h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
+              Likes & Dislikes Engine
+            </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-serif-luxury">
-            Your Scent Wardrobe & Dislike Filter
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Select perfumes you <span className="text-emerald-400 font-bold">Like / Love (1 to 10)</span> to extract your favorite accords & notes, and check perfumes you <span className="text-rose-400 font-bold">Dislike / Avoid (1 to 10)</span> so the engine actively ignores those scent types in your top recommendations.
+          <p className="text-xs text-slate-300">
+            Check scents you <strong className="text-emerald-400">Like (👍)</strong> and <strong className="text-rose-400">Dislike (👎)</strong> below. The algorithm finds your scent twins and checks live stock across 6 community sellers.
           </p>
         </div>
 

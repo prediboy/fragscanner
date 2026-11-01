@@ -23,7 +23,7 @@ export default function App() {
   const [activeFragrance, setActiveFragrance] = useState(null);
   const [quickTab, setQuickTab] = useState('overview');
   const [selectedSeller, setSelectedSeller] = useState('all');
-  const [viewMode, setViewMode] = useState('discovery'); // 'discovery' | 'matcher'
+  const [viewMode, setViewMode] = useState('matcher'); // 'matcher' (default: likes/dislikes) | 'discovery' | 'both'
 
   const totalReviews = useMemo(() => {
     return fragrancesData.reduce((acc, curr) => acc + (curr.rating_count || 0), 0);
@@ -72,6 +72,18 @@ export default function App() {
           {/* Mode Switcher Tabs */}
           <div className="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800 shrink-0 self-center md:self-auto">
             <button
+              onClick={() => setViewMode('matcher')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                viewMode === 'matcher'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>Scent Matcher (Likes & Dislikes)</span>
+            </button>
+
+            <button
               onClick={() => setViewMode('discovery')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 viewMode === 'discovery'
@@ -84,15 +96,15 @@ export default function App() {
             </button>
 
             <button
-              onClick={() => setViewMode('matcher')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                viewMode === 'matcher'
+              onClick={() => setViewMode('both')}
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                viewMode === 'both'
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Scent Matcher</span>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Show Both</span>
             </button>
           </div>
 
@@ -172,21 +184,37 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main Workspace: Price Discovery (Default) OR Scent Twin Matcher */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 flex-1 w-full pb-24 md:pb-8">
-        {viewMode === 'discovery' ? (
-          <PriceDiscoveryView 
-            allFragrances={fragrancesData}
-            selectedSeller={selectedSeller}
-            onSelectSeller={setSelectedSeller}
-            onSelectFragrance={(f) => openFragranceModal(f, 'overview')}
-          />
-        ) : (
+      {/* Main Workspace: Scent Matcher (Default with Likes/Dislikes) OR Price Discovery OR Both */}
+      <main className="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 flex-1 w-full pb-24 md:pb-8 space-y-12">
+        {(viewMode === 'matcher' || viewMode === 'both') && (
           <MyWardrobeMatcher 
             allFragrances={fragrancesData}
             onSelectFragrance={(f) => openFragranceModal(f, 'recommendations')}
             selectedSeller={selectedSeller}
             onSelectSeller={setSelectedSeller}
+          />
+        )}
+
+        {viewMode === 'both' && (
+          <div className="relative py-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-800"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-[#0b1120] px-4 text-amber-400 font-bold flex items-center gap-1.5 border border-slate-800 rounded-full py-1">
+                <Tag className="w-3.5 h-3.5" />
+                Live Price Discovery & Catalog Deals
+              </span>
+            </div>
+          </div>
+        )}
+
+        {(viewMode === 'discovery' || viewMode === 'both') && (
+          <PriceDiscoveryView 
+            allFragrances={fragrancesData}
+            selectedSeller={selectedSeller}
+            onSelectSeller={setSelectedSeller}
+            onSelectFragrance={(f) => openFragranceModal(f, 'overview')}
           />
         )}
       </main>
