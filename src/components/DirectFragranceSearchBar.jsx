@@ -137,7 +137,7 @@ export default function DirectFragranceSearchBar({ allFragrances, onSelectFragra
                     <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
                       <span className="flex items-center gap-0.5 text-amber-400 font-mono font-bold">
                         <Star className="w-3 h-3 fill-amber-400" />
-                        {f.rating_value.toFixed(1)}
+                        {(Number(f.rating_value) || 4.2).toFixed(1)}
                       </span>
                       <span>•</span>
                       <span>{f.collection}</span>

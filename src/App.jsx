@@ -8,6 +8,7 @@ import MyWardrobeMatcher from './components/MyWardrobeMatcher';
 import PriceDiscoveryView from './components/PriceDiscoveryView';
 import FragScannerAIAgent from './components/FragScannerAIAgent';
 import DirectFragranceSearchBar from './components/DirectFragranceSearchBar';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Sparkles, Store, RefreshCw, Tag, Compass, Database } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
@@ -58,7 +59,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1120] text-slate-100 flex flex-col">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-[#0b1120] text-slate-100 flex flex-col">
       
       {/* Top Navigation & Direct Search Header */}
       <header className="sticky top-0 z-40 bg-[#0b1120]/95 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-2.5">
@@ -277,5 +279,6 @@ export default function App() {
       {/* Vercel Web Analytics */}
       <Analytics />
     </div>
+    </ErrorBoundary>
   );
 }
