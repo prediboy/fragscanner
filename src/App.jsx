@@ -9,7 +9,8 @@ import PriceDiscoveryView from './components/PriceDiscoveryView';
 import FragScannerAIAgent from './components/FragScannerAIAgent';
 import DirectFragranceSearchBar from './components/DirectFragranceSearchBar';
 import ErrorBoundary from './components/ErrorBoundary';
-import { Sparkles, Store, RefreshCw, Tag, Compass, Database } from 'lucide-react';
+import SyncStatsModal from './components/SyncStatsModal';
+import { Sparkles, Store, RefreshCw, Tag, Compass, Database, BarChart3 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All Sellers', tag: 'All 6' },
@@ -28,6 +29,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState('matcher'); // 'matcher' (default: likes/dislikes) | 'discovery' | 'both'
   const [allFragrances, setAllFragrances] = useState(fragrancesData);
   const [isLiveDatabase, setIsLiveDatabase] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
 
   // Real-time Supabase Data Fetch
   useEffect(() => {
@@ -136,29 +138,41 @@ export default function App() {
         </div>
       </header>
 
-      {/* Compact Status & Live Metrics Strip */}
+      {/* Compact Status & Live Metrics Strip (Clickable to view detailed breakdown) */}
       <div className="bg-[#0e1628] border-b border-slate-800/80 px-4 sm:px-8 py-1.5 text-xs">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-slate-400 text-[11px]">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="flex items-center gap-1 font-bold text-emerald-400">
+            <button
+              onClick={() => setShowStatsModal(true)}
+              className="flex items-center gap-1 font-bold text-emerald-400 hover:text-emerald-300 transition-colors group cursor-pointer"
+              title="Click to view full seller inventory breakdown"
+            >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              6 Sellers Live
+              <span className="underline decoration-emerald-500/40 underline-offset-2">6 Sellers Live</span>
+            </button>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-300 font-mono font-medium">
+              <strong className="text-amber-400">{syncMeta?.in_stock_count || 656}</strong> Bottles
             </span>
             <span className="text-slate-600">•</span>
             <span className="text-slate-300 font-mono font-medium">
-              <strong className="text-amber-400">{syncMeta?.in_stock_count || 647}</strong> Bottles
+              <strong className="text-cyan-400">{syncMeta?.decants_available_count || 372}</strong> Decanted Scents
             </span>
             <span className="text-slate-600">•</span>
             <span className="text-slate-300 font-mono font-medium">
-              <strong className="text-cyan-400">{syncMeta?.decants_available_count || 369}</strong> Decanted Scents
-            </span>
-            <span className="text-slate-600">•</span>
-            <span className="text-slate-300 font-mono font-medium">
-              <strong className="text-purple-400">{syncMeta?.dual_available_count || 359}</strong> Both Options
+              <strong className="text-purple-400">{syncMeta?.dual_available_count || 362}</strong> Both Options
             </span>
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowStatsModal(true)}
+              className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30 transition-all font-semibold"
+            >
+              <BarChart3 className="w-2.5 h-2.5 text-amber-400" />
+              <span>Seller Stats</span>
+            </button>
+
             {isLiveDatabase && (
               <span className="inline-flex items-center gap-1 text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
                 <Database className="w-2.5 h-2.5" />
@@ -264,6 +278,14 @@ export default function App() {
       <FragScannerAIAgent 
         onSelectFragrance={(f) => openFragranceModal(f, 'overview')} 
       />
+
+      {/* Live Inventory & Sync Stats Breakdown Modal */}
+      {showStatsModal && (
+        <SyncStatsModal
+          syncMeta={syncMeta}
+          onClose={() => setShowStatsModal(false)}
+        />
+      )}
 
       {/* Minimal Footer */}
       <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-4 px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto w-full gap-2">
