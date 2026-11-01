@@ -1,9 +1,9 @@
 {
-  "last_sync": "2026-11-01T16:02:00.894Z",
-  "catalog_total": 1134,
-  "in_stock_count": 647,
-  "decants_available_count": 369,
-  "dual_available_count": 359,
+  "last_sync": "2026-11-01T20:34:57.410Z",
+  "catalog_total": 1146,
+  "in_stock_count": 656,
+  "decants_available_count": 370,
+  "dual_available_count": 360,
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
@@ -13,7 +13,7 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 402,
+      "bottles": 428,
       "type": "Full Bottles"
     },
     "apex_aroma": {
@@ -34,8 +34,8 @@
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 381,
-      "decants": 389,
+      "bottles": 380,
+      "decants": 390,
       "type": "Dual"
     }
   }

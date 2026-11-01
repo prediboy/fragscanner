@@ -19,6 +19,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --omit=dev
 
       - name: Run Master Refresh Pipeline across All 6 Sellers
         run: |
@@ -29,4 +33,4 @@ jobs:
           git config --global user.name "FragScanner Price Bot"
           git config --global user.email "price-bot@fragscanner.app"
           git add src/data/fragrances.json src/data/seller_config.json src/data/sync_meta.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(sync): automated 2-hour price refresh across all 6 community sellers" && git push)
+          git diff --quiet && git diff --staged --quiet || (git pull --rebase origin main && git commit -m "chore(sync): automated 2-hour price refresh across all 6 community sellers" && git push)

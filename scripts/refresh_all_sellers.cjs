@@ -2,11 +2,12 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-async function fetchUrl(url) {
+async function fetchUrl(url, timeoutMs = 15000) {
   const res = await fetch(url, {
     headers: {
       "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
+    },
+    signal: AbortSignal.timeout(timeoutMs)
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
   return await res.text();

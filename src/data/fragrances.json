@@ -3003,19 +3003,9 @@
     "community_seller_name": "Second Theory",
     "community_whatsapp": "8076851481",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2349,
+    "community_price": 2600,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 2349,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice",
-        "verified": true
-      },
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
@@ -3027,7 +3017,7 @@
       }
     ],
     "in_second_theory_sheet": false,
-    "lowest_seller": "Whiff Culture",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": false,
@@ -5248,9 +5238,18 @@
     "community_seller_name": "Second Theory",
     "community_whatsapp": "8076851481",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2800,
+    "community_price": 2750,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2750,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -5281,7 +5280,7 @@
       }
     ],
     "in_second_theory_sheet": true,
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": true,
@@ -5659,9 +5658,18 @@
     "community_seller_name": "Second Theory",
     "community_whatsapp": "8076851481",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2750,
+    "community_price": 2700,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2700,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -5692,7 +5700,7 @@
       }
     ],
     "in_second_theory_sheet": true,
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": true,
@@ -5965,9 +5973,18 @@
     "community_seller_name": "Second Theory",
     "community_whatsapp": "8076851481",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2700,
+    "community_price": 2650,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
@@ -5998,7 +6015,7 @@
       }
     ],
     "in_second_theory_sheet": false,
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
@@ -8035,23 +8052,6 @@
     "in_apex_aroma_sheet": false,
     "community_decants": [
       {
-        "seller_id": "liquid_emotions",
-        "seller_name": "Liquid Emotions",
-        "website": "https://liquidemotions.vercel.app/",
-        "whatsapp": "7982410620",
-        "shipping": "Free above ₹1,200",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 200,
-          "10ml": 360,
-          "20ml": 680,
-          "30ml": 940
-        },
-        "lowest_price": 200,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/armaf-tres-nuit",
@@ -8081,13 +8081,6 @@
             "price": 169,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-tres-nuit"
-          },
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 200,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
           }
         ]
       },
@@ -8114,26 +8107,6 @@
             "price": 239,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-tres-nuit"
-          },
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 360,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 680,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 680,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
           }
         ]
       },
@@ -8147,13 +8120,6 @@
             "price": 779,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-tres-nuit"
-          },
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 940,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
           }
         ]
       }
@@ -13821,17 +13787,31 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "5ml": 259,
           "8ml": 369,
           "10ml": 369,
           "30ml": 1249
         },
-        "lowest_price": 369,
+        "lowest_price": 259,
         "in_stock": true,
         "verified": true
       }
     ],
     "has_decants": true,
     "decant_comparison": {
+      "5ml": {
+        "lowest_price": 259,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 259,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/afnan-supremacy-in-heaven"
+          }
+        ]
+      },
       "8ml": {
         "lowest_price": 369,
         "lowest_seller": "Whiff Culture",
@@ -13872,7 +13852,7 @@
         ]
       }
     },
-    "lowest_decant_price": 369
+    "lowest_decant_price": 259
   },
   {
     "id": "afnan-historic-doria",
@@ -52748,9 +52728,18 @@
     "community_seller_name": "Second Theory",
     "community_whatsapp": "8076851481",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 3149,
+    "community_price": 2850,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2850,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
@@ -52763,7 +52752,7 @@
       }
     ],
     "in_second_theory_sheet": false,
-    "lowest_seller": "Whiff Culture",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": false,
@@ -68052,6 +68041,15 @@
         "verified": true
       },
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2750,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
         "price": 2800,
@@ -68321,6 +68319,16 @@
         "whatsapp": "9456411103",
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 3959,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/afnan-supremacy-not-only-intense-collectors-edition",
         "verified": true
       }
     ],
@@ -73690,12 +73698,11 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 269,
           "8ml": 379,
           "10ml": 379,
           "30ml": 1279
         },
-        "lowest_price": 269,
+        "lowest_price": 379,
         "in_stock": true,
         "verified": true
       }
@@ -73715,13 +73722,6 @@
             "price": 205,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 269,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/fragrance-world-liquid-brun"
           }
         ]
       },
@@ -76824,12 +76824,11 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 289,
           "8ml": 409,
           "10ml": 409,
           "30ml": 1389
         },
-        "lowest_price": 289,
+        "lowest_price": 409,
         "in_stock": true,
         "verified": true
       }
@@ -76849,13 +76848,6 @@
             "price": 200,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 289,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/french-avenue-vulcan-fue"
           }
         ]
       },
@@ -79370,12 +79362,11 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 309,
           "8ml": 449,
           "10ml": 449,
           "30ml": 1539
         },
-        "lowest_price": 309,
+        "lowest_price": 449,
         "in_stock": true,
         "verified": true
       }
@@ -79395,13 +79386,6 @@
             "price": 265,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 309,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-musamam-black-intense"
           }
         ]
       },
@@ -86781,16 +86765,6 @@
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
         "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 4499,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/swiss-arabian-incense-01",
-        "verified": true
       }
     ],
     "dna_type": "Smoky Balsamic Amber",
@@ -92890,10 +92864,19 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2900,
+    "community_price": 2700,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2700,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -92949,7 +92932,7 @@
       ]
     },
     "description": "Ahmed Al Maghribi Aqua oud is a community favorite priced at ₹2900 by Second Theory. Features oud accords with notes of Saffron, Bergamot and Amber.",
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -93184,6 +93167,15 @@
         "price": 2450,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
         "verified": true
       },
@@ -93999,10 +93991,19 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 3350,
+    "community_price": 3200,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3200,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -94079,7 +94080,7 @@
       ]
     },
     "description": "Ahmed Al Maghribi Summer oud is a community favorite priced at ₹3350 by Second Theory. Features woody accords with notes of Citrus, Marine Notes and White Amber.",
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -94207,6 +94208,15 @@
         "price": 3100,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3300,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
         "verified": true
       }
@@ -94656,6 +94666,15 @@
         "verified": true
       },
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3000,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
         "price": 3000,
@@ -94928,10 +94947,19 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1799,
+    "community_price": 1700,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1700,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
@@ -95006,7 +95034,7 @@
       ]
     },
     "description": "Ajmal Kuro is a community favorite priced at ₹1850 by Second Theory. Features fresh spicy accords with notes of Bergamot, Geranium and Patchouli.",
-    "lowest_seller": "Whiff Culture",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -95128,10 +95156,19 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2350,
+    "community_price": 650,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
@@ -95202,7 +95239,7 @@
       ]
     },
     "description": "Ajmal Wisal Dhahab is a community favorite priced at ₹2400 by Second Theory. Features fruity accords with notes of Apple, Peach and Sandalwood.",
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -113680,14 +113717,14 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2400,
+    "community_price": 2600,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
-        "price": 2400,
+        "price": 2600,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
         "dispatch": "24-48 hrs",
@@ -120748,12 +120785,11 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 189,
           "8ml": 279,
           "10ml": 279,
           "30ml": 909
         },
-        "lowest_price": 189,
+        "lowest_price": 279,
         "in_stock": true,
         "verified": true
       }
@@ -120780,13 +120816,6 @@
             "price": 170,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 189,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-terra-1"
           }
         ]
       },
@@ -126861,9 +126890,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 3650,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AFNAN Creation",
     "similarity_percentage": 92,
@@ -126903,8 +126942,8 @@
       ]
     },
     "description": "AFNAN SNOI 100 ML is available with FragFever at ₹3600.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-afnan-mysticbouquet",
@@ -126939,9 +126978,18 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 3800,
+    "community_price": 3750,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3750,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -127001,7 +127049,7 @@
       ]
     },
     "description": "AFNAN Stardust is available with FragFever at ₹3700.",
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -127108,9 +127156,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 2900,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2900,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AFNAN Creation",
     "similarity_percentage": 92,
@@ -127150,8 +127208,8 @@
       ]
     },
     "description": "AFNAN SUPREMACY HEAVEN is available with FragFever at ₹2900.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-afnan-mysticbouquet",
@@ -127505,9 +127563,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 5500,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 5500,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AHMED AL MAGHRIBI Creation",
     "similarity_percentage": 92,
@@ -127547,8 +127615,8 @@
       ]
     },
     "description": "AHMED AL MAGHRIBI BIN Ameer is available with FragFever at ₹5100.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-ahmedalmaghribi-ahl",
@@ -127583,9 +127651,18 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2800,
+    "community_price": 2750,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2750,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
@@ -127645,7 +127722,7 @@
       ]
     },
     "description": "AHMED AL MAGHRIBI BLU OUD is available with FragFever at ₹2600.",
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -127752,9 +127829,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 3150,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3150,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AHMED AL MAGHRIBI Creation",
     "similarity_percentage": 92,
@@ -127794,8 +127881,8 @@
       ]
     },
     "description": "AHMED AL MAGHRIBI BRULEE is available with FragFever at ₹3000.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-ahmedalmaghribi-ahl",
@@ -127841,6 +127928,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/ahmed-al-maghribi-ignite-rose-flash-sale",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3300,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       }
     ],
@@ -128001,6 +128097,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/ahmed-muzn",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3450,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       }
     ],
@@ -128331,6 +128436,15 @@
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/ahmed-al-maghribi-opaline-wave",
         "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2450,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
       }
     ],
     "dna_type": "Community Clone",
@@ -128567,9 +128681,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 3300,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3300,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AHMED AL MAGHRIBI Creation",
     "similarity_percentage": 92,
@@ -128609,8 +128733,8 @@
       ]
     },
     "description": "AHMED AL MAGHRIBI MUSK and Roses is available with FragFever at ₹3000.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-ahmedalmaghribi-ahl",
@@ -128645,9 +128769,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 3900,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3900,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AHMED AL MAGHRIBI Creation",
     "similarity_percentage": 92,
@@ -128687,8 +128821,8 @@
       ]
     },
     "description": "AHMED AL MAGHRIBI Oud and Roses is available with FragFever at ₹3300.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-ahmedalmaghribi-ahl",
@@ -128723,9 +128857,18 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2800,
+    "community_price": 2700,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2700,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
@@ -128785,7 +128928,7 @@
       ]
     },
     "description": "AJMAL Aristocrat is available with FragFever at ₹2700.",
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -128892,9 +129035,19 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": null,
+    "community_price": 2650,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      }
+    ],
     "dna_type": "Community Clone",
     "dna_inspiration": "AJMAL Creation",
     "similarity_percentage": 92,
@@ -128934,8 +129087,8 @@
       ]
     },
     "description": "AJMAL Aurum Aurum Elixir is available with FragFever at ₹2650.",
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "FragFever",
+    "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
       "apex-ajmal-aristocrat",
@@ -129062,6 +129215,15 @@
     "is_hot_seller": false,
     "community_sellers": [
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1550,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
         "price": 1550,
@@ -129120,7 +129282,7 @@
       ]
     },
     "description": "AJMAL Cyan Oud is available with FragFever at ₹1550.",
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -149292,31 +149454,17 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 209,
           "8ml": 299,
           "10ml": 299,
           "30ml": 979
         },
-        "lowest_price": 209,
+        "lowest_price": 299,
         "in_stock": true,
         "verified": true
       }
     ],
     "has_decants": true,
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 209,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 209,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/riiffs-seasons-drift"
-          }
-        ]
-      },
       "8ml": {
         "lowest_price": 299,
         "lowest_seller": "Whiff Culture",
@@ -149357,7 +149505,7 @@
         ]
       }
     },
-    "lowest_decant_price": 209
+    "lowest_decant_price": 299
   },
   {
     "id": "apex-riiffs-seasonsrise",
@@ -154533,16 +154681,6 @@
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
         "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 3479,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/al-haramain-laventure",
-        "verified": true
       }
     ],
     "dna_type": "Community Clone",
@@ -154605,81 +154743,10 @@
       "apex-ajmal-aurumaurumelixir",
       "apex-ajmal-blue"
     ],
-    "community_decants": [
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/al-haramain-laventure",
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 289,
-          "8ml": 409,
-          "10ml": 409,
-          "30ml": 1389
-        },
-        "lowest_price": 289,
-        "in_stock": true,
-        "verified": true
-      }
-    ],
-    "has_decants": true,
-    "decant_comparison": {
-      "5ml": {
-        "lowest_price": 289,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 289,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 409,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 409,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
-          }
-        ]
-      },
-      "10ml": {
-        "lowest_price": 409,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 409,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 1389,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1389,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
-          }
-        ]
-      }
-    },
-    "lowest_decant_price": 289
+    "community_decants": [],
+    "has_decants": false,
+    "decant_comparison": null,
+    "lowest_decant_price": null
   },
   {
     "id": "apex-alrehab-frenchcoffee",
@@ -156792,7 +156859,15 @@
         "Fills a room with 2 sprays. Better longevity than Erba Pura.",
         "Best fruity melon opening in the clone world."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "al-haramain-laventure",
@@ -156871,7 +156946,148 @@
       "top_reviewer_quotes": [
         "Much smoother than Club de Nuit Intense Man. Very close to fruity Aventus batches."
       ]
-    }
+    },
+    "community_sellers": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 3479,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/al-haramain-laventure",
+        "verified": true
+      }
+    ],
+    "community_decants": [
+      {
+        "seller_id": "liquid_emotions",
+        "seller_name": "Liquid Emotions",
+        "website": "https://liquidemotions.vercel.app/",
+        "whatsapp": "7982410620",
+        "shipping": "Free above ₹1,200",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 200,
+          "10ml": 360,
+          "20ml": 680,
+          "30ml": 940
+        },
+        "lowest_price": 200,
+        "in_stock": true,
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/al-haramain-laventure",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 289,
+          "8ml": 409,
+          "10ml": 409,
+          "30ml": 1389
+        },
+        "lowest_price": 289,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 200,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 200,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 289,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 409,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 409,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 360,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 360,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 409,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 680,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 680,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 940,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 940,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1389,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/al-haramain-laventure"
+          }
+        ]
+      }
+    },
+    "in_seller_stock": true,
+    "community_price": 3479,
+    "lowest_seller": "Whiff Culture",
+    "has_decants": true,
+    "lowest_decant_price": 200
   },
   {
     "id": "al-haramain-amber-oud-tobacco",
@@ -156960,7 +157176,15 @@
         "Better than modern TF Tobacco Vanille bottles.",
         "12 hours easily on skin, days on coats."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "paris-corner-emir-youre-drugged",
@@ -157036,7 +157260,15 @@
       "top_reviewer_quotes": [
         "Kilian Intoxicated for 1/6th the price. Gorgeous autumn scent."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "paris-corner-voux-elegante",
@@ -157120,7 +157352,15 @@
       "top_reviewer_quotes": [
         "In the air, 95% of people cannot tell this apart from Naxos."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "paris-corner-north-stag-quatre-iv",
@@ -157196,7 +157436,15 @@
       "top_reviewer_quotes": [
         "Better performance than LV Afternoon Swim at a fraction of the cost."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "maison-alhambra-jean-lowe-immortal",
@@ -157280,7 +157528,97 @@
       "top_reviewer_quotes": [
         "This is 95% L'Immensité. Total masterpiece for daily wear."
       ]
-    }
+    },
+    "community_sellers": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 2719,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal",
+        "verified": true
+      }
+    ],
+    "community_decants": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 219,
+          "8ml": 319,
+          "10ml": 319,
+          "30ml": 1069
+        },
+        "lowest_price": 219,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 219,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 219,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 319,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 319,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 319,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 319,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1069,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1069,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/maison-alhambra-jean-lowe-immortal"
+          }
+        ]
+      }
+    },
+    "in_seller_stock": true,
+    "community_price": 2719,
+    "lowest_seller": "Whiff Culture",
+    "has_decants": true,
+    "lowest_decant_price": 219
   },
   {
     "id": "maison-alhambra-the-tux",
@@ -157362,7 +157700,15 @@
       "top_reviewer_quotes": [
         "Pure black-tie luxury. Smells like a $300 bottle."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "maison-alhambra-kismet-magic",
@@ -157444,7 +157790,15 @@
       "top_reviewer_quotes": [
         "If you wanted Khamrah with the actual booziness of Angels' Share, this is it."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "swiss-arabian-casablanca",
@@ -157528,7 +157882,15 @@
       "top_reviewer_quotes": [
         "Smells like a high-end French bakery making caramel apples. 10/10 longevity."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "swiss-arabian-shaghaf-oud",
@@ -157609,7 +157971,15 @@
       "top_reviewer_quotes": [
         "Nuclear bomb in a gold bottle. The sweet praline oud is intoxicating."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   },
   {
     "id": "dumont-nitro-white",
@@ -157687,6 +158057,14 @@
       "top_reviewer_quotes": [
         "Massive compliment getter. Outperforms most designer fragrances."
       ]
-    }
+    },
+    "community_sellers": [],
+    "community_decants": [],
+    "decant_comparison": null,
+    "in_seller_stock": false,
+    "community_price": null,
+    "lowest_seller": null,
+    "has_decants": false,
+    "lowest_decant_price": null
   }
 ]
