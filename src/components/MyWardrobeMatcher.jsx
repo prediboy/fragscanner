@@ -3,7 +3,7 @@ import {
   Sparkles, ThumbsUp, ThumbsDown, CheckSquare, Square, 
   AlertTriangle, CheckCircle, ArrowRight, ShieldAlert, Heart, 
   Star, Search, Filter, RotateCcw, X, ShieldX, Flame,
-  ShoppingBag, Store, ChevronDown, ChevronUp
+  ShoppingBag, Store, ChevronDown, ChevronUp, Building2
 } from 'lucide-react';
 import { getProfileRecommendations } from '../utils/userProfiler';
 
@@ -16,15 +16,24 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
   const [selectionMode, setSelectionMode] = useState('like');
   const [showClashWarnings, setShowClashWarnings] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [activeRecTab, setActiveRecTab] = useState('overview'); // 'overview' | 'sellers' | 'companies'
   
   const [filterBrand, setFilterBrand] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const brands = [
-    'All', 'Rasasi', 'Lattafa', 'Armaf', 'Afnan', 'French Avenue', 
-    'Titan Skinn', 'Mykonos', 'Rayhaan', 'Ajmal', 'Maison Alhambra', 
-    'Ahmed Al Maghribi', 'Paris Corner'
-  ];
+  // Dynamically derive unique brands in catalog sorted by volume
+  const brands = useMemo(() => {
+    const counts = {};
+    allFragrances.forEach(f => {
+      if (f.brand) {
+        counts[f.brand] = (counts[f.brand] || 0) + 1;
+      }
+    });
+    const sorted = Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([b]) => b);
+    return ['All', ...sorted];
+  }, [allFragrances]);
 
   // Toggle Like handler (max 10)
   const toggleLike = (id) => {
@@ -109,8 +118,16 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
     return allFragrances.filter(f => dislikedIds.includes(f.id));
   }, [allFragrances, dislikedIds]);
 
-  // Run dual recommendation calculation
-  const { likedProfile = null, dislikedProfile = null, likes = [], sellerMatches = [], dislikes = [] } = useMemo(() => {
+  // Run dual recommendation calculation with Olfactory Umbrella & Multi-Company Matches
+  const { 
+    likedProfile = null, 
+    dislikedProfile = null, 
+    umbrella = null, 
+    likes = [], 
+    sellerMatches = [], 
+    companyMatches = [], 
+    dislikes = [] 
+  } = useMemo(() => {
     return getProfileRecommendations(likedPerfumes, dislikedPerfumes, allFragrances) || {};
   }, [likedPerfumes, dislikedPerfumes, allFragrances]);
 
@@ -406,12 +423,158 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
         )}
       </div>
 
-      {/* ==================== THE TWO RECOMMENDATION SECTIONS ==================== */}
+      {/* ==================== THE OLFACTORY UMBRELLA & RECOMMENDATION SECTIONS ==================== */}
       {hasSelections ? (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          {/* ================= SENSORY UMBRELLA SYNTHESIS CARD ================= */}
+          {umbrella && (
+            <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-[#101c33] to-slate-900/95 border-2 border-amber-500/40 shadow-2xl space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner shrink-0">
+                    {umbrella.icon || '✨'}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                        Your Olfactory Umbrella
+                      </span>
+                      <span className="text-[11px] text-slate-400">
+                        Synthesized from {umbrella.likedPerfumesCount} liked & {umbrella.dislikedPerfumesCount} avoided perfumes
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-white font-serif-luxury tracking-wide">
+                      {umbrella.title}
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                      {umbrella.vibe}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 self-start md:self-center">
+                  <span className="text-[11px] px-3 py-1 rounded-xl bg-slate-800/90 border border-slate-700 text-slate-300 font-semibold flex items-center gap-1">
+                    <span>🗓️</span> {umbrella.bestSeason}
+                  </span>
+                  <span className="text-[11px] px-3 py-1 rounded-xl bg-slate-800/90 border border-slate-700 text-slate-300 font-semibold flex items-center gap-1">
+                    <span>⏱️</span> {umbrella.dayNight}
+                  </span>
+                </div>
+              </div>
+
+              {/* Notes Breakdown: Green Zone (Likes) vs Red Zone (Forbidden/Shielded) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-800/80">
+                
+                {/* Green Zone: Preferred Notes */}
+                <div className="p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <span>Core Notes Under Your Umbrella</span>
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-normal">Favored by algorithm</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {umbrella.favoriteNotes.map((n, idx) => (
+                      <span 
+                        key={idx}
+                        className={`text-[11px] px-2.5 py-1 rounded-lg border font-medium ${
+                          umbrella.universalAnchorNotes.includes(n)
+                            ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200 font-bold shadow-sm'
+                            : 'bg-emerald-900/40 border-emerald-500/30 text-emerald-300'
+                        }`}
+                      >
+                        {umbrella.universalAnchorNotes.includes(n) && '⭐ '}
+                        {n.charAt(0).toUpperCase() + n.slice(1)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Red Zone: Shielded Notes (Blocked) */}
+                <div className="p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/30 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold text-rose-400">
+                    <span className="flex items-center gap-1.5">
+                      <ShieldX className="w-4 h-4 text-rose-400" />
+                      <span>Forbidden Notes Shield (Dislike Filter)</span>
+                    </span>
+                    <span className="text-[10px] text-rose-400 font-normal">Actively bypassed</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {umbrella.shieldedNotes.length > 0 ? (
+                      umbrella.shieldedNotes.map((n, idx) => (
+                        <span 
+                          key={idx}
+                          className="text-[11px] px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-500/30 text-rose-300 font-medium"
+                        >
+                          🚫 {n.charAt(0).toUpperCase() + n.slice(1)}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[11px] text-slate-400 italic">
+                        No dislikes checked yet — check perfumes you hate to shield their notes.
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* ================= RECS TAB SWITCHER ================= */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+              <button
+                onClick={() => setActiveRecTab('overview')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 ${
+                  activeRecTab === 'overview'
+                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>1. Best Scent Twins ({likes.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveRecTab('sellers')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 ${
+                  activeRecTab === 'sellers'
+                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Store className="w-3.5 h-3.5" />
+                <span>2. Ready to Buy • Live Sellers ({sellerMatches.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveRecTab('companies')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 ${
+                  activeRecTab === 'companies'
+                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5" />
+                <span>3. Best for Every Company ({companyMatches.length} Houses)</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-black">NEW</span>
+              </button>
+            </div>
+
+            <span className="text-xs text-slate-400">
+              Explore recommendations tailored to your scent umbrella
+            </span>
+          </div>
+
+          {/* ================= TAB CONTENT 1 & 2: OVERVIEW 2-COLUMN VIEW ================= */}
+          {(activeRecTab === 'overview' || activeRecTab === 'sellers') && (
+          <div className={`grid grid-cols-1 ${activeRecTab === 'overview' ? 'lg:grid-cols-2' : 'max-w-4xl mx-auto'} gap-8`}>
             
             {/* ================= SECTION 1: BEST MATCH OVERALL ================= */}
+            {activeRecTab === 'overview' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-emerald-500/30">
                 <div className="flex items-center gap-2 text-emerald-400 font-bold text-lg">
@@ -455,7 +618,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                           {item.fragrance.name}
                         </h4>
                         <div className="text-right">
-                          {item.fragrance.in_second_theory_sheet && item.fragrance.community_price ? (
+                          {item.fragrance.in_seller_stock && item.fragrance.community_price ? (
                             <>
                               <span className="text-xs font-bold text-emerald-400 font-mono">
                                 ₹{item.fragrance.community_price}
@@ -497,6 +660,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                 ))}
               </div>
             </div>
+            )}
 
             {/* ================= SECTION 2: BEST MATCH AVAILABLE WITH SELLER ================= */}
             <div className="space-y-4">
@@ -630,6 +794,142 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
             </div>
 
           </div>
+          )}
+
+          {/* ================= TAB 3: BROWSE YOU MAY ALSO LIKE BY COMPANY ================= */}
+          {activeRecTab === 'companies' && (
+            <div className="space-y-6">
+              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <Building2 className="w-5 h-5 text-amber-400" />
+                    <span>Your Scent Umbrella: Top Pick for Every Community House</span>
+                  </h4>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    For every company in the catalog, our algorithm picked their single best fragrance that fits under your customized olfactory umbrella:
+                  </p>
+                </div>
+                <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 shrink-0">
+                  {companyMatches.length} Houses Analyzed
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {companyMatches.map((comp, cIdx) => {
+                  const item = comp.bestMatch;
+                  const bestSeller = item.fragrance.community_sellers?.[0];
+                  const sellerQuote = item.fragrance.community_price;
+                  const waNumber = bestSeller?.whatsapp || '8076851481';
+                  const waUrl = `https://wa.me/91${waNumber}?text=${encodeURIComponent(`Hi ${bestSeller?.seller_name || 'Seller'}, I want to check availability for ${comp.brand} ${item.fragrance.name} quoted at ₹${sellerQuote || ''}.`)}`;
+
+                  return (
+                    <div
+                      key={cIdx}
+                      className="group p-4 rounded-2xl bg-[#142238] hover:bg-[#192b47] border border-slate-800 hover:border-amber-400/50 transition-all flex flex-col justify-between shadow-md"
+                    >
+                      <div>
+                        {/* Company Badge & Match Score */}
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-black text-amber-400 px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">
+                            {comp.brand}
+                          </span>
+                          <div className="flex items-center gap-1 text-xs font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-lg border border-emerald-500/30">
+                            <Star className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400" />
+                            <span>{item.matchOutOfFive.toFixed(1)} / 5.0</span>
+                          </div>
+                        </div>
+
+                        {/* Perfume Name */}
+                        <h4 
+                          onClick={() => onSelectFragrance(item.fragrance)}
+                          className="text-base font-extrabold text-white group-hover:text-amber-300 transition-colors cursor-pointer"
+                        >
+                          {item.fragrance.name}
+                        </h4>
+
+                        <p className="text-xs text-slate-400 mt-0.5 mb-2 line-clamp-1">
+                          {item.fragrance.dna_inspiration ? `Inspired by ${item.fragrance.dna_inspiration}` : item.fragrance.dna_type}
+                        </p>
+
+                        {/* Top Reason */}
+                        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/80 text-[11px] text-slate-300 space-y-1 mb-3">
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                            <span className="line-clamp-2">{item.likeReasons[0] || 'Matches your core accord umbrella.'}</span>
+                          </div>
+                        </div>
+
+                        {/* In-stock status & price */}
+                        <div className="flex items-center justify-between text-xs mb-2">
+                          {comp.hasInStock && sellerQuote ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-emerald-400 font-extrabold font-mono text-sm">
+                                ₹{sellerQuote}
+                              </span>
+                              <span className="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                                In Stock ({bestSeller?.seller_name})
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60">
+                              Archive Bottle • Ask to Source
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Secondary options within this brand */}
+                        {comp.otherOptions && comp.otherOptions.length > 0 && (
+                          <div className="pt-2 border-t border-slate-800/80 text-[10px] text-slate-400 flex items-center gap-1 flex-wrap">
+                            <span className="font-semibold text-slate-400">Also from {comp.brand}:</span>
+                            {comp.otherOptions.slice(0, 2).map((alt, aIdx) => (
+                              <button
+                                key={aIdx}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectFragrance(alt.fragrance);
+                                }}
+                                className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors truncate max-w-[120px]"
+                              >
+                                {alt.fragrance.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between gap-2">
+                        <button
+                          onClick={() => onSelectFragrance(item.fragrance)}
+                          className="text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1 transition-colors"
+                        >
+                          <span>Inspect Notes</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+
+                        {comp.hasInStock && sellerQuote ? (
+                          <a
+                            href={waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-transform hover:scale-105 shadow"
+                          >
+                            <span>Buy ({bestSeller?.seller_name})</span>
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => onSelectFragrance(item.fragrance)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                          >
+                            <span>View Details</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* ================= CLASH WARNINGS COLLAPSIBLE (DISLIKED SCENTS) ================= */}
           <div className="rounded-2xl border border-rose-900/40 bg-[#16121f] p-4 sm:p-5">

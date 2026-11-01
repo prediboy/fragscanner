@@ -192,16 +192,101 @@ export function analyzeDislikedProfile(dislikedPerfumes) {
   };
 }
 
+export function synthesizeOlfactoryUmbrella(likedProfile, dislikedProfile, likedPerfumes, dislikedPerfumes) {
+  if (!likedProfile) return null;
+
+  const topAccords = likedProfile.topAccords || [];
+  const topAccordNames = topAccords.map(a => a.name.toLowerCase());
+  
+  let title = "Curated Middle Eastern Olfactory Umbrella";
+  let vibe = "A balanced, refined olfactory signature tailored to your checked wardrobe preferences.";
+  let icon = "✨";
+  let themeColor = "amber";
+
+  const isAquatic = topAccordNames.some(a => a.includes('marine') || a.includes('aquatic') || a.includes('citrus') || a.includes('fresh'));
+  const isGourmand = topAccordNames.some(a => a.includes('sweet') || a.includes('vanilla') || a.includes('warm spicy'));
+  const isWoodySmoky = topAccordNames.some(a => a.includes('oud') || a.includes('leather') || a.includes('smoky') || a.includes('woody'));
+  const isBarbershop = topAccordNames.some(a => a.includes('aromatic') || a.includes('lavender') || a.includes('green'));
+  const isFloral = topAccordNames.some(a => a.includes('white floral') || a.includes('rose') || a.includes('fruity'));
+
+  if (isAquatic && !isWoodySmoky && !isGourmand) {
+    title = "Fresh Aquatic, Citrus & Radiant Ambroxan Umbrella";
+    vibe = "Uplifting, breezy, and energizing. Characterized by crisp citrus zest, ozonic sea mist, and a sparkling ambroxan drydown. High versatility for Indian summers, office, and active daily wear.";
+    icon = "🌊";
+    themeColor = "emerald";
+  } else if (isGourmand && !isAquatic) {
+    title = "Warm Boozy Gourmand, Cinnamon & Amber Vanilla Umbrella";
+    vibe = "Rich, decadent, and seductive. Dominated by creamy vanilla, toasted tonka, candied praline, and warm spices. Outstanding sillage and longevity, perfect for evenings, cooler nights, and special dates.";
+    icon = "🍯";
+    themeColor = "amber";
+  } else if (isAquatic && isGourmand) {
+    title = "Modern Sweet-Fresh Hybrid Umbrella (Bubblegum Aquatic)";
+    vibe = "Playful, crowd-pleasing, and vibrant. Combines youthful sweet fruity notes with aquatic blue undertones and high-heat longevity. Perfect party and evening signature.";
+    icon = "⚡";
+    themeColor = "purple";
+  } else if (isWoodySmoky) {
+    title = "Dark Smoky Incense, Precious Woods & Leather Umbrella";
+    vibe = "Mysterious, authoritative, and regal. Rooted in resinous labdanum, dark cedarwood, exotic spices, and smoky birch. Beast-mode trail for formal nights.";
+    icon = "🪵";
+    themeColor = "indigo";
+  } else if (isBarbershop) {
+    title = "Classic Aromatic Fougere & Crisp Barbershop Umbrella";
+    vibe = "Timeless, clean, and immaculately groomed. Soapy French lavender, brisk peppermint, crushed herbs, and earthy oakmoss. Clean professional presence.";
+    icon = "🌿";
+    themeColor = "teal";
+  } else if (isFloral) {
+    title = "Lush Floral Bouquet & Creamy Velvet Musk Umbrella";
+    vibe = "Soft, alluring, and luminous. Layered with exotic blossoms, sun-drenched fruits, and silky clean musk.";
+    icon = "🌸";
+    themeColor = "rose";
+  } else if (topAccords.length > 0) {
+    const formatted = topAccords.slice(0, 3).map(a => a.name.charAt(0).toUpperCase() + a.name.slice(1)).join(' • ');
+    title = `${formatted} Umbrella`;
+  }
+
+  // Favorite notes
+  const favoriteNotes = (likedProfile.topNotes || []).slice(0, 8);
+  const universalAnchorNotes = likedProfile.universalNotes || [];
+
+  // Blocked Dislike Notes & Accords (The Red Shield)
+  const shieldedNotes = (dislikedProfile?.allDislikedNotes || []).slice(0, 8);
+  const shieldedAccords = (dislikedProfile?.topDislikedAccords || []).map(a => a.name).slice(0, 5);
+
+  // Best Seasons calculation
+  const seasons = likedProfile.seasonWeights || {};
+  const sortedSeasons = Object.entries(seasons).sort((a, b) => b[1] - a[1]);
+  const bestSeason = sortedSeasons[0] ? sortedSeasons[0][0].charAt(0).toUpperCase() + sortedSeasons[0][0].slice(1) : 'All Seasons';
+
+  // Day vs Night
+  const isDayDominant = (likedProfile.dayNightRatio?.day || 50) >= (likedProfile.dayNightRatio?.night || 50);
+
+  return {
+    title,
+    vibe,
+    icon,
+    themeColor,
+    favoriteNotes,
+    universalAnchorNotes,
+    shieldedNotes,
+    shieldedAccords,
+    bestSeason,
+    dayNight: isDayDominant ? 'Daytime & Office Preferred' : 'Evening & Night Wear Preferred',
+    likedPerfumesCount: likedPerfumes.length,
+    dislikedPerfumesCount: dislikedPerfumes.length
+  };
+}
+
 export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes = [], allFragrances = []) {
   const hasLikes = likedPerfumes && likedPerfumes.length > 0;
   const hasDislikes = dislikedPerfumes && dislikedPerfumes.length > 0;
 
   if (!hasLikes && !hasDislikes) {
-    return { likes: [], sellerMatches: [], dislikes: [], likedProfile: null, dislikedProfile: null };
+    return { likes: [], sellerMatches: [], companyMatches: [], dislikes: [], likedProfile: null, dislikedProfile: null, umbrella: null };
   }
 
   const likedProfile = analyzeLikedProfile(likedPerfumes);
   const dislikedProfile = analyzeDislikedProfile(dislikedPerfumes);
+  const umbrella = synthesizeOlfactoryUmbrella(likedProfile, dislikedProfile, likedPerfumes, dislikedPerfumes);
 
   // Exclude perfumes already chosen by user in either list and unverified placeholder stubs
   const chosenIds = new Set([
@@ -527,6 +612,48 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     .sort((a, b) => b.matchOutOfFive - a.matchOutOfFive || b.rawAffinity - a.rawAffinity)
     .slice(0, 10);
 
+  // Section 3: "You May Also Like: Best Pick for Every Company"
+  // Groups top matches across ALL companies represented in the catalog
+  const companyMap = {};
+  scoredList
+    .filter(item => item.dislikePenalty < 35 && item.matchOutOfFive >= 3.4)
+    .forEach(item => {
+      const b = item.fragrance.brand;
+      if (!companyMap[b]) {
+        companyMap[b] = [];
+      }
+      companyMap[b].push(item);
+    });
+
+  const companyMatches = Object.entries(companyMap).map(([brand, items]) => {
+    items.sort((a, b) => {
+      const aInStock = Boolean(a.fragrance.in_seller_stock && a.fragrance.community_price);
+      const bInStock = Boolean(b.fragrance.in_seller_stock && b.fragrance.community_price);
+      if (aInStock && !bInStock) return -1;
+      if (!aInStock && bInStock) return 1;
+      return b.matchOutOfFive - a.matchOutOfFive || b.rawAffinity - a.rawAffinity;
+    });
+
+    const bestPick = items[0];
+    const totalCompanyOptions = items.length;
+    const inStockOptions = items.filter(i => i.fragrance.in_seller_stock).length;
+
+    return {
+      brand,
+      bestMatch: bestPick,
+      otherOptions: items.slice(1, 4),
+      totalOptions: totalCompanyOptions,
+      inStockOptions,
+      hasInStock: inStockOptions > 0
+    };
+  });
+
+  companyMatches.sort((a, b) => {
+    if (a.hasInStock && !b.hasInStock) return -1;
+    if (!a.hasInStock && b.hasInStock) return 1;
+    return b.bestMatch.matchOutOfFive - a.bestMatch.matchOutOfFive;
+  });
+
   // Clash Warnings: "Top 5 Perfumes You Might Dislike / Avoid"
   const topDislikes = [...scoredList]
     .filter(item => item.clashReasons.length > 0 || item.dislikePenalty >= 20 || item.matchOutOfFive <= 3.7)
@@ -536,8 +663,10 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   return {
     likedProfile,
     dislikedProfile,
+    umbrella,
     likes: topLikes,
     sellerMatches: topSellerMatches,
+    companyMatches,
     dislikes: topDislikes
   };
 }
