@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import fragrancesData from './data/fragrances.json';
 import syncMeta from './data/sync_meta.json';
 import FragranceDetailModal from './components/FragranceDetailModal';
@@ -132,15 +133,23 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-6 px-4 pb-24 md:pb-6 text-center text-xs text-slate-400 space-y-1.5">
+      <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-6 px-4 pb-24 md:pb-6 text-center text-xs text-slate-400 space-y-2">
         <p>
           FragScanner • Real-time Middle Eastern & Niche Fragrance Matcher • Live Quotes from Second Theory, FragFever & Apex Aroma.
         </p>
         <p className="text-slate-400">
           Always check with sellers on WhatsApp to confirm batch codes and stock prior to ordering.
         </p>
+        <div className="pt-2 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Real-time Community Traffic & Analytics Active</span>
+          </span>
+        </div>
       </footer>
 
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }
