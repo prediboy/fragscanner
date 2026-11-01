@@ -7,7 +7,26 @@ import {
 } from 'lucide-react';
 import { getProfileRecommendations } from '../utils/userProfiler';
 
-export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) {
+const COMMUNITY_SELLERS = [
+  { id: 'all', name: 'All Sellers', tag: 'All 6' },
+  { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
+  { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
+  { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
+  { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
+  { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
+  { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' }
+];
+
+export default function MyWardrobeMatcher({ 
+  allFragrances, 
+  onSelectFragrance,
+  selectedSeller: externalSeller,
+  onSelectSeller: externalSetSeller 
+}) {
+  const [internalSeller, setInternalSeller] = useState('all');
+  const selectedSeller = externalSeller !== undefined ? externalSeller : internalSeller;
+  const setSelectedSeller = externalSetSeller || setInternalSeller;
+
   // Dual-Preference State (starts empty as requested)
   const [likedIds, setLikedIds] = useState([]);
   const [dislikedIds, setDislikedIds] = useState([]);
@@ -84,6 +103,11 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
       if (filterBrand !== 'All' && f.brand.toLowerCase() !== filterBrand.toLowerCase()) {
         return false;
       }
+      if (selectedSeller !== 'all') {
+        const hasBottle = f.community_sellers?.some(s => s.seller_id === selectedSeller);
+        const hasDecant = f.community_decants?.some(d => d.seller_id === selectedSeller);
+        if (!hasBottle && !hasDecant) return false;
+      }
       if (searchQuery.trim() !== '') {
         const q = searchQuery.toLowerCase();
         return f.name.toLowerCase().includes(q) || f.brand.toLowerCase().includes(q) || (f.dna_inspiration || '').toLowerCase().includes(q);
@@ -130,6 +154,17 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
   } = useMemo(() => {
     return getProfileRecommendations(likedPerfumes, dislikedPerfumes, allFragrances) || {};
   }, [likedPerfumes, dislikedPerfumes, allFragrances]);
+
+  // Seller-filtered matches for Ready to Buy tab
+  const filteredSellerMatches = useMemo(() => {
+    if (selectedSeller === 'all') return sellerMatches;
+    return sellerMatches.filter(item => {
+      const f = item.fragrance;
+      const hasBottle = f.community_sellers?.some(s => s.seller_id === selectedSeller);
+      const hasDecant = f.community_decants?.some(d => d.seller_id === selectedSeller);
+      return hasBottle || hasDecant;
+    });
+  }, [sellerMatches, selectedSeller]);
 
   const hasSelections = likedIds.length > 0 || dislikedIds.length > 0;
 
@@ -237,6 +272,35 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
               <span className="text-rose-300">Tip: Click cards below to mark scent profiles you hate/avoid.</span>
             )}
           </div>
+        </div>
+
+        {/* SELLER FILTER PILLS (All 6 Verified Community Sellers) */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2.5 mb-3.5 border-b border-slate-800/80">
+          <span className="text-[11px] font-bold text-amber-400 whitespace-nowrap flex items-center gap-1.5 mr-1 shrink-0">
+            <Store className="w-3.5 h-3.5 text-amber-400" />
+            <span>Filter by Seller:</span>
+          </span>
+          {COMMUNITY_SELLERS.map(s => {
+            const isSelected = selectedSeller === s.id;
+            return (
+              <button
+                key={s.id}
+                onClick={() => setSelectedSeller(s.id)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all border flex items-center gap-1.5 shrink-0 ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-amber-300 shadow-md shadow-amber-500/20 font-black'
+                    : 'bg-slate-900/90 hover:bg-slate-850 text-slate-300 border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                <span>{s.name}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
+                  isSelected ? 'bg-slate-950/20 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'
+                }`}>
+                  {s.tag}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Filter controls */}
@@ -699,12 +763,17 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
               </div>
 
               <p className="text-xs text-slate-300">
-                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers</strong>: Full Bottles (Second Theory, FragFever & Apex Aroma) & Decants 5ml–30ml (Liquid Emotions, Blue Wings):
+                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers</strong> across Full Bottles and Decants (5ml–30ml):
+                {selectedSeller !== 'all' && (
+                  <span className="block mt-1 text-amber-400 font-semibold">
+                    Filtered by seller: <strong>{COMMUNITY_SELLERS.find(s => s.id === selectedSeller)?.name}</strong>
+                  </span>
+                )}
               </p>
 
               <div className="space-y-3">
-                {sellerMatches && sellerMatches.length > 0 ? (
-                  sellerMatches.map((item, idx) => {
+                {filteredSellerMatches && filteredSellerMatches.length > 0 ? (
+                  filteredSellerMatches.map((item, idx) => {
                     const bestSeller = item.fragrance.community_sellers?.[0];
                     const sellerQuote = item.fragrance.community_price;
                     const sellerCount = item.fragrance.community_sellers?.length || 1;
@@ -1044,14 +1113,14 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
       )}
 
       {/* ================= MOBILE FLOATING MATCH ACTION PILL (CONCEPT A) ================= */}
-      {hasSelections && sellerMatches && sellerMatches.length > 0 && (
+      {hasSelections && filteredSellerMatches && filteredSellerMatches.length > 0 && (
         <div 
           onClick={() => setMobileDrawerOpen(true)}
           className="fixed bottom-16 left-4 right-4 z-40 md:hidden bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 text-slate-950 font-black text-xs py-3 px-4 rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-between cursor-pointer active:scale-95 transition-all border border-amber-300"
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
-            <span>{sellerMatches.length} Scent Twins Found • Bottles & Decants</span>
+            <span>{filteredSellerMatches.length} Scent Twins Found • Bottles & Decants</span>
           </div>
           <span className="bg-slate-950 text-amber-300 px-2.5 py-1 rounded-xl text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
             View Deals &uarr;
@@ -1080,7 +1149,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified across Second Theory, FragFever, Apex Aroma, Liquid Emotions & Blue Wings
+                  Verified across 6 Sellers: Second Theory, FragFever, Apex Aroma, Liquid Emotions, Blue Wings & Whiff Culture
                 </p>
               </div>
               <button 
@@ -1093,7 +1162,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
 
             {/* In-Stock Seller Matches List */}
             <div className="overflow-y-auto space-y-2.5 flex-1 pr-1 pb-4">
-              {sellerMatches.map((item, idx) => {
+              {filteredSellerMatches.map((item, idx) => {
                 const bestSeller = item.fragrance.community_sellers?.[0];
                 const sellerQuote = item.fragrance.community_price;
                 const waNumber = bestSeller?.whatsapp || '8076851481';

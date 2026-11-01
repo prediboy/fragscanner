@@ -2,6 +2,7 @@
   {
     "id": "second_theory",
     "seller_name": "Second Theory",
+    "type": "bottle",
     "sheet_url": "https://docs.google.com/spreadsheets/d/1IoMk77atuzWEX9QibVPzmTruazspYZQ24sXeRmmne90/gviz/tq?tqx=out:csv",
     "whatsapp": "8076851481",
     "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
@@ -14,6 +15,7 @@
   {
     "id": "fragfever",
     "seller_name": "FragFever",
+    "type": "bottle",
     "sheet_url": "https://docs.google.com/spreadsheets/d/13kMrUoW_AHXEkqeTqOCri1szqmh1b1D8T5tPBtZFDfw/gviz/tq?tqx=out:csv&gid=0",
     "whatsapp": "9716764787",
     "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
@@ -26,6 +28,7 @@
   {
     "id": "apex_aroma",
     "seller_name": "Apex Aroma",
+    "type": "bottle",
     "sheet_url": "https://docs.google.com/spreadsheets/d/1JDLgpguWyg2gblX3uOw1naWTVbwWPta4rqYFG5xHsos/export?format=csv&gid=1236708900",
     "whatsapp": "9456411103",
     "alt_whatsapp": "8279794497",
@@ -65,6 +68,21 @@
       "5ml",
       "10ml",
       "20ml",
+      "30ml"
+    ]
+  },
+  {
+    "id": "whiffculture",
+    "seller_name": "Whiff Culture",
+    "type": "decant_and_bottle",
+    "url": "https://www.whiffculture.com",
+    "whatsapp": "9811377357",
+    "shipping": "Free Pan-India Delivery on orders above ₹1,499",
+    "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "5ml",
+      "8ml",
+      "10ml",
       "30ml"
     ]
   }

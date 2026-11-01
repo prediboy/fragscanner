@@ -150,7 +150,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                       )}
                     </div>
                     <p className="text-xs text-slate-300">
-                      Live quotes verified across 5 sellers for both <strong>Full Bottles</strong> and <strong>Decants (5ml - 30ml)</strong>:
+                      Live quotes verified across 6 sellers for both <strong>Full Bottles</strong> and <strong>Decants (5ml - 30ml)</strong>:
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -228,19 +228,32 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                               </p>
                             </div>
 
-                            <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between">
+                            <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between flex-wrap gap-2">
                               <span className="text-[10px] text-slate-400 flex items-center gap-1">
                                 <Truck className="w-3 h-3 text-slate-400" /> Dispatch: {seller.dispatch || '24-48 hrs'}
                               </span>
-                              <a
-                                href={waUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow"
-                              >
-                                <span>Buy Bottle on WhatsApp</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </a>
+                              <div className="flex items-center gap-2">
+                                {seller.product_url && (
+                                  <a
+                                    href={seller.product_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition-colors border border-slate-700"
+                                  >
+                                    <span>Store Page</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                                <a
+                                  href={waUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow"
+                                >
+                                  <span>Buy on WhatsApp</span>
+                                  <ArrowRight className="w-3 h-3" />
+                                </a>
+                              </div>
                             </div>
                           </div>
                         );
@@ -291,14 +304,14 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
                         <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>🧪 Decants & Samples (5ml • 10ml • 20ml • 30ml)</span>
+                        <span>🧪 Decants & Samples (5ml • 8ml • 10ml • 20ml • 30ml)</span>
                       </h4>
                       <p className="text-[11px] text-slate-400">
-                        Comparing live decant rates from <strong>Liquid Emotions</strong> and <strong>Blue Wings Fragrances</strong>:
+                        Comparing live decant rates from <strong>Liquid Emotions</strong>, <strong>Blue Wings</strong> & <strong>Whiff Culture</strong>:
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <a
                         href="https://liquidemotions.vercel.app/"
                         target="_blank"
@@ -320,12 +333,23 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                         <span>Blue Wings</span>
                         <ExternalLink className="w-2.5 h-2.5" />
                       </a>
+                      <span className="text-slate-600">•</span>
+                      <a
+                        href="https://www.whiffculture.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium"
+                      >
+                        <Globe className="w-3 h-3" />
+                        <span>Whiff Culture</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
                     </div>
                   </div>
 
                   {fragrance.has_decants && fragrance.decant_comparison ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                      {['5ml', '10ml', '20ml', '30ml'].map((size) => {
+                      {['5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
                         const sizeData = fragrance.decant_comparison[size];
                         if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
 
@@ -384,15 +408,28 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                                 const waUrl = `https://wa.me/91${topQuote.whatsapp}?text=${encodeURIComponent(waMsg)}`;
 
                                 return (
-                                  <a
-                                    href={waUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-full inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow"
-                                  >
-                                    <span>Buy {size} on WhatsApp</span>
-                                    <ArrowRight className="w-3 h-3" />
-                                  </a>
+                                  <div className="flex items-center gap-1.5">
+                                    {topQuote.website && topQuote.website.includes('http') && (
+                                      <a
+                                        href={topQuote.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+                                        title={`Visit ${topQuote.seller_name} product page`}
+                                      >
+                                        <ExternalLink className="w-3.5 h-3.5" />
+                                      </a>
+                                    )}
+                                    <a
+                                      href={waUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow"
+                                    >
+                                      <span>Buy {size} on WhatsApp</span>
+                                      <ArrowRight className="w-3 h-3" />
+                                    </a>
+                                  </div>
                                 );
                               })()}
                             </div>
@@ -403,7 +440,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                   ) : (
                     <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
                       <p className="text-xs text-slate-300">
-                        Fixed decants are not pre-listed for <strong>{fragrance.name}</strong>, but both decant sellers frequently decant customer requests upon inquiry:
+                        Fixed decants are not pre-listed for <strong>{fragrance.name}</strong>, but community decant sellers frequently decant customer requests upon inquiry:
                       </p>
                       <div className="flex items-center gap-2 flex-wrap pt-1">
                         <a
@@ -413,7 +450,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
                         >
                           <FlaskConical className="w-3 h-3 text-cyan-400" />
-                          <span>Ask Liquid Emotions Decants</span>
+                          <span>Ask Liquid Emotions</span>
                         </a>
                         <a
                           href={`https://wa.me/919899401419?text=${encodeURIComponent(`Hi Blue Wings, do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
@@ -422,7 +459,16 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
                         >
                           <FlaskConical className="w-3 h-3 text-cyan-400" />
-                          <span>Ask Blue Wings Decants</span>
+                          <span>Ask Blue Wings</span>
+                        </a>
+                        <a
+                          href={`https://wa.me/919811377357?text=${encodeURIComponent(`Hi Whiff Culture, do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
+                        >
+                          <FlaskConical className="w-3 h-3 text-cyan-400" />
+                          <span>Ask Whiff Culture</span>
                         </a>
                       </div>
                     </div>
