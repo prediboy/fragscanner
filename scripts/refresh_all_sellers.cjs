@@ -649,6 +649,59 @@ async function runMasterRefresh() {
   // Save updated fragrances.json
   fs.writeFileSync(fragrancesPath, JSON.stringify(fragrances, null, 2), "utf-8");
 
+  // ==========================================
+  // SYNC DIRECTLY TO SUPABASE DATABASE
+  // ==========================================
+  console.log("\n--- Syncing Live Prices & Decants directly to Supabase ---");
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const SUPABASE_URL = 'https://lvivmkdlaxaetnazmcat.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_8eXJXa7QmS1okuJ3tFwsbg_GyE7RaKC';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const chunkSize = 100;
+    for (let i = 0; i < fragrances.length; i += chunkSize) {
+      const chunk = fragrances.slice(i, i + chunkSize).map(f => ({
+        id: f.id,
+        name: f.name,
+        brand: f.brand,
+        rating_value: f.rating_value || 0,
+        rating_count: f.rating_count || 0,
+        collection: f.collection || '',
+        concentration: f.concentration || '',
+        primary_season: f.primary_season || '',
+        day_night: f.day_night || '',
+        longevity: f.longevity || '',
+        sillage: f.sillage || '',
+        gender: f.gender || '',
+        dna_type: f.dna_type || '',
+        dna_inspiration: f.dna_inspiration || '',
+        description: f.description || '',
+        top_notes: f.top_notes || [],
+        middle_notes: f.middle_notes || [],
+        base_notes: f.base_notes || [],
+        accords: f.accords || [],
+        in_seller_stock: !!f.in_seller_stock,
+        community_price: f.community_price || null,
+        has_decants: !!f.has_decants,
+        lowest_decant_price: f.lowest_decant_price || null,
+        community_sellers: f.community_sellers || [],
+        community_decants: f.community_decants || [],
+        best_bottle_seller: f.best_bottle_seller || null,
+        best_decant_seller: f.best_decant_seller || null,
+        updated_at: new Date().toISOString()
+      }));
+
+      const { error } = await supabase.from('fragrances').upsert(chunk, { onConflict: 'id' });
+      if (error) {
+        console.error("  Warning: Supabase sync chunk error:", error.message);
+      }
+    }
+    console.log("  ✓ Successfully synced all live prices to Supabase!");
+  } catch (err) {
+    console.error("  Warning: Supabase sync failed:", err.message);
+  }
+
   // Save sync_meta.json
   const syncMeta = {
     last_sync: new Date().toISOString(),

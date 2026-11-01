@@ -1,13 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import fragrancesData from './data/fragrances.json';
 import syncMeta from './data/sync_meta.json';
+import { supabase } from './lib/supabaseTelemetry';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import MyWardrobeMatcher from './components/MyWardrobeMatcher';
 import PriceDiscoveryView from './components/PriceDiscoveryView';
 import FragScannerAIAgent from './components/FragScannerAIAgent';
 import DirectFragranceSearchBar from './components/DirectFragranceSearchBar';
-import { Sparkles, Store, RefreshCw, Tag, Compass } from 'lucide-react';
+import { Sparkles, Store, RefreshCw, Tag, Compass, Database } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All Sellers', tag: 'All 6' },
@@ -24,10 +25,32 @@ export default function App() {
   const [quickTab, setQuickTab] = useState('overview');
   const [selectedSeller, setSelectedSeller] = useState('all');
   const [viewMode, setViewMode] = useState('matcher'); // 'matcher' (default: likes/dislikes) | 'discovery' | 'both'
+  const [allFragrances, setAllFragrances] = useState(fragrancesData);
+  const [isLiveDatabase, setIsLiveDatabase] = useState(false);
+
+  // Real-time Supabase Data Fetch
+  useEffect(() => {
+    async function fetchLiveFromSupabase() {
+      try {
+        const { data, error } = await supabase
+          .from('fragrances')
+          .select('*')
+          .range(0, 1500);
+
+        if (data && data.length > 500) {
+          setAllFragrances(data);
+          setIsLiveDatabase(true);
+        }
+      } catch (err) {
+        console.warn('Fallback to local cache:', err);
+      }
+    }
+    fetchLiveFromSupabase();
+  }, []);
 
   const totalReviews = useMemo(() => {
-    return fragrancesData.reduce((acc, curr) => acc + (curr.rating_count || 0), 0);
-  }, []);
+    return allFragrances.reduce((acc, curr) => acc + (curr.rating_count || 0), 0);
+  }, [allFragrances]);
 
   const openFragranceModal = (fragrance, tab = 'overview') => {
     setActiveFragrance(fragrance);
@@ -64,7 +87,7 @@ export default function App() {
           {/* Direct Search Bar */}
           <div className="flex-1 flex justify-center max-w-lg mx-auto w-full">
             <DirectFragranceSearchBar 
-              allFragrances={fragrancesData} 
+              allFragrances={allFragrances} 
               onSelectFragrance={(f) => openFragranceModal(f, 'overview')} 
             />
           </div>
@@ -134,6 +157,12 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            {isLiveDatabase && (
+              <span className="inline-flex items-center gap-1 text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
+                <Database className="w-2.5 h-2.5" />
+                <span>Supabase Live</span>
+              </span>
+            )}
             <span className="inline-flex items-center gap-1 text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded border border-slate-800">
               <RefreshCw className="w-2.5 h-2.5 text-emerald-400" />
               <span>Auto-refreshes every 2 hrs</span>
@@ -188,7 +217,7 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 flex-1 w-full pb-24 md:pb-8 space-y-12">
         {(viewMode === 'matcher' || viewMode === 'both') && (
           <MyWardrobeMatcher 
-            allFragrances={fragrancesData}
+            allFragrances={allFragrances}
             onSelectFragrance={(f) => openFragranceModal(f, 'recommendations')}
             selectedSeller={selectedSeller}
             onSelectSeller={setSelectedSeller}
@@ -211,7 +240,7 @@ export default function App() {
 
         {(viewMode === 'discovery' || viewMode === 'both') && (
           <PriceDiscoveryView 
-            allFragrances={fragrancesData}
+            allFragrances={allFragrances}
             selectedSeller={selectedSeller}
             onSelectSeller={setSelectedSeller}
             onSelectFragrance={(f) => openFragranceModal(f, 'overview')}
@@ -223,7 +252,7 @@ export default function App() {
       {activeFragrance && (
         <FragranceDetailModal
           fragrance={activeFragrance}
-          allFragrances={fragrancesData}
+          allFragrances={allFragrances}
           onClose={() => setActiveFragrance(null)}
           onSelectOther={(other) => setActiveFragrance(other)}
         />
