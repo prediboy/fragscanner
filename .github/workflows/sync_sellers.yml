@@ -1,30 +1,32 @@
-name: Sync Community Sellers
+name: Refresh Community Seller Prices (Every 2 Hours)
 
 on:
   schedule:
-    # Runs every 6 hours automatically
-    - cron: '0 */6 * * *'
+    # Runs every 2 hours automatically
+    - cron: '0 */2 * * *'
   workflow_dispatch: # Allows manual 1-click trigger anytime from GitHub Actions tab
 
 jobs:
-  sync:
+  refresh:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.10'
+          node-version: 20
 
-      - name: Run Seller Sync Pipeline
+      - name: Run Master Refresh Pipeline across All 6 Sellers
         run: |
-          python3 scripts/sync_all_community_sellers.py
+          node scripts/refresh_all_sellers.cjs
 
-      - name: Commit and Push Updates
+      - name: Commit and Push Fresh Prices
         run: |
-          git config --global user.name "ScentTwin Bot"
-          git config --global user.email "bot@scenttwin.com"
-          git add src/data/fragrances.json src/data/sync_meta.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-sync community seller prices from Google Sheets" && git push)
+          git config --global user.name "FragScanner Price Bot"
+          git config --global user.email "price-bot@fragscanner.app"
+          git add src/data/fragrances.json src/data/seller_config.json src/data/sync_meta.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(sync): automated 2-hour price refresh across all 6 community sellers" && git push)
