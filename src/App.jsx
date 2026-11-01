@@ -70,7 +70,7 @@ export default function App() {
               Community Sellers Live:
             </span>
             <span className="text-slate-300">
-              <strong>Second Theory</strong> & <strong>FragFever</strong>
+              <strong>Second Theory</strong>, <strong>FragFever</strong> & <strong>Apex Aroma</strong>
             </span>
             <span className="hidden sm:inline text-slate-600">•</span>
             <span className="text-emerald-300 font-mono font-semibold">
@@ -134,7 +134,7 @@ export default function App() {
       {/* Footer */}
       <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-6 px-4 pb-24 md:pb-6 text-center text-xs text-slate-400 space-y-1.5">
         <p>
-          FragScanner • Real-time Middle Eastern & Niche Fragrance Matcher • Live Quotes from Second Theory & FragFever.
+          FragScanner • Real-time Middle Eastern & Niche Fragrance Matcher • Live Quotes from Second Theory, FragFever & Apex Aroma.
         </p>
         <p className="text-slate-400">
           Always check with sellers on WhatsApp to confirm batch codes and stock prior to ordering.

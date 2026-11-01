@@ -1,8 +1,8 @@
 {
-  "last_synced": "2026-10-31 18:53:03 IST",
-  "total_catalog": 889,
-  "total_in_stock": 399,
-  "multi_seller_comparisons": 189,
+  "last_synced": "2026-11-01 13:03:12 IST",
+  "total_catalog": 1134,
+  "total_in_stock": 650,
+  "multi_seller_comparisons": 238,
   "sellers": [
     {
       "seller_id": "second_theory",
@@ -16,8 +16,16 @@
       "seller_id": "fragfever",
       "seller_name": "FragFever",
       "whatsapp": "9716764787",
-      "matched_items": 265,
-      "total_sheet_items": 441,
+      "matched_items": 446,
+      "total_sheet_items": 446,
+      "status": "success"
+    },
+    {
+      "seller_id": "apex_aroma",
+      "seller_name": "Apex Aroma",
+      "whatsapp": "9456411103",
+      "matched_items": 215,
+      "total_sheet_items": 215,
       "status": "success"
     }
   ]

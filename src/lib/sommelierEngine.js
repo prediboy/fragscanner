@@ -61,7 +61,7 @@ export function processSommelierQuery(queryText) {
         analysis += `In stock with **${sellers[0].seller_name}** at **₹${sellers[0].price}**.\n`;
       }
     } else {
-      analysis += `⚠️ **Seller Status:** Not currently listed on Second Theory or FragFever active sheets (archive bottle).\n`;
+      analysis += `⚠️ **Seller Status:** Not currently listed on community seller sheets (archive bottle).\n`;
     }
 
     return {
@@ -84,7 +84,7 @@ export function processSommelierQuery(queryText) {
     }
 
     const featured = matched.slice(0, 3);
-    let comparisonText = `### 🔍 **Live Multi-Seller Price Comparison**\n\nHere are real-time quotes compared across **Second Theory** and **FragFever**:\n\n`;
+    let comparisonText = `### 🔍 **Live Multi-Seller Price Comparison**\n\nHere are real-time quotes compared across **Second Theory**, **FragFever**, and **Apex Aroma**:\n\n`;
 
     featured.forEach(f => {
       comparisonText += `**${f.brand} ${f.name}**\n`;

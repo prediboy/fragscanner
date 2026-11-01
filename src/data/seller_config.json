@@ -22,5 +22,20 @@
     "product_col": 1,
     "price_col": 2,
     "hot_col": -1
+  },
+  {
+    "id": "apex_aroma",
+    "seller_name": "Apex Aroma",
+    "sheet_url": "https://docs.google.com/spreadsheets/d/1JDLgpguWyg2gblX3uOw1naWTVbwWPta4rqYFG5xHsos/export?format=csv&gid=1236708900",
+    "whatsapp": "9456411103",
+    "alt_whatsapp": "8279794497",
+    "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+    "dispatch": "24-48 hrs",
+    "brand_col": 0,
+    "product_col": 1,
+    "price_col": 2,
+    "inspired_col": 3,
+    "hot_col": -1,
+    "start_row": 9
   }
 ]

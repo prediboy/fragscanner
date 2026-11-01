@@ -10,7 +10,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), or comparing live prices across **Second Theory** and **FragFever**!",
+      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), or comparing live prices across **Second Theory**, **FragFever**, and **Apex Aroma**!",
       data: null
     }
   ]);
@@ -129,7 +129,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400">
-                    Live olfactory twins • Verified Second Theory & FragFever rates
+                    Live olfactory twins • Verified Second Theory, FragFever & Apex Aroma rates
                   </p>
                 </div>
               </div>

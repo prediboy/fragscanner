@@ -151,7 +151,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                     </div>
                     <p className="text-xs text-slate-300">
                       {fragrance.in_seller_stock 
-                        ? <>Comparing verified live quotes from community sellers <strong>Second Theory</strong> & <strong>FragFever</strong>:</>
+                        ? <>Comparing verified live quotes from community sellers (<strong>Second Theory</strong>, <strong>FragFever</strong> & <strong>Apex Aroma</strong>):</>
                         : <>Availability status with verified community sellers:</>
                       }
                     </p>
@@ -234,13 +234,13 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                       <span>Status: Not Listed in Active Sellers Lists</span>
                     </div>
                     <p className="text-xs text-slate-300">
-                      <strong>{fragrance.brand} {fragrance.name}</strong> is in the Fragrantica clone database, but is <strong>not currently listed on Second Theory or FragFever price lists</strong>.
+                      <strong>{fragrance.brand} {fragrance.name}</strong> is in the Fragrantica clone database, but is <strong>not currently listed on community price lists (Second Theory, FragFever, Apex Aroma)</strong>.
                     </p>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800">
                       <span className="text-[11px] text-slate-400">
                         Check availability or request sourcing directly:
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <a
                           href={`https://wa.me/918076851481?text=${encodeURIComponent(`Hi Second Theory, I see ${fragrance.brand} ${fragrance.name} is not on your current price list. Can you source this perfume?`)}`}
                           target="_blank"
@@ -256,6 +256,14 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
                         >
                           <span>Ask FragFever</span>
+                        </a>
+                        <a
+                          href={`https://wa.me/919456411103?text=${encodeURIComponent(`Hi Apex Aroma, I see ${fragrance.brand} ${fragrance.name} is not on your current price list. Can you source this perfume?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+                        >
+                          <span>Ask Apex Aroma</span>
                         </a>
                       </div>
                     </div>

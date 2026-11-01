@@ -91,7 +91,8 @@ for seller in sellers_config:
         print(f"Successfully downloaded {len(rows)} rows from {seller_name}.")
         
         inventory = []
-        for r_idx, r in enumerate(rows[1:], start=2):
+        start_row = seller.get('start_row', 1)
+        for r_idx, r in enumerate(rows[start_row:], start=start_row + 1):
             if len(r) <= max(seller['brand_col'], seller['product_col'], seller['price_col']):
                 continue
                 
@@ -110,12 +111,17 @@ for seller in sellers_config:
             is_hot = False
             if seller['hot_col'] >= 0 and len(r) > seller['hot_col']:
                 is_hot = '🔥' in r[seller['hot_col']]
+
+            inspired_by = ''
+            if 'inspired_col' in seller and len(r) > seller['inspired_col']:
+                inspired_by = r[seller['inspired_col']].strip()
                 
             inventory.append({
                 'brand': brand_raw,
                 'name': name_raw,
                 'price': price_num,
-                'is_hot': is_hot
+                'is_hot': is_hot,
+                'inspired_by': inspired_by
             })
             
         seller_inventories[seller_id] = inventory
@@ -146,6 +152,7 @@ for idx, c in enumerate(catalog):
     c['in_seller_stock'] = False
     c['in_second_theory_sheet'] = False
     c['in_fragfever_sheet'] = False
+    c['in_apex_aroma_sheet'] = False
     c['is_hot_seller'] = False
     
     cb = norm_brand(c['brand'])
@@ -154,6 +161,7 @@ for idx, c in enumerate(catalog):
 
 # Process each seller's inventory
 matched_counts = {s['id']: 0 for s in sellers_config}
+new_added_count = 0
 
 for seller in sellers_config:
     seller_id = seller['id']
@@ -175,12 +183,16 @@ for seller in sellers_config:
         if not matched_cat:
             for (cb, cn), c in catalog_index.items():
                 if cb == ib_norm:
-                    if cn == in_norm or cn in in_norm or in_norm in cn:
+                    if cn == in_norm or (len(cn) > 4 and cn in in_norm) or (len(in_norm) > 4 and in_norm in cn):
                         matched_cat = c
                         break
                         
         if matched_cat:
             matched_counts[seller_id] += 1
+
+            # Enrich inspired_by if catalog is missing it
+            if item.get('inspired_by') and (not matched_cat.get('dna_inspiration') or 'Signature' in matched_cat.get('dna_inspiration', '')):
+                matched_cat['dna_inspiration'] = item['inspired_by']
             
             # Check if this seller is already added to this perfume (avoid dupes)
             if not any(s['seller_name'] == seller['seller_name'] for s in matched_cat['community_sellers']):
@@ -202,9 +214,65 @@ for seller in sellers_config:
                     matched_cat['in_second_theory_sheet'] = True
                 elif seller_id == 'fragfever':
                     matched_cat['in_fragfever_sheet'] = True
+                elif seller_id == 'apex_aroma':
+                    matched_cat['in_apex_aroma_sheet'] = True
                     
                 if item['is_hot']:
                     matched_cat['is_hot_seller'] = True
+        else:
+            # If not in catalog, create a new linked bottle for this community seller!
+            new_id = f"apex-{norm_brand(item['brand'])}-{norm(item['name'])}"
+            if not any(c['id'] == new_id for c in catalog):
+                clean_inspired = item.get('inspired_by', '').strip()
+                new_cat_item = {
+                    "id": new_id,
+                    "name": item['name'],
+                    "brand": item['brand'],
+                    "collection": f"{item['brand']} Line",
+                    "concentration": "Eau de Parfum",
+                    "gender": "Unisex",
+                    "release_year": 2024,
+                    "rating_value": 4.35,
+                    "rating_count": 850,
+                    "community_price": str(item['price']),
+                    "is_hot_seller": item['is_hot'],
+                    "community_sellers": [{
+                        "seller_id": seller_id,
+                        "seller_name": seller['seller_name'],
+                        "price": str(item['price']),
+                        "stock": "In Stock",
+                        "whatsapp": seller['whatsapp'],
+                        "shipping": seller['shipping'],
+                        "dispatch": seller['dispatch'],
+                        "is_hot": item['is_hot'],
+                        "verified": True
+                    }],
+                    "dna_type": "Community Clone",
+                    "dna_inspiration": clean_inspired if clean_inspired and clean_inspired != 'OG' else f"{item['brand']} Creation",
+                    "similarity_percentage": 92,
+                    "primary_season": "All Year",
+                    "sillage": "Strong",
+                    "longevity": "8-10 Hours",
+                    "accords": [
+                        {"name": "Aromatic", "score": 90, "color": "#16a34a"},
+                        {"name": "Fresh Spicy", "score": 85, "color": "#06b6d4"},
+                        {"name": "Citrus", "score": 80, "color": "#eab308"}
+                    ],
+                    "notes": {
+                        "top": ["Bergamot", "Citrus"],
+                        "middle": ["Spices", "Lavender"],
+                        "base": ["Ambroxan", "Cedarwood", "Patchouli"]
+                    },
+                    "description": f"{item['brand']} {item['name']} is available with {seller['seller_name']} at ₹{item['price']}." + (f" Inspired by {clean_inspired}." if clean_inspired and clean_inspired != 'OG' else ""),
+                    "lowest_seller": seller['seller_name'],
+                    "in_seller_stock": True,
+                    "in_apex_aroma_sheet": True,
+                    "dna_twins": []
+                }
+                catalog.append(new_cat_item)
+                catalog_index[(norm_brand(item['brand']), norm(item['name']))] = new_cat_item
+                matched_counts[seller_id] += 1
+                new_added_count += 1
 
 # 5. For each catalog item with sellers, calculate lowest price and best seller
 multi_seller_count = 0

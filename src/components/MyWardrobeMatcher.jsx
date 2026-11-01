@@ -513,7 +513,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
               </div>
 
               <p className="text-xs text-slate-300">
-                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers (Second Theory & FragFever)</strong>, compared by best price:
+                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers (Second Theory, FragFever & Apex Aroma)</strong>, compared by best price:
               </p>
 
               <div className="space-y-3">
@@ -723,7 +723,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified In-Stock with FragFever & Second Theory
+                  Verified In-Stock across Second Theory, FragFever & Apex Aroma
                 </p>
               </div>
               <button 
