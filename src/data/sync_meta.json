@@ -1,24 +1,24 @@
 {
-  "last_sync": "2026-11-01T20:34:57.410Z",
-  "catalog_total": 1146,
+  "last_sync": "2026-11-01T20:41:15.012Z",
+  "catalog_total": 1150,
   "in_stock_count": 656,
-  "decants_available_count": 370,
-  "dual_available_count": 360,
+  "decants_available_count": 372,
+  "dual_available_count": 362,
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
-      "bottles": 404,
+      "bottles": 411,
       "type": "Full Bottles"
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 428,
+      "bottles": 448,
       "type": "Full Bottles"
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 205,
+      "bottles": 209,
       "type": "Full Bottles"
     },
     "liquid_emotions": {
@@ -34,8 +34,8 @@
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 380,
-      "decants": 390,
+      "bottles": 391,
+      "decants": 395,
       "type": "Dual"
     }
   }

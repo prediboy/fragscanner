@@ -86,6 +86,12 @@ function normalizeBrand(raw) {
 function cleanStr(s) {
   return (s || "")
     .toLowerCase()
+    .replace(/\bcdnim\b/gi, "club de nuit intense man")
+    .replace(/\bcdn\b/gi, "club de nuit")
+    .replace(/\bsnoi\b/gi, "supremacy not only intense")
+    .replace(/9:00\s*pm/gi, "9pm")
+    .replace(/immortel/gi, "immortal")
+    .replace(/\b\d+\s*ml\b/gi, "")
     .replace(/\b(edp|edt|parfum|extrait de parfum|extrait|pure parfum|eau de parfum|eau de toilette|pour homme|pour femme|partial|tester)\b/g, "")
     .replace(/[^a-z0-9]/g, "");
 }
