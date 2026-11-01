@@ -17,13 +17,23 @@ export default function PriceDiscoveryView({
   const [priceRange, setPriceRange] = useState('all'); // 'all' | 'u1500' | '1500-2500' | '2500-3500' | '3500plus'
   const [displayLimit, setDisplayLimit] = useState(32);
 
-  // Derive unique brands
+  const CORE_FEATURED_BRANDS = [
+    'Lattafa', 'Armaf', 'Rasasi', 'Afnan', 'Titan Skinn', 
+    'Mykonos', 'Rayhaan', 'Ahmed Al Maghribi', 'French Avenue', 
+    'Paris Corner', 'Swiss Arabian', 'Al Haramain', 'Maison Alhambra', 'Dumont'
+  ];
+
+  // Derive priority-ordered brands ensuring core houses are upfront
   const brands = useMemo(() => {
-    const counts = {};
-    allFragrances.forEach(f => {
-      if (f.brand) counts[f.brand] = (counts[f.brand] || 0) + 1;
-    });
-    return ['All', ...Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([b]) => b)];
+    const present = new Set();
+    allFragrances.forEach(f => { if (f.brand) present.add(f.brand); });
+
+    const prioritized = CORE_FEATURED_BRANDS.filter(b => present.has(b));
+    const remaining = Array.from(present)
+      .filter(b => !CORE_FEATURED_BRANDS.includes(b))
+      .sort((a, b) => a.localeCompare(b));
+
+    return ['All', ...prioritized, ...remaining];
   }, [allFragrances]);
 
   // Filtered & Sorted Fragrances

@@ -18,6 +18,12 @@ const COMMUNITY_SELLERS = [
   { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' }
 ];
 
+const CORE_FEATURED_BRANDS = [
+  'Lattafa', 'Armaf', 'Rasasi', 'Afnan', 'Titan Skinn', 
+  'Mykonos', 'Rayhaan', 'Ahmed Al Maghribi', 'French Avenue', 
+  'Paris Corner', 'Swiss Arabian', 'Al Haramain', 'Maison Alhambra', 'Dumont'
+];
+
 export default function MyWardrobeMatcher({ 
   allFragrances, 
   onSelectFragrance,
@@ -41,18 +47,17 @@ export default function MyWardrobeMatcher({
   const [filterBrand, setFilterBrand] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Dynamically derive unique brands in catalog sorted by volume
+  // Priority-ordered brand list ensuring user's core houses are upfront
   const brands = useMemo(() => {
-    const counts = {};
-    allFragrances.forEach(f => {
-      if (f.brand) {
-        counts[f.brand] = (counts[f.brand] || 0) + 1;
-      }
-    });
-    const sorted = Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([b]) => b);
-    return ['All', ...sorted];
+    const present = new Set();
+    allFragrances.forEach(f => { if (f.brand) present.add(f.brand); });
+
+    const prioritized = CORE_FEATURED_BRANDS.filter(b => present.has(b));
+    const remaining = Array.from(present)
+      .filter(b => !CORE_FEATURED_BRANDS.includes(b))
+      .sort((a, b) => a.localeCompare(b));
+
+    return ['All', ...prioritized, ...remaining];
   }, [allFragrances]);
 
   // Toggle Like handler (max 10)

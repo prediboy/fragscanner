@@ -8398,16 +8398,16 @@
     "id": "titan-skinn-steele",
     "name": "Steele",
     "brand": "Titan Skinn",
-    "collection": "Skinn Classic",
-    "rating_value": 4.16,
-    "rating_count": 980,
+    "collection": "Skinn Men",
+    "rating_value": 4.28,
+    "rating_count": 1850,
     "gender": "Men",
     "release_year": 2013,
     "concentration": "Eau de Parfum",
-    "primary_season": "Fall",
-    "dna_inspiration": "Sweet Spicy Leather Praline",
-    "dna_type": "Warm Spicy Woody",
-    "similarity_percentage": 90,
+    "primary_season": "Fall / Winter",
+    "dna_inspiration": "Original Creation / CH Men Prive twist",
+    "dna_type": "Woody Spicy Vanilla Leather",
+    "similarity_percentage": 88,
     "accords": [
       {
         "name": "Warm Spicy",
@@ -8415,64 +8415,60 @@
         "color": "#c2410c"
       },
       {
-        "name": "Woody",
-        "score": 88,
-        "color": "#854d0e"
-      },
-      {
         "name": "Vanilla",
-        "score": 80,
+        "score": 90,
         "color": "#f59e0b"
       },
       {
+        "name": "Woody",
+        "score": 85,
+        "color": "#854d0e"
+      },
+      {
         "name": "Leather",
-        "score": 68,
+        "score": 70,
         "color": "#78350f"
       }
     ],
     "notes": {
       "top": [
-        "Grapefruit",
-        "Bitter Orange",
-        "Rhubarb"
+        "Cardamom",
+        "Pink Pepper",
+        "Bergamot"
       ],
       "middle": [
-        "Pink Pepper",
-        "Pimento",
-        "Nutmeg",
+        "Praline",
+        "Cedarwood",
         "Geranium"
       ],
       "base": [
-        "Praline",
-        "Vanilla",
+        "Smoked Vanilla",
         "Leather",
-        "Cedarwood"
+        "Patchouli",
+        "Tonka Bean"
       ]
     },
     "seasons": {
-      "fall": 45,
-      "winter": 38,
-      "spring": 14,
-      "summer": 3
+      "winter": 50,
+      "fall": 40,
+      "spring": 10,
+      "summer": 0
     },
-    "day_night": {
-      "night": 72,
-      "day": 28
-    },
-    "longevity": "Long Lasting (8 hrs)",
-    "sillage": "Moderate to Strong",
+    "day_night": "Night",
+    "longevity": "Long Lasting (8h)",
+    "sillage": "Strong",
     "review_summary": {
+      "community_verdict": "The date night champion of the Titan Skinn lineup. Smooth vanilla and leather.",
       "pros": [
-        "Fiery pink pepper, sweet praline, and warm leather",
-        "Crafted by master perfumer Fabrice Pellegrin",
-        "Superb date night appeal"
+        "Masterfully blended by French master perfumers",
+        "Romantic and cozy",
+        "Great longevity for an Indian EDP"
       ],
       "cons": [
-        "Warm spicy profile for summer days"
+        "Too heavy for summer days"
       ],
-      "community_verdict": "Titan Skinn’s warmest, most sensual masculine scent.",
       "top_reviewer_quotes": [
-        "Warm spices and sweet roasted praline vanilla over leather."
+        "Raw for day, Steele for night. Absolute staple in any Indian collection."
       ]
     },
     "flankers": [
@@ -8524,42 +8520,43 @@
     "community_decants": [],
     "has_decants": false,
     "decant_comparison": null,
-    "lowest_decant_price": null
+    "lowest_decant_price": null,
+    "description": "Cardamom, pink pepper, and bergamot melting into smoked vanilla, rich praline, cedarwood, and masculine leather. One of Indian perfumery's most sophisticated evening scents."
   },
   {
     "id": "titan-skinn-amalfi-bleu",
     "name": "Amalfi Bleu",
     "brand": "Titan Skinn",
-    "collection": "Skinn Escapade",
+    "collection": "Skinn Men",
     "rating_value": 4.18,
     "rating_count": 1150,
     "gender": "Men",
-    "release_year": 2019,
+    "release_year": 2020,
     "concentration": "Eau de Parfum",
     "primary_season": "Summer",
-    "dna_inspiration": "Mediterranean Azure Marine / Light Blue",
-    "dna_type": "Marine Citrus Coastal",
-    "similarity_percentage": 92,
+    "dna_inspiration": "Dolce & Gabbana Light Blue / Acqua di Gio",
+    "dna_type": "Citrus Marine Aquatic",
+    "similarity_percentage": 90,
     "accords": [
       {
-        "name": "Marine / Aquatic",
+        "name": "Citrus",
         "score": 100,
-        "color": "#0284c7"
+        "color": "#eab308"
       },
       {
-        "name": "Citrus",
-        "score": 92,
-        "color": "#eab308"
+        "name": "Marine",
+        "score": 95,
+        "color": "#0284c7"
       },
       {
         "name": "Aromatic",
         "score": 80,
-        "color": "#16a34a"
+        "color": "#10b981"
       },
       {
-        "name": "Woody",
-        "score": 72,
-        "color": "#854d0e"
+        "name": "Fresh Spicy",
+        "score": 70,
+        "color": "#06b6d4"
       }
     ],
     "notes": {
@@ -8569,41 +8566,37 @@
         "Bergamot"
       ],
       "middle": [
+        "Sea Notes",
         "Lavender",
-        "Violet Leaves",
-        "Thyme"
+        "Violet Leaf"
       ],
       "base": [
-        "Vetiver",
-        "Amber",
         "Cedarwood",
-        "Musk"
+        "Musk",
+        "Amber"
       ]
     },
     "seasons": {
-      "summer": 74,
-      "spring": 20,
+      "summer": 70,
+      "spring": 25,
       "fall": 5,
-      "winter": 1
+      "winter": 0
     },
-    "day_night": {
-      "day": 84,
-      "night": 16
-    },
-    "longevity": "Long Lasting (8 hrs)",
-    "sillage": "Moderate to Strong",
+    "day_night": "Day",
+    "longevity": "Moderate-Long (6-8h)",
+    "sillage": "Moderate",
     "review_summary": {
+      "community_verdict": "Ultra-refreshing marine citrus that excels in 40°C Indian heat.",
       "pros": [
-        "Sun-drenched Italian coast citrus with salty breeze",
-        "Formulated by master perfumer Alberto Morillas",
-        "High compliment rate in summer"
+        "Zero cloying in high heat",
+        "Crisp ocean air vibe",
+        "Clean office safe"
       ],
       "cons": [
-        "Very popular in offices"
+        "Needs reapplication after 6 hours in humid weather"
       ],
-      "community_verdict": "Arguably Titan Skinn’s highest quality fresh aquatic fragrance.",
       "top_reviewer_quotes": [
-        "Smells like a luxury Italian cruise on the Mediterranean sea."
+        "The best hot weather perfume from Titan Skinn."
       ]
     },
     "flankers": [
@@ -8643,7 +8636,8 @@
     "community_decants": [],
     "has_decants": false,
     "decant_comparison": null,
-    "lowest_decant_price": null
+    "lowest_decant_price": null,
+    "description": "Zesty Mediterranean mandarin orange, green apple, marine sea wave accords, and soothing lavender over dry cedarwood and clean musk. The quintessential fresh Indian summer signature."
   },
   {
     "id": "titan-skinn-verge",
@@ -156713,6 +156707,986 @@
           }
         ]
       }
+    }
+  },
+  {
+    "id": "al-haramain-amber-oud-gold",
+    "name": "Amber Oud Gold Edition",
+    "brand": "Al Haramain",
+    "collection": "Amber Oud",
+    "rating_value": 4.38,
+    "rating_count": 5800,
+    "gender": "Unisex",
+    "release_year": 2018,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Summer",
+    "day_night": "Day & Night",
+    "longevity": "Eternal (12h+)",
+    "sillage": "Enormous",
+    "dna_type": "Fruity Sweet Musk",
+    "dna_inspiration": "Xerjoff Erba Pura",
+    "similarity_percentage": 92,
+    "description": "A decadent explosion of sweet melon, juicy pineapple and sparkling bergamot over a luscious amber, vanilla and clean musk base. Widely recognized as the premier Erba Pura clone with monster projection.",
+    "accords": [
+      {
+        "name": "Sweet",
+        "score": 100,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Fruity",
+        "score": 95,
+        "color": "#f97316"
+      },
+      {
+        "name": "Amber",
+        "score": 85,
+        "color": "#d97706"
+      },
+      {
+        "name": "Musky",
+        "score": 75,
+        "color": "#a855f7"
+      },
+      {
+        "name": "Citrus",
+        "score": 70,
+        "color": "#eab308"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Bergamot",
+        "Green Notes"
+      ],
+      "middle": [
+        "Melon",
+        "Sweet Notes",
+        "Pineapple",
+        "Amber"
+      ],
+      "base": [
+        "Musk",
+        "Vanilla",
+        "Woody Notes"
+      ]
+    },
+    "seasons": {
+      "summer": 45,
+      "spring": 35,
+      "fall": 15,
+      "winter": 5
+    },
+    "review_summary": {
+      "community_verdict": "Nuclear longevity and intoxicating melon-pineapple projection that easily matches Xerjoff Erba Pura.",
+      "pros": [
+        "12+ hour beastmode performance",
+        "Compliment magnet in summer and warm evenings",
+        "High quality fruity musk"
+      ],
+      "cons": [
+        "Very loud if oversprayed",
+        "Very sweet for formal wear"
+      ],
+      "top_reviewer_quotes": [
+        "Fills a room with 2 sprays. Better longevity than Erba Pura.",
+        "Best fruity melon opening in the clone world."
+      ]
+    }
+  },
+  {
+    "id": "al-haramain-laventure",
+    "name": "L'Aventure",
+    "brand": "Al Haramain",
+    "collection": "L'Aventure",
+    "rating_value": 4.22,
+    "rating_count": 6200,
+    "gender": "Men",
+    "release_year": 2016,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Spring / Summer",
+    "day_night": "Day",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Citrus Smoky Woody",
+    "dna_inspiration": "Creed Aventus (Fruity Batch)",
+    "similarity_percentage": 90,
+    "description": "A sparkling, refined take on Creed Aventus focusing on natural tart lemon, bergamot, and elemi resin transitioning into birch wood, lily-of-the-valley, patchouli, and clean ambergris.",
+    "accords": [
+      {
+        "name": "Citrus",
+        "score": 100,
+        "color": "#eab308"
+      },
+      {
+        "name": "Woody",
+        "score": 85,
+        "color": "#854d0e"
+      },
+      {
+        "name": "Smoky",
+        "score": 70,
+        "color": "#475569"
+      },
+      {
+        "name": "Aromatic",
+        "score": 65,
+        "color": "#10b981"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Lemon",
+        "Bergamot",
+        "Elemi"
+      ],
+      "middle": [
+        "Woody Notes",
+        "Jasmine",
+        "Lily-of-the-Valley"
+      ],
+      "base": [
+        "Musk",
+        "Patchouli",
+        "Amber"
+      ]
+    },
+    "seasons": {
+      "summer": 40,
+      "spring": 45,
+      "fall": 10,
+      "winter": 5
+    },
+    "review_summary": {
+      "community_verdict": "One of the smoothest, least harsh Aventus interpretations on the market with a brighter citrus opening.",
+      "pros": [
+        "Zero synthetic alcohol blast on opening",
+        "Versatile signature daily driver",
+        "Mass appealing"
+      ],
+      "cons": [
+        "Less smoky than CDNIM",
+        "Moderate sillage compared to beast batches"
+      ],
+      "top_reviewer_quotes": [
+        "Much smoother than Club de Nuit Intense Man. Very close to fruity Aventus batches."
+      ]
+    }
+  },
+  {
+    "id": "al-haramain-amber-oud-tobacco",
+    "name": "Amber Oud Tobacco Edition",
+    "brand": "Al Haramain",
+    "collection": "Amber Oud",
+    "rating_value": 4.41,
+    "rating_count": 3900,
+    "gender": "Unisex",
+    "release_year": 2019,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Winter",
+    "day_night": "Night",
+    "longevity": "Eternal (12h+)",
+    "sillage": "Enormous",
+    "dna_type": "Warm Spicy Tobacco Vanilla",
+    "dna_inspiration": "Tom Ford Tobacco Vanille",
+    "similarity_percentage": 95,
+    "description": "Rich pipe tobacco leaf, clove, cinnamon, and star anise blended with dried fruit, dark vanilla, cacao, and tonka bean. Frequently hailed as more potent and opulent than the original Tom Ford formulation.",
+    "accords": [
+      {
+        "name": "Tobacco",
+        "score": 100,
+        "color": "#78350f"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 95,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Sweet",
+        "score": 90,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Vanilla",
+        "score": 85,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Cacao",
+        "score": 65,
+        "color": "#581c87"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Tobacco Leaf",
+        "Cinnamon",
+        "Black Pepper",
+        "Ginger"
+      ],
+      "middle": [
+        "Vanilla",
+        "Star Anise",
+        "Clove",
+        "Cacao",
+        "Tonka Bean",
+        "Incense"
+      ],
+      "base": [
+        "Tobacco",
+        "Dried Fruits",
+        "Woody Notes"
+      ]
+    },
+    "seasons": {
+      "winter": 65,
+      "fall": 30,
+      "spring": 5,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "Arguably the single best Tobacco Vanille clone on earth. Nuclear performance with rich authentic pipe tobacco.",
+      "pros": [
+        "Nearly 1:1 with vintage Tobacco Vanille",
+        "Monster projection and sillage",
+        "Deep dried fruit complexity"
+      ],
+      "cons": [
+        "Unwearable in warm weather",
+        "Potent clove/spice opening"
+      ],
+      "top_reviewer_quotes": [
+        "Better than modern TF Tobacco Vanille bottles.",
+        "12 hours easily on skin, days on coats."
+      ]
+    }
+  },
+  {
+    "id": "paris-corner-emir-youre-drugged",
+    "name": "Emir You're Drugged",
+    "brand": "Paris Corner",
+    "collection": "Emir",
+    "rating_value": 4.31,
+    "rating_count": 1200,
+    "gender": "Unisex",
+    "release_year": 2022,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Fall / Winter",
+    "day_night": "Night",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Aromatic Spicy Coffee",
+    "dna_inspiration": "Kilian Intoxicated",
+    "similarity_percentage": 93,
+    "description": "A hypnotic blend of freshly crushed green cardamom, warm cinnamon, rich roasted Turkish coffee, and caramelized nutmeg. Captures Kilian Intoxicated's signature cardamom coffee accord with remarkable accuracy.",
+    "accords": [
+      {
+        "name": "Warm Spicy",
+        "score": 100,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Coffee",
+        "score": 90,
+        "color": "#451a03"
+      },
+      {
+        "name": "Aromatic",
+        "score": 80,
+        "color": "#10b981"
+      },
+      {
+        "name": "Sweet",
+        "score": 70,
+        "color": "#ec4899"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Cardamom",
+        "Coffee"
+      ],
+      "middle": [
+        "Cinnamon",
+        "Nutmeg"
+      ],
+      "base": [
+        "Caramel",
+        "Vanilla",
+        "Amber"
+      ]
+    },
+    "seasons": {
+      "winter": 55,
+      "fall": 40,
+      "spring": 5,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "Top-tier clone of Kilian Intoxicated. Addictive warm cardamom coffee for crisp evenings.",
+      "pros": [
+        "Photorealistic cardamom-coffee note",
+        "Luxury Kilian presentation and heavy glass",
+        "Great price-to-performance ratio"
+      ],
+      "cons": [
+        "Cardamom heavy for citrus lovers"
+      ],
+      "top_reviewer_quotes": [
+        "Kilian Intoxicated for 1/6th the price. Gorgeous autumn scent."
+      ]
+    }
+  },
+  {
+    "id": "paris-corner-voux-elegante",
+    "name": "Voux Elegante",
+    "brand": "Paris Corner",
+    "collection": "Emir",
+    "rating_value": 4.36,
+    "rating_count": 1450,
+    "gender": "Unisex",
+    "release_year": 2022,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Fall / Winter",
+    "day_night": "Day & Night",
+    "longevity": "Long Lasting (8h)",
+    "sillage": "Moderate-Strong",
+    "dna_type": "Sweet Honey Tobacco Lavender",
+    "dna_inspiration": "Xerjoff Naxos 1861",
+    "similarity_percentage": 91,
+    "description": "Golden honey, smooth pipe tobacco, crisp Sicilian lemon and calming lavender over a cashmeran and tonka bean base. A remarkably refined interpretation of Xerjoff's iconic Naxos.",
+    "accords": [
+      {
+        "name": "Honey",
+        "score": 100,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Sweet",
+        "score": 90,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Tobacco",
+        "score": 85,
+        "color": "#78350f"
+      },
+      {
+        "name": "Lavender",
+        "score": 75,
+        "color": "#8b5cf6"
+      },
+      {
+        "name": "Citrus",
+        "score": 65,
+        "color": "#eab308"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Bergamot",
+        "Lemon",
+        "Lavender"
+      ],
+      "middle": [
+        "Honey",
+        "Cinnamon",
+        "Cashmeran",
+        "Jasmine"
+      ],
+      "base": [
+        "Tobacco Leaf",
+        "Tonka Bean",
+        "Vanilla"
+      ]
+    },
+    "seasons": {
+      "fall": 45,
+      "winter": 40,
+      "spring": 15,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "The closest budget-friendly answer to Xerjoff Naxos on the market today.",
+      "pros": [
+        "Rich natural honey and lavender blend",
+        "Sophisticated and versatile in cold weather",
+        "High-class drydown"
+      ],
+      "cons": [
+        "Opening has slightly more alcohol than Naxos"
+      ],
+      "top_reviewer_quotes": [
+        "In the air, 95% of people cannot tell this apart from Naxos."
+      ]
+    }
+  },
+  {
+    "id": "paris-corner-north-stag-quatre-iv",
+    "name": "North Stag Expressions IV QUATRE",
+    "brand": "Paris Corner",
+    "collection": "North Stag",
+    "rating_value": 4.45,
+    "rating_count": 1800,
+    "gender": "Men",
+    "release_year": 2023,
+    "concentration": "Extrait de Parfum",
+    "primary_season": "Summer",
+    "day_night": "Day",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Citrus Ginger Fresh Aquatic",
+    "dna_inspiration": "Louis Vuitton Afternoon Swim",
+    "similarity_percentage": 94,
+    "description": "High-octane sparkling mandarin orange, ginger, Sicilian bergamot, and ambergris. Replicates the hyper-refreshing citrus realism of Louis Vuitton Afternoon Swim with superior Extrait-concentration longevity.",
+    "accords": [
+      {
+        "name": "Citrus",
+        "score": 100,
+        "color": "#eab308"
+      },
+      {
+        "name": "Fresh Spicy",
+        "score": 85,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 65,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Aquatic",
+        "score": 60,
+        "color": "#0284c7"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Mandarin Orange",
+        "Sicilian Orange",
+        "Bergamot"
+      ],
+      "middle": [
+        "Ginger",
+        "Water Notes"
+      ],
+      "base": [
+        "Ambergris",
+        "Musk"
+      ]
+    },
+    "seasons": {
+      "summer": 70,
+      "spring": 25,
+      "fall": 5,
+      "winter": 0
+    },
+    "review_summary": {
+      "community_verdict": "Extrait de parfum performance for Louis Vuitton Afternoon Swim's zesty mandarin DNA.",
+      "pros": [
+        "Outlasts the original Louis Vuitton",
+        "Incredible refreshing mandarin ginger note",
+        "Premium heavy magnetic cap"
+      ],
+      "cons": [
+        "Higher price point than entry clones"
+      ],
+      "top_reviewer_quotes": [
+        "Better performance than LV Afternoon Swim at a fraction of the cost."
+      ]
+    }
+  },
+  {
+    "id": "maison-alhambra-jean-lowe-immortal",
+    "name": "Jean Lowe Immortal",
+    "brand": "Maison Alhambra",
+    "collection": "Jean Lowe",
+    "rating_value": 4.44,
+    "rating_count": 3200,
+    "gender": "Men",
+    "release_year": 2023,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Spring / Summer / Fall",
+    "day_night": "Day & Night",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Citrus Ginger Amber Aquatic",
+    "dna_inspiration": "Louis Vuitton L'Immensité",
+    "similarity_percentage": 95,
+    "description": "Effervescent grapefruit and spicy ginger married to rosemary, water notes, labdanum, and ambroxan. Universally celebrated as the definitive clone of Louis Vuitton L'Immensité.",
+    "accords": [
+      {
+        "name": "Citrus",
+        "score": 100,
+        "color": "#eab308"
+      },
+      {
+        "name": "Fresh Spicy",
+        "score": 90,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 75,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Amber",
+        "score": 70,
+        "color": "#d97706"
+      },
+      {
+        "name": "Aromatic",
+        "score": 65,
+        "color": "#10b981"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Grapefruit",
+        "Ginger",
+        "Bergamot"
+      ],
+      "middle": [
+        "Water Notes",
+        "Sage",
+        "Rosemary",
+        "Geranium"
+      ],
+      "base": [
+        "Ambroxan",
+        "Amber",
+        "Labdanum"
+      ]
+    },
+    "seasons": {
+      "summer": 45,
+      "spring": 40,
+      "fall": 15,
+      "winter": 0
+    },
+    "review_summary": {
+      "community_verdict": "The absolute best clone of Louis Vuitton L'Immensité available. Signature scent material.",
+      "pros": [
+        "Sensational sparkling grapefruit and ginger",
+        "Smooth ambroxan drydown",
+        "Versatile all-season performer"
+      ],
+      "cons": [
+        "Hard to keep in stock due to viral hype"
+      ],
+      "top_reviewer_quotes": [
+        "This is 95% L'Immensité. Total masterpiece for daily wear."
+      ]
+    }
+  },
+  {
+    "id": "maison-alhambra-the-tux",
+    "name": "The Tux",
+    "brand": "Maison Alhambra",
+    "collection": "Private",
+    "rating_value": 4.52,
+    "rating_count": 4100,
+    "gender": "Unisex",
+    "release_year": 2022,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Fall / Winter",
+    "day_night": "Night",
+    "longevity": "Long Lasting (8h)",
+    "sillage": "Strong",
+    "dna_type": "Patchouli Vanilla Rose Amber",
+    "dna_inspiration": "Yves Saint Laurent Tuxedo",
+    "similarity_percentage": 96,
+    "description": "Black pepper, coriander, and bergamot leading into a silky violet leaf, rose, and bourbon vanilla center wrapped in earthy patchouli and ambergris. A legendary 1:1 recreation of YSL Tuxedo.",
+    "accords": [
+      {
+        "name": "Patchouli",
+        "score": 100,
+        "color": "#065f46"
+      },
+      {
+        "name": "Vanilla",
+        "score": 90,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 85,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Amber",
+        "score": 80,
+        "color": "#d97706"
+      },
+      {
+        "name": "Rose",
+        "score": 60,
+        "color": "#f43f5e"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Violet Leaf",
+        "Bergamot",
+        "Coriander"
+      ],
+      "middle": [
+        "Rose",
+        "Black Pepper",
+        "Lily-of-the-Valley"
+      ],
+      "base": [
+        "Patchouli",
+        "Ambergris",
+        "Bourbon Vanilla"
+      ]
+    },
+    "seasons": {
+      "winter": 50,
+      "fall": 45,
+      "spring": 5,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "A legendary clone that put Maison Alhambra on the map. Exact scent profile of YSL Tuxedo.",
+      "pros": [
+        "Indistinguishable in sillage from YSL Tuxedo",
+        "Ultra-sophisticated gentleman's evening scent"
+      ],
+      "cons": [
+        "Rare batch restocks"
+      ],
+      "top_reviewer_quotes": [
+        "Pure black-tie luxury. Smells like a $300 bottle."
+      ]
+    }
+  },
+  {
+    "id": "maison-alhambra-kismet-magic",
+    "name": "Kismet Magic (Kismet Angel)",
+    "brand": "Maison Alhambra",
+    "collection": "Kismet",
+    "rating_value": 4.39,
+    "rating_count": 3600,
+    "gender": "Unisex",
+    "release_year": 2022,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Winter",
+    "day_night": "Night",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Boezy Cognac Cinnamon Vanilla",
+    "dna_inspiration": "Kilian Angels' Share",
+    "similarity_percentage": 93,
+    "description": "Gourmand cognac liquor, spicy cinnamon, nutmeg, and dark praline melted into oak wood, tonka bean, and warm vanilla. Replicates the boozy apple-pie warmth of Kilian Angels' Share.",
+    "accords": [
+      {
+        "name": "Warm Spicy",
+        "score": 100,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Sweet",
+        "score": 95,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Vanilla",
+        "score": 90,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Cinnamon",
+        "score": 85,
+        "color": "#9a3412"
+      },
+      {
+        "name": "Woody",
+        "score": 70,
+        "color": "#854d0e"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Cognac",
+        "Nutmeg",
+        "Cinnamon"
+      ],
+      "middle": [
+        "Praline",
+        "Tonka Bean",
+        "Oak Wood"
+      ],
+      "base": [
+        "Vanilla",
+        "Sandalwood",
+        "Amber"
+      ]
+    },
+    "seasons": {
+      "winter": 65,
+      "fall": 30,
+      "spring": 5,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "A richer, boozier Angels' Share clone than Khamrah with true cognac notes.",
+      "pros": [
+        "Has the boozy cognac accord that Khamrah replaced with dates",
+        "Cozy winter date night king"
+      ],
+      "cons": [
+        "Too sweet for hot days"
+      ],
+      "top_reviewer_quotes": [
+        "If you wanted Khamrah with the actual booziness of Angels' Share, this is it."
+      ]
+    }
+  },
+  {
+    "id": "swiss-arabian-casablanca",
+    "name": "Casablanca",
+    "brand": "Swiss Arabian",
+    "collection": "Heritage",
+    "rating_value": 4.37,
+    "rating_count": 3400,
+    "gender": "Unisex",
+    "release_year": 2016,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Fall / Winter / Spring",
+    "day_night": "Day & Night",
+    "longevity": "Long Lasting (10h+)",
+    "sillage": "Strong",
+    "dna_type": "Fruity Caramel Amber Vanilla",
+    "dna_inspiration": "Original Creation / La Capitale vibes",
+    "similarity_percentage": 88,
+    "description": "Crisp ripe apples and green grapes drizzled in warm golden caramel, iris, white woods, amber, and sensual suede musk. An opulent, unforgettable sweet gourmand that turns heads everywhere.",
+    "accords": [
+      {
+        "name": "Sweet",
+        "score": 100,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Caramel",
+        "score": 95,
+        "color": "#b45309"
+      },
+      {
+        "name": "Fruity",
+        "score": 90,
+        "color": "#f97316"
+      },
+      {
+        "name": "Amber",
+        "score": 80,
+        "color": "#d97706"
+      },
+      {
+        "name": "Powdery",
+        "score": 65,
+        "color": "#c084fc"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Apple",
+        "Grapes"
+      ],
+      "middle": [
+        "White Woods",
+        "Patchouli",
+        "Iris"
+      ],
+      "base": [
+        "Caramel",
+        "Amber",
+        "Suede",
+        "Musk",
+        "Peru Balsam"
+      ]
+    },
+    "seasons": {
+      "fall": 45,
+      "winter": 35,
+      "spring": 20,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "Swiss Arabian's greatest gourmand masterpiece. Juicy glazed caramel apples with elite longevity.",
+      "pros": [
+        "Enormous projection",
+        "Warm, comforting caramel and fruit DNA",
+        "Massive compliment getter"
+      ],
+      "cons": [
+        "Rich sweetness may overwhelm in high heat"
+      ],
+      "top_reviewer_quotes": [
+        "Smells like a high-end French bakery making caramel apples. 10/10 longevity."
+      ]
+    }
+  },
+  {
+    "id": "swiss-arabian-shaghaf-oud",
+    "name": "Shaghaf Oud (Gold)",
+    "brand": "Swiss Arabian",
+    "collection": "Shaghaf",
+    "rating_value": 4.28,
+    "rating_count": 5100,
+    "gender": "Unisex",
+    "release_year": 2017,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Winter",
+    "day_night": "Night",
+    "longevity": "Eternal (14h+)",
+    "sillage": "Enormous",
+    "dna_type": "Oud Rose Praline Vanilla",
+    "dna_inspiration": "Lancôme Oud Bouquet",
+    "similarity_percentage": 95,
+    "description": "Saffron and deep oud melted into sweet roasted praline, French rose, amber, and intoxicating vanilla. Famous across the fragrance community for its nuclear 14+ hour longevity.",
+    "accords": [
+      {
+        "name": "Sweet",
+        "score": 100,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Oud",
+        "score": 95,
+        "color": "#451a03"
+      },
+      {
+        "name": "Vanilla",
+        "score": 90,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Warm Spicy",
+        "score": 75,
+        "color": "#c2410c"
+      },
+      {
+        "name": "Rose",
+        "score": 70,
+        "color": "#f43f5e"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Saffron"
+      ],
+      "middle": [
+        "Rose",
+        "Agarwood (Oud)"
+      ],
+      "base": [
+        "Praline",
+        "Vanilla",
+        "Agarwood (Oud)"
+      ]
+    },
+    "seasons": {
+      "winter": 75,
+      "fall": 25,
+      "spring": 0,
+      "summer": 0
+    },
+    "review_summary": {
+      "community_verdict": "The definition of nuclear Middle Eastern performance. 1 spray lasts until tomorrow.",
+      "pros": [
+        "Unbeatable longevity (14h+ on skin)",
+        "Opulent gourmand oud & praline",
+        "Inexpensive for its performance"
+      ],
+      "cons": [
+        "Never spray more than 2 times",
+        "Strictly for cold weather"
+      ],
+      "top_reviewer_quotes": [
+        "Nuclear bomb in a gold bottle. The sweet praline oud is intoxicating."
+      ]
+    }
+  },
+  {
+    "id": "dumont-nitro-white",
+    "name": "Nitro White",
+    "brand": "Dumont",
+    "collection": "Nitro",
+    "rating_value": 4.41,
+    "rating_count": 1100,
+    "gender": "Men",
+    "release_year": 2020,
+    "concentration": "Eau de Parfum",
+    "primary_season": "Spring / Summer",
+    "day_night": "Day",
+    "longevity": "Long Lasting (8-10h)",
+    "sillage": "Strong",
+    "dna_type": "Vanilla Honey Lavender Amber",
+    "dna_inspiration": "Invictus Victory / Ultra Male twist",
+    "similarity_percentage": 89,
+    "description": "Sweet mandarin orange, white peach, cedarwood, lavender, sweet vanilla, and golden honey. A powerhouse sweet-fresh party scent with massive projection.",
+    "accords": [
+      {
+        "name": "Vanilla",
+        "score": 100,
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Sweet",
+        "score": 90,
+        "color": "#ec4899"
+      },
+      {
+        "name": "Citrus",
+        "score": 75,
+        "color": "#eab308"
+      },
+      {
+        "name": "Amber",
+        "score": 70,
+        "color": "#d97706"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Mandarin Orange",
+        "Peach",
+        "Bergamot"
+      ],
+      "middle": [
+        "Lavender",
+        "Caramel",
+        "Cedarwood"
+      ],
+      "base": [
+        "Vanilla",
+        "Honey",
+        "Musk"
+      ]
+    },
+    "seasons": {
+      "spring": 35,
+      "summer": 35,
+      "fall": 20,
+      "winter": 10
+    },
+    "review_summary": {
+      "community_verdict": "Top tier sweet masculine daily wear with beastly projection and mass appeal.",
+      "pros": [
+        "Great performance",
+        "Girls love this profile",
+        "Unique creamy peach vanilla freshness"
+      ],
+      "cons": [
+        "Loud opening"
+      ],
+      "top_reviewer_quotes": [
+        "Massive compliment getter. Outperforms most designer fragrances."
+      ]
     }
   }
 ]
