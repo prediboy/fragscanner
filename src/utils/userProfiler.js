@@ -146,7 +146,7 @@ export function analyzeLikedProfile(likedPerfumes) {
   };
 }
 
-export function analyzeDislikedProfile(dislikedPerfumes) {
+export function analyzeDislikedProfile(dislikedPerfumes, likedProfile = null) {
   if (!dislikedPerfumes || dislikedPerfumes.length === 0) return null;
 
   const accordWeights = {};
@@ -174,8 +174,32 @@ export function analyzeDislikedProfile(dislikedPerfumes) {
 
     if (p.dna_inspiration) dislikedDnas.add(p.dna_inspiration.toLowerCase());
     if (p.dna_type) dislikedDnas.add(p.dna_type.toLowerCase());
+    
+    // Disliked perfume itself AND all its community scent twins!
+    dislikedTwinIds.add(p.id);
     (p.dna_twins || []).forEach(tid => dislikedTwinIds.add(tid));
     (p.flankers || []).forEach(fid => dislikedTwinIds.add(fid));
+  });
+
+  // Net Disliked Accords:
+  // An accord is ONLY penalized if the user dislikes it significantly MORE than they like it!
+  // If user has 4 citrus perfumes in likes, citrus has huge positive weight, so it is NEVER penalized.
+  const netDislikedAccords = [];
+  Object.entries(accordWeights).forEach(([name, dWeight]) => {
+    const lWeight = likedProfile?.accordWeights?.[name] || 0;
+    if (dWeight > lWeight * 1.1) {
+      netDislikedAccords.push({ name, weight: dWeight - lWeight });
+    }
+  });
+  netDislikedAccords.sort((a, b) => b.weight - a.weight);
+
+  // Pure Disliked Notes:
+  // A note is ONLY penalized if it is exclusive to dislikes and NOT in any liked perfumes!
+  const pureDislikedNotes = new Set();
+  allDislikedNotes.forEach(n => {
+    if (!likedProfile?.allLikedNotes?.includes(n)) {
+      pureDislikedNotes.add(n);
+    }
   });
 
   const topDislikedAccords = Object.entries(accordWeights)
@@ -185,6 +209,8 @@ export function analyzeDislikedProfile(dislikedPerfumes) {
 
   return {
     topDislikedAccords,
+    netDislikedAccords,
+    pureDislikedNotes,
     allDislikedNotes: Array.from(allDislikedNotes),
     dislikedDnas: Array.from(dislikedDnas),
     dislikedTwinIds,
@@ -196,49 +222,71 @@ export function synthesizeOlfactoryUmbrella(likedProfile, dislikedProfile, liked
   if (!likedProfile) return null;
 
   const topAccords = likedProfile.topAccords || [];
-  const topAccordNames = topAccords.map(a => a.name.toLowerCase());
   
+  // Volume-weighted family sums (Ratio Matters!)
+  let freshWeight = 0;
+  let gourmandWeight = 0;
+  let darkWoodyWeight = 0;
+  let barbershopWeight = 0;
+  let floralWeight = 0;
+
+  topAccords.forEach(a => {
+    const n = a.name.toLowerCase();
+    const w = a.weight || 0;
+    if (n.includes('citrus') || n.includes('aquatic') || n.includes('marine') || n.includes('fresh spicy') || n.includes('green') || n.includes('fruity')) {
+      freshWeight += w;
+    }
+    if (n.includes('sweet') || n.includes('vanilla') || n.includes('warm spicy') || n.includes('caramel') || n.includes('cinnamon')) {
+      gourmandWeight += w;
+    }
+    if (n.includes('oud') || n.includes('leather') || n.includes('smoky') || n.includes('incense') || n.includes('tobacco')) {
+      darkWoodyWeight += w;
+    }
+    if (n.includes('aromatic') || n.includes('lavender') || n.includes('oakmoss')) {
+      barbershopWeight += w;
+    }
+    if (n.includes('floral') || n.includes('rose') || n.includes('white floral')) {
+      floralWeight += w;
+    }
+  });
+
+  const totalVol = freshWeight + gourmandWeight + darkWoodyWeight + barbershopWeight + floralWeight || 1;
+  const freshPct = freshWeight / totalVol;
+  const gourmandPct = gourmandWeight / totalVol;
+  const darkWoodyPct = darkWoodyWeight / totalVol;
+  const barbershopPct = barbershopWeight / totalVol;
+
   let title = "Curated Middle Eastern Olfactory Umbrella";
   let vibe = "A balanced, refined olfactory signature tailored to your checked wardrobe preferences.";
   let icon = "✨";
   let themeColor = "amber";
 
-  const isAquatic = topAccordNames.some(a => a.includes('marine') || a.includes('aquatic') || a.includes('citrus') || a.includes('fresh'));
-  const isGourmand = topAccordNames.some(a => a.includes('sweet') || a.includes('vanilla') || a.includes('warm spicy'));
-  const isWoodySmoky = topAccordNames.some(a => a.includes('oud') || a.includes('leather') || a.includes('smoky') || a.includes('woody'));
-  const isBarbershop = topAccordNames.some(a => a.includes('aromatic') || a.includes('lavender') || a.includes('green'));
-  const isFloral = topAccordNames.some(a => a.includes('white floral') || a.includes('rose') || a.includes('fruity'));
-
-  if (isAquatic && !isWoodySmoky && !isGourmand) {
-    title = "Fresh Aquatic, Citrus & Radiant Ambroxan Umbrella";
-    vibe = "Uplifting, breezy, and energizing. Characterized by crisp citrus zest, ozonic sea mist, and a sparkling ambroxan drydown. High versatility for Indian summers, office, and active daily wear.";
+  // Decision driven by true DOMINANT RATIO
+  if (freshPct >= 0.40 && freshWeight > darkWoodyWeight * 1.5 && freshWeight > gourmandWeight * 1.5) {
+    title = "Fresh Citrus, Crisp Aromatic & Uplifting Blue Umbrella";
+    vibe = "Bright, uplifting, and oceanic. Characterized by Italian bergamot, crisp citrus zest, crushed mint, and a radiant ambroxan-woody drydown. Tailored for warm Indian weather, office versatility, and high daytime projection.";
     icon = "🌊";
     themeColor = "emerald";
-  } else if (isGourmand && !isAquatic) {
+  } else if (gourmandPct >= 0.40 && gourmandWeight > freshWeight * 1.5) {
     title = "Warm Boozy Gourmand, Cinnamon & Amber Vanilla Umbrella";
     vibe = "Rich, decadent, and seductive. Dominated by creamy vanilla, toasted tonka, candied praline, and warm spices. Outstanding sillage and longevity, perfect for evenings, cooler nights, and special dates.";
     icon = "🍯";
     themeColor = "amber";
-  } else if (isAquatic && isGourmand) {
-    title = "Modern Sweet-Fresh Hybrid Umbrella (Bubblegum Aquatic)";
-    vibe = "Playful, crowd-pleasing, and vibrant. Combines youthful sweet fruity notes with aquatic blue undertones and high-heat longevity. Perfect party and evening signature.";
-    icon = "⚡";
-    themeColor = "purple";
-  } else if (isWoodySmoky) {
+  } else if (darkWoodyPct >= 0.40 && darkWoodyWeight > freshWeight * 1.5) {
     title = "Dark Smoky Incense, Precious Woods & Leather Umbrella";
     vibe = "Mysterious, authoritative, and regal. Rooted in resinous labdanum, dark cedarwood, exotic spices, and smoky birch. Beast-mode trail for formal nights.";
     icon = "🪵";
     themeColor = "indigo";
-  } else if (isBarbershop) {
+  } else if (barbershopPct >= 0.35 && freshPct >= 0.25) {
     title = "Classic Aromatic Fougere & Crisp Barbershop Umbrella";
     vibe = "Timeless, clean, and immaculately groomed. Soapy French lavender, brisk peppermint, crushed herbs, and earthy oakmoss. Clean professional presence.";
     icon = "🌿";
     themeColor = "teal";
-  } else if (isFloral) {
-    title = "Lush Floral Bouquet & Creamy Velvet Musk Umbrella";
-    vibe = "Soft, alluring, and luminous. Layered with exotic blossoms, sun-drenched fruits, and silky clean musk.";
-    icon = "🌸";
-    themeColor = "rose";
+  } else if (freshPct >= 0.25 && gourmandPct >= 0.25) {
+    title = "Modern Sweet-Fresh Hybrid Umbrella (Bubblegum Aquatic)";
+    vibe = "Playful, crowd-pleasing, and vibrant. Combines youthful sweet fruity notes with aquatic blue undertones and high-heat longevity. Perfect party and evening signature.";
+    icon = "⚡";
+    themeColor = "purple";
   } else if (topAccords.length > 0) {
     const formatted = topAccords.slice(0, 3).map(a => a.name.charAt(0).toUpperCase() + a.name.slice(1)).join(' • ');
     title = `${formatted} Umbrella`;
@@ -248,11 +296,11 @@ export function synthesizeOlfactoryUmbrella(likedProfile, dislikedProfile, liked
   const favoriteNotes = (likedProfile.topNotes || []).slice(0, 8);
   const universalAnchorNotes = likedProfile.universalNotes || [];
 
-  // Blocked Dislike Notes & Accords (The Red Shield)
-  const shieldedNotes = (dislikedProfile?.allDislikedNotes || []).slice(0, 8);
-  const shieldedAccords = (dislikedProfile?.topDislikedAccords || []).map(a => a.name).slice(0, 5);
+  // Blocked Dislike Notes & Accords (Only Net Disliked items - no friendly fire on citrus/fresh notes!)
+  const shieldedNotes = Array.from(dislikedProfile?.pureDislikedNotes || []).slice(0, 8);
+  const shieldedAccords = (dislikedProfile?.netDislikedAccords || []).map(a => a.name).slice(0, 5);
 
-  // Best Seasons calculation
+  // Best Seasons calculation (Ratio-Driven)
   const seasons = likedProfile.seasonWeights || {};
   const sortedSeasons = Object.entries(seasons).sort((a, b) => b[1] - a[1]);
   const bestSeason = sortedSeasons[0] ? sortedSeasons[0][0].charAt(0).toUpperCase() + sortedSeasons[0][0].slice(1) : 'All Seasons';
@@ -285,7 +333,8 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
   }
 
   const likedProfile = analyzeLikedProfile(likedPerfumes);
-  const dislikedProfile = analyzeDislikedProfile(dislikedPerfumes);
+  // Pass likedProfile to resolve conflicts: liked citrus/fresh notes must never be penalized by dislikes!
+  const dislikedProfile = analyzeDislikedProfile(dislikedPerfumes, likedProfile);
   const umbrella = synthesizeOlfactoryUmbrella(likedProfile, dislikedProfile, likedPerfumes, dislikedPerfumes);
 
   // Exclude perfumes already chosen by user in either list and unverified placeholder stubs
@@ -302,11 +351,22 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     return true;
   });
 
-  // Dominant tendency flags from likes
-  const userHasSweetGourmand = likedProfile?.topAccords.some(a => ['sweet', 'vanilla', 'warm spicy'].includes(a.name));
-  const userHasFreshAquatic = likedProfile?.topAccords.some(a => ['marine / aquatic', 'citrus', 'fresh spicy', 'aromatic'].includes(a.name));
-  const userHasHeavyOudLeather = likedProfile?.topAccords.some(a => ['oud', 'leather', 'smoky'].includes(a.name));
-  const userHasBarbershop = likedProfile?.topAccords.some(a => ['aromatic', 'green', 'lavender', 'earthy / oakmoss'].includes(a.name));
+  // Dominant tendency flags from likes (Volume and Ratio-driven)
+  const totalLikedWeight = (likedProfile?.topAccords || []).reduce((sum, a) => sum + a.weight, 0) || 1;
+  const freshWeight = (likedProfile?.topAccords || [])
+    .filter(a => ['marine / aquatic', 'citrus', 'fresh spicy', 'aromatic', 'green', 'fruity'].includes(a.name))
+    .reduce((sum, a) => sum + a.weight, 0);
+  const oudLeatherWeight = (likedProfile?.topAccords || [])
+    .filter(a => ['oud', 'leather', 'smoky'].includes(a.name))
+    .reduce((sum, a) => sum + a.weight, 0);
+  const gourmandWeight = (likedProfile?.topAccords || [])
+    .filter(a => ['sweet', 'vanilla', 'warm spicy'].includes(a.name))
+    .reduce((sum, a) => sum + a.weight, 0);
+
+  const isDominantlyFresh = (freshWeight / totalLikedWeight) >= 0.50;
+  const isDominantlyOud = (oudLeatherWeight / totalLikedWeight) >= 0.45;
+  const isDominantlyGourmand = (gourmandWeight / totalLikedWeight) >= 0.45;
+  const userHasBarbershop = (likedProfile?.topAccords || []).some(a => ['aromatic', 'green', 'lavender', 'earthy / oakmoss'].includes(a.name));
 
   const scoredList = candidates.map(candidate => {
     // Tiered candidate notes
@@ -466,6 +526,7 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
 
     if (dislikedProfile) {
       // Direct twin of a disliked perfume? Immediate heavy disqualifier!
+      // (Uses the "You May Also Like for Dislikes" Shield)
       isDislikedDnaTwin = dislikedProfile.dislikedTwinIds.has(candidate.id) ||
         dislikedPerfumes.some(dp => 
           (dp.dna_inspiration && candidate.dna_inspiration && (
@@ -475,21 +536,21 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
         );
 
       if (isDislikedDnaTwin) {
-        dislikePenalty += 60;
+        dislikePenalty += 70;
       }
 
-      // Accord overlap with disliked perfumes
+      // Net Accord overlap with disliked perfumes (ONLY accords where dislike weight strictly beats liked weight)
       (candidate.accords || []).forEach(ca => {
-        const match = dislikedProfile.topDislikedAccords.find(da => da.name.toLowerCase() === ca.name.toLowerCase());
+        const match = (dislikedProfile.netDislikedAccords || []).find(da => da.name.toLowerCase() === ca.name.toLowerCase());
         if (match) {
-          dislikePenalty += (ca.score * match.weight) / 600;
+          dislikePenalty += (ca.score * match.weight) / 500;
           sharedDislikedAccords.push(ca.name);
         }
       });
 
-      // Note overlap with disliked perfumes
+      // Pure Note overlap with disliked perfumes (ONLY notes that user did NOT check in likes)
       candidateNotes.forEach(cn => {
-        if (dislikedProfile.allDislikedNotes.includes(cn)) {
+        if (dislikedProfile.pureDislikedNotes && dislikedProfile.pureDislikedNotes.has(cn)) {
           dislikePenalty += 10;
           sharedDislikedNotes.push(cn);
         }
@@ -501,33 +562,36 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     let clashScoreRaw = 0;
 
     if (isDislikedDnaTwin) {
-      clashReasons.push(`Shares identical DNA lineage with perfumes you marked as disliked (${candidate.dna_inspiration || 'Disliked Twin'}).`);
-      clashScoreRaw += 50;
+      clashReasons.push(`Shares identical DNA lineage or is a direct Scent Twin to a perfume you marked as avoid (${candidate.dna_inspiration || 'Disliked Twin'}).`);
+      clashScoreRaw += 60;
     }
     if (sharedDislikedAccords.length > 0) {
-      clashReasons.push(`Heavy in accords from your avoid list: ${sharedDislikedAccords.slice(0, 3).join(', ')}.`);
+      clashReasons.push(`Heavy in avoided accords: ${sharedDislikedAccords.slice(0, 3).join(', ')}.`);
       clashScoreRaw += Math.min(45, sharedDislikedAccords.length * 15);
     }
     if (sharedDislikedNotes.length > 0) {
-      clashReasons.push(`Contains specific notes you marked as disliked: ${sharedDislikedNotes.slice(0, 3).join(', ')}.`);
+      clashReasons.push(`Contains specific notes from your avoid list: ${sharedDislikedNotes.slice(0, 3).join(', ')}.`);
       clashScoreRaw += Math.min(30, sharedDislikedNotes.length * 10);
     }
 
     if (hasLikes) {
-      if (userHasFreshAquatic && !userHasHeavyOudLeather) {
-        if ((candidate.accords || []).some(a => ['Oud', 'Smoky', 'Leather'].includes(a.name) && a.score >= 70)) {
-          clashScoreRaw += 35;
-          clashReasons.push('Heavy animalic oud/leather clashes with your clean, fresh aromatic wardrobe preference.');
+      // Ratio-driven protection: If wardrobe is predominantly fresh (e.g. 80% summer), shield against heavy winter/oud/leather
+      if (isDominantlyFresh && !isDominantlyOud) {
+        if ((candidate.accords || []).some(a => ['Oud', 'Smoky', 'Leather'].includes(a.name) && a.score >= 65)) {
+          clashScoreRaw += 40;
+          dislikePenalty += 25;
+          clashReasons.push('Heavy animalic oud/leather clashes with your 80% fresh aromatic summer wardrobe preference.');
         }
       }
-      if (userHasFreshAquatic && !userHasSweetGourmand) {
-        if ((candidate.accords || []).some(a => a.name === 'Lactonic / Milky' || (a.name === 'Sweet' && a.score > 90))) {
+      if (isDominantlyFresh && !isDominantlyGourmand) {
+        if ((candidate.accords || []).some(a => a.name === 'Lactonic / Milky' || (a.name === 'Sweet' && a.score > 88))) {
           clashScoreRaw += 30;
+          dislikePenalty += 20;
           clashReasons.push('Dense syrupy caramel/milky sweetness will feel heavy and cloying compared to your fresh choices.');
         }
       }
-      if (userHasBarbershop && !userHasSweetGourmand) {
-        if ((candidate.accords || []).some(a => a.name === 'Sweet' && a.score > 92)) {
+      if (userHasBarbershop && !isDominantlyGourmand) {
+        if ((candidate.accords || []).some(a => a.name === 'Sweet' && a.score > 90)) {
           clashScoreRaw += 30;
           clashReasons.push('Extreme bubblegum sweetness contrasts with your clean aromatic barbershop preference.');
         }
