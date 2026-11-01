@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Sparkles, ThumbsUp, ThumbsDown, CheckSquare, Square, 
   AlertTriangle, CheckCircle, ArrowRight, ShieldAlert, Heart, 
@@ -6,6 +6,7 @@ import {
   ShoppingBag, Store, ChevronDown, ChevronUp, Building2, FlaskConical
 } from 'lucide-react';
 import { getProfileRecommendations } from '../utils/userProfiler';
+import { logWardrobeSelection } from '../lib/supabaseTelemetry';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All Sellers', tag: 'All 6' },
@@ -167,6 +168,18 @@ export default function MyWardrobeMatcher({
   }, [sellerMatches, selectedSeller]);
 
   const hasSelections = likedIds.length > 0 || dislikedIds.length > 0;
+
+  // Real-time Supabase Telemetry: Captures likes/dislikes 2.5s after user finishes selecting
+  useEffect(() => {
+    if (likedPerfumes.length > 0 || dislikedPerfumes.length > 0) {
+      logWardrobeSelection({
+        likedPerfumes,
+        dislikedPerfumes,
+        umbrella,
+        topRecommendations: likes
+      });
+    }
+  }, [likedPerfumes, dislikedPerfumes, umbrella, likes]);
 
   return (
     <div className="bg-[#0f172a] border-2 border-amber-500/40 rounded-3xl p-6 sm:p-8 my-8 shadow-2xl relative overflow-hidden">
