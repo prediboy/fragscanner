@@ -61,7 +61,11 @@ export function processSommelierQuery(queryText) {
         analysis += `In stock with **${sellers[0].seller_name}** at **₹${sellers[0].price}**.\n`;
       }
     } else {
-      analysis += `⚠️ **Seller Status:** Not currently listed on community seller sheets (archive bottle).\n`;
+      analysis += `⚠️ **Seller Status:** Not currently listed on community full-bottle sheets.\n`;
+    }
+
+    if (primary.has_decants && primary.community_decants && primary.community_decants.length > 0) {
+      analysis += `\n🧪 **Live Decants Available:** Starting from **₹${primary.lowest_decant_price}** (5ml, 10ml, 20ml, 30ml) via **${primary.community_decants.map(d => d.seller_name).join(' & ')}**!\n`;
     }
 
     return {
@@ -72,7 +76,42 @@ export function processSommelierQuery(queryText) {
     };
   }
 
-  // 2. Multi-Seller Price Comparison Query
+  // 2. Decant & Sample Inquiries (Liquid Emotions & Blue Wings)
+  if (q.includes('decant') || q.includes('sample') || q.includes('5ml') || q.includes('10ml') || q.includes('20ml') || q.includes('30ml') || q.includes('liquid emotion') || q.includes('blue wing')) {
+    const decantCandidates = fragrancesData.filter(f => f.has_decants && f.community_decants && f.community_decants.length > 0);
+    let matched = decantCandidates.filter(f => q.includes(f.name.toLowerCase()) || q.includes(f.brand.toLowerCase()));
+    
+    if (matched.length === 0) {
+      // Return top popular decanted fragrances (e.g., SNOI, Hawas Ice, Khamrah, Liquid Brun, etc.)
+      matched = decantCandidates.filter(f => f.community_decants.length > 1 || f.is_hot_seller || f.rating_value >= 4.2).slice(0, 4);
+    }
+
+    const featured = matched.slice(0, 3);
+    let decantText = `### 🧪 **Verified Decants & Samples (5ml – 30ml)**\n\nLive decant rates compared between **Liquid Emotions** and **Blue Wings Fragrances**:\n\n`;
+
+    featured.forEach(f => {
+      decantText += `**${f.brand} ${f.name}**\n`;
+      if (f.decant_comparison) {
+        ['5ml', '10ml', '20ml', '30ml'].forEach(sz => {
+          const comp = f.decant_comparison[sz];
+          if (comp && comp.quotes && comp.quotes.length > 0) {
+            decantText += `• **${sz}:** ₹${comp.lowest_price} *(Best via ${comp.lowest_seller})*\n`;
+          }
+        });
+      }
+      decantText += `\n`;
+    });
+
+    decantText += `💡 *All decants come in sealed glass atomizers. WhatsApp sellers directly from the card to order.*`;
+
+    return {
+      text: decantText,
+      cardType: 'multi_seller_compare',
+      items: featured
+    };
+  }
+
+  // 3. Multi-Seller Price Comparison Query
   if (q.includes('compare') || q.includes('cheapest') || q.includes('who has') || q.includes('price of') || q.includes('rate of')) {
     // Find candidate fragrances with multiple sellers
     const candidates = fragrancesData.filter(f => f.community_sellers && f.community_sellers.length > 0);

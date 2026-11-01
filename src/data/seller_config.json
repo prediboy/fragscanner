@@ -37,5 +37,35 @@
     "inspired_col": 3,
     "hot_col": -1,
     "start_row": 9
+  },
+  {
+    "id": "liquid_emotions",
+    "seller_name": "Liquid Emotions",
+    "type": "decant",
+    "url": "https://liquidemotions.vercel.app/",
+    "whatsapp": "7982410620",
+    "shipping": "Free Pan-India Delivery on orders above ₹1,200",
+    "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "5ml",
+      "10ml",
+      "20ml",
+      "30ml"
+    ]
+  },
+  {
+    "id": "bluewings",
+    "seller_name": "Blue Wings Fragrances",
+    "type": "decant_and_bottle",
+    "url": "https://bluewingsfnd.com/",
+    "whatsapp": "9899401419",
+    "shipping": "Free Pan-India Delivery on orders above ₹1,500",
+    "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "5ml",
+      "10ml",
+      "20ml",
+      "30ml"
+    ]
   }
 ]

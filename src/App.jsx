@@ -63,28 +63,30 @@ export default function App() {
       </header>
 
       {/* Community Sellers Live Status Bar */}
-      <div className="bg-[#0e1628] border-b border-slate-800/80 px-4 sm:px-8 py-2 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div className="bg-[#0e1628] border-b border-slate-800/80 px-4 sm:px-8 py-2.5 text-xs">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-1.5 font-bold text-emerald-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Community Sellers Live:
+              5 Community Sellers Live:
             </span>
             <span className="text-slate-300">
-              <strong>Second Theory</strong>, <strong>FragFever</strong> & <strong>Apex Aroma</strong>
+              <strong>Second Theory</strong>, <strong>FragFever</strong>, <strong>Apex Aroma</strong> <span className="text-slate-400 font-mono">(Full Bottles)</span> + <strong>Liquid Emotions</strong> & <strong>Blue Wings</strong> <span className="text-cyan-400 font-mono font-semibold">(Decants: 5ml - 30ml)</span>
             </span>
-            <span className="hidden sm:inline text-slate-600">•</span>
+            <span className="hidden lg:inline text-slate-600">•</span>
             <span className="text-emerald-300 font-mono font-semibold">
-              {syncMeta?.total_in_stock || 399} In-Stock Perfumes
+              {syncMeta?.in_stock_count || 651} Bottles
             </span>
-            <span className="hidden sm:inline text-slate-600">•</span>
-            <span className="text-amber-400 font-mono font-semibold">
-              {syncMeta?.multi_seller_comparisons || 189} Multi-Seller Comparisons Active
+            <span className="hidden lg:inline text-slate-600">•</span>
+            <span className="text-cyan-300 font-mono font-semibold bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+              🧪 {syncMeta?.decants_available_count || 122} Decanted Fragrances
             </span>
           </div>
 
           <div className="flex items-center gap-3 text-slate-400 text-[11px]">
-            <span>Last Synced: {syncMeta?.last_synced || 'Today'}</span>
+            <span className="text-amber-400/90 font-semibold">Full Bottles & Decants Supported</span>
+            <span>•</span>
+            <span>Live Sync Active</span>
           </div>
         </div>
       </div>
@@ -135,7 +137,7 @@ export default function App() {
       {/* Footer */}
       <footer className="mt-auto border-t border-slate-800/80 bg-[#070b14] py-6 px-4 pb-24 md:pb-6 text-center text-xs text-slate-400 space-y-2">
         <p>
-          FragScanner • Real-time Middle Eastern & Niche Fragrance Matcher • Live Quotes from Second Theory, FragFever & Apex Aroma.
+          FragScanner • Real-time Middle Eastern & Niche Fragrance Matcher • Dual Pricing: Full Bottles (Second Theory, FragFever, Apex Aroma) & Decants 5ml–30ml (Liquid Emotions, Blue Wings Fragrances).
         </p>
         <p className="text-slate-400">
           Always check with sellers on WhatsApp to confirm batch codes and stock prior to ordering.

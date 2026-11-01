@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   X, Star, Sparkles, Wind, Sun, Moon, Calendar, 
   CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, Zap, Tag, Flame,
-  Store, ShieldCheck, Truck, ExternalLink, ShoppingBag 
+  Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe 
 } from 'lucide-react';
 import { getFragranceRecommendations } from '../utils/recommender';
 
@@ -135,112 +135,127 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                 </div>
               )}
 
-              {/* Community Sellers Marketplace: All Sellers & Quoted Prices */}
-              <div className="bg-[#101b30] border border-emerald-500/40 rounded-2xl p-5 shadow-xl space-y-4">
+              {/* Community Sellers Marketplace: Dual Pricing (Full Bottles & Decants) */}
+              <div className="bg-[#101b30] border border-emerald-500/40 rounded-2xl p-5 shadow-xl space-y-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
                   <div>
                     <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-0.5">
                       <Store className="w-4 h-4 text-emerald-400" />
-                      <span>Community Sellers Marketplace</span>
+                      <span>Community Sellers Marketplace • Dual Pricing</span>
                       {fragrance.is_hot_seller && (
                         <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-extrabold flex items-center gap-1">
                           <Flame className="w-3 h-3 text-rose-400 fill-rose-400" />
-                          <span>Hot Selling in Community</span>
+                          <span>Hot Selling</span>
                         </span>
                       )}
                     </div>
                     <p className="text-xs text-slate-300">
-                      {fragrance.in_seller_stock 
-                        ? <>Comparing verified live quotes from community sellers (<strong>Second Theory</strong>, <strong>FragFever</strong> & <strong>Apex Aroma</strong>):</>
-                        : <>Availability status with verified community sellers:</>
-                      }
+                      Live quotes verified across 5 sellers for both <strong>Full Bottles</strong> and <strong>Decants (5ml - 30ml)</strong>:
                     </p>
                   </div>
-                  <span className="text-[11px] text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 self-start sm:self-auto font-mono">
-                    {fragrance.community_sellers?.length || 0} Verified {fragrance.community_sellers?.length === 1 ? 'Seller' : 'Sellers'}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-300 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 font-mono">
+                      {fragrance.community_sellers?.length || 0} Bottle {fragrance.community_sellers?.length === 1 ? 'Seller' : 'Sellers'}
+                    </span>
+                    {fragrance.has_decants && (
+                      <span className="text-[11px] text-cyan-300 bg-cyan-950/60 px-2.5 py-1 rounded-lg border border-cyan-500/40 font-mono font-bold flex items-center gap-1">
+                        <FlaskConical className="w-3 h-3 text-cyan-400" />
+                        Decants Available
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                {/* Seller Quotes List or Unquoted Notice */}
-                {fragrance.in_seller_stock && fragrance.community_sellers && fragrance.community_sellers.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {fragrance.community_sellers.map((seller, sIdx) => {
-                      const isLowest = sIdx === 0 && fragrance.community_sellers.length > 1;
-                      const waMessage = `Hi ${seller.seller_name}, I am interested in purchasing ${fragrance.brand} ${fragrance.name} quoted at ₹${seller.price}. Is it available?`;
-                      const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
+                {/* SECTION 1: FULL BOTTLES (BNIB) */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                      <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
+                      <span>🍾 Full Bottles (100ml Retail / BNIB)</span>
+                    </h4>
+                    {fragrance.community_price && (
+                      <span className="text-xs font-mono font-bold text-emerald-400">
+                        Best: ₹{fragrance.community_price}
+                      </span>
+                    )}
+                  </div>
 
-                      return (
-                        <div 
-                          key={sIdx}
-                          className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
-                            isLowest
-                              ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
-                              : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
-                          }`}
-                        >
-                          <div>
-                            <div className="flex items-start justify-between gap-2 mb-2">
-                              <div>
-                                <div className="flex items-center gap-1.5">
-                                  <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
-                                  {isLowest && (
-                                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
-                                      ★ Best Deal
-                                    </span>
-                                  )}
+                  {fragrance.in_seller_stock && fragrance.community_sellers && fragrance.community_sellers.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {fragrance.community_sellers.map((seller, sIdx) => {
+                        const isLowest = sIdx === 0 && fragrance.community_sellers.length > 1;
+                        const waMessage = `Hi ${seller.seller_name}, I am interested in purchasing a full bottle of ${fragrance.brand} ${fragrance.name} quoted at ₹${seller.price} on FragScanner. Is it available?`;
+                        const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
+
+                        return (
+                          <div 
+                            key={sIdx}
+                            className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+                              isLowest
+                                ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
+                                : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <div>
+                                  <div className="flex items-center gap-1.5">
+                                    <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
+                                    {isLowest && (
+                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
+                                        ★ Best Bottle Deal
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                    Verified Community Seller
+                                  </span>
                                 </div>
-                                <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
-                                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                                  Verified Community Seller
-                                </span>
+
+                                <div className="text-right">
+                                  <span className="text-lg font-black text-emerald-400 font-mono">
+                                    ₹{seller.price}
+                                  </span>
+                                  <span className="block text-[9px] text-emerald-300 font-semibold truncate max-w-[130px]">
+                                    {seller.shipping}
+                                  </span>
+                                </div>
                               </div>
 
-                              <div className="text-right">
-                                <span className="text-lg font-black text-emerald-400 font-mono">
-                                  ₹{seller.price}
-                                </span>
-                                <span className="block text-[9px] text-emerald-300 font-semibold truncate max-w-[130px]">
-                                  {seller.shipping}
-                                </span>
-                              </div>
+                              <p className="text-[11px] text-slate-300 mb-3 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80">
+                                Quoted on active {seller.seller_name} price list. WhatsApp order directly with seller.
+                              </p>
                             </div>
 
-                            <p className="text-[11px] text-slate-300 mb-3 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80">
-                              Quoted on active {seller.seller_name} Google Sheet price list. WhatsApp order directly with seller.
-                            </p>
+                            <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between">
+                              <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                                <Truck className="w-3 h-3 text-slate-400" /> Dispatch: {seller.dispatch || '24-48 hrs'}
+                              </span>
+                              <a
+                                href={waUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow"
+                              >
+                                <span>Buy Bottle on WhatsApp</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </a>
+                            </div>
                           </div>
-
-                          <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between">
-                            <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                              <Truck className="w-3 h-3 text-slate-400" /> Dispatch: {seller.dispatch || '24-48 hrs'}
-                            </span>
-                            <a
-                              href={waUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow"
-                            >
-                              <span>Buy on WhatsApp</span>
-                              <ArrowRight className="w-3 h-3" />
-                            </a>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase">
-                      <span>Status: Not Listed in Active Sellers Lists</span>
+                        );
+                      })}
                     </div>
-                    <p className="text-xs text-slate-300">
-                      <strong>{fragrance.brand} {fragrance.name}</strong> is in the Fragrantica clone database, but is <strong>not currently listed on community price lists (Second Theory, FragFever, Apex Aroma)</strong>.
-                    </p>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800">
-                      <span className="text-[11px] text-slate-400">
-                        Check availability or request sourcing directly:
-                      </span>
-                      <div className="flex items-center gap-2 flex-wrap">
+                  ) : (
+                    <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-amber-400 font-semibold">Full Bottle Status: Not Listed on Current Sheets</span>
+                        <span className="text-slate-400 text-[10px]">Second Theory • FragFever • Apex Aroma</span>
+                      </div>
+                      <p className="text-xs text-slate-300">
+                        Ask sellers directly if they can source a sealed retail bottle for you:
+                      </p>
+                      <div className="flex items-center gap-2 flex-wrap pt-1">
                         <a
                           href={`https://wa.me/918076851481?text=${encodeURIComponent(`Hi Second Theory, I see ${fragrance.brand} ${fragrance.name} is not on your current price list. Can you source this perfume?`)}`}
                           target="_blank"
@@ -267,12 +282,159 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                         </a>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-800/60 flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Always record an uncut unboxing video upon delivery as per community seller policy.</span>
+                {/* SECTION 2: DECANTS & SAMPLES (5ML, 10ML, 20ML, 30ML) */}
+                <div className="pt-4 border-t border-slate-800/80 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
+                        <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>🧪 Decants & Samples (5ml • 10ml • 20ml • 30ml)</span>
+                      </h4>
+                      <p className="text-[11px] text-slate-400">
+                        Comparing live decant rates from <strong>Liquid Emotions</strong> and <strong>Blue Wings Fragrances</strong>:
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <a
+                        href="https://liquidemotions.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium"
+                      >
+                        <Globe className="w-3 h-3" />
+                        <span>Liquid Emotions</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                      <span className="text-slate-600">•</span>
+                      <a
+                        href="https://bluewingsfnd.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium"
+                      >
+                        <Globe className="w-3 h-3" />
+                        <span>Blue Wings</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {fragrance.has_decants && fragrance.decant_comparison ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                      {['5ml', '10ml', '20ml', '30ml'].map((size) => {
+                        const sizeData = fragrance.decant_comparison[size];
+                        if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
+
+                        const quotes = sizeData.quotes;
+                        const lowestPrice = sizeData.lowest_price;
+
+                        return (
+                          <div
+                            key={size}
+                            className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400/60 transition-all flex flex-col justify-between shadow-sm"
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 font-extrabold text-xs font-mono">
+                                  {size} Decant
+                                </span>
+                                <span className="text-base font-black text-white font-mono">
+                                  ₹{lowestPrice}
+                                </span>
+                              </div>
+
+                              <div className="space-y-1.5 mb-3">
+                                {quotes.map((q, qIdx) => {
+                                  const isWinning = q.price === lowestPrice;
+                                  return (
+                                    <div 
+                                      key={qIdx}
+                                      className={`flex items-center justify-between text-[11px] p-1.5 rounded-lg border ${
+                                        isWinning 
+                                          ? 'bg-cyan-950/40 border-cyan-500/40 text-cyan-200' 
+                                          : 'bg-slate-950/40 border-slate-800 text-slate-400'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-1 truncate mr-1">
+                                        <span className="font-semibold truncate">{q.seller_name}</span>
+                                        {isWinning && (
+                                          <span className="text-[9px] px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-200 font-bold shrink-0">
+                                            Best
+                                          </span>
+                                        )}
+                                      </div>
+                                      <span className="font-mono font-bold shrink-0">
+                                        ₹{q.price}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div className="pt-2 border-t border-slate-800/80">
+                              {/* Order best quote directly */}
+                              {(() => {
+                                const topQuote = quotes[0];
+                                const waMsg = `Hi ${topQuote.seller_name}, I want to order a ${size} decant of ${fragrance.brand} ${fragrance.name} quoted at ₹${topQuote.price} on FragScanner. Is it available?`;
+                                const waUrl = `https://wa.me/91${topQuote.whatsapp}?text=${encodeURIComponent(waMsg)}`;
+
+                                return (
+                                  <a
+                                    href={waUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow"
+                                  >
+                                    <span>Buy {size} on WhatsApp</span>
+                                    <ArrowRight className="w-3 h-3" />
+                                  </a>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                      <p className="text-xs text-slate-300">
+                        Fixed decants are not pre-listed for <strong>{fragrance.name}</strong>, but both decant sellers frequently decant customer requests upon inquiry:
+                      </p>
+                      <div className="flex items-center gap-2 flex-wrap pt-1">
+                        <a
+                          href={`https://wa.me/917982410620?text=${encodeURIComponent(`Hi Liquid Emotions, do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
+                        >
+                          <FlaskConical className="w-3 h-3 text-cyan-400" />
+                          <span>Ask Liquid Emotions Decants</span>
+                        </a>
+                        <a
+                          href={`https://wa.me/919899401419?text=${encodeURIComponent(`Hi Blue Wings, do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
+                        >
+                          <FlaskConical className="w-3 h-3 text-cyan-400" />
+                          <span>Ask Blue Wings Decants</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-800/60 flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Always record an uncut unboxing video upon delivery as per community seller policy.</span>
+                  </div>
+                  <span className="text-slate-400">Glass atomizers & secure packaging guaranteed</span>
                 </div>
               </div>
               <div className="bg-[#131d31] border border-slate-800 rounded-2xl p-5">

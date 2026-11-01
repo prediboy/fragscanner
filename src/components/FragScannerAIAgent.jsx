@@ -10,7 +10,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), or comparing live prices across **Second Theory**, **FragFever**, and **Apex Aroma**!",
+      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), comparing live prices for **Full Bottles** (*Second Theory, FragFever, Apex Aroma*) and **Decants 5ml–30ml** (*Liquid Emotions, Blue Wings*)!",
       data: null
     }
   ]);
@@ -25,8 +25,8 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
   const QUICK_PROMPTS = [
     "Winter date night scents under ₹3,000",
     "Cheapest seller for Liquid Brun",
+    "Decants available for SNOI & Hawas Ice",
     "Best clones of Kilian Angels' Share",
-    "Fresh summer beast-mode perfumes",
     "Tell me about Turathi Blue"
   ];
 
@@ -129,7 +129,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400">
-                    Live olfactory twins • Verified Second Theory, FragFever & Apex Aroma rates
+                    Live olfactory twins • Full Bottles & Decants (5ml–30ml) Across 5 Sellers
                   </p>
                 </div>
               </div>

@@ -3,7 +3,7 @@ import {
   Sparkles, ThumbsUp, ThumbsDown, CheckSquare, Square, 
   AlertTriangle, CheckCircle, ArrowRight, ShieldAlert, Heart, 
   Star, Search, Filter, RotateCcw, X, ShieldX, Flame,
-  ShoppingBag, Store, ChevronDown, ChevronUp, Building2
+  ShoppingBag, Store, ChevronDown, ChevronUp, Building2, FlaskConical
 } from 'lucide-react';
 import { getProfileRecommendations } from '../utils/userProfiler';
 
@@ -341,6 +341,21 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                   <p className="text-[10px] text-slate-400 truncate mt-0.5">
                     {fragrance.dna_inspiration ? `Inspired by ${fragrance.dna_inspiration}` : fragrance.collection}
                   </p>
+                  
+                  {/* Full Bottle & Decant Dual Price Badges */}
+                  <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                    {fragrance.community_price ? (
+                      <span className="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                        🍾 ₹{fragrance.community_price}
+                      </span>
+                    ) : null}
+                    {fragrance.has_decants && fragrance.lowest_decant_price ? (
+                      <span className="text-[9px] font-mono font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/20 flex items-center gap-0.5">
+                        <FlaskConical className="w-2.5 h-2.5 text-cyan-400" />
+                        5ml ₹{fragrance.lowest_decant_price}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
 
                 {/* Quick Action Buttons for explicit Like / Dislike */}
@@ -617,21 +632,28 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                         <h4 className="text-base font-extrabold text-white group-hover:text-emerald-300 transition-colors">
                           {item.fragrance.name}
                         </h4>
-                        <div className="text-right">
+                        <div className="text-right space-y-0.5">
                           {item.fragrance.in_seller_stock && item.fragrance.community_price ? (
-                            <>
+                            <div className="flex items-center gap-1 justify-end">
+                              <span className="text-[10px] text-slate-400">Bottle:</span>
                               <span className="text-xs font-bold text-emerald-400 font-mono">
                                 ₹{item.fragrance.community_price}
                               </span>
-                              <span className="block text-[9px] text-emerald-400 font-semibold">
-                                (In Stock)
-                              </span>
-                            </>
+                            </div>
                           ) : (
-                            <span className="inline-block text-[10px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60">
-                              Not in Seller Stock
+                            <span className="block text-[10px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60">
+                              Bottle: Unlisted
                             </span>
                           )}
+                          {item.fragrance.has_decants && item.fragrance.lowest_decant_price ? (
+                            <div className="flex items-center gap-1 justify-end text-cyan-300">
+                              <FlaskConical className="w-2.5 h-2.5 text-cyan-400" />
+                              <span className="text-[10px]">Decant:</span>
+                              <span className="text-xs font-bold font-mono">
+                                ₹{item.fragrance.lowest_decant_price}
+                              </span>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
 
@@ -677,7 +699,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
               </div>
 
               <p className="text-xs text-slate-300">
-                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers (Second Theory, FragFever & Apex Aroma)</strong>, compared by best price:
+                Top matching fragrances that are <strong className="text-amber-300">verified in-stock with community sellers</strong>: Full Bottles (Second Theory, FragFever & Apex Aroma) & Decants 5ml–30ml (Liquid Emotions, Blue Wings):
               </p>
 
               <div className="space-y-3">
@@ -696,8 +718,8 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                       >
                         <div>
                           {/* Top line with Brand and Seller Quoted Price Badge */}
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-1.5">
+                          <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+                            <div className="flex items-center gap-1.5 flex-wrap">
                               <span className="text-xs font-bold text-amber-400 px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">
                                 {item.fragrance.brand}
                               </span>
@@ -709,14 +731,29 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                               )}
                               {sellerCount > 1 && (
                                 <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold">
-                                  {sellerCount} Sellers Compared
+                                  {sellerCount} Bottle Sellers
+                                </span>
+                              )}
+                              {item.fragrance.has_decants && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold flex items-center gap-1">
+                                  <FlaskConical className="w-3 h-3 text-cyan-400" />
+                                  Decants Available
                                 </span>
                               )}
                             </div>
                             
-                            {/* Seller Price Highlight */}
-                            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-black text-sm font-mono shadow-sm">
-                              <span>Best: ₹{sellerQuote}</span>
+                            {/* Dual Seller Price Highlights */}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {sellerQuote && (
+                                <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-black text-xs font-mono shadow-sm">
+                                  <span>🍾 Bottle: ₹{sellerQuote}</span>
+                                </div>
+                              )}
+                              {item.fragrance.has_decants && item.fragrance.lowest_decant_price && (
+                                <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-black text-xs font-mono shadow-sm">
+                                  <span>🧪 Decants from ₹{item.fragrance.lowest_decant_price}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -733,7 +770,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                           </div>
 
                           <p className="text-xs text-slate-400 mt-0.5 mb-2.5">
-                            {item.fragrance.collection} • {item.fragrance.concentration} • Lowest quote by <strong className="text-emerald-400 font-semibold">{bestSeller?.seller_name}</strong>
+                            {item.fragrance.collection} • {item.fragrance.concentration} • Lowest bottle quote by <strong className="text-emerald-400 font-semibold">{bestSeller?.seller_name}</strong>
                           </p>
 
                           {/* Why you will like it reasons (Olfactory match profile) */}
@@ -758,24 +795,37 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                           </div>
                         </div>
 
-                        <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                        <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2 flex-wrap">
                           <button
                             onClick={() => onSelectFragrance(item.fragrance)}
-                            className="text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1 transition-colors"
+                            className="text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
                           >
                             <Store className="w-3.5 h-3.5 text-amber-400" />
-                            <span>Compare {sellerCount} {sellerCount > 1 ? 'Sellers' : 'Seller'}</span>
+                            <span>Compare Quotes & Decants</span>
+                            <ArrowRight className="w-3 h-3 text-slate-400" />
                           </button>
 
-                          <a
-                            href={waUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-transform hover:scale-105 shadow"
-                          >
-                            <span>Buy from {bestSeller?.seller_name}</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </a>
+                          <div className="flex items-center gap-2">
+                            {item.fragrance.has_decants && (
+                              <button
+                                onClick={() => onSelectFragrance(item.fragrance)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-bold text-xs transition-colors"
+                              >
+                                <FlaskConical className="w-3 h-3 text-cyan-400" />
+                                <span>Decants (5-30ml)</span>
+                              </button>
+                            )}
+
+                            <a
+                              href={waUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-transform hover:scale-105 shadow"
+                            >
+                              <span>Buy Bottle</span>
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
                         </div>
                       </div>
                     );
@@ -859,22 +909,29 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                           </div>
                         </div>
 
-                        {/* In-stock status & price */}
-                        <div className="flex items-center justify-between text-xs mb-2">
+                        {/* In-stock status & price (Full Bottle & Decant) */}
+                        <div className="flex items-center justify-between text-xs mb-2 flex-wrap gap-1.5">
                           {comp.hasInStock && sellerQuote ? (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5">
                               <span className="text-emerald-400 font-extrabold font-mono text-sm">
-                                ₹{sellerQuote}
+                                🍾 ₹{sellerQuote}
                               </span>
-                              <span className="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                                In Stock ({bestSeller?.seller_name})
+                              <span className="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                In Stock
                               </span>
                             </div>
                           ) : (
                             <span className="text-[10px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60">
-                              Archive Bottle • Ask to Source
+                              Bottle: Unlisted
                             </span>
                           )}
+
+                          {item.fragrance.has_decants && item.fragrance.lowest_decant_price ? (
+                            <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30 flex items-center gap-1">
+                              <FlaskConical className="w-2.5 h-2.5 text-cyan-400" />
+                              Decants ₹{item.fragrance.lowest_decant_price}
+                            </span>
+                          ) : null}
                         </div>
 
                         {/* Secondary options within this brand */}
@@ -994,7 +1051,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
-            <span>{sellerMatches.length} Scent Twins Found • From ₹{sellerMatches[0]?.fragrance.community_price}</span>
+            <span>{sellerMatches.length} Scent Twins Found • Bottles & Decants</span>
           </div>
           <span className="bg-slate-950 text-amber-300 px-2.5 py-1 rounded-xl text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
             View Deals &uarr;
@@ -1023,7 +1080,7 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified In-Stock across Second Theory, FragFever & Apex Aroma
+                  Verified across Second Theory, FragFever, Apex Aroma, Liquid Emotions & Blue Wings
                 </p>
               </div>
               <button 
@@ -1065,9 +1122,14 @@ export default function MyWardrobeMatcher({ allFragrances, onSelectFragrance }) 
                       >
                         {item.fragrance.name}
                       </h5>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        Best: <strong className="text-emerald-400 font-mono font-black">₹{sellerQuote}</strong> via {bestSeller?.seller_name || 'Seller'}
-                      </p>
+                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400">
+                        {sellerQuote && (
+                          <span>Bottle: <strong className="text-emerald-400 font-mono font-bold">₹{sellerQuote}</strong></span>
+                        )}
+                        {item.fragrance.has_decants && item.fragrance.lowest_decant_price && (
+                          <span className="text-cyan-300 font-semibold">• Decant: <strong className="font-mono font-bold">₹{item.fragrance.lowest_decant_price}</strong></span>
+                        )}
+                      </div>
                     </div>
 
                     <a 

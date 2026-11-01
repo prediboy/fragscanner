@@ -1,32 +1,40 @@
 {
-  "last_synced": "2026-11-01 13:03:12 IST",
-  "total_catalog": 1134,
-  "total_in_stock": 650,
-  "multi_seller_comparisons": 238,
-  "sellers": [
+  "last_sync": "2026-11-01T11:14:40.950Z",
+  "total_fragrances": 1134,
+  "in_stock_count": 651,
+  "decants_available_count": 122,
+  "multi_seller_count": 238,
+  "multi_decant_comparison_count": 25,
+  "active_sellers": [
     {
-      "seller_id": "second_theory",
+      "id": "second_theory",
       "seller_name": "Second Theory",
-      "whatsapp": "8076851481",
-      "matched_items": 409,
-      "total_sheet_items": 409,
-      "status": "success"
+      "type": "Full Bottle",
+      "count": 374
     },
     {
-      "seller_id": "fragfever",
+      "id": "fragfever",
       "seller_name": "FragFever",
-      "whatsapp": "9716764787",
-      "matched_items": 446,
-      "total_sheet_items": 446,
-      "status": "success"
+      "type": "Full Bottle",
+      "count": 403
     },
     {
-      "seller_id": "apex_aroma",
+      "id": "apex_aroma",
       "seller_name": "Apex Aroma",
-      "whatsapp": "9456411103",
-      "matched_items": 215,
-      "total_sheet_items": 215,
-      "status": "success"
+      "type": "Full Bottle",
+      "count": 202
+    },
+    {
+      "id": "liquid_emotions",
+      "seller_name": "Liquid Emotions",
+      "type": "Decants (5ml - 30ml)",
+      "count": 73
+    },
+    {
+      "id": "bluewings",
+      "seller_name": "Blue Wings Fragrances",
+      "type": "Decants & BNIB",
+      "count": 75
     }
   ]
 }
