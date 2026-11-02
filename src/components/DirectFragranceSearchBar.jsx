@@ -68,11 +68,10 @@ export default function DirectFragranceSearchBar({
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
-    setIsOpen(false);
-    // Smooth scroll down to catalog if available
-    const catalogEl = document.getElementById('price-discovery-catalog');
-    if (catalogEl) {
-      catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (results.length > 0) {
+      handleSelect(results[0]);
+    } else {
+      setIsOpen(false);
     }
   };
 
@@ -197,20 +196,20 @@ export default function DirectFragranceSearchBar({
                     {/* Dual Price Highlights & Quick Action Buttons */}
                     <div className="text-right shrink-0 space-y-1.5 flex flex-col items-end">
                       <div className="flex items-center gap-3">
-                        {f.community_price ? (
+                        {f.community_price && !isNaN(Number(f.community_price)) && Number(f.community_price) > 0 ? (
                           <div className="text-right">
                             <span className="text-[10px] text-slate-400 uppercase font-mono block">Bottle</span>
                             <span className="text-xs font-bold text-slate-900 font-mono">
-                              ₹{f.community_price.toLocaleString()}
+                              ₹{Number(f.community_price).toLocaleString()}
                             </span>
                           </div>
                         ) : null}
 
-                        {f.lowest_decant_price ? (
+                        {f.lowest_decant_price && !isNaN(Number(f.lowest_decant_price)) && Number(f.lowest_decant_price) > 0 ? (
                           <div className="text-right">
                             <span className="text-[10px] text-slate-400 uppercase font-mono block">Decant</span>
                             <span className="text-xs font-bold text-emerald-600 font-mono">
-                              ₹{f.lowest_decant_price}
+                              ₹{Number(f.lowest_decant_price).toLocaleString()}
                             </span>
                           </div>
                         ) : null}
@@ -284,14 +283,8 @@ export default function DirectFragranceSearchBar({
 
           {/* Footer note in dropdown */}
           <div className="p-2.5 bg-slate-50 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-            <span>Showing top 8 matches in stock</span>
-            <button
-              type="button"
-              onClick={handleSearchSubmit}
-              className="text-cyan-700 font-bold hover:underline"
-            >
-              See all in catalog ↓
-            </button>
+            <span>Showing top {results.length} matches in stock</span>
+            <span className="text-slate-400">Click any card to inspect all rates</span>
           </div>
 
         </div>

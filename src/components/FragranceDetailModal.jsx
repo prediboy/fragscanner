@@ -28,6 +28,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
     }
   };
 
+  const modalDisplayName = fragrance.brand && !fragrance.name.toLowerCase().includes(fragrance.brand.toLowerCase())
+    ? `${fragrance.brand} ${fragrance.name}`
+    : fragrance.name;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl bg-[#0f172a] border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
@@ -178,50 +182,53 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                       <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
                       <span>🍾 Full Bottles (100ml Retail / BNIB)</span>
                     </h4>
-                    {fragrance.community_price && (
+                    {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
                       <span className="text-xs font-mono font-bold text-emerald-400">
-                        Best: ₹{fragrance.community_price}
+                        Best: ₹{Number(fragrance.community_price).toLocaleString()}
                       </span>
                     )}
                   </div>
 
-                  {fragrance.in_seller_stock && fragrance.community_sellers && fragrance.community_sellers.length > 0 ? (
+                  {fragrance.in_seller_stock && fragrance.community_sellers && fragrance.community_sellers.filter(s => Number(s.price) > 0 && !isNaN(Number(s.price))).length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {fragrance.community_sellers.map((seller, sIdx) => {
-                        const isLowest = sIdx === 0 && fragrance.community_sellers.length > 1;
-                        const waMessage = `Hi ${seller.seller_name}, saw your price for ${fragrance.brand} ${fragrance.name} (Full Bottle) quoted at ₹${seller.price} on FragScanner. Is this in stock?`;
-                        const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
+                      {fragrance.community_sellers
+                        .filter(s => Number(s.price) > 0 && !isNaN(Number(s.price)))
+                        .map((seller, sIdx, filteredSellers) => {
+                          const priceNum = Number(seller.price);
+                          const isLowest = sIdx === 0 && filteredSellers.length > 1;
+                          const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (Full Bottle) quoted at ₹${priceNum.toLocaleString()} on FragScanner. Is this in stock?`;
+                          const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
 
-                        return (
-                          <div 
-                            key={sIdx}
-                            className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
-                              isLowest
-                                ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
-                                : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
-                            }`}
-                          >
-                            <div>
-                              <div className="flex items-start justify-between gap-2 mb-2">
-                                <div>
-                                  <div className="flex items-center gap-1.5">
-                                    <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
-                                    {isLowest && (
-                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
-                                        ★ Best Bottle Deal
-                                      </span>
-                                    )}
+                          return (
+                            <div 
+                              key={sIdx}
+                              className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+                                isLowest
+                                  ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
+                                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                              }`}
+                            >
+                              <div>
+                                <div className="flex items-start justify-between gap-2 mb-2">
+                                  <div>
+                                    <div className="flex items-center gap-1.5">
+                                      <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
+                                      {isLowest && (
+                                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
+                                          ★ Best Bottle Deal
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                      Verified Community Seller
+                                    </span>
                                   </div>
-                                  <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
-                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                                    Verified Community Seller
-                                  </span>
-                                </div>
 
-                                <div className="text-right">
-                                  <span className="text-lg font-black text-emerald-400 font-mono">
-                                    ₹{seller.price}
-                                  </span>
+                                  <div className="text-right">
+                                    <span className="text-lg font-black text-emerald-400 font-mono">
+                                      ₹{priceNum.toLocaleString()}
+                                    </span>
                                   <span className="block text-[9px] text-emerald-300 font-semibold truncate max-w-[130px]">
                                     {seller.shipping}
                                   </span>
@@ -365,8 +372,14 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                         const sizeData = fragrance.decant_comparison[size];
                         if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
 
-                        const quotes = sizeData.quotes;
-                        const lowestPrice = sizeData.lowest_price;
+                        const validQuotes = sizeData.quotes.filter(q => {
+                          const p = Number(q.price);
+                          return p && !isNaN(p) && p > 0;
+                        });
+                        if (validQuotes.length === 0) return null;
+
+                        const lowestPrice = Number(sizeData.lowest_price || validQuotes[0]?.price);
+                        if (!lowestPrice || isNaN(lowestPrice) || lowestPrice <= 0) return null;
 
                         return (
                           <div
@@ -379,12 +392,12 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                                   {size} Decant
                                 </span>
                                 <span className="text-base font-black text-white font-mono">
-                                  ₹{lowestPrice}
+                                  ₹{lowestPrice.toLocaleString()}
                                 </span>
                               </div>
 
                               <div className="space-y-1.5 mb-3">
-                                {quotes.map((q, qIdx) => {
+                                {validQuotes.map((q, qIdx) => {
                                   const isWinning = q.price === lowestPrice;
                                   return (
                                     <div 
@@ -404,7 +417,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                                         )}
                                       </div>
                                       <span className="font-mono font-bold shrink-0">
-                                        ₹{q.price}
+                                        ₹{Number(q.price).toLocaleString()}
                                       </span>
                                     </div>
                                   );
@@ -415,8 +428,8 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                             <div className="pt-2 border-t border-slate-800/80">
                               {/* Order best quote directly */}
                               {(() => {
-                                const topQuote = quotes[0];
-                                const waMsg = `Hi ${topQuote.seller_name}, saw your price for ${fragrance.brand} ${fragrance.name} (${size} Decant) quoted at ₹${topQuote.price} on FragScanner. Is this in stock?`;
+                                const topQuote = validQuotes[0];
+                                const waMsg = `Hi ${topQuote.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${Number(topQuote.price).toLocaleString()} on FragScanner. Is this in stock?`;
                                 const waUrl = `https://wa.me/91${topQuote.whatsapp}?text=${encodeURIComponent(waMsg)}`;
 
                                 return (

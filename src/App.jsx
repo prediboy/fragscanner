@@ -24,15 +24,34 @@ const COMMUNITY_SELLERS = [
 export default function App() {
   const [allFragrances] = useState(fragrancesData);
   
-  // Navigation View Mode
-  const [viewTab, setViewTab] = useState('both'); // 'both' | 'matcher' | 'catalog'
-  
+  // Theme state: 'fresh' (Glacier Fresh Day) or 'night' (Midnight Frost Dark)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('fragscanner_theme') || 'fresh';
+    } catch {
+      return 'fresh';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('fragscanner_theme', theme);
+    } catch {}
+    const root = document.documentElement;
+    if (theme === 'night') {
+      root.classList.add('theme-night', 'dark');
+      root.classList.remove('theme-fresh');
+      root.setAttribute('data-theme', 'night');
+    } else {
+      root.classList.add('theme-fresh');
+      root.classList.remove('theme-night', 'dark');
+      root.setAttribute('data-theme', 'fresh');
+    }
+  }, [theme]);
+
   // Global Price Discovery Search Bar & Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeller, setSelectedSeller] = useState('all');
-  const [formatFilter, setFormatFilter] = useState('all'); // 'all' | 'bottles' | 'decants'
-  const [sortBy, setSortBy] = useState('price-asc');
-  const [catalogDisplayLimit, setCatalogDisplayLimit] = useState(30);
   
   // Step 1: Taste Anchor Search & Selection (Starts Clean & Empty)
   const [anchorSearch, setAnchorSearch] = useState('');
@@ -108,47 +127,6 @@ export default function App() {
     }).slice(0, 10);
   }, [anchorSearch, allFragrances, popularAnchors]);
 
-  // Main Filtered Catalog for Direct Price Discovery
-  const filteredCatalog = useMemo(() => {
-    return allFragrances.filter(f => {
-      // 1. Seller Filter
-      if (selectedSeller !== 'all') {
-        const hasBottle = f.community_sellers?.some(s => s.seller_id === selectedSeller);
-        const hasDecant = f.community_decants?.some(d => d.seller_id === selectedSeller);
-        if (!hasBottle && !hasDecant) return false;
-      }
-
-      // 2. Format Filter
-      if (formatFilter === 'bottles' && (!f.in_seller_stock || !f.community_price)) return false;
-      if (formatFilter === 'decants' && (!f.community_decants || f.community_decants.length === 0)) return false;
-
-      // 3. Search Query Filter (Matches name, brand, DNA, notes)
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const mName = (f.name || '').toLowerCase().includes(q);
-        const mBrand = (f.brand || '').toLowerCase().includes(q);
-        const mDna = (f.dna_inspiration || '').toLowerCase().includes(q);
-        
-        let mNotes = false;
-        if (f.notes && typeof f.notes === 'object') {
-          const allN = [...(f.notes.top || []), ...(f.notes.middle || []), ...(f.notes.base || [])];
-          mNotes = allN.some(n => String(n).toLowerCase().includes(q));
-        }
-
-        if (!mName && !mBrand && !mDna && !mNotes) return false;
-      }
-
-      return true;
-    }).sort((a, b) => {
-      const priceA = a.community_price || (a.community_decants?.[0]?.price_10ml ? a.community_decants[0].price_10ml * 10 : 99999);
-      const priceB = b.community_price || (b.community_decants?.[0]?.price_10ml ? b.community_decants[0].price_10ml * 10 : 99999);
-      if (sortBy === 'price-asc') return priceA - priceB;
-      if (sortBy === 'price-desc') return priceB - priceA;
-      if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
-      return 0;
-    });
-  }, [allFragrances, selectedSeller, formatFilter, searchQuery, sortBy]);
-
   // Full Recommendation Engine (Exact Rich Explanations)
   const recommendations = useMemo(() => {
     const likedPerfumes = allFragrances.filter(f => likedIds.includes(f.id));
@@ -174,9 +152,13 @@ export default function App() {
   // Telemetry: Log primary search queries (debounced 1.5s after typing stops)
   useEffect(() => {
     if (searchQuery && searchQuery.trim().length >= 2) {
-      logSearchQuery(searchQuery, filteredCatalog.length);
+      const q = searchQuery.toLowerCase().trim();
+      const matchCount = allFragrances.filter(f => 
+        (f.name || '').toLowerCase().includes(q) || (f.brand || '').toLowerCase().includes(q)
+      ).length;
+      logSearchQuery(searchQuery, matchCount);
     }
-  }, [searchQuery, filteredCatalog.length]);
+  }, [searchQuery, allFragrances]);
 
   // Telemetry: Log Step 01 taste anchor searches
   useEffect(() => {
@@ -204,78 +186,82 @@ export default function App() {
       
       {/* Top Glacier Frost Navigation */}
       <header className="border-b border-glacier-border bg-white/95 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 shadow-2xs">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-sky-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-cyan-500/20">
-                ❄️
-              </div>
-              <div>
-                <h1 className="text-base font-heading font-bold tracking-tight text-slate-900 flex items-center gap-2">
-                  <span>FRAGSCANNER</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-bold border border-cyan-200">GLACIER FRESH</span>
-                </h1>
-                <p className="text-[11px] text-glacier-textMuted font-mono">
-                  Price Discovery & Olfactory Twin Intelligence
-                </p>
-              </div>
+          {/* Logo & Clickable Theme Badge */}
+          <button
+            type="button"
+            onClick={() => setTheme(t => t === 'fresh' ? 'night' : 'fresh')}
+            className="text-left flex items-center gap-3 group cursor-pointer"
+            title={`Currently in ${theme === 'night' ? 'Midnight Frost' : 'Glacier Fresh'}. Click to toggle.`}
+          >
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md transition-all group-hover:scale-105 shrink-0 ${
+              theme === 'night'
+                ? 'bg-gradient-to-tr from-cyan-600 to-indigo-700 shadow-cyan-900/40 ring-1 ring-cyan-400/30'
+                : 'bg-gradient-to-tr from-cyan-500 to-sky-600 shadow-cyan-500/20'
+            }`}>
+              {theme === 'night' ? '🌙' : '❄️'}
+            </div>
+            <div>
+              <h1 className="text-base font-heading font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                <span>FRAGSCANNER</span>
+                <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold border transition-colors flex items-center gap-1.5 shadow-2xs ${
+                  theme === 'night'
+                    ? 'bg-sky-950 text-cyan-300 border-cyan-500/40'
+                    : 'bg-cyan-100 text-cyan-800 border-cyan-200'
+                }`}>
+                  <span>{theme === 'night' ? '🌙 MIDNIGHT FROST' : '❄️ GLACIER FRESH'}</span>
+                  <span className="text-[9px] opacity-60 font-sans">⇄ Switch</span>
+                </span>
+              </h1>
+              <p className="text-[11px] text-glacier-textMuted font-mono">
+                Price Discovery & Olfactory Twin Intelligence
+              </p>
+            </div>
+          </button>
+
+          {/* Header Controls: High-Contrast Theme Switcher & Seller Status */}
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 text-xs">
+            {/* Highly Visible Theme Switcher Toggle Pill */}
+            <div className="flex items-center bg-glacier-subtle p-1 rounded-xl border border-glacier-border shadow-xs">
+              <button
+                type="button"
+                onClick={() => setTheme('fresh')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                  theme === 'fresh'
+                    ? 'bg-white text-cyan-800 shadow-xs border border-cyan-300 ring-1 ring-cyan-300/30'
+                    : 'text-glacier-textMuted hover:text-glacier-text'
+                }`}
+                title="Switch to Glacier Fresh (Light Day Mode)"
+              >
+                <span>❄️</span>
+                <span>Light</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTheme('night')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                  theme === 'night'
+                    ? 'bg-slate-900 text-cyan-300 shadow-xs border border-cyan-400 ring-1 ring-cyan-400/40'
+                    : 'text-glacier-textMuted hover:text-glacier-text'
+                }`}
+                title="Switch to Midnight Frost (Dark Night Mode)"
+              >
+                <span>🌙</span>
+                <span>Dark</span>
+              </button>
             </div>
 
-            {/* Mobile View Toggle */}
-            <div className="flex sm:hidden items-center gap-1 bg-glacier-subtle p-0.5 rounded-lg text-xs">
-              <button
-                onClick={() => setViewTab('both')}
-                className={`px-2 py-1 rounded text-[11px] font-medium ${viewTab === 'both' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted'}`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setViewTab('matcher')}
-                className={`px-2 py-1 rounded text-[11px] font-medium ${viewTab === 'matcher' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted'}`}
-              >
-                Twins ({recommendations.length})
-              </button>
-              <button
-                onClick={() => setViewTab('catalog')}
-                className={`px-2 py-1 rounded text-[11px] font-medium ${viewTab === 'catalog' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted'}`}
-              >
-                Prices ({filteredCatalog.length})
-              </button>
-            </div>
-          </div>
-
-          {/* Seller Status & Navigation Tabs */}
-          <div className="flex items-center justify-between sm:justify-end gap-3 text-xs">
+            {/* Monitored Sellers Button */}
             <button
               onClick={() => setShowStatsModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px]"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px] shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-glacier-success animate-pulse"></span>
-              <span>6 Community Sellers Monitored</span>
+              <span className="hidden md:inline">6 Community Sellers Monitored</span>
+              <span className="md:hidden">6 Sellers</span>
             </button>
-
-            {/* Desktop View Switcher */}
-            <div className="hidden sm:flex items-center gap-1 bg-glacier-subtle p-1 rounded-xl text-xs font-medium">
-              <button
-                onClick={() => setViewTab('both')}
-                className={`px-3 py-1 rounded-lg transition-colors ${viewTab === 'both' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted hover:text-glacier-text'}`}
-              >
-                Dual View
-              </button>
-              <button
-                onClick={() => setViewTab('matcher')}
-                className={`px-3 py-1 rounded-lg transition-colors ${viewTab === 'matcher' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted hover:text-glacier-text'}`}
-              >
-                Scent Twins ({recommendations.length})
-              </button>
-              <button
-                onClick={() => setViewTab('catalog')}
-                className={`px-3 py-1 rounded-lg transition-colors ${viewTab === 'catalog' ? 'bg-white shadow-2xs text-glacier-accent font-bold' : 'text-glacier-textMuted hover:text-glacier-text'}`}
-              >
-                Price Discovery ({filteredCatalog.length})
-              </button>
-            </div>
           </div>
 
         </div>
@@ -314,15 +300,15 @@ export default function App() {
                   <button
                     key={s.id}
                     onClick={() => setSelectedSeller(s.id)}
-                    className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition-all border flex items-center gap-1.5 shrink-0 ${
+                    className={`px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all border flex items-center gap-1.5 shrink-0 ${
                       isSelected
                         ? 'bg-cyan-600 text-white border-cyan-700 shadow-xs font-bold'
                         : 'bg-white hover:bg-glacier-bg text-glacier-text border-glacier-border hover:border-glacier-borderDark'
                     }`}
                   >
-                    <span>{s.name}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-                      isSelected ? 'bg-black/20 text-white' : 'bg-glacier-subtle text-glacier-textMuted'
+                    <span className="font-bold">{s.name}</span>
+                    <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-md ${
+                      isSelected ? 'bg-black/25 text-white font-bold' : 'bg-glacier-subtle text-glacier-textMuted font-medium'
                     }`}>
                       {s.tag}
                     </span>
@@ -484,7 +470,7 @@ export default function App() {
           <div className="pt-2">
             {likedIds.length === 0 && dislikedIds.length === 0 ? (
               <div className="p-4 rounded-xl bg-glacier-bg border border-glacier-border text-center text-xs text-glacier-textMuted">
-                Your profile is currently clean. Use the search bar above or tap 👍 / 👎 on any fragrance in the catalog below to add it.
+                Your profile is currently clean. Use the search bar above or choose reference perfumes below to build your olfactory taste profile.
               </div>
             ) : (
               <div className="space-y-2.5">
@@ -558,36 +544,109 @@ export default function App() {
         {/* ======================================================== */}
         {/* STEP 2: THE EXACT RICH INSIGHT RECOMMENDATION CARDS      */}
         {/* ======================================================== */}
-        {(viewTab === 'both' || viewTab === 'matcher') && (
-          <section className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-glacier-border pb-3">
-              <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-700 font-bold block">
-                  STEP 02 • SENSORY INTELLIGENCE
-                </span>
-                <h2 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
-                  <span>Your Tailored Scent Twins in Stock</span>
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800">
-                    {recommendations.length} Matches
-                  </span>
-                </h2>
-              </div>
-              <span className="text-xs text-glacier-textMuted font-mono">
-                Pure Olfactory Vector & Lineage Math • Zero AI Fluff
+        <section className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-glacier-border pb-3">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-700 font-bold block">
+                STEP 02 • SENSORY INTELLIGENCE
               </span>
+              <h2 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
+                <span>Your Tailored Scent Twins in Stock</span>
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800">
+                  {recommendations.length} Matches
+                </span>
+              </h2>
             </div>
+            <span className="text-xs text-glacier-textMuted font-mono">
+              Pure Olfactory Vector & Lineage Math • Zero AI Fluff
+            </span>
+          </div>
 
-            {recommendations.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-glacier-border p-12 text-center text-xs text-glacier-textMuted space-y-2">
-                <p className="font-bold text-slate-900 text-sm">No preferences selected yet.</p>
-                <p>Use the search box in Step 01 or tap 👍 on any perfumes below to populate your scent twins.</p>
-              </div>
-            ) : (
+          {recommendations.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-glacier-border p-12 text-center text-xs text-glacier-textMuted space-y-2">
+              <p className="font-bold text-slate-900 text-sm">No preferences selected yet.</p>
+              <p>Use the search box above or tap 👍 on reference perfumes in Step 01 to populate your tailored scent twins.</p>
+            </div>
+          ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {recommendations.slice(0, 10).map((item, idx) => {
                   const f = item.fragrance;
                   const isExpanded = expandedCardId === f.id;
-                  const sellers = (f.community_sellers || []).concat(f.community_decants || []);
+                  
+                  const displayName = f.brand && !f.name.toLowerCase().includes(f.brand.toLowerCase())
+                    ? `${f.brand} ${f.name}`
+                    : f.name;
+
+                  const bottlePriceNum = Number(f.community_price);
+                  const hasBottlePrice = !isNaN(bottlePriceNum) && bottlePriceNum > 0;
+
+                  const decantPriceNum = Number(f.lowest_decant_price);
+                  const hasDecantPrice = !isNaN(decantPriceNum) && decantPriceNum > 0;
+
+                  const bestLeadPrice = hasBottlePrice ? bottlePriceNum : (hasDecantPrice ? decantPriceNum : 0);
+
+                  // Extract strictly valid numerical quotes (no zero, no NaN)
+                  const validQuotes = (() => {
+                    const list = [];
+                    
+                    // Bottle sellers
+                    if (Array.isArray(f.community_sellers)) {
+                      for (const s of f.community_sellers) {
+                        if (selectedSeller !== 'all' && s.seller_id !== selectedSeller) continue;
+                        const p = Number(s.price);
+                        if (p && !isNaN(p) && p > 0) {
+                          list.push({
+                            seller_id: s.seller_id,
+                            seller_name: s.seller_name,
+                            label: s.size || '100ml Retail Bottle',
+                            price: p,
+                            whatsapp: s.whatsapp,
+                            isBottle: true
+                          });
+                        }
+                      }
+                    }
+
+                    // Decant sellers
+                    if (Array.isArray(f.community_decants)) {
+                      for (const d of f.community_decants) {
+                        if (selectedSeller !== 'all' && d.seller_id !== selectedSeller) continue;
+                        if (d.sizes && typeof d.sizes === 'object') {
+                          for (const [sz, val] of Object.entries(d.sizes)) {
+                            const p = Number(val);
+                            if (p && !isNaN(p) && p > 0) {
+                              list.push({
+                                seller_id: d.seller_id,
+                                seller_name: d.seller_name,
+                                label: `${sz} Decant`,
+                                price: p,
+                                whatsapp: d.whatsapp,
+                                isBottle: false
+                              });
+                            }
+                          }
+                        } else {
+                          const p = Number(d.lowest_price || d.price_10ml || d.price_5ml || d.price);
+                          if (p && !isNaN(p) && p > 0) {
+                            list.push({
+                              seller_id: d.seller_id,
+                              seller_name: d.seller_name,
+                              label: d.price_10ml ? '10ml Decant' : (d.price_5ml ? '5ml Decant' : 'Decant'),
+                              price: p,
+                              whatsapp: d.whatsapp,
+                              isBottle: false
+                            });
+                          }
+                        }
+                      }
+                    }
+
+                    // Sort bottles first by price asc, then decants by price asc
+                    return list.sort((a, b) => {
+                      if (a.isBottle !== b.isBottle) return a.isBottle ? -1 : 1;
+                      return a.price - b.price;
+                    });
+                  })();
 
                   return (
                     <div 
@@ -619,18 +678,18 @@ export default function App() {
                           </div>
 
                           <div className="text-right shrink-0">
-                            {f.community_price ? (
+                            {hasBottlePrice ? (
                               <div className="font-mono text-lg font-bold text-slate-900">
-                                ₹{f.community_price.toLocaleString()}
+                                ₹{bottlePriceNum.toLocaleString()}
                               </div>
-                            ) : f.lowest_decant_price ? (
+                            ) : hasDecantPrice ? (
                               <div className="text-xs text-glacier-textMuted font-mono font-medium">Decant only</div>
                             ) : (
                               <div className="text-xs text-glacier-textMuted font-mono">Unquoted</div>
                             )}
-                            {f.lowest_decant_price && (
+                            {hasDecantPrice && (
                               <div className="text-[11px] text-emerald-600 font-semibold font-mono">
-                                Decant from ₹{f.lowest_decant_price}
+                                Decant from ₹{decantPriceNum.toLocaleString()}
                               </div>
                             )}
                           </div>
@@ -677,15 +736,19 @@ export default function App() {
                           
                           {f.community_whatsapp ? (
                             <a
-                              href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(`Hi, saw your price for ${f.brand ? `${f.brand} ` : ''}${f.name} quoted at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} on FragScanner. Is this in stock?`)}`}
+                              href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
+                                bestLeadPrice > 0
+                                  ? `Hi, saw your price for ${displayName} quoted at ₹${bestLeadPrice.toLocaleString()} on FragScanner. Is this in stock?`
+                                  : `Hi, saw your listing for ${displayName} on FragScanner. Is this in stock?`
+                              )}`}
                               target="_blank"
                               rel="noreferrer"
                               onClick={() => logWhatsAppClick({
                                 sellerName: f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || 'Community Seller',
                                 fragranceName: f.name,
                                 brand: f.brand,
-                                price: f.community_price || f.lowest_decant_price,
-                                format: f.community_price ? 'bottle' : 'decant'
+                                price: bestLeadPrice,
+                                format: hasBottlePrice ? 'bottle' : 'decant'
                               })}
                               className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-mono font-bold transition-colors shadow-xs"
                             >
@@ -699,46 +762,49 @@ export default function App() {
                       {isExpanded && (
                         <div className="mt-3 pt-3 border-t border-glacier-border space-y-2 bg-glacier-bg/60 p-3 rounded-xl animate-in fade-in duration-100">
                           <span className="text-[11px] font-mono text-glacier-textMuted uppercase font-bold block">
-                            Direct Community Quotes ({sellers.length}):
+                            Direct Community Quotes ({validQuotes.length}):
                           </span>
-                          {sellers.map((s, sIdx) => {
-                            const isBottle = Boolean(s.price);
-                            const price = isBottle ? s.price : (s.price_10ml || s.price_5ml);
-                            const label = isBottle ? (s.size || '100ml Retail Bottle') : (s.price_10ml ? '10ml Decant' : '5ml Decant');
-                            const phoneDigits = String(s.whatsapp || '').replace(/\D/g, '');
-                            const intlPhone = phoneDigits.startsWith('91') ? phoneDigits : `91${phoneDigits}`;
-                            const msg = encodeURIComponent(`Hi ${s.seller_name}, saw your price for ${f.brand ? `${f.brand} ` : ''}${f.name}${label ? ` (${label})` : ''} quoted at ₹${Number(price).toLocaleString()} on FragScanner. Is this in stock?`);
-                            const wa = phoneDigits ? `https://wa.me/${intlPhone}?text=${msg}` : null;
+                          {validQuotes.length === 0 ? (
+                            <div className="text-xs text-glacier-textMuted py-2 text-center">
+                              No active verified quotes found for this selection.
+                            </div>
+                          ) : (
+                            validQuotes.map((q, qIdx) => {
+                              const phoneDigits = String(q.whatsapp || '').replace(/\D/g, '');
+                              const intlPhone = phoneDigits.startsWith('91') ? phoneDigits : `91${phoneDigits}`;
+                              const msg = encodeURIComponent(`Hi ${q.seller_name}, saw your price for ${displayName}${q.label ? ` (${q.label})` : ''} quoted at ₹${q.price.toLocaleString()} on FragScanner. Is this in stock?`);
+                              const wa = phoneDigits ? `https://wa.me/${intlPhone}?text=${msg}` : null;
 
-                            return (
-                              <div key={sIdx} className="bg-white border border-glacier-border rounded-lg p-2.5 flex items-center justify-between text-xs">
-                                <div>
-                                  <div className="font-bold text-slate-900">{s.seller_name}</div>
-                                  <div className="text-[10px] text-glacier-textMuted font-mono">{label} • In Stock</div>
+                              return (
+                                <div key={qIdx} className="bg-white border border-glacier-border rounded-lg p-2.5 flex items-center justify-between text-xs">
+                                  <div>
+                                    <div className="font-bold text-slate-900">{q.seller_name}</div>
+                                    <div className="text-[10px] text-glacier-textMuted font-mono">{q.label} • In Stock</div>
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                    <span className="font-mono font-bold text-slate-900">₹{q.price.toLocaleString()}</span>
+                                    {wa && (
+                                      <a 
+                                        href={wa} 
+                                        target="_blank" 
+                                        rel="noreferrer" 
+                                        onClick={() => logWhatsAppClick({
+                                          sellerName: q.seller_name,
+                                          fragranceName: f.name,
+                                          brand: f.brand,
+                                          price: q.price,
+                                          format: q.isBottle ? 'bottle' : 'decant'
+                                        })}
+                                        className="px-2.5 py-1 rounded bg-slate-900 text-white font-mono text-[10px] hover:bg-cyan-600 transition-colors"
+                                      >
+                                        Message ↗
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="font-mono font-bold text-slate-900">₹{Number(price).toLocaleString()}</span>
-                                  {wa && (
-                                    <a 
-                                      href={wa} 
-                                      target="_blank" 
-                                      rel="noreferrer" 
-                                      onClick={() => logWhatsAppClick({
-                                        sellerName: s.seller_name,
-                                        fragranceName: f.name,
-                                        brand: f.brand,
-                                        price: price,
-                                        format: isBottle ? 'bottle' : 'decant'
-                                      })}
-                                      className="px-2.5 py-1 rounded bg-slate-900 text-white font-mono text-[10px] hover:bg-cyan-600 transition-colors"
-                                    >
-                                      Message ↗
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })
+                          )}
                         </div>
                       )}
                     </div>
@@ -747,169 +813,6 @@ export default function App() {
               </div>
             )}
           </section>
-        )}
-
-        {/* ======================================================== */}
-        {/* STEP 3: DIRECT PRICE DISCOVERY CATALOG TABLE             */}
-        {/* ======================================================== */}
-        {(viewTab === 'both' || viewTab === 'catalog') && (
-          <section id="price-discovery-catalog" className="space-y-4 pt-4 scroll-mt-24">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-glacier-border pb-3">
-              <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-700 font-bold block">
-                  STEP 03 • MARKET PRICE COMPARISON
-                </span>
-                <h2 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
-                  <span>Full Price Discovery Catalog</span>
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">
-                    {filteredCatalog.length} In Stock
-                  </span>
-                </h2>
-              </div>
-              
-              <div className="flex items-center gap-2 text-xs">
-                {/* Format toggle */}
-                <div className="flex items-center bg-white border border-glacier-border rounded-lg p-0.5">
-                  <button 
-                    onClick={() => setFormatFilter('all')} 
-                    className={`px-2.5 py-1 rounded text-xs transition-colors ${formatFilter === 'all' ? 'bg-cyan-600 text-white font-bold' : 'text-glacier-textMuted'}`}
-                  >
-                    All
-                  </button>
-                  <button 
-                    onClick={() => setFormatFilter('bottles')} 
-                    className={`px-2.5 py-1 rounded text-xs transition-colors ${formatFilter === 'bottles' ? 'bg-cyan-600 text-white font-bold' : 'text-glacier-textMuted'}`}
-                  >
-                    Bottles
-                  </button>
-                  <button 
-                    onClick={() => setFormatFilter('decants')} 
-                    className={`px-2.5 py-1 rounded text-xs transition-colors ${formatFilter === 'decants' ? 'bg-cyan-600 text-white font-bold' : 'text-glacier-textMuted'}`}
-                  >
-                    Decants
-                  </button>
-                </div>
-
-                {/* Sort */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white border border-glacier-border rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none"
-                >
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="name">Name: A to Z</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Active Search & Filter Banner */}
-            {searchQuery.trim() && (
-              <div className="flex items-center justify-between p-3 rounded-xl bg-cyan-50 border border-cyan-200 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-cyan-900 font-mono">
-                    🔍 Filtered by: "{searchQuery}"
-                  </span>
-                  <span className="text-cyan-700 font-mono">
-                    ({filteredCatalog.length} matching fragrances found)
-                  </span>
-                </div>
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="px-2.5 py-1 rounded-md bg-white border border-cyan-300 text-cyan-800 hover:bg-cyan-100 font-mono text-[11px] font-bold flex items-center gap-1 shadow-2xs"
-                >
-                  <X className="w-3 h-3" />
-                  <span>Clear Search Filter</span>
-                </button>
-              </div>
-            )}
-
-            {/* Catalog Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredCatalog.slice(0, catalogDisplayLimit).map(f => {
-                const isLiked = likedIds.includes(f.id);
-                const isDisliked = dislikedIds.includes(f.id);
-
-                return (
-                  <div 
-                    key={f.id}
-                    className={`bg-white rounded-xl border p-4 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between ${
-                      isLiked ? 'border-cyan-500 ring-1 ring-cyan-500/20' : isDisliked ? 'border-red-300 opacity-60' : 'border-glacier-border'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between text-[10px] font-mono uppercase text-glacier-textMuted mb-1">
-                        <span>{f.brand}</span>
-                        {f.dna_inspiration && <span className="truncate max-w-[140px]">• DNA: {f.dna_inspiration}</span>}
-                      </div>
-
-                      <h4 className="font-heading font-bold text-base text-slate-900 truncate">
-                        {f.name}
-                      </h4>
-
-                      <div className="mt-2 flex items-baseline justify-between">
-                        {f.community_price ? (
-                          <div>
-                            <span className="text-[10px] text-glacier-textMuted uppercase font-mono block">Lowest Bottle</span>
-                            <span className="font-mono font-bold text-base text-slate-900">₹{f.community_price.toLocaleString()}</span>
-                          </div>
-                        ) : (
-                          <div className="text-xs text-glacier-textMuted font-mono">Decants only</div>
-                        )}
-
-                        {f.lowest_decant_price && (
-                          <div className="text-right">
-                            <span className="text-[10px] text-glacier-textMuted uppercase font-mono block">Decant from</span>
-                            <span className="font-mono font-bold text-emerald-600 text-sm">₹{f.lowest_decant_price}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-glacier-subtle flex items-center justify-between">
-                      <button
-                        onClick={() => setActiveFragrance(f)}
-                        className="text-xs font-mono font-medium text-cyan-700 hover:underline flex items-center gap-1"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect Rates</span>
-                      </button>
-
-                      {/* 1-Tap Dual Like/Avoid Buttons */}
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={(e) => handleToggleLike(f.id, e)}
-                          title={isLiked ? "Remove like" : "I like this fragrance"}
-                          className={`p-1.5 rounded-lg transition-colors ${isLiked ? 'bg-cyan-600 text-white font-bold' : 'text-glacier-textMuted hover:text-cyan-700 hover:bg-cyan-50'}`}
-                        >
-                          <ThumbsUp className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={(e) => handleToggleDislike(f.id, e)}
-                          title={isDisliked ? "Remove avoid" : "Avoid this scent"}
-                          className={`p-1.5 rounded-lg transition-colors ${isDisliked ? 'bg-red-600 text-white font-bold' : 'text-glacier-textMuted hover:text-red-700 hover:bg-red-50'}`}
-                        >
-                          <ThumbsDown className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {filteredCatalog.length > catalogDisplayLimit && (
-              <div className="text-center pt-4">
-                <button
-                  onClick={() => setCatalogDisplayLimit(prev => prev + 30)}
-                  className="px-5 py-2 rounded-xl bg-white border border-glacier-border hover:border-slate-900 text-slate-900 text-xs font-mono font-bold transition-colors shadow-2xs"
-                >
-                  Load Next 30 Fragrances ({filteredCatalog.length - catalogDisplayLimit} remaining)
-                </button>
-              </div>
-            )}
-          </section>
-        )}
 
       </main>
 

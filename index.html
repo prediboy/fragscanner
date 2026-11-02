@@ -8,19 +8,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
               glacier: {
-                bg: '#F1F5F9',
-                surface: '#FFFFFF',
-                subtle: '#E2E8F0',
-                border: '#CBD5E1',
-                borderDark: '#94A3B8',
-                text: '#0F172A',
-                textMuted: '#64748B',
-                accent: '#0284C7',
-                accentLight: '#E0F2FE',
+                bg: 'var(--glacier-bg)',
+                surface: 'var(--glacier-surface)',
+                card: 'var(--glacier-card)',
+                subtle: 'var(--glacier-subtle)',
+                border: 'var(--glacier-border)',
+                borderDark: 'var(--glacier-border-dark)',
+                text: 'var(--glacier-text)',
+                textMuted: 'var(--glacier-text-muted)',
+                accent: 'var(--glacier-accent)',
+                accentLight: 'var(--glacier-accent-light)',
                 accentDark: '#0369A1',
                 cyan: '#06B6D4',
                 success: '#10B981',
@@ -38,11 +40,41 @@
     </script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+      
+      :root, [data-theme="fresh"], .theme-fresh {
+        --glacier-bg: #F1F5F9;
+        --glacier-surface: #FFFFFF;
+        --glacier-card: #FFFFFF;
+        --glacier-subtle: #E2E8F0;
+        --glacier-border: #CBD5E1;
+        --glacier-border-dark: #94A3B8;
+        --glacier-text: #0F172A;
+        --glacier-text-muted: #64748B;
+        --glacier-header: rgba(255, 255, 255, 0.95);
+        --glacier-accent: #0284C7;
+        --glacier-accent-light: #E0F2FE;
+      }
+
+      [data-theme="night"], .theme-night, .dark {
+        --glacier-bg: #070B14;
+        --glacier-surface: #0E1626;
+        --glacier-card: #111C2E;
+        --glacier-subtle: #17243B;
+        --glacier-border: #23354E;
+        --glacier-border-dark: #3B5270;
+        --glacier-text: #F8FAFC;
+        --glacier-text-muted: #94A3B8;
+        --glacier-header: rgba(14, 22, 38, 0.95);
+        --glacier-accent: #38BDF8;
+        --glacier-accent-light: rgba(56, 189, 248, 0.15);
+      }
+
       body {
-        background-color: #F1F5F9;
-        color: #0F172A;
+        background-color: var(--glacier-bg);
+        color: var(--glacier-text);
         font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
+        transition: background-color 0.2s ease, color 0.2s ease;
       }
       .font-heading {
         font-family: 'Space Grotesk', system-ui, sans-serif;
@@ -53,18 +85,155 @@
         height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #F1F5F9;
+        background: var(--glacier-bg);
       }
       ::-webkit-scrollbar-thumb {
-        background: #CBD5E1;
+        background: var(--glacier-border);
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #94A3B8;
+        background: var(--glacier-border-dark);
+      }
+
+      /* ======================================================== */
+      /* MIDNIGHT FROST DARK THEME OVERRIDES                      */
+      /* ======================================================== */
+      
+      /* 1. SELLER NAMES & SELLER CHIPS (Vibrant, high-contrast) */
+      .theme-night .text-glacier-text {
+        color: #F8FAFC !important;
+      }
+      .theme-night .text-glacier-textMuted {
+        color: #94A3B8 !important;
+      }
+      .theme-night .text-slate-900 {
+        color: #F8FAFC !important;
+      }
+      .theme-night .text-slate-800 {
+        color: #E2E8F0 !important;
+      }
+      .theme-night .text-slate-700 {
+        color: #CBD5E1 !important;
+      }
+      .theme-night .text-slate-600 {
+        color: #94A3B8 !important;
+      }
+      .theme-night .text-slate-500 {
+        color: #8899B5 !important;
+      }
+
+      /* Hero Seller Filter Chips */
+      .theme-night button.bg-white {
+        background-color: var(--glacier-card) !important;
+        border-color: var(--glacier-border) !important;
+        color: #F8FAFC !important;
+      }
+      .theme-night button.bg-white:hover {
+        background-color: #17263E !important;
+        border-color: #38BDF8 !important;
+      }
+      .theme-night button.bg-white span {
+        color: inherit !important;
+      }
+      .theme-night .bg-glacier-subtle {
+        background-color: #1B2B44 !important;
+        color: #93C5FD !important;
+        border-color: #24354D !important;
+      }
+
+      /* 2. BRAND BADGES (Vivid Ice Cyan on dark frosted glass) */
+      .theme-night .bg-cyan-50,
+      .theme-night .bg-cyan-100\/70,
+      .theme-night .bg-cyan-100 {
+        background-color: rgba(6, 182, 212, 0.18) !important;
+        border-color: rgba(56, 189, 248, 0.5) !important;
+      }
+      .theme-night .text-cyan-800,
+      .theme-night .text-cyan-700,
+      .theme-night .text-cyan-900,
+      .theme-night .text-cyan-600 {
+        color: #38BDF8 !important;
+        font-weight: 700 !important;
+      }
+      .theme-night .border-cyan-200,
+      .theme-night .border-cyan-300 {
+        border-color: rgba(56, 189, 248, 0.45) !important;
+      }
+
+      /* 3. SURFACES & SECTIONS */
+      .theme-night .bg-white {
+        background-color: var(--glacier-card) !important;
+      }
+      .theme-night .bg-white\/95 {
+        background-color: rgba(14, 22, 38, 0.94) !important;
+      }
+      .theme-night .bg-glacier-bg {
+        background-color: var(--glacier-bg) !important;
+      }
+      .theme-night .border-glacier-border,
+      .theme-night .border-glacier-subtle {
+        border-color: var(--glacier-border) !important;
+      }
+
+      /* 4. COMPARE RATES DRAWER & QUOTE ITEMS */
+      .theme-night .bg-glacier-bg\/60 {
+        background-color: #0A111E !important;
+        border-color: var(--glacier-border) !important;
+      }
+      .theme-night .bg-slate-50 {
+        background-color: #0C1422 !important;
+        border-color: #1F3047 !important;
+      }
+      .theme-night .bg-glacier-bg\/60 .bg-white {
+        background-color: #132034 !important;
+        border-color: #23354E !important;
+      }
+      .theme-night .bg-glacier-bg\/60 .bg-white:hover {
+        border-color: #38BDF8 !important;
+      }
+
+      /* 5. STATUS PILLS & BADGES */
+      .theme-night .bg-emerald-50 {
+        background-color: rgba(16, 185, 129, 0.16) !important;
+        border-color: rgba(16, 185, 129, 0.4) !important;
+      }
+      .theme-night .text-emerald-800,
+      .theme-night .text-emerald-700,
+      .theme-night .text-emerald-600 {
+        color: #34D399 !important;
+      }
+      .theme-night .bg-red-50 {
+        background-color: rgba(239, 68, 68, 0.16) !important;
+        border-color: rgba(239, 68, 68, 0.4) !important;
+      }
+      .theme-night .text-red-800,
+      .theme-night .text-red-700 {
+        color: #F87171 !important;
+      }
+
+      /* 6. INPUTS & SEARCH DROPDOWN */
+      .theme-night input[type="text"] {
+        background-color: #0C1422 !important;
+        color: #F8FAFC !important;
+        border-color: #23354E !important;
+      }
+      .theme-night input[type="text"]::placeholder {
+        color: #64748B !important;
+      }
+      .theme-night .hover\:bg-slate-50:hover {
+        background-color: #15243B !important;
+      }
+      .theme-night .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+        border-color: #1E2E44 !important;
+      }
+      .theme-night .shadow-2xs,
+      .theme-night .shadow-xs,
+      .theme-night .shadow-sm {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5) !important;
       }
     </style>
   </head>
-  <body class="bg-[#0b1120] text-slate-100 min-h-screen selection:bg-amber-500/30 selection:text-amber-300">
+  <body class="min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
