@@ -5,6 +5,7 @@ import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
 import DirectFragranceSearchBar from './components/DirectFragranceSearchBar';
 import { getProfileRecommendations } from './utils/userProfiler';
+import { logWardrobeSelection, logWhatsAppClick, logSearchQuery } from './lib/supabaseTelemetry';
 import { 
   Search, ThumbsUp, ThumbsDown, Sparkles, X, 
   Store, Star, Eye, ArrowRight, CheckCircle2, FlaskConical, ChevronDown, ChevronUp
@@ -169,6 +170,34 @@ export default function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Telemetry: Log primary search queries (debounced 1.5s after typing stops)
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim().length >= 2) {
+      logSearchQuery(searchQuery, filteredCatalog.length);
+    }
+  }, [searchQuery, filteredCatalog.length]);
+
+  // Telemetry: Log Step 01 taste anchor searches
+  useEffect(() => {
+    if (anchorSearch && anchorSearch.trim().length >= 2) {
+      logSearchQuery(`anchor:${anchorSearch.trim()}`, anchorSearchResults.length);
+    }
+  }, [anchorSearch, anchorSearchResults.length]);
+
+  // Telemetry: Log user taste anchors & recommendations (debounced 2.5s)
+  useEffect(() => {
+    if (likedIds.length > 0 || dislikedIds.length > 0) {
+      const likedPerfumes = allFragrances.filter(f => likedIds.includes(f.id));
+      const dislikedPerfumes = allFragrances.filter(f => dislikedIds.includes(f.id));
+      logWardrobeSelection({
+        likedPerfumes,
+        dislikedPerfumes,
+        umbrella: { title: 'Glacier Taste Profile', bestSeason: 'All Season' },
+        topRecommendations: recommendations
+      });
+    }
+  }, [likedIds, dislikedIds, recommendations, allFragrances]);
 
   return (
     <div className="min-h-screen bg-glacier-bg text-glacier-text flex flex-col antialiased">
@@ -646,6 +675,13 @@ export default function App() {
                               href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(`Hi, saw your price for ${f.brand ? `${f.brand} ` : ''}${f.name} quoted at ₹${Number(f.community_price).toLocaleString()} on FragScanner. Is this in stock?`)}`}
                               target="_blank"
                               rel="noreferrer"
+                              onClick={() => logWhatsAppClick({
+                                sellerName: f.community_seller_name || 'Community Seller',
+                                fragranceName: f.name,
+                                brand: f.brand,
+                                price: f.community_price,
+                                format: 'bottle'
+                              })}
                               className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-mono font-bold transition-colors shadow-xs"
                             >
                               WhatsApp ↗
@@ -678,7 +714,19 @@ export default function App() {
                                 <div className="flex items-center gap-3">
                                   <span className="font-mono font-bold text-slate-900">₹{Number(price).toLocaleString()}</span>
                                   {wa && (
-                                    <a href={wa} target="_blank" rel="noreferrer" className="px-2.5 py-1 rounded bg-slate-900 text-white font-mono text-[10px] hover:bg-cyan-600 transition-colors">
+                                    <a 
+                                      href={wa} 
+                                      target="_blank" 
+                                      rel="noreferrer" 
+                                      onClick={() => logWhatsAppClick({
+                                        sellerName: s.seller_name,
+                                        fragranceName: f.name,
+                                        brand: f.brand,
+                                        price: price,
+                                        format: isBottle ? 'bottle' : 'decant'
+                                      })}
+                                      className="px-2.5 py-1 rounded bg-slate-900 text-white font-mono text-[10px] hover:bg-cyan-600 transition-colors"
+                                    >
                                       Message ↗
                                     </a>
                                   )}

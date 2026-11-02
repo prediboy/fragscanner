@@ -5,6 +5,7 @@ import {
   Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe 
 } from 'lucide-react';
 import { getFragranceRecommendations } from '../utils/recommender';
+import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
 export default function FragranceDetailModal({ fragrance, allFragrances, onClose, onSelectOther }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
@@ -252,6 +253,13 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                                   href={waUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  onClick={() => logWhatsAppClick({
+                                    sellerName: seller.seller_name,
+                                    fragranceName: fragrance.name,
+                                    brand: fragrance.brand,
+                                    price: seller.price,
+                                    format: 'bottle'
+                                  })}
                                   className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow"
                                 >
                                   <span>Buy on WhatsApp</span>
@@ -428,6 +436,13 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                                       href={waUrl}
                                       target="_blank"
                                       rel="noopener noreferrer"
+                                      onClick={() => logWhatsAppClick({
+                                        sellerName: topQuote.seller_name,
+                                        fragranceName: fragrance.name,
+                                        brand: fragrance.brand,
+                                        price: topQuote.price,
+                                        format: 'decant'
+                                      })}
                                       className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow"
                                     >
                                       <span>Buy {size} on WhatsApp</span>
