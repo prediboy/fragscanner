@@ -1,8 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, X, Sparkles, Star, Store, FlaskConical, ArrowRight } from 'lucide-react';
+import { Search, X, Sparkles, Star, Store, FlaskConical, ArrowRight, ThumbsUp, ThumbsDown } from 'lucide-react';
 
-export default function DirectFragranceSearchBar({ allFragrances, onSelectFragrance }) {
-  const [query, setQuery] = useState('');
+export default function DirectFragranceSearchBar({ 
+  searchQuery, 
+  onSearchChange, 
+  allFragrances, 
+  onSelectFragrance,
+  onToggleLike,
+  onToggleDislike,
+  likedIds = [],
+  dislikedIds = []
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
@@ -33,160 +41,259 @@ export default function DirectFragranceSearchBar({ allFragrances, onSelectFragra
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Filter matching fragrances (by name, brand, DNA inspiration, or notes)
+  // Filter matching fragrances for dropdown autocomplete
   const results = React.useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = (searchQuery || '').trim().toLowerCase();
     if (!q || q.length < 2) return [];
 
     return allFragrances.filter(f => {
       const name = (f.name || '').toLowerCase();
       const brand = (f.brand || '').toLowerCase();
       const inspo = (f.dna_inspiration || '').toLowerCase();
-      const notes = (f.notes_top || []).concat(f.notes_middle || [], f.notes_base || []).map(n => n.toLowerCase());
+      
+      let matchNotes = false;
+      if (f.notes && typeof f.notes === 'object') {
+        const allN = [...(f.notes.top || []), ...(f.notes.middle || []), ...(f.notes.base || [])];
+        matchNotes = allN.some(n => String(n).toLowerCase().includes(q));
+      }
 
       return (
         name.includes(q) ||
         brand.includes(q) ||
         inspo.includes(q) ||
-        notes.some(n => n.includes(q))
+        matchNotes
       );
     }).slice(0, 8); // Top 8 matches
-  }, [query, allFragrances]);
+  }, [searchQuery, allFragrances]);
+
+  const handleSearchSubmit = (e) => {
+    e?.preventDefault();
+    setIsOpen(false);
+    // Smooth scroll down to catalog if available
+    const catalogEl = document.getElementById('price-discovery-catalog');
+    if (catalogEl) {
+      catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handleSelect = (fragrance) => {
     onSelectFragrance(fragrance);
     setIsOpen(false);
-    setQuery('');
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-xl">
+    <div ref={containerRef} className="relative w-full">
       {/* Search Input Container */}
-      <div className="relative flex items-center">
-        <Search className="absolute left-3.5 w-4 h-4 text-amber-400 pointer-events-none" />
-        
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-          }}
-          onFocus={() => {
-            if (query.trim().length >= 2) setIsOpen(true);
-          }}
-          placeholder="🔍 Direct Search: Find any perfume, clone inspiration, or seller deals..."
-          className="w-full bg-[#131d31] hover:bg-[#16223a] focus:bg-[#172540] border border-slate-700 focus:border-amber-400/80 rounded-2xl pl-10 pr-20 py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all shadow-inner"
-        />
+      <form onSubmit={handleSearchSubmit} className="relative flex items-center gap-2">
+        <div className="relative flex-1 flex items-center">
+          <Search className="absolute left-4 w-4 h-4 text-cyan-600 pointer-events-none" />
+          
+          <input
+            ref={inputRef}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => {
+              onSearchChange(e.target.value);
+              setIsOpen(true);
+            }}
+            onFocus={() => {
+              if (searchQuery && searchQuery.trim().length >= 2) setIsOpen(true);
+            }}
+            placeholder="🔍 Direct Price Search: Find any perfume, clone (e.g. Angels' Share, Hawas, 9 PM), or note..."
+            className="w-full bg-white hover:bg-slate-50/50 focus:bg-white border-2 border-slate-200 focus:border-cyan-600 rounded-2xl pl-11 pr-20 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 transition-all shadow-xs"
+          />
 
-        <div className="absolute right-3 flex items-center gap-1.5">
-          {query ? (
-            <button
-              onClick={() => {
-                setQuery('');
-                setIsOpen(false);
-              }}
-              className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ) : (
-            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700 rounded-md">
-              /
-            </kbd>
-          )}
+          <div className="absolute right-3.5 flex items-center gap-2">
+            {searchQuery ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onSearchChange('');
+                  setIsOpen(false);
+                }}
+                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                title="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            ) : (
+              <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-100 border border-slate-200 rounded-md">
+                /
+              </kbd>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Dropdown Live Results */}
-      {isOpen && query.trim().length >= 2 && (
-        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#0f172a] border border-amber-500/30 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl max-h-[75vh] flex flex-col">
-          <div className="p-2.5 bg-[#131d31] border-b border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <span className="font-semibold flex items-center gap-1.5 text-amber-400">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Direct Fragrance Search ({results.length} results)</span>
+        {/* Explicit Search Button */}
+        <button
+          type="submit"
+          className="shrink-0 px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-heading font-bold text-sm shadow-md shadow-cyan-600/20 transition-all flex items-center gap-2"
+        >
+          <Search className="w-4 h-4" />
+          <span>Search</span>
+        </button>
+      </form>
+
+      {/* Autocomplete Dropdown */}
+      {isOpen && searchQuery && searchQuery.trim().length >= 2 && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-cyan-200/80 rounded-2xl shadow-xl overflow-hidden backdrop-blur-xl max-h-[75vh] flex flex-col divide-y divide-slate-100 animate-in fade-in duration-150">
+          
+          <div className="p-3 bg-cyan-50/70 border-b border-cyan-100 flex items-center justify-between text-xs text-slate-600">
+            <span className="font-bold flex items-center gap-1.5 text-cyan-800 font-mono uppercase tracking-wider text-[11px]">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
+              <span>Instant Discovery Results ({results.length} matches)</span>
             </span>
-            <span className="text-[11px] text-slate-400">Click any fragrance to view full details</span>
+            <span className="text-[11px] text-slate-500 font-mono">
+              Press Enter to view in full catalog
+            </span>
           </div>
 
-          <div className="overflow-y-auto divide-y divide-slate-800/60">
+          <div className="overflow-y-auto divide-y divide-slate-100">
             {results.length > 0 ? (
-              results.map((f) => (
-                <div
-                  key={f.id}
-                  onClick={() => handleSelect(f)}
-                  className="p-3 hover:bg-slate-800/70 transition-colors cursor-pointer flex items-center justify-between gap-3 group"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[10px] font-bold px-2 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        {f.brand}
-                      </span>
-                      {f.dna_inspiration && (
-                        <span className="text-[10px] text-slate-400 truncate max-w-[200px]">
-                          Target: <strong className="text-slate-300">{f.dna_inspiration}</strong>
+              results.map((f) => {
+                const isLiked = likedIds.includes(f.id);
+                const isDisliked = dislikedIds.includes(f.id);
+
+                return (
+                  <div
+                    key={f.id}
+                    className="p-3.5 hover:bg-slate-50 transition-colors flex items-center justify-between gap-3 group"
+                  >
+                    <div 
+                      className="min-w-0 flex-1 cursor-pointer"
+                      onClick={() => handleSelect(f)}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-cyan-100/70 text-cyan-800 border border-cyan-200 uppercase font-mono">
+                          {f.brand}
                         </span>
-                      )}
+                        {f.dna_inspiration && (
+                          <span className="text-[11px] text-slate-600 truncate max-w-[240px]">
+                            DNA: <strong className="text-slate-800 font-semibold">{f.dna_inspiration}</strong>
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-cyan-700 transition-colors truncate">
+                        {f.name}
+                      </h4>
+
+                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500 font-mono">
+                        <span className="flex items-center gap-0.5 text-amber-600 font-bold">
+                          <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                          {(Number(f.rating_value) || 4.2).toFixed(1)}
+                        </span>
+                        <span>•</span>
+                        <span>{f.collection || f.concentration}</span>
+                        {f.primary_season && (
+                          <>
+                            <span>•</span>
+                            <span>{f.primary_season}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors truncate">
-                      {f.name}
-                    </h4>
+                    {/* Dual Price Highlights & Quick Action Buttons */}
+                    <div className="text-right shrink-0 space-y-1.5 flex flex-col items-end">
+                      <div className="flex items-center gap-3">
+                        {f.community_price ? (
+                          <div className="text-right">
+                            <span className="text-[10px] text-slate-400 uppercase font-mono block">Bottle</span>
+                            <span className="text-xs font-bold text-slate-900 font-mono">
+                              ₹{f.community_price.toLocaleString()}
+                            </span>
+                          </div>
+                        ) : null}
 
-                    <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
-                      <span className="flex items-center gap-0.5 text-amber-400 font-mono font-bold">
-                        <Star className="w-3 h-3 fill-amber-400" />
-                        {(Number(f.rating_value) || 4.2).toFixed(1)}
-                      </span>
-                      <span>•</span>
-                      <span>{f.collection}</span>
-                      <span>•</span>
-                      <span>{f.primary_season}</span>
+                        {f.lowest_decant_price ? (
+                          <div className="text-right">
+                            <span className="text-[10px] text-slate-400 uppercase font-mono block">Decant</span>
+                            <span className="text-xs font-bold text-emerald-600 font-mono">
+                              ₹{f.lowest_decant_price}
+                            </span>
+                          </div>
+                        ) : null}
+                      </div>
+
+                      {/* Action buttons: Rates + Like + Avoid */}
+                      <div className="flex items-center gap-1.5 pt-0.5">
+                        <button
+                          type="button"
+                          onClick={() => handleSelect(f)}
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-mono font-medium flex items-center gap-1 transition-colors"
+                        >
+                          <span>Rates</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+
+                        {onToggleLike && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              onToggleLike(f.id, e);
+                              onSearchChange('');
+                              setIsOpen(false);
+                            }}
+                            title={isLiked ? "Remove like" : "Add to liked anchors"}
+                            className={`p-1.5 rounded-lg text-xs transition-colors ${
+                              isLiked 
+                                ? 'bg-cyan-600 text-white font-bold' 
+                                : 'bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-200'
+                            }`}
+                          >
+                            <ThumbsUp className="w-3 h-3" />
+                          </button>
+                        )}
+
+                        {onToggleDislike && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              onToggleDislike(f.id, e);
+                              onSearchChange('');
+                              setIsOpen(false);
+                            }}
+                            title={isDisliked ? "Remove avoid" : "Add to avoided"}
+                            className={`p-1.5 rounded-lg text-xs transition-colors ${
+                              isDisliked 
+                                ? 'bg-red-600 text-white font-bold' 
+                                : 'bg-red-50 hover:bg-red-100 text-red-800 border border-red-200'
+                            }`}
+                          >
+                            <ThumbsDown className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
                     </div>
+
                   </div>
-
-                  {/* Dual Price Highlights */}
-                  <div className="text-right shrink-0 space-y-1">
-                    {f.in_seller_stock && f.community_price ? (
-                      <div className="flex items-center gap-1 justify-end">
-                        <span className="text-[10px] text-slate-400">Bottle:</span>
-                        <span className="text-xs font-black text-emerald-400 font-mono">
-                          ₹{f.community_price}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="inline-block text-[9px] text-slate-400 bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/60">
-                        Bottle: Unquoted
-                      </span>
-                    )}
-
-                    {f.has_decants && f.lowest_decant_price ? (
-                      <div className="flex items-center gap-1 justify-end text-cyan-300 font-mono text-xs font-black">
-                        <FlaskConical className="w-3 h-3 text-cyan-400" />
-                        <span className="text-[10px] font-normal text-slate-400">Decant:</span>
-                        <span>₹{f.lowest_decant_price}</span>
-                      </div>
-                    ) : null}
-
-                    <span className="inline-flex items-center gap-1 text-[10px] text-amber-400 group-hover:translate-x-0.5 transition-transform font-semibold">
-                      <span>View Details</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="p-6 text-center space-y-1.5">
-                <p className="text-sm text-slate-300 font-semibold">
-                  No matching fragrances found for "{query}"
+                <p className="text-sm text-slate-800 font-semibold">
+                  No matching fragrances found for "{searchQuery}"
                 </p>
-                <p className="text-xs text-slate-400">
-                  Try searching by house name (e.g., Lattafa, Afnan, Armaf, Paris Corner) or clone target (e.g., Angels' Share, Aventus, Sauvage).
+                <p className="text-xs text-slate-500">
+                  Try searching by house name (e.g., Lattafa, Afnan, Armaf, Rasasi) or clone target (e.g., Angels' Share, Aventus, Sauvage).
                 </p>
               </div>
             )}
           </div>
+
+          {/* Footer note in dropdown */}
+          <div className="p-2.5 bg-slate-50 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Showing top 8 matches in stock</span>
+            <button
+              type="button"
+              onClick={handleSearchSubmit}
+              className="text-cyan-700 font-bold hover:underline"
+            >
+              See all in catalog ↓
+            </button>
+          </div>
+
         </div>
       )}
     </div>

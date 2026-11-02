@@ -8,44 +8,59 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              fragrantica: {
-                dark: '#0f172a',
-                card: '#1e293b',
-                gold: '#d97706',
-                accent: '#f59e0b',
-                muted: '#94a3b8'
+              glacier: {
+                bg: '#F1F5F9',
+                surface: '#FFFFFF',
+                subtle: '#E2E8F0',
+                border: '#CBD5E1',
+                borderDark: '#94A3B8',
+                text: '#0F172A',
+                textMuted: '#64748B',
+                accent: '#0284C7',
+                accentLight: '#E0F2FE',
+                accentDark: '#0369A1',
+                cyan: '#06B6D4',
+                success: '#10B981',
+                danger: '#EF4444'
               }
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              heading: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace']
             }
           }
         }
       }
     </script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
       body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #F1F5F9;
+        color: #0F172A;
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
-      .font-serif-luxury {
-        font-family: 'Playfair Display', serif;
+      .font-heading {
+        font-family: 'Space Grotesk', system-ui, sans-serif;
       }
-      /* Custom scrollbar */
+      /* Custom clean frosted scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0f172a;
+        background: #F1F5F9;
       }
       ::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 4px;
+        background: #CBD5E1;
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
+        background: #94A3B8;
       }
     </style>
   </head>
