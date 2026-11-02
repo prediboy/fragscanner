@@ -623,8 +623,10 @@ export default function App() {
                               <div className="font-mono text-lg font-bold text-slate-900">
                                 ₹{f.community_price.toLocaleString()}
                               </div>
+                            ) : f.lowest_decant_price ? (
+                              <div className="text-xs text-glacier-textMuted font-mono font-medium">Decant only</div>
                             ) : (
-                              <div className="text-xs text-glacier-textMuted font-mono">Decant only</div>
+                              <div className="text-xs text-glacier-textMuted font-mono">Unquoted</div>
                             )}
                             {f.lowest_decant_price && (
                               <div className="text-[11px] text-emerald-600 font-semibold font-mono">
@@ -636,21 +638,18 @@ export default function App() {
 
                         {/* EXACT STRUCTURED PROOF BREAKDOWN */}
                         <div className="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                          {item.likeReasons.map((reason, rIdx) => (
-                            <div key={rIdx} className="flex items-start gap-2 leading-relaxed text-slate-800">
-                              <span className="shrink-0 text-sm mt-0.5">
-                                {reason.startsWith('✨') ? '✨' : reason.startsWith('⏳') ? '⏳' : reason.startsWith('🎯') ? '🎯' : reason.startsWith('🌿') ? '🌿' : '⭐'}
-                              </span>
-                              <span>{reason.replace(/^[✨⏳🎯🌿⭐]\s*/, '')}</span>
-                            </div>
-                          ))}
+                          {item.likeReasons.map((reason, rIdx) => {
+                            const match = reason.match(/^([^\s\w]+)\s*(.*)$/u);
+                            const emoji = match ? match[1] : '•';
+                            const text = match ? match[2] : reason;
 
-                          {/* Fragrantica Stats */}
-                          <div className="flex items-center gap-2 pt-1 border-t border-slate-200 text-[11px] text-glacier-textMuted font-mono">
-                            <span>⭐ Community: <strong>{(Number(f.rating_value) || 4.2).toFixed(2)}/5</strong> ({f.rating_count || '2.1k'} votes)</span>
-                            <span>•</span>
-                            <span>{f.longevity || '8+ hrs'}</span>
-                          </div>
+                            return (
+                              <div key={rIdx} className="flex items-start gap-2 leading-relaxed text-slate-800">
+                                <span className="shrink-0 text-sm mt-0.5">{emoji}</span>
+                                <span>{text}</span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -658,7 +657,13 @@ export default function App() {
                       <div className="pt-2 border-t border-glacier-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                         <div className="text-[11px] text-glacier-textMuted">
                           <span>In stock: </span>
-                          <strong className="text-slate-900">{f.community_seller_name || 'Second Theory & FragFever'}</strong>
+                          <strong className="text-slate-900">
+                            {f.community_sellers && f.community_sellers.length > 0 
+                              ? (f.community_seller_name || f.community_sellers[0].seller_name)
+                              : f.community_decants && f.community_decants.length > 0
+                                ? (f.community_seller_name || f.community_decants[0].seller_name)
+                                : 'Verified Sellers (Inquire)'}
+                          </strong>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -672,15 +677,15 @@ export default function App() {
                           
                           {f.community_whatsapp ? (
                             <a
-                              href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(`Hi, saw your price for ${f.brand ? `${f.brand} ` : ''}${f.name} quoted at ₹${Number(f.community_price).toLocaleString()} on FragScanner. Is this in stock?`)}`}
+                              href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(`Hi, saw your price for ${f.brand ? `${f.brand} ` : ''}${f.name} quoted at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} on FragScanner. Is this in stock?`)}`}
                               target="_blank"
                               rel="noreferrer"
                               onClick={() => logWhatsAppClick({
-                                sellerName: f.community_seller_name || 'Community Seller',
+                                sellerName: f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || 'Community Seller',
                                 fragranceName: f.name,
                                 brand: f.brand,
-                                price: f.community_price,
-                                format: 'bottle'
+                                price: f.community_price || f.lowest_decant_price,
+                                format: f.community_price ? 'bottle' : 'decant'
                               })}
                               className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-mono font-bold transition-colors shadow-xs"
                             >
