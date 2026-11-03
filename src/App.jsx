@@ -5,7 +5,8 @@ import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
 import DirectFragranceSearchBar from './components/DirectFragranceSearchBar';
 import { getProfileRecommendations } from './utils/userProfiler';
-import { logWardrobeSelection, logWhatsAppClick, logSearchQuery } from './lib/supabaseTelemetry';
+import { logWardrobeSelection, logWhatsAppClick, logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
+import { Analytics } from '@vercel/analytics/react';
 import { 
   Search, ThumbsUp, ThumbsDown, Sparkles, X, 
   Store, Star, Eye, ArrowRight, CheckCircle2, FlaskConical, ChevronDown, ChevronUp
@@ -50,6 +51,11 @@ export default function App() {
       root.setAttribute('data-theme', 'fresh');
     }
   }, [theme]);
+
+  // Track session landing visit with source attribution
+  useEffect(() => {
+    logSessionVisit();
+  }, []);
 
   // Global Price Discovery Search Bar & Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -848,6 +854,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
 
     </div>
   );

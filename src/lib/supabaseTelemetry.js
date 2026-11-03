@@ -19,6 +19,102 @@ function getSessionId() {
   }
 }
 
+// Persistent acquisition and referrer tracker
+export function getAcquisitionInfo() {
+  try {
+    let stored = localStorage.getItem('fragscanner_acquisition');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+
+    const ref = typeof document !== 'undefined' ? (document.referrer || '') : '';
+    let source = 'direct';
+    let hostname = '';
+
+    if (ref) {
+      try {
+        hostname = new URL(ref).hostname;
+      } catch (e) {
+        hostname = ref;
+      }
+    }
+
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    const utmSource = urlParams.get('utm_source');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmCampaign = urlParams.get('utm_campaign');
+
+    if (utmSource) {
+      source = utmSource.toLowerCase();
+    } else if (hostname.includes('reddit.com') || hostname.includes('redd.it')) {
+      source = 'reddit';
+    } else if (hostname.includes('google.')) {
+      source = 'google';
+    } else if (hostname.includes('instagram.')) {
+      source = 'instagram';
+    } else if (hostname.includes('twitter.') || hostname.includes('t.co') || hostname.includes('x.com')) {
+      source = 'twitter';
+    } else if (hostname.includes('facebook.')) {
+      source = 'facebook';
+    } else if (hostname.includes('youtube.') || hostname.includes('youtu.be')) {
+      source = 'youtube';
+    } else if (hostname) {
+      source = hostname;
+    }
+
+    const info = {
+      source,
+      referrer: ref || 'direct',
+      hostname: hostname || 'direct',
+      utm_source: utmSource || null,
+      utm_medium: utmMedium || null,
+      utm_campaign: utmCampaign || null,
+      first_visit: new Date().toISOString()
+    };
+
+    localStorage.setItem('fragscanner_acquisition', JSON.stringify(info));
+    return info;
+  } catch (e) {
+    return { source: 'direct', referrer: 'direct', hostname: 'direct' };
+  }
+}
+
+/**
+ * Logs session visit once per browser session with acquisition attribution
+ */
+export async function logSessionVisit() {
+  try {
+    if (typeof sessionStorage === 'undefined') return;
+    if (sessionStorage.getItem('fragscanner_visit_logged')) return;
+
+    sessionStorage.setItem('fragscanner_visit_logged', 'true');
+    const sessionId = getSessionId();
+    const acq = getAcquisitionInfo();
+
+    const payload = {
+      session_id: sessionId,
+      umbrella_title: 'EVENT:session_visit',
+      umbrella_season: `source:${acq.source}`,
+      liked_perfumes: [{
+        event: 'session_visit',
+        source: acq.source,
+        referrer: acq.referrer,
+        hostname: acq.hostname,
+        utm_source: acq.utm_source,
+        utm_medium: acq.utm_medium,
+        timestamp: new Date().toISOString()
+      }],
+      disliked_perfumes: [],
+      top_recommendations: []
+    };
+
+    await supabase.from('wardrobe_logs').insert([payload]);
+    console.log('[FragScanner Telemetry] Visit logged with acquisition:', acq.source, acq.referrer);
+  } catch (err) {
+    console.warn('[FragScanner Telemetry] Visit log error:', err);
+  }
+}
+
 let wardrobeDebounceTimer = null;
 
 /**
@@ -90,10 +186,11 @@ export async function logWhatsAppClick({
 }) {
   try {
     const sessionId = getSessionId();
+    const acq = getAcquisitionInfo();
     const payload = {
       session_id: sessionId,
       umbrella_title: 'EVENT:whatsapp_click',
-      umbrella_season: format,
+      umbrella_season: `${format}|source:${acq.source}`,
       liked_perfumes: [{
         event: 'whatsapp_click',
         seller_name: sellerName,
@@ -101,6 +198,8 @@ export async function logWhatsAppClick({
         brand: brand,
         price: price,
         format: format,
+        source: acq.source,
+        referrer: acq.referrer,
         timestamp: new Date().toISOString()
       }],
       disliked_perfumes: [],
@@ -144,14 +243,17 @@ export function logSearchQuery(query, resultsCount = 0) {
   searchDebounceTimer = setTimeout(async () => {
     try {
       const sessionId = getSessionId();
+      const acq = getAcquisitionInfo();
       const payload = {
         session_id: sessionId,
         umbrella_title: 'EVENT:search_query',
-        umbrella_season: `${resultsCount} results`,
+        umbrella_season: `${resultsCount} results|source:${acq.source}`,
         liked_perfumes: [{
           event: 'search_query',
           query: cleanQ,
           results_count: resultsCount,
+          source: acq.source,
+          referrer: acq.referrer,
           timestamp: new Date().toISOString()
         }],
         disliked_perfumes: [],
