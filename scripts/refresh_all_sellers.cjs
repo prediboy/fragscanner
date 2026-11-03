@@ -193,17 +193,73 @@ async function runMasterRefresh() {
       shipping: "Free Pan-India Delivery on orders above ₹1,499",
       dispatch: "24-48 hrs",
       decant_sizes: ["5ml", "8ml", "10ml", "30ml"]
+    },
+    {
+      id: "aar_fragrances",
+      seller_name: "AAR Fragrances",
+      type: "decant_and_bottle",
+      url: "https://www.aarfragrances.com",
+      whatsapp: "9873520545",
+      shipping: "Pan-India Shipping",
+      dispatch: "24-48 hrs",
+      decant_sizes: ["10ml"]
+    },
+    {
+      id: "fragrance_heaven",
+      seller_name: "Fragrance Heaven",
+      type: "bottle",
+      url: "https://www.fragranceheaven.in",
+      whatsapp: "7838191410",
+      shipping: "Pan-India Shipping",
+      dispatch: "24-48 hrs"
     }
   ];
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
+
+  const EXPLICIT_ALIASES = {
+    'afnan:900pm': '9pm',
+    'afnan:9pm': '9pm',
+    'armaf:cdnsillage': 'clubdenuitsillage',
+    'armaf:milestone': 'clubdenuitmilestone',
+    'armaf:cdniconic': 'clubdenuitblueiconic',
+    'armaf:cdniconicextrait': 'clubdenuitblueiconic',
+    'armaf:cdnim': 'clubdenuitintenseman',
+    'armaf:cdnimedt': 'clubdenuitintenseman',
+    'armaf:cdnimlimitededition': 'clubdenuitintensemanlimitededition',
+    'rasasi:hawas': 'hawasforhim',
+    'rasasi:hawasforhim': 'hawasforhim',
+    'rasasi:hawasice': 'hawasiceforhim',
+    'reef33:reef33': '33black200ml',
+    'lattafa:badeealoudblackexposed': 'badeealoudoudforglory',
+    'lattafa:badeealoudhonorandglory': 'badeealoudhonorglory',
+    'lattafa:badeealoudhonorglory': 'badeealoudhonorglory',
+    'lattafa:qaedalfursanblack': 'qaedalfursan',
+    'arabiyat:oudallayl': 'oudallayl',
+    'arabiyatprestige:oudallayl': 'oudallayl',
+    'arabiyatprestige:oudallaylaswad': 'oudallaylaswad',
+    'ibraheemalqurashi:blueoud': 'blueoud',
+    'ajmal:evokegold': 'evokegoldforhim',
+    'ahmedalmaghribi:ighraa': 'ighra'
+  };
+
+  const FLANKER_DISTINCT_TOKENS = [
+    'freeze', 'dukhan', 'waha', 'platin', 'flames', 'elixir', 'collector',
+    'nightout', 'rebel', 'sapphire', 'kobra', 'tropical', 'dive', 'sahara', 'atlantis'
+  ];
 
   // Helper: Find best fragrance match in catalog
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "") {
     if (isDesigner(brandRaw) || isDesigner(nameRaw)) return null;
     const brand = normalizeBrand(brandRaw);
-    const bClean = cleanStr(brand);
-    const nClean = cleanStr(nameRaw);
+    let bClean = cleanStr(brand);
+    let nClean = cleanStr(nameRaw);
     if (!nClean || nClean.length < 2) return null;
+
+    // Check alias
+    const aliasKey = `${bClean}:${nClean}`;
+    if (EXPLICIT_ALIASES[aliasKey]) {
+      nClean = EXPLICIT_ALIASES[aliasKey];
+    }
 
     // 1. Exact brand + name match
     let match = fragrances.find(f => {
@@ -219,16 +275,32 @@ async function runMasterRefresh() {
       const fnClean = cleanStr(f.name);
       const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
       if (!sameBrand) return false;
+
+      // Prevent flanker token collision
+      for (const token of FLANKER_DISTINCT_TOKENS) {
+        const inIncoming = nClean.includes(token);
+        const inCatalog = fnClean.includes(token);
+        if (inIncoming !== inCatalog) return false;
+      }
+
       return fnClean === nClean || (nClean.length >= 4 && (fnClean.startsWith(nClean) || fnClean.endsWith(nClean)));
     });
     if (match) return match;
 
-    // 3. Substring match within same brand
+    // 3. Substring match within same brand (with strict flanker protection)
     match = fragrances.find(f => {
       const fbClean = cleanStr(f.brand);
       const fnClean = cleanStr(f.name);
       const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
       if (!sameBrand) return false;
+
+      // Strict flanker protection
+      for (const token of FLANKER_DISTINCT_TOKENS) {
+        const inIncoming = nClean.includes(token);
+        const inCatalog = fnClean.includes(token);
+        if (inIncoming !== inCatalog) return false;
+      }
+
       return (nClean.length >= 4 && fnClean.includes(nClean)) || (fnClean.length >= 4 && nClean.includes(fnClean));
     });
     if (match) return match;
@@ -583,6 +655,78 @@ async function runMasterRefresh() {
     console.log(`  ✓ Matched ${stats.whiffculture_decants} decants & ${stats.whiffculture_bottles} bottles for Whiff Culture`);
   } catch (err) {
     console.error("  ❌ Error syncing Whiff Culture:", err.message);
+  }
+
+  // ==========================================
+  // SOURCE 6 & 7: AAR FRAGRANCES & FRAGRANCE HEAVEN
+  // ==========================================
+  console.log("\n--- Syncing AAR Fragrances & Fragrance Heaven ---");
+  try {
+    const aarBottlesPath = path.join(__dirname, "../src/data/cache_aar_bottles.json");
+    const aarDecantsPath = path.join(__dirname, "../src/data/cache_aar_decants.json");
+    const fhBottlesPath = path.join(__dirname, "../src/data/cache_fh_bottles.json");
+
+    if (fs.existsSync(aarBottlesPath)) {
+      const aarB = JSON.parse(fs.readFileSync(aarBottlesPath, "utf-8"));
+      for (const [fid, data] of Object.entries(aarB)) {
+        const target = fragrances.find(f => f.id === fid);
+        if (target && data.price > 0) {
+          addBottleQuote(target, {
+            seller_id: "aar_fragrances",
+            seller_name: "AAR Fragrances",
+            price: data.price,
+            whatsapp: "9873520545",
+            shipping: "Pan-India Shipping",
+            dispatch: "24-48 hrs",
+            product_url: data.url,
+            verified: true
+          });
+        }
+      }
+    }
+
+    if (fs.existsSync(aarDecantsPath)) {
+      const aarD = JSON.parse(fs.readFileSync(aarDecantsPath, "utf-8"));
+      for (const [fid, data] of Object.entries(aarD)) {
+        const target = fragrances.find(f => f.id === fid);
+        if (target && data.price > 0) {
+          addDecantQuote(target, {
+            seller_id: "aar_fragrances",
+            seller_name: "AAR Fragrances",
+            website: data.url,
+            whatsapp: "9873520545",
+            shipping: "Pan-India Shipping",
+            dispatch: "24-48 hrs",
+            sizes: { "10ml": data.price },
+            lowest_price: data.price,
+            in_stock: true,
+            verified: true
+          });
+        }
+      }
+    }
+
+    if (fs.existsSync(fhBottlesPath)) {
+      const fhB = JSON.parse(fs.readFileSync(fhBottlesPath, "utf-8"));
+      for (const [fid, data] of Object.entries(fhB)) {
+        const target = fragrances.find(f => f.id === fid);
+        if (target && data.price > 0) {
+          addBottleQuote(target, {
+            seller_id: "fragrance_heaven",
+            seller_name: "Fragrance Heaven",
+            price: data.price,
+            whatsapp: "7838191410",
+            shipping: "Pan-India Shipping",
+            dispatch: "24-48 hrs",
+            product_url: data.url,
+            verified: true
+          });
+        }
+      }
+    }
+    console.log("  ✓ Successfully merged verified AAR & Fragrance Heaven quotes");
+  } catch (err) {
+    console.error("  ❌ Error loading AAR / FH cache:", err.message);
   }
 
   // ==========================================

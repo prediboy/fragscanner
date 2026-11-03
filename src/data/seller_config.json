@@ -85,5 +85,26 @@
       "10ml",
       "30ml"
     ]
+  },
+  {
+    "id": "aar_fragrances",
+    "seller_name": "AAR Fragrances",
+    "type": "decant_and_bottle",
+    "url": "https://www.aarfragrances.com",
+    "whatsapp": "9873520545",
+    "shipping": "Pan-India Shipping",
+    "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "10ml"
+    ]
+  },
+  {
+    "id": "fragrance_heaven",
+    "seller_name": "Fragrance Heaven",
+    "type": "bottle",
+    "url": "https://www.fragranceheaven.in",
+    "whatsapp": "7838191410",
+    "shipping": "Pan-India Shipping",
+    "dispatch": "24-48 hrs"
   }
 ]
