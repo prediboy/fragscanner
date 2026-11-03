@@ -12,13 +12,15 @@ import {
 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 6 Sellers', tag: 'All' },
+  { id: 'all', name: 'All 8 Sellers', tag: 'All' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
   { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
-  { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' }
+  { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' },
+  { id: 'aar_fragrances', name: 'AAR Fragrances', tag: '🍾 & 🧪' },
+  { id: 'fragrance_heaven', name: 'Fragrance Heaven', tag: '🍾 Bottles' }
 ];
 
 export default function App() {
@@ -259,8 +261,8 @@ export default function App() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px] shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-glacier-success animate-pulse"></span>
-              <span className="hidden md:inline">6 Community Sellers Monitored</span>
-              <span className="md:hidden">6 Sellers</span>
+              <span className="hidden md:inline">8 Community Sellers Monitored</span>
+              <span className="md:hidden">8 Sellers</span>
             </button>
           </div>
 
