@@ -164563,13 +164563,13 @@
     ]
   },
   {
-    "id": "apex-armaf-cdnioverdose",
-    "name": "CDNi Overdose",
+    "id": "armaf-club-de-nuit-intense-overdose",
+    "name": "Club de Nuit Intense Overdose",
     "brand": "Armaf",
     "collection": "ARMAF Line",
-    "concentration": "Eau de Parfum",
+    "concentration": "Extrait de Parfum",
     "gender": "Unisex",
-    "release_year": 2024,
+    "release_year": 2026,
     "rating_value": 4.35,
     "rating_count": 850,
     "community_price": 3550,
@@ -164583,48 +164583,52 @@
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
         "verified": true
+      },
+      {
+        "seller_id": "apex_aroma",
+        "seller_name": "Apex Aroma",
+        "price": 3650,
+        "whatsapp": "9456411103",
+        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+        "dispatch": "24-48 hrs",
+        "verified": true
       }
     ],
-    "dna_type": "Smoky Birch Blackcurrant Pineapple Bergamot Oakmoss",
-    "dna_inspiration": "Creed Aventus (High Concentration Extrait)",
+    "dna_type": "Clone / Twist",
+    "dna_inspiration": "Creed Aventus / Absolu Aventus (High Concentration Extrait)",
     "similarity_percentage": 95,
     "primary_season": "All Year",
     "sillage": "Strong",
     "longevity": "8-10 Hours",
     "accords": [
-      {
-        "name": "Aromatic",
-        "score": 90,
-        "color": "#16a34a"
-      },
-      {
-        "name": "Fresh Spicy",
-        "score": 85,
-        "color": "#06b6d4"
-      },
-      {
-        "name": "Citrus",
-        "score": 80,
-        "color": "#eab308"
-      }
+      "Fruity",
+      "Citrus",
+      "Sweet",
+      "Woody",
+      "Amber",
+      "Mossy"
     ],
     "notes": {
       "top": [
+        "Pineapple",
         "Bergamot",
-        "Citrus"
+        "Tangerine",
+        "Blue Crystals"
       ],
       "middle": [
-        "Spices",
-        "Lavender"
+        "Plum",
+        "Oakmoss",
+        "Vanilla Flower"
       ],
       "base": [
-        "Ambroxan",
-        "Cedarwood",
-        "Patchouli"
+        "Amber",
+        "Patchouli",
+        "Tonka Bean",
+        "White Powder"
       ]
     },
     "description": "ARMAF CDNi Overdose is available with FragFever at ₹3550.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "fragfever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -164670,7 +164674,13 @@
     "community_whatsapp": "9716764787",
     "community_seller_name": "FragFever",
     "lowest_decant_seller": null,
-    "aliases": []
+    "aliases": [
+      "CDNi Overdose",
+      "Club de nuit Overdose",
+      "CDNIM Overdose",
+      "Club de Nuit Overdose",
+      "Armaf Overdose"
+    ]
   },
   {
     "id": "apex-armaf-3100",
@@ -164773,8 +164783,8 @@
     "aliases": []
   },
   {
-    "id": "apex-armaf-cdnoudicollectorspride",
-    "name": "CDN Oud I - Collectors Pride",
+    "id": "armaf-club-de-nuit-oud",
+    "name": "Club de Nuit Oud",
     "brand": "Armaf",
     "collection": "ARMAF Line",
     "concentration": "Eau de Parfum",
@@ -164880,7 +164890,12 @@
     "community_whatsapp": "9716764787",
     "community_seller_name": "FragFever",
     "lowest_decant_seller": null,
-    "aliases": []
+    "aliases": [
+      "CDN Oud I - Collectors Pride",
+      "CDN Oud",
+      "CDN Oud I",
+      "Club de Nuit Oud Collectors Pride"
+    ]
   },
   {
     "id": "armaf-club-de-nuit-intense-man-pure-parfum",
@@ -192528,116 +192543,6 @@
       ],
       "top_reviewer_quotes": [
         "Honestly blown away by the quality of Club de nuit Limited Edition. Longevity easily lasts through a full workday.",
-        "The drydown into Ambroxan, Cedarwood is smooth, rich, and receives compliments consistently.",
-        "One of the best value blind buys from Armaf. A permanent fixture in my rotation."
-      ]
-    },
-    "community_whatsapp": "9456411103",
-    "community_seller_name": "Apex Aroma",
-    "lowest_decant_seller": null,
-    "aliases": []
-  },
-  {
-    "id": "apex-armaf-clubdenuitoverdose",
-    "name": "Club de nuit Overdose",
-    "brand": "Armaf",
-    "collection": "Armaf Line",
-    "concentration": "Eau de Parfum",
-    "gender": "Unisex",
-    "release_year": 2024,
-    "rating_value": 4.35,
-    "rating_count": 850,
-    "community_price": 3650,
-    "is_hot_seller": false,
-    "community_sellers": [
-      {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 3650,
-        "whatsapp": "9456411103",
-        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      }
-    ],
-    "dna_type": "Community Clone",
-    "dna_inspiration": "Creed Aventus",
-    "similarity_percentage": 92,
-    "primary_season": "All Year",
-    "sillage": "Strong",
-    "longevity": "8-10 Hours",
-    "accords": [
-      {
-        "name": "Aromatic",
-        "score": 90,
-        "color": "#16a34a"
-      },
-      {
-        "name": "Fresh Spicy",
-        "score": 85,
-        "color": "#06b6d4"
-      },
-      {
-        "name": "Citrus",
-        "score": 80,
-        "color": "#eab308"
-      }
-    ],
-    "notes": {
-      "top": [
-        "Bergamot",
-        "Citrus"
-      ],
-      "middle": [
-        "Spices",
-        "Lavender"
-      ],
-      "base": [
-        "Ambroxan",
-        "Cedarwood",
-        "Patchouli"
-      ]
-    },
-    "description": "Armaf Club de nuit Overdose is available with Apex Aroma at ₹3650. Inspired by Creed Aventus.",
-    "lowest_seller": "Apex Aroma",
-    "in_seller_stock": true,
-    "in_apex_aroma_sheet": true,
-    "dna_twins": [
-      "apex-armaf-clubdenuitintensepp",
-      "apex-armaf-clubdenuitlimitededition",
-      "apex-alharamain-laventureintensetester",
-      "apex-riiffs-privenoir",
-      "apex-afnan-mysticbouquet",
-      "apex-afnan-snoi",
-      "apex-afnan-stardust",
-      "apex-ahmedalmaghribi-ahl",
-      "apex-ahmedalmaghribi-azureroyal",
-      "apex-ahmedalmaghribi-binameer",
-      "apex-ajmal-aristocrat",
-      "apex-ajmal-aurumaurumelixir",
-      "apex-ajmal-blue",
-      "apex-alharamain-aquadubai",
-      "apex-alharamain-dtournoir",
-      "apex-alwataniah-kayanclassic"
-    ],
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
-    "review_summary": {
-      "community_verdict": "A standout community favorite from Armaf. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of Creed Aventus. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
-      "pros": [
-        "Excellent projection and staying power lasting 8-10 Hours",
-        "Radiant opening featuring Bergamot, Citrus with zero harshness",
-        "Versatile profile built for All Year with strong compliment pull",
-        "Outstanding price-to-performance ratio compared to luxury niche counterparts"
-      ],
-      "cons": [
-        "Initial spray is rich; allows 5-10 minutes for the Aromatic, Fresh Spicy, Citrus to settle",
-        "Best suited for All Year rather than extreme weather conditions"
-      ],
-      "top_reviewer_quotes": [
-        "Honestly blown away by the quality of Club de nuit Overdose. Longevity easily lasts through a full workday.",
         "The drydown into Ambroxan, Cedarwood is smooth, rich, and receives compliments consistently.",
         "One of the best value blind buys from Armaf. A permanent fixture in my rotation."
       ]

@@ -1090,5 +1090,35 @@
     "canonical_name": "Sorrento",
     "brand": "Mykonos",
     "fragrance_id": "mykonos-sorrento"
+  },
+  {
+    "alias": "CDNi Overdose",
+    "canonical_name": "Club de Nuit Intense Overdose",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-overdose"
+  },
+  {
+    "alias": "Club de nuit Overdose",
+    "canonical_name": "Club de Nuit Intense Overdose",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-overdose"
+  },
+  {
+    "alias": "CDNIM Overdose",
+    "canonical_name": "Club de Nuit Intense Overdose",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-overdose"
+  },
+  {
+    "alias": "CDN Oud I - Collectors Pride",
+    "canonical_name": "Club de Nuit Oud",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-oud"
+  },
+  {
+    "alias": "CDN Oud",
+    "canonical_name": "Club de Nuit Oud",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-oud"
   }
 ]
