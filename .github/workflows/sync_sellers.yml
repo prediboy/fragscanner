@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -33,4 +36,11 @@ jobs:
           git config --global user.name "FragScanner Price Bot"
           git config --global user.email "price-bot@fragscanner.app"
           git add src/data/fragrances.json src/data/seller_config.json src/data/sync_meta.json src/data/cache_*.json
-          git diff --quiet && git diff --staged --quiet || (git pull --rebase origin main && git commit -m "chore(sync): automated 2-hour price refresh across all 8 community sellers" && git push)
+          if ! git diff --staged --quiet; then
+            echo "Changes detected, committing and pushing..."
+            git commit -m "chore(sync): automated 2-hour price refresh across all 8 community sellers"
+            git pull --rebase origin main || true
+            git push origin main
+          else
+            echo "No price or stock changes detected."
+          fi
