@@ -46,7 +46,7 @@ export default function FragranceCard({ fragrance, onSelect, onOpenRecommendatio
           <div className="my-3 p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 text-xs">
             <div className="flex items-center gap-1.5 text-amber-400 font-semibold mb-0.5">
               <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>DNA Inspiration</span>
+              <span>Closest Match</span>
             </div>
             <p className="text-slate-300 font-medium truncate">
               {fragrance.dna_inspiration}

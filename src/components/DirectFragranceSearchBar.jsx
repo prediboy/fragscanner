@@ -90,7 +90,12 @@ export default function DirectFragranceSearchBar({
   };
 
   const handleSelect = (fragrance) => {
-    onSelectFragrance(fragrance);
+    if (typeof onSelectFragrance === 'function') {
+      onSelectFragrance(fragrance);
+    }
+    if (typeof onSearchChange === 'function' && fragrance?.name) {
+      onSearchChange(fragrance.name);
+    }
     setIsOpen(false);
   };
 
@@ -140,9 +145,9 @@ export default function DirectFragranceSearchBar({
         {/* Explicit Search Button */}
         <button
           type="submit"
-          className="shrink-0 px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-heading font-bold text-sm shadow-md shadow-cyan-600/20 transition-all flex items-center gap-2"
+          className="shrink-0 px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-white font-heading font-bold text-sm shadow-sm transition-all flex items-center gap-2 active:scale-98"
         >
-          <Search className="w-4 h-4" />
+          <Search className="w-4 h-4 text-cyan-400 dark:text-white" />
           <span>Search</span>
         </button>
       </form>
@@ -187,8 +192,9 @@ export default function DirectFragranceSearchBar({
                           </span>
                         )}
                         {f.dna_inspiration && (
-                          <span className="text-[11px] text-slate-600 truncate max-w-[240px]">
-                            DNA: <strong className="text-slate-800 font-semibold">{f.dna_inspiration}</strong>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 font-medium truncate max-w-[260px] inline-flex items-center gap-1 shadow-2xs">
+                            <span>Closest Match:</span>
+                            <strong className="font-bold">{f.dna_inspiration}</strong>
                           </span>
                         )}
                       </div>
@@ -255,13 +261,13 @@ export default function DirectFragranceSearchBar({
                               setIsOpen(false);
                             }}
                             title={isLiked ? "Remove like" : "Add to liked anchors"}
-                            className={`p-1.5 rounded-lg text-xs transition-colors ${
+                            className={`p-1.5 rounded-lg text-xs transition-all ${
                               isLiked 
-                                ? 'bg-cyan-600 text-white font-bold' 
-                                : 'bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-200'
+                                ? 'bg-emerald-600 text-white font-bold shadow-xs' 
+                                : 'bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
                             }`}
                           >
-                            <ThumbsUp className="w-3 h-3" />
+                            <ThumbsUp className="w-3.5 h-3.5" />
                           </button>
                         )}
 
@@ -274,13 +280,13 @@ export default function DirectFragranceSearchBar({
                               setIsOpen(false);
                             }}
                             title={isDisliked ? "Remove avoid" : "Add to avoided"}
-                            className={`p-1.5 rounded-lg text-xs transition-colors ${
+                            className={`p-1.5 rounded-lg text-xs transition-all ${
                               isDisliked 
-                                ? 'bg-red-600 text-white font-bold' 
-                                : 'bg-red-50 hover:bg-red-100 text-red-800 border border-red-200'
+                                ? 'bg-rose-600 text-white font-bold shadow-xs' 
+                                : 'bg-rose-50/80 hover:bg-rose-100 text-rose-800 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800'
                             }`}
                           >
-                            <ThumbsDown className="w-3 h-3" />
+                            <ThumbsDown className="w-3.5 h-3.5" />
                           </button>
                         )}
                       </div>

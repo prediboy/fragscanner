@@ -260,7 +260,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
               {isThinking && (
                 <div className="flex items-center gap-2 text-xs text-amber-400 bg-slate-900/60 p-3 rounded-2xl border border-slate-800 w-max">
                   <div className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                  <span>Sommelier analyzing notes, clone DNA & seller inventory...</span>
+                  <span>Sommelier analyzing notes, closest matches & seller inventory...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />

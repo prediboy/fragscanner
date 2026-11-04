@@ -39,11 +39,12 @@ export function analyzeLikedProfile(likedPerfumes) {
   const directTwinIds = new Set();
   const directFlankerIds = new Set();
 
-  likedPerfumes.forEach(p => {
+  likedPerfumes.filter(Boolean).forEach(p => {
     // 1. Accords
     (p.accords || []).forEach(a => {
-      const k = a.name.toLowerCase();
-      accordWeights[k] = (accordWeights[k] || 0) + a.score;
+      const k = typeof a === 'string' ? a.toLowerCase() : (a && a.name ? a.name.toLowerCase() : '');
+      const score = typeof a?.score === 'number' ? a.score : 70;
+      if (k) accordWeights[k] = (accordWeights[k] || 0) + score;
     });
 
     // 2. Tiered Notes
@@ -382,12 +383,14 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
       let dotProduct = 0;
       let cNormSq = 0;
       (candidate.accords || []).forEach(ca => {
-        const k = ca.name.toLowerCase();
-        cNormSq += ca.score * ca.score;
+        const k = typeof ca === 'string' ? ca.toLowerCase() : (ca && ca.name ? ca.name.toLowerCase() : '');
+        if (!k) return;
+        const score = typeof ca.score === 'number' ? ca.score : 70;
+        cNormSq += score * score;
         const userWeight = likedProfile.accordWeights[k];
         if (userWeight) {
-          dotProduct += userWeight * ca.score;
-          sharedLikedAccords.push(ca.name);
+          dotProduct += userWeight * score;
+          sharedLikedAccords.push(ca.name || ca);
         }
       });
       const cNorm = Math.sqrt(cNormSq) || 1;
@@ -562,7 +565,7 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     let clashScoreRaw = 0;
 
     if (isDislikedDnaTwin) {
-      clashReasons.push(`Shares identical DNA lineage or is a direct Scent Twin to a perfume you marked as avoid (${candidate.dna_inspiration || 'Disliked Twin'}).`);
+      clashReasons.push(`Shares identical closest match or is a direct Scent Twin to a perfume you marked as avoid (${candidate.dna_inspiration || 'Disliked Twin'}).`);
       clashScoreRaw += 60;
     }
     if (sharedDislikedAccords.length > 0) {
@@ -620,7 +623,7 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
     if (twinContext) {
       likeReasons.push(`✨ ${twinContext} (${candidate.similarity_percentage || 92}% match).`);
     } else if (isTargetMatch) {
-      likeReasons.push(`🧬 Shares identical DNA lineage (${candidate.dna_inspiration}).`);
+      likeReasons.push(`✨ Closest match to ${candidate.dna_inspiration}.`);
     }
 
     // 2. Note Pyramid Drydown & Heart Alignment
@@ -660,7 +663,8 @@ export function getProfileRecommendations(likedPerfumes = [], dislikedPerfumes =
       sharedDislikedAccords,
       sharedDislikedNotes,
       likeReasons,
-      clashReasons
+      clashReasons,
+      isCloneTargetMatch: Boolean(isTargetMatch || twinContext)
     };
   });
 

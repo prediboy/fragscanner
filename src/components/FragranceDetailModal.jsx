@@ -7,12 +7,12 @@ import {
 import { getFragranceRecommendations } from '../utils/recommender';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
-export default function FragranceDetailModal({ fragrance, allFragrances, onClose, onSelectOther }) {
+export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
 
   if (!fragrance) return null;
 
-  const recommendations = getFragranceRecommendations(fragrance.id, allFragrances, 8);
+  const recommendations = getFragranceRecommendations(fragrance.id, allFragrances, 8) || { flankers: [], dnaTwins: [], similarAccords: [] };
 
   const getBrandBadgeColor = (brand) => {
     switch (brand.toLowerCase()) {
@@ -125,7 +125,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                     <div>
                       <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
                         <Sparkles className="w-4 h-4 text-amber-400" />
-                        <span>High-End DNA Inspiration / Clone Target</span>
+                        <span>Closest Match / High-End Inspiration</span>
                       </div>
                       <p className="text-xl font-bold text-white">
                         {fragrance.dna_inspiration}
@@ -771,7 +771,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                     How the "You Will Also Like" Algorithm Works:
                   </strong>
                   Matches perfumes based on shared olfactory notes, cosine similarity of Fragrantica accord profiles, 
-                  same-line flanker evolution, and Middle Eastern clone twins sharing the same luxury DNA.
+                  same-line flanker evolution, and Middle Eastern clone twins sharing the same luxury profile.
                 </div>
               </div>
 
@@ -823,7 +823,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                      <span>Direct DNA Twins (Same High-End Inspiration)</span>
+                      <span>Direct Closest Matches (Same High-End Inspiration)</span>
                     </h3>
                     <span className="text-xs text-emerald-400 font-semibold">
                       {fragrance.dna_inspiration}
@@ -845,7 +845,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances, onClose
                           {twin.name}
                         </h4>
                         <p className="text-xs text-slate-400 mt-1">
-                          {twin.similarity_percentage}% match to original DNA
+                          {twin.similarity_percentage}% match to original
                         </p>
                         <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
                           <span className="font-bold text-emerald-400 font-mono">

@@ -1,5 +1,214 @@
 [
   {
+    "id": "rasasi-hawas-fire",
+    "name": "Hawas Fire",
+    "brand": "Rasasi",
+    "collection": "Hawas Line",
+    "concentration": "Eau de Parfum",
+    "gender": "Men",
+    "release_year": 2025,
+    "rating_value": 4.4,
+    "rating_count": 150,
+    "community_price": 2850,
+    "in_seller_stock": true,
+    "lowest_seller": "fragfever",
+    "community_seller_name": "FragFever",
+    "community_whatsapp": "9716764787",
+    "has_decants": true,
+    "lowest_decant_price": 350,
+    "lowest_decant_seller": "Whiff Culture",
+    "lowest_decant_size": "5ml",
+    "dna_type": "Flanker / Twist",
+    "dna_inspiration": "Rasasi Hawas Spicy Amber Cinnamon Lineage Twist",
+    "similarity_percentage": 95,
+    "primary_season": "Fall / Winter / All Season",
+    "day_night": "Evening",
+    "sillage": "Heavy Beastmode",
+    "longevity": "Eternal (10+ hrs)",
+    "accords": [
+      {
+        "name": "Warm Spicy",
+        "score": 95,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Cinnamon",
+        "score": 87,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Amber",
+        "score": 79,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Aquatic",
+        "score": 71,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Fruity",
+        "score": 63,
+        "color": "#06b6d4"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Cinnamon",
+        "Apple",
+        "Bergamot",
+        "Cardamom"
+      ],
+      "middle": [
+        "Plum",
+        "Orange Blossom",
+        "Watery Accord"
+      ],
+      "base": [
+        "Amber",
+        "Musk",
+        "Driftwood",
+        "Tonka Bean"
+      ]
+    },
+    "aliases": [
+      "Hawas Fire",
+      "Rasasi Hawas Fire",
+      "Hawas fire"
+    ],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2850,
+        "whatsapp": "9716764787",
+        "verified": true
+      }
+    ],
+    "community_decants": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "sizes": {
+          "5ml": 350,
+          "10ml": 620
+        },
+        "lowest_price": 350
+      }
+    ],
+    "review_summary": "A spicy, fiery flanker turning the legendary aquatic Hawas DNA into a warm, intoxicating cinnamon-amber beastmode powerhouse."
+  },
+  {
+    "id": "armaf-odyssey-mandarin-sky-elixir",
+    "name": "Odyssey Mandarin Sky Elixir",
+    "brand": "Armaf",
+    "collection": "Odyssey Collection",
+    "concentration": "Extrait de Parfum",
+    "gender": "Men",
+    "release_year": 2025,
+    "rating_value": 4.3,
+    "rating_count": 210,
+    "community_price": 2850,
+    "in_seller_stock": true,
+    "lowest_seller": "fragfever",
+    "community_seller_name": "FragFever",
+    "community_whatsapp": "9716764787",
+    "has_decants": true,
+    "lowest_decant_price": 340,
+    "lowest_decant_seller": "Whiff Culture",
+    "lowest_decant_size": "5ml",
+    "dna_type": "Clone / Twist",
+    "dna_inspiration": "Jean Paul Gaultier Scandal Pour Homme / Stronger With You (Deep Citrus Amber Gourmand)",
+    "similarity_percentage": 93,
+    "primary_season": "Fall / Winter / Spring",
+    "day_night": "Day & Night",
+    "sillage": "Strong",
+    "longevity": "Long Lasting (8-10 hrs)",
+    "accords": [
+      {
+        "name": "Citrus",
+        "score": 95,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Sweet",
+        "score": 87,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Caramel",
+        "score": 79,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Amber",
+        "score": 71,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Aromatic",
+        "score": 63,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Woody",
+        "score": 55,
+        "color": "#06b6d4"
+      }
+    ],
+    "notes": {
+      "top": [
+        "Mandarin Orange",
+        "Sweet Orange",
+        "Saffron"
+      ],
+      "middle": [
+        "Caramel",
+        "Tonka Bean",
+        "Clary Sage"
+      ],
+      "base": [
+        "Ambroxan",
+        "Cedarwood",
+        "Vetiver"
+      ]
+    },
+    "aliases": [
+      "Odyssey Mandarin Sky Elixir",
+      "Mandarin Sky Elixir",
+      "Armaf Mandarin Sky Elixir",
+      "Mandarin sky elixir"
+    ],
+    "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2850,
+        "whatsapp": "9716764787",
+        "verified": true
+      },
+      {
+        "seller_id": "apex_aroma",
+        "seller_name": "Apex Aroma",
+        "price": 2900,
+        "whatsapp": "9456411103",
+        "verified": true
+      }
+    ],
+    "community_decants": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "sizes": {
+          "5ml": 340,
+          "10ml": 590
+        },
+        "lowest_price": 340
+      }
+    ],
+    "review_summary": "An intense Elixir concentration elevating the juicy mandarin opening with deeper salted caramel, tonka bean, and ambery cedarwood."
+  },
+  {
     "id": "afnan-lynked-freedom-black",
     "name": "Lynked Freedom Black",
     "brand": "Afnan",
@@ -2084,7 +2293,7 @@
     "lowest_decant_seller": "Blue Wings Fragrances",
     "lowest_decant_size": "5ml",
     "dna_type": "Spicy Sweet Mandarin Pepper Madagascar Vanilla",
-    "dna_inspiration": "Versace Eros DNA (Spicy Mandarin & Madagascar Vanilla)",
+    "dna_inspiration": "Versace Eros (Spicy Mandarin & Madagascar Vanilla)",
     "similarity_percentage": 100,
     "primary_season": "Winter",
     "day_night": {
@@ -2523,7 +2732,7 @@
     "lowest_decant_seller": "Blue Wings Fragrances",
     "lowest_decant_size": "5ml",
     "dna_type": "Fresh Sweet Vanilla",
-    "dna_inspiration": "Versace Eros DNA",
+    "dna_inspiration": "Versace Eros",
     "similarity_percentage": 100,
     "primary_season": "Fall",
     "day_night": {
@@ -151777,8 +151986,8 @@
         "verified": true
       }
     ],
-    "dna_type": "Sparkling Citrus Chinese Black Tea Ginger Ambroxan",
-    "dna_inspiration": "Louis Vuitton Imagination",
+    "dna_type": "Icy Spearmint Calabrian Bergamot Frosted Ginger & Sage",
+    "dna_inspiration": null,
     "similarity_percentage": 96,
     "primary_season": "All Year",
     "sillage": "Strong",
@@ -151996,7 +152205,7 @@
       }
     },
     "review_summary": {
-      "community_verdict": "A standout community favorite from Riiffs. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. Celebrating the iconic profile of LV Imagination. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
+      "community_verdict": "A standout community favorite from Riiffs. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. A standalone cooling beastmode freshie engineered for high-heat summers. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
         "Excellent projection and staying power lasting 8-10 Hours",
         "Radiant opening featuring Bergamot, Lavender with zero harshness",
@@ -164601,12 +164810,36 @@
     "sillage": "Strong",
     "longevity": "8-10 Hours",
     "accords": [
-      "Fruity",
-      "Citrus",
-      "Sweet",
-      "Woody",
-      "Amber",
-      "Mossy"
+      {
+        "name": "Fruity",
+        "score": 95,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Citrus",
+        "score": 87,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Sweet",
+        "score": 79,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Woody",
+        "score": 71,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Amber",
+        "score": 63,
+        "color": "#06b6d4"
+      },
+      {
+        "name": "Mossy",
+        "score": 55,
+        "color": "#06b6d4"
+      }
     ],
     "notes": {
       "top": [

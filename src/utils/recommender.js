@@ -43,6 +43,7 @@ export function calculateNotesOverlap(notesA, notesB) {
 }
 
 export function getFragranceRecommendations(targetId, allFragrances, limit = 6) {
+  if (!Array.isArray(allFragrances)) return { flankers: [], dnaTwins: [], similarAccords: [] };
   const target = allFragrances.find(f => f.id === targetId);
   if (!target) return null;
 
