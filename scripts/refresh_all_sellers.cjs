@@ -2,15 +2,27 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-async function fetchUrl(url, timeoutMs = 15000) {
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    },
-    signal: AbortSignal.timeout(timeoutMs)
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
-  return await res.text();
+async function fetchUrl(url, timeoutMs = 20000, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        },
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+      if (res.status === 429) {
+        console.warn(`  [HTTP 429] Rate limited on ${url}. Backing off attempt ${attempt}...`);
+        await new Promise(r => setTimeout(r, 2500 * attempt));
+        continue;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
+      return await res.text();
+    } catch (e) {
+      if (attempt === maxRetries) throw e;
+      await new Promise(r => setTimeout(r, 1500 * attempt));
+    }
+  }
 }
 
 function parseCSV(text) {
@@ -108,8 +120,13 @@ async function runMasterRefresh() {
   const fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
   console.log(`Loaded ${fragrances.length} catalog fragrances.`);
 
-  // Reset seller arrays on all catalog items so we rebuild clean from fresh sources
+  // Backup existing quotes to protect against rate limits or temporary network errors
+  const existingQuotes = {};
   fragrances.forEach(f => {
+    existingQuotes[f.id] = {
+      sellers: f.community_sellers || [],
+      decants: f.community_decants || []
+    };
     f.community_sellers = [];
     f.community_decants = [];
     f.decant_comparison = null;
@@ -540,7 +557,7 @@ async function runMasterRefresh() {
     let allWcProducts = [];
     let page = 1;
     while (true) {
-      const url = `https://www.whiffculture.com/products.json?limit=250&page=${page}`;
+      const url = `https://www.whiffculture.com/products.json?limit=100&page=${page}`;
       const jsonStr = await fetchUrl(url);
       let data;
       try {
@@ -552,8 +569,8 @@ async function runMasterRefresh() {
       if (!data.products || data.products.length === 0) break;
       allWcProducts.push(...data.products);
       page++;
-      if (page > 12) break;
-      await new Promise(r => setTimeout(r, 600)); // Respect Shopify rate limit
+      if (page > 25) break;
+      await new Promise(r => setTimeout(r, 1200)); // Respect Shopify rate limit
     }
     console.log(`  Fetched ${allWcProducts.length} total products from Whiff Culture.`);
 
@@ -728,6 +745,47 @@ async function runMasterRefresh() {
   } catch (err) {
     console.error("  ❌ Error loading AAR / FH cache:", err.message);
   }
+
+  // Graceful fallback: If any seller has 0 quotes due to network/rate-limits, restore previous quotes
+  const trackedSellers = [
+    { id: "second_theory", name: "Second Theory" },
+    { id: "fragfever", name: "FragFever" },
+    { id: "apex_aroma", name: "Apex Aroma" },
+    { id: "liquid_emotions", name: "Liquid Emotions" },
+    { id: "bluewings", name: "Blue Wings" },
+    { id: "whiffculture", name: "Whiff Culture" },
+    { id: "aar_fragrances", name: "AAR Fragrances" },
+    { id: "fragrance_heaven", name: "Fragrance Heaven" }
+  ];
+
+  trackedSellers.forEach(s => {
+    let bottleCount = 0;
+    let decantCount = 0;
+    fragrances.forEach(f => {
+      bottleCount += (f.community_sellers || []).filter(item => item.seller_id === s.id).length;
+      decantCount += (f.community_decants || []).filter(item => item.seller_id === s.id).length;
+    });
+
+    if (bottleCount === 0 && decantCount === 0) {
+      console.log(`  🛡 Restoring cached quotes for ${s.name} (${s.id}) to protect against transient network/rate limits...`);
+      let restoredBottles = 0;
+      let restoredDecants = 0;
+      fragrances.forEach(f => {
+        const prev = existingQuotes[f.id];
+        if (prev) {
+          prev.sellers.filter(item => item.seller_id === s.id).forEach(quote => {
+            f.community_sellers.push(quote);
+            restoredBottles++;
+          });
+          prev.decants.filter(item => item.seller_id === s.id).forEach(quote => {
+            f.community_decants.push(quote);
+            restoredDecants++;
+          });
+        }
+      });
+      console.log(`    ↳ Restored ${restoredBottles} bottles and ${restoredDecants} decants for ${s.name}`);
+    }
+  });
 
   // ==========================================
   // COMPUTE COMPARISONS & AGGREGATE WINNERS

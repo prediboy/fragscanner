@@ -1,9 +1,9 @@
 {
-  "last_sync": "2026-11-03T12:36:02.763Z",
+  "last_sync": "2026-11-04T16:42:44.651Z",
   "catalog_total": 1165,
   "in_stock_count": 896,
-  "decants_available_count": 703,
-  "dual_available_count": 696,
+  "decants_available_count": 707,
+  "dual_available_count": 695,
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
@@ -18,24 +18,24 @@
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 210,
+      "bottles": 207,
       "type": "Full Bottles"
     },
     "liquid_emotions": {
       "name": "Liquid Emotions",
-      "decants": 76,
+      "decants": 77,
       "type": "Decants (5-30ml)"
     },
     "bluewings": {
       "name": "Blue Wings Fragrances",
       "bottles": 2,
-      "decants": 93,
+      "decants": 92,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 395,
-      "decants": 390,
+      "bottles": 397,
+      "decants": 397,
       "type": "Dual"
     }
   }

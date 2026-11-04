@@ -601,11 +601,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze",
+        "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1349,
           "5ml": 309,
           "8ml": 439,
           "10ml": 439,
@@ -651,7 +652,7 @@
             "seller_name": "Whiff Culture",
             "price": 309,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       },
@@ -664,7 +665,7 @@
             "seller_name": "Whiff Culture",
             "price": 439,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       },
@@ -684,7 +685,7 @@
             "seller_name": "Whiff Culture",
             "price": 439,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       },
@@ -698,6 +699,13 @@
             "price": 800,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1349,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       },
@@ -717,7 +725,7 @@
             "seller_name": "Whiff Culture",
             "price": 1499,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       }
@@ -3326,11 +3334,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa",
+        "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1219,
           "5ml": 279,
           "8ml": 389,
           "10ml": 389,
@@ -3366,7 +3375,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa"
+            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial"
           }
         ]
       },
@@ -3379,7 +3388,7 @@
             "seller_name": "Whiff Culture",
             "price": 389,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa"
+            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial"
           }
         ]
       },
@@ -3392,7 +3401,7 @@
             "seller_name": "Whiff Culture",
             "price": 389,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa"
+            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial"
           },
           {
             "seller_id": "aar_fragrances",
@@ -3400,6 +3409,19 @@
             "price": 499,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-lattafa-khamrah-qahwa"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 1219,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1219,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial"
           }
         ]
       },
@@ -3412,7 +3434,7 @@
             "seller_name": "Whiff Culture",
             "price": 1329,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa"
+            "website": "https://www.whiffculture.com/products/lattafa-khamrah-qahwa-partial"
           }
         ]
       }
@@ -8116,22 +8138,6 @@
         "verified": true
       },
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 185,
-          "10ml": 335,
-          "20ml": 650
-        },
-        "lowest_price": 185,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/afnan-9pm-dive",
@@ -8164,21 +8170,14 @@
       }
     ],
     "has_decants": true,
-    "lowest_decant_price": 185,
+    "lowest_decant_price": 200,
     "lowest_decant_seller": "Blue Wings Fragrances",
     "lowest_decant_size": "5ml",
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 185,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 200,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 185,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -8209,16 +8208,9 @@
         ]
       },
       "10ml": {
-        "lowest_price": 335,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 340,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 335,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -8252,13 +8244,6 @@
             "price": 640,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 650,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -8397,128 +8382,12 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [
-      {
-        "seller_id": "liquid_emotions",
-        "seller_name": "Liquid Emotions",
-        "website": "https://liquidemotions.vercel.app/",
-        "whatsapp": "7982410620",
-        "shipping": "Free above ₹1,200",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 245,
-          "10ml": 430,
-          "20ml": 820,
-          "30ml": 1190
-        },
-        "lowest_price": 245,
-        "in_stock": true,
-        "verified": true
-      },
-      {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 275,
-          "10ml": 490,
-          "20ml": 950,
-          "30ml": 1345
-        },
-        "lowest_price": 275,
-        "in_stock": true,
-        "verified": true
-      }
-    ],
-    "has_decants": true,
-    "lowest_decant_price": 245,
+    "community_decants": [],
+    "has_decants": false,
+    "lowest_decant_price": null,
     "lowest_decant_seller": "Liquid Emotions",
     "lowest_decant_size": "5ml",
-    "decant_comparison": {
-      "5ml": {
-        "lowest_price": 245,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 245,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 275,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "10ml": {
-        "lowest_price": 430,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 430,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 490,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 820,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 820,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 950,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 1190,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 1190,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 1345,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      }
-    }
+    "decant_comparison": null
   },
   {
     "id": "afnan-supremacy-silver",
@@ -9600,11 +9469,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/afnan-rare-carbon",
+        "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1119,
           "5ml": 239,
           "8ml": 349,
           "10ml": 349,
@@ -9657,7 +9527,7 @@
             "seller_name": "Whiff Culture",
             "price": 239,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           }
         ]
       },
@@ -9670,7 +9540,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           }
         ]
       },
@@ -9697,7 +9567,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           },
           {
             "seller_id": "aar_fragrances",
@@ -9725,6 +9595,13 @@
             "price": 620,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1119,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           }
         ]
       },
@@ -9744,7 +9621,7 @@
             "seller_name": "Whiff Culture",
             "price": 1159,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           }
         ]
       }
@@ -23243,10 +23120,81 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 120,
+          "10ml": 220,
+          "20ml": 425,
+          "30ml": 590
+        },
+        "lowest_price": 120,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 120,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 120,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 220,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 220,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 425,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 425,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 590,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 590,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 120,
     "lowest_decant_seller": null
   },
   {
@@ -26108,10 +26056,53 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 170,
+          "10ml": 305
+        },
+        "lowest_price": 170,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 170,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 170,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 305,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 305,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 170,
     "lowest_decant_seller": null
   },
   {
@@ -38516,10 +38507,53 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 210,
+          "10ml": 375
+        },
+        "lowest_price": 210,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 210,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 210,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 375,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 375,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 210,
     "lowest_decant_seller": null
   },
   {
@@ -46441,10 +46475,67 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 140,
+          "10ml": 250,
+          "20ml": 485
+        },
+        "lowest_price": 140,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 140,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 140,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 250,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 250,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 485,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 485,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 140,
     "lowest_decant_seller": null
   },
   {
@@ -54973,10 +55064,53 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 230,
+          "10ml": 415
+        },
+        "lowest_price": 230,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 230,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 230,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 415,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 415,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 230,
     "lowest_decant_seller": null
   },
   {
@@ -75161,11 +75295,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rayhaan-aquatica",
+        "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 959,
           "5ml": 189,
           "8ml": 279,
           "10ml": 279,
@@ -75218,7 +75353,7 @@
             "seller_name": "Whiff Culture",
             "price": 189,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           }
         ]
       },
@@ -75231,7 +75366,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           }
         ]
       },
@@ -75244,7 +75379,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           },
           {
             "seller_id": "liquid_emotions",
@@ -75286,6 +75421,13 @@
             "price": 600,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 959,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           }
         ]
       },
@@ -75305,7 +75447,7 @@
             "seller_name": "Whiff Culture",
             "price": 909,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           }
         ]
       }
@@ -75848,23 +75990,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "liquid_emotions",
-        "seller_name": "Liquid Emotions",
-        "website": "https://liquidemotions.vercel.app/",
-        "whatsapp": "7982410620",
-        "shipping": "Free above ₹1,200",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 220,
-          "10ml": 380,
-          "20ml": 720,
-          "30ml": 1040
-        },
-        "lowest_price": 220,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/rayhaan-vantage",
@@ -75899,16 +76024,9 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 220,
-        "lowest_seller": "Liquid Emotions",
+        "lowest_price": 229,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 220,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -75943,13 +76061,6 @@
             "website": "https://www.whiffculture.com/products/rayhaan-vantage"
           },
           {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 380,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
             "price": 499,
@@ -75958,30 +76069,10 @@
           }
         ]
       },
-      "20ml": {
-        "lowest_price": 720,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 720,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          }
-        ]
-      },
       "30ml": {
-        "lowest_price": 1040,
-        "lowest_seller": "Liquid Emotions",
+        "lowest_price": 1089,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 1040,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -75992,7 +76083,7 @@
         ]
       }
     },
-    "lowest_decant_price": 220,
+    "lowest_decant_price": 229,
     "lowest_decant_seller": "Whiff Culture",
     "lowest_decant_size": "5ml"
   },
@@ -77388,12 +77479,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial",
+        "website": "https://www.whiffculture.com/products/rayhaan-pharaoh",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 939,
           "5ml": 189,
           "8ml": 279,
           "10ml": 279,
@@ -77415,7 +77505,7 @@
             "seller_name": "Whiff Culture",
             "price": 189,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh"
           }
         ]
       },
@@ -77428,7 +77518,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh"
           }
         ]
       },
@@ -77441,20 +77531,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 939,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 939,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh"
           }
         ]
       },
@@ -77467,7 +77544,7 @@
             "seller_name": "Whiff Culture",
             "price": 909,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-pharaoh"
           }
         ]
       }
@@ -78188,10 +78265,81 @@
     "in_seller_stock": false,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "liquid_emotions",
+        "seller_name": "Liquid Emotions",
+        "website": "https://liquidemotions.vercel.app/",
+        "whatsapp": "7982410620",
+        "shipping": "Free above ₹1,200",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 220,
+          "10ml": 380,
+          "20ml": 720,
+          "30ml": 1040
+        },
+        "lowest_price": 220,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 220,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 220,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 380,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 380,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 720,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 720,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1040,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 1040,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 220,
     "lowest_decant_seller": null
   },
   {
@@ -81263,11 +81411,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/afnan-rare-reef",
+        "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1119,
           "5ml": 239,
           "8ml": 349,
           "10ml": 349,
@@ -81313,7 +81462,7 @@
             "seller_name": "Whiff Culture",
             "price": 239,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-reef"
+            "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial"
           }
         ]
       },
@@ -81326,7 +81475,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-reef"
+            "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial"
           }
         ]
       },
@@ -81346,7 +81495,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-reef"
+            "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial"
           },
           {
             "seller_id": "aar_fragrances",
@@ -81367,6 +81516,13 @@
             "price": 620,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1119,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial"
           }
         ]
       },
@@ -81386,7 +81542,7 @@
             "seller_name": "Whiff Culture",
             "price": 1169,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-reef"
+            "website": "https://www.whiffculture.com/products/afnan-rare-reef-partial"
           }
         ]
       }
@@ -88039,15 +88195,6 @@
         "verified": true
       },
       {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 3950,
-        "whatsapp": "9456411103",
-        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
         "price": 4000,
@@ -92974,12 +93121,12 @@
         "shipping": "Free above ₹1,200",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 260,
-          "10ml": 460,
-          "20ml": 880,
-          "30ml": 1280
+          "5ml": 235,
+          "10ml": 410,
+          "20ml": 780,
+          "30ml": 1130
         },
-        "lowest_price": 260,
+        "lowest_price": 235,
         "in_stock": true,
         "verified": true
       },
@@ -92991,11 +93138,12 @@
         "shipping": "Free above ₹1,500",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 275,
-          "10ml": 490,
-          "20ml": 950
+          "5ml": 250,
+          "10ml": 455,
+          "20ml": 875,
+          "30ml": 1235
         },
-        "lowest_price": 275,
+        "lowest_price": 250,
         "in_stock": true,
         "verified": true
       },
@@ -93015,45 +93163,45 @@
       }
     ],
     "has_decants": true,
-    "lowest_decant_price": 260,
+    "lowest_decant_price": 235,
     "lowest_decant_seller": "Liquid Emotions",
     "lowest_decant_size": "5ml",
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 260,
+        "lowest_price": 235,
         "lowest_seller": "Liquid Emotions",
         "quotes": [
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
-            "price": 260,
+            "price": 235,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
           },
           {
             "seller_id": "bluewings",
             "seller_name": "Blue Wings Fragrances",
-            "price": 275,
+            "price": 250,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
           }
         ]
       },
       "10ml": {
-        "lowest_price": 460,
+        "lowest_price": 410,
         "lowest_seller": "Liquid Emotions",
         "quotes": [
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
-            "price": 460,
+            "price": 410,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
           },
           {
             "seller_id": "bluewings",
             "seller_name": "Blue Wings Fragrances",
-            "price": 490,
+            "price": 455,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
           },
@@ -93067,35 +93215,42 @@
         ]
       },
       "20ml": {
-        "lowest_price": 880,
+        "lowest_price": 780,
         "lowest_seller": "Liquid Emotions",
         "quotes": [
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
-            "price": 880,
+            "price": 780,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
           },
           {
             "seller_id": "bluewings",
             "seller_name": "Blue Wings Fragrances",
-            "price": 950,
+            "price": 875,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
           }
         ]
       },
       "30ml": {
-        "lowest_price": 1280,
+        "lowest_price": 1130,
         "lowest_seller": "Liquid Emotions",
         "quotes": [
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
-            "price": 1280,
+            "price": 1130,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 1235,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
           }
         ]
       }
@@ -97292,21 +97447,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 185,
-          "10ml": 335
-        },
-        "lowest_price": 185,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/mykonos-reflection",
@@ -97341,16 +97481,9 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 185,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 269,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 185,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -97374,16 +97507,9 @@
         ]
       },
       "10ml": {
-        "lowest_price": 335,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 389,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 335,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -97414,7 +97540,7 @@
         ]
       }
     },
-    "lowest_decant_price": 185,
+    "lowest_decant_price": 269,
     "review_summary": {
       "community_verdict": "A standout community favorite from Mykonos. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. Celebrating the iconic profile of LV Symphony. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -98254,12 +98380,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/mykonos-inferno-partial",
+        "website": "https://www.whiffculture.com/products/mykonos-inferno",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 1429,
           "5ml": 329,
           "8ml": 469,
           "10ml": 469,
@@ -98281,7 +98406,7 @@
             "seller_name": "Whiff Culture",
             "price": 329,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/mykonos-inferno-partial"
+            "website": "https://www.whiffculture.com/products/mykonos-inferno"
           }
         ]
       },
@@ -98294,7 +98419,7 @@
             "seller_name": "Whiff Culture",
             "price": 469,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/mykonos-inferno-partial"
+            "website": "https://www.whiffculture.com/products/mykonos-inferno"
           }
         ]
       },
@@ -98307,20 +98432,7 @@
             "seller_name": "Whiff Culture",
             "price": 469,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/mykonos-inferno-partial"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 1429,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1429,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/mykonos-inferno-partial"
+            "website": "https://www.whiffculture.com/products/mykonos-inferno"
           }
         ]
       },
@@ -98333,7 +98445,7 @@
             "seller_name": "Whiff Culture",
             "price": 1619,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/mykonos-inferno-partial"
+            "website": "https://www.whiffculture.com/products/mykonos-inferno"
           }
         ]
       }
@@ -99704,14 +99816,14 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2550,
+    "community_price": 3550,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
-        "price": 2550,
+        "price": 3550,
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
@@ -104896,23 +105008,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 105,
-          "10ml": 195,
-          "20ml": 375,
-          "30ml": 515
-        },
-        "lowest_price": 105,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/paris-corner-rifaaqat-adorn",
@@ -104947,16 +105042,9 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 105,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 199,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 105,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -104980,16 +105068,9 @@
         ]
       },
       "10ml": {
-        "lowest_price": 195,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 279,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 195,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -105006,30 +105087,10 @@
           }
         ]
       },
-      "20ml": {
-        "lowest_price": 375,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 375,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
       "30ml": {
-        "lowest_price": 515,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 899,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 515,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -105040,7 +105101,7 @@
         ]
       }
     },
-    "lowest_decant_price": 105,
+    "lowest_decant_price": 199,
     "review_summary": {
       "community_verdict": "A standout community favorite from Paris Corner. Loved for its luminous Amber, Woody, Amber harmony and lasting Amber, Vanilla drydown. Celebrating the iconic profile of YSL Tuxedo / Rosendo Mateu 5. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -108482,11 +108543,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/afnan-9pm-night-out",
+        "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1329,
           "5ml": 299,
           "8ml": 429,
           "10ml": 429,
@@ -108525,7 +108587,7 @@
             "seller_name": "Whiff Culture",
             "price": 299,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out"
+            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial"
           }
         ]
       },
@@ -108538,7 +108600,7 @@
             "seller_name": "Whiff Culture",
             "price": 429,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out"
+            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial"
           }
         ]
       },
@@ -108558,7 +108620,7 @@
             "seller_name": "Whiff Culture",
             "price": 429,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out"
+            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial"
           },
           {
             "seller_id": "bluewings",
@@ -108586,6 +108648,13 @@
             "price": 925,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1329,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial"
           }
         ]
       },
@@ -108612,7 +108681,7 @@
             "seller_name": "Whiff Culture",
             "price": 1459,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out"
+            "website": "https://www.whiffculture.com/products/afnan-9pm-night-out-partial"
           }
         ]
       }
@@ -109154,6 +109223,23 @@
     "in_apex_aroma_sheet": false,
     "community_decants": [
       {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 250,
+          "10ml": 455,
+          "20ml": 875,
+          "30ml": 1235
+        },
+        "lowest_price": 250,
+        "in_stock": true,
+        "verified": true
+      },
+      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/afnan-delicious-bouquet",
@@ -109188,9 +109274,16 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 329,
-        "lowest_seller": "Whiff Culture",
+        "lowest_price": 250,
+        "lowest_seller": "Blue Wings Fragrances",
         "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 250,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -109214,9 +109307,16 @@
         ]
       },
       "10ml": {
-        "lowest_price": 479,
-        "lowest_seller": "Whiff Culture",
+        "lowest_price": 455,
+        "lowest_seller": "Blue Wings Fragrances",
         "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 455,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -109233,10 +109333,30 @@
           }
         ]
       },
-      "30ml": {
-        "lowest_price": 1719,
-        "lowest_seller": "Whiff Culture",
+      "20ml": {
+        "lowest_price": 875,
+        "lowest_seller": "Blue Wings Fragrances",
         "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 875,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1235,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 1235,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -109247,7 +109367,7 @@
         ]
       }
     },
-    "lowest_decant_price": 329,
+    "lowest_decant_price": 250,
     "review_summary": {
       "community_verdict": "A standout community favorite from Afnan. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. Celebrating the iconic profile of Afnan Signature Creation. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -110410,11 +110530,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed",
+        "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 879,
           "5ml": 229,
           "8ml": 319,
           "10ml": 319,
@@ -110446,7 +110567,7 @@
             "seller_name": "Whiff Culture",
             "price": 229,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed"
+            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial"
           }
         ]
       },
@@ -110459,7 +110580,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed"
+            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial"
           }
         ]
       },
@@ -110479,7 +110600,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed"
+            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial"
           }
         ]
       },
@@ -110493,6 +110614,13 @@
             "price": 550,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 879,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial"
           }
         ]
       },
@@ -110512,7 +110640,7 @@
             "seller_name": "Whiff Culture",
             "price": 1049,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed"
+            "website": "https://www.whiffculture.com/products/ahmed-al-maghribi-blue-by-ahmed-partial"
           }
         ]
       }
@@ -111238,15 +111366,6 @@
         "price": 4500,
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 4650,
-        "whatsapp": "9456411103",
-        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
         "verified": true
       },
@@ -114389,14 +114508,14 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1700,
+    "community_price": 1750,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
-        "price": 1700,
+        "price": 1750,
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
@@ -122089,6 +122208,23 @@
         "verified": true
       },
       {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 275,
+          "10ml": 490,
+          "20ml": 950,
+          "30ml": 1345
+        },
+        "lowest_price": 275,
+        "in_stock": true,
+        "verified": true
+      },
+      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/armaf-spartacus-edp",
@@ -122142,6 +122278,13 @@
             "price": 229,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-spartacus-edp"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 275,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -122177,6 +122320,13 @@
             "website": "https://liquidemotions.vercel.app/"
           },
           {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 490,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
+          {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
             "price": 549,
@@ -122195,6 +122345,13 @@
             "price": 640,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 950,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -122215,6 +122372,13 @@
             "price": 1149,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-spartacus-edp"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 1345,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
           }
         ]
       }
@@ -129192,14 +129356,14 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1200,
+    "community_price": 1250,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
-        "price": 1200,
+        "price": 1250,
         "whatsapp": "9456411103",
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
@@ -130099,53 +130263,10 @@
       "lattafa-malik-al-tayoor"
     ],
     "in_apex_aroma_sheet": false,
-    "community_decants": [
-      {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 170,
-          "10ml": 305
-        },
-        "lowest_price": 170,
-        "in_stock": true,
-        "verified": true
-      }
-    ],
-    "has_decants": true,
-    "decant_comparison": {
-      "5ml": {
-        "lowest_price": 170,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 170,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "10ml": {
-        "lowest_price": 305,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 305,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      }
-    },
-    "lowest_decant_price": 170,
+    "community_decants": [],
+    "has_decants": false,
+    "decant_comparison": null,
+    "lowest_decant_price": null,
     "review_summary": {
       "community_verdict": "A standout community favorite from Dumont. Loved for its luminous Fruity, Woody, Amber harmony and lasting Vanilla, Amber drydown. Celebrating the iconic profile of Creed Aventus + Mancera Cedrat Boise. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -135816,23 +135937,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 120,
-          "10ml": 220,
-          "20ml": 425,
-          "30ml": 590
-        },
-        "lowest_price": 120,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/khadlaj-island-sun",
@@ -135867,16 +135971,9 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 120,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 189,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 120,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -135900,16 +135997,9 @@
         ]
       },
       "10ml": {
-        "lowest_price": 220,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 269,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 220,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -135926,30 +136016,10 @@
           }
         ]
       },
-      "20ml": {
-        "lowest_price": 425,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 425,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
       "30ml": {
-        "lowest_price": 590,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 869,
+        "lowest_seller": "Whiff Culture",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 590,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
@@ -135960,7 +136030,7 @@
         ]
       }
     },
-    "lowest_decant_price": 120,
+    "lowest_decant_price": 189,
     "review_summary": {
       "community_verdict": "A standout community favorite from Khadlaj. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. Celebrating the iconic profile of JPG Le beau le parfum. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -139263,11 +139333,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon",
+        "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1039,
           "5ml": 229,
           "8ml": 319,
           "10ml": 319,
@@ -139303,7 +139374,7 @@
             "seller_name": "Whiff Culture",
             "price": 229,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           }
         ]
       },
@@ -139316,7 +139387,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           }
         ]
       },
@@ -139329,7 +139400,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           },
           {
             "seller_id": "aar_fragrances",
@@ -139337,6 +139408,19 @@
             "price": 399,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-lattafa-asad-bourbon"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 1039,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1039,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           }
         ]
       },
@@ -139349,7 +139433,7 @@
             "seller_name": "Whiff Culture",
             "price": 1049,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           }
         ]
       }
@@ -139540,11 +139624,12 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/lattafa-asad-elixir",
+        "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "20ml": 1039,
           "5ml": 229,
           "8ml": 319,
           "10ml": 319,
@@ -139590,7 +139675,7 @@
             "seller_name": "Whiff Culture",
             "price": 229,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial"
           }
         ]
       },
@@ -139603,7 +139688,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial"
           }
         ]
       },
@@ -139623,7 +139708,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial"
           },
           {
             "seller_id": "aar_fragrances",
@@ -139644,6 +139729,13 @@
             "price": 580,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1039,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial"
           }
         ]
       },
@@ -139663,7 +139755,7 @@
             "seller_name": "Whiff Culture",
             "price": 1049,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-elixir-partial"
           }
         ]
       }
@@ -144074,6 +144166,16 @@
         "verified": true
       },
       {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 2359,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/al-mukhtalif-signature",
+        "verified": true
+      },
+      {
         "seller_id": "fragrance_heaven",
         "seller_name": "Fragrance Heaven",
         "price": 2700,
@@ -145136,23 +145238,6 @@
     "in_apex_aroma_sheet": false,
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 120,
-          "10ml": 220,
-          "20ml": 425,
-          "30ml": 590
-        },
-        "lowest_price": 120,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decant-charuto-mysterious-tobacco",
@@ -145169,30 +145254,10 @@
     ],
     "has_decants": true,
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 120,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 120,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 220,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 299,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 220,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -145201,35 +145266,9 @@
             "website": "https://www.aarfragrances.com/product/decant-charuto-mysterious-tobacco"
           }
         ]
-      },
-      "20ml": {
-        "lowest_price": 425,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 425,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 590,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 590,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
       }
     },
-    "lowest_decant_price": 120,
+    "lowest_decant_price": 299,
     "review_summary": {
       "community_verdict": "A standout community favorite from Paris Corner. Loved for its luminous Tobacco, Woody, Amber harmony and lasting Tobacco, Vanilla drydown. Celebrating the iconic profile of Mancera Red Tobacco. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -149512,23 +149551,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 255,
-          "10ml": 460,
-          "20ml": 885,
-          "30ml": 1255
-        },
-        "lowest_price": 255,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/rayhaan-elixir",
@@ -149572,13 +149594,6 @@
             "price": 189,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rayhaan-elixir"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 255,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -149612,26 +149627,6 @@
             "price": 349,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-rayhaan-elixir"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 460,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 885,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 885,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -149645,13 +149640,6 @@
             "price": 909,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rayhaan-elixir"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 1255,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       }
@@ -152887,23 +152875,6 @@
         "verified": true
       },
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 170,
-          "10ml": 305,
-          "20ml": 585,
-          "30ml": 820
-        },
-        "lowest_price": 170,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/riiffs-freeze",
@@ -152936,21 +152907,14 @@
       }
     ],
     "has_decants": true,
-    "lowest_decant_price": 170,
+    "lowest_decant_price": 200,
     "lowest_decant_seller": "Blue Wings Fragrances",
     "lowest_decant_size": "5ml",
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 170,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 200,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 170,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -152981,16 +152945,9 @@
         ]
       },
       "10ml": {
-        "lowest_price": 305,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 340,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 305,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -153015,16 +152972,9 @@
         ]
       },
       "20ml": {
-        "lowest_price": 585,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 640,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 585,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -153035,16 +152985,9 @@
         ]
       },
       "30ml": {
-        "lowest_price": 820,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 920,
+        "lowest_seller": "Liquid Emotions",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 820,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "liquid_emotions",
             "seller_name": "Liquid Emotions",
@@ -171654,15 +171597,6 @@
         "verified": true
       },
       {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 3150,
-        "whatsapp": "9456411103",
-        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "price": 3429,
@@ -173504,6 +173438,23 @@
     ],
     "community_decants": [
       {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 120,
+          "10ml": 220,
+          "20ml": 425,
+          "30ml": 590
+        },
+        "lowest_price": 120,
+        "in_stock": true,
+        "verified": true
+      },
+      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decantsample-ibraheem-al-qurashi-tobacco-collection-mexican-tobacco",
@@ -173520,10 +173471,30 @@
     ],
     "has_decants": true,
     "decant_comparison": {
-      "10ml": {
-        "lowest_price": 849,
-        "lowest_seller": "AAR Fragrances",
+      "5ml": {
+        "lowest_price": 120,
+        "lowest_seller": "Blue Wings Fragrances",
         "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 120,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 220,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 220,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -173532,9 +173503,35 @@
             "website": "https://www.aarfragrances.com/product/decantsample-ibraheem-al-qurashi-tobacco-collection-mexican-tobacco"
           }
         ]
+      },
+      "20ml": {
+        "lowest_price": 425,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 425,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 590,
+        "lowest_seller": "Blue Wings Fragrances",
+        "quotes": [
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 590,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
       }
     },
-    "lowest_decant_price": 849,
+    "lowest_decant_price": 120,
     "review_summary": {
       "community_verdict": "A standout community favorite from Ibraq. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of IBRAQ Creation. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -189235,6 +189232,15 @@
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/swiss-arabian-essence-of-casablanca",
         "verified": true
+      },
+      {
+        "seller_id": "apex_aroma",
+        "seller_name": "Apex Aroma",
+        "price": 5100,
+        "whatsapp": "9456411103",
+        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+        "dispatch": "24-48 hrs",
+        "verified": true
       }
     ],
     "dna_type": "Community Clone",
@@ -194651,7 +194657,7 @@
       {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
-        "price": 3650,
+        "price": 3450,
         "whatsapp": "9456411103",
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
@@ -195799,23 +195805,6 @@
     ],
     "community_decants": [
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 195,
-          "10ml": 350,
-          "20ml": 675,
-          "30ml": 950
-        },
-        "lowest_price": 195,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decantsample-al-haramain-detour-noir-exclusif",
@@ -195832,30 +195821,10 @@
     ],
     "has_decants": true,
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 195,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 195,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 350,
-        "lowest_seller": "Blue Wings Fragrances",
+        "lowest_price": 399,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 350,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -195864,35 +195833,9 @@
             "website": "https://www.aarfragrances.com/product/decantsample-al-haramain-detour-noir-exclusif"
           }
         ]
-      },
-      "20ml": {
-        "lowest_price": 675,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 675,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 950,
-        "lowest_seller": "Blue Wings Fragrances",
-        "quotes": [
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 950,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
       }
     },
-    "lowest_decant_price": 195,
+    "lowest_decant_price": 399,
     "review_summary": {
       "community_verdict": "A standout community favorite from Al Haramain. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of PDM Layton Exclusif. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
