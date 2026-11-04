@@ -9,13 +9,13 @@
     "release_year": 2025,
     "rating_value": 4.4,
     "rating_count": 150,
-    "community_price": 2850,
+    "community_price": 3550,
     "in_seller_stock": true,
-    "lowest_seller": "fragfever",
+    "lowest_seller": "FragFever",
     "community_seller_name": "FragFever",
     "community_whatsapp": "9716764787",
     "has_decants": true,
-    "lowest_decant_price": 350,
+    "lowest_decant_price": 220,
     "lowest_decant_seller": "Whiff Culture",
     "lowest_decant_size": "5ml",
     "dna_type": "Flanker / Twist",
@@ -80,23 +80,203 @@
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
-        "price": 2850,
+        "price": 3550,
         "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "second_theory",
+        "seller_name": "Second Theory",
+        "price": 3600,
+        "whatsapp": "8076851481",
+        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "apex_aroma",
+        "seller_name": "Apex Aroma",
+        "price": 3650,
+        "whatsapp": "9456411103",
+        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 3849,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-fire",
         "verified": true
       }
     ],
     "community_decants": [
       {
+        "seller_id": "liquid_emotions",
+        "seller_name": "Liquid Emotions",
+        "website": "https://liquidemotions.vercel.app/",
+        "whatsapp": "7982410620",
+        "shipping": "Free above ₹1,200",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 220,
+          "10ml": 380,
+          "20ml": 720,
+          "30ml": 1040
+        },
+        "lowest_price": 220,
+        "in_stock": true,
+        "verified": true
+      },
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 245,
+          "10ml": 440,
+          "20ml": 850
+        },
+        "lowest_price": 245,
+        "in_stock": true,
+        "verified": true
+      },
+      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/rasasi-hawas-fire",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 350,
-          "10ml": 620
+          "5ml": 309,
+          "8ml": 449,
+          "10ml": 449,
+          "30ml": 1549
         },
-        "lowest_price": 350
+        "lowest_price": 309,
+        "in_stock": true,
+        "verified": true
       }
     ],
-    "review_summary": "A spicy, fiery flanker turning the legendary aquatic Hawas DNA into a warm, intoxicating cinnamon-amber beastmode powerhouse."
+    "review_summary": "A spicy, fiery flanker turning the legendary aquatic Hawas DNA into a warm, intoxicating cinnamon-amber beastmode powerhouse.",
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 220,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 220,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 245,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 309,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 449,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 449,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 380,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 380,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 440,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 449,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 720,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 720,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 850,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1040,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 1040,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1549,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
+          }
+        ]
+      }
+    }
   },
   {
     "id": "armaf-odyssey-mandarin-sky-elixir",
@@ -108,13 +288,13 @@
     "release_year": 2025,
     "rating_value": 4.3,
     "rating_count": 210,
-    "community_price": 2850,
+    "community_price": 2100,
     "in_seller_stock": true,
-    "lowest_seller": "fragfever",
+    "lowest_seller": "Second Theory",
     "community_seller_name": "FragFever",
     "community_whatsapp": "9716764787",
     "has_decants": true,
-    "lowest_decant_price": 340,
+    "lowest_decant_price": 170,
     "lowest_decant_seller": "Whiff Culture",
     "lowest_decant_size": "5ml",
     "dna_type": "Clone / Twist",
@@ -181,32 +361,159 @@
     ],
     "community_sellers": [
       {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 2850,
-        "whatsapp": "9716764787",
+        "seller_id": "second_theory",
+        "seller_name": "Second Theory",
+        "price": 2100,
+        "whatsapp": "8076851481",
+        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 2900,
-        "whatsapp": "9456411103",
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2100,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 3309,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir",
         "verified": true
       }
     ],
     "community_decants": [
       {
+        "seller_id": "liquid_emotions",
+        "seller_name": "Liquid Emotions",
+        "website": "https://liquidemotions.vercel.app/",
+        "whatsapp": "7982410620",
+        "shipping": "Free above ₹1,200",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 170,
+          "10ml": 270,
+          "20ml": 500,
+          "30ml": 710
+        },
+        "lowest_price": 170,
+        "in_stock": true,
+        "verified": true
+      },
+      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 340,
-          "10ml": 590
+          "5ml": 189,
+          "8ml": 269,
+          "10ml": 269,
+          "30ml": 899
         },
-        "lowest_price": 340
+        "lowest_price": 189,
+        "in_stock": true,
+        "verified": true
       }
     ],
-    "review_summary": "An intense Elixir concentration elevating the juicy mandarin opening with deeper salted caramel, tonka bean, and ambery cedarwood."
+    "review_summary": "An intense Elixir concentration elevating the juicy mandarin opening with deeper salted caramel, tonka bean, and ambery cedarwood.",
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 170,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 170,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 189,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 269,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 269,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 269,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 269,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir"
+          },
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 270,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 500,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 500,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 710,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 710,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 899,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-odyssey-mandarin-sky-elixir"
+          }
+        ]
+      }
+    }
   },
   {
     "id": "afnan-lynked-freedom-black",
@@ -9832,12 +10139,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial",
+        "website": "https://www.whiffculture.com/products/afnan-rare-carbon",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 1119,
           "5ml": 239,
           "8ml": 349,
           "10ml": 349,
@@ -9890,7 +10196,7 @@
             "seller_name": "Whiff Culture",
             "price": 239,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
           }
         ]
       },
@@ -9903,7 +10209,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
           }
         ]
       },
@@ -9930,7 +10236,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
           },
           {
             "seller_id": "aar_fragrances",
@@ -9958,13 +10264,6 @@
             "price": 620,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1119,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
           }
         ]
       },
@@ -9984,7 +10283,7 @@
             "seller_name": "Whiff Culture",
             "price": 1159,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-rare-carbon-partial"
+            "website": "https://www.whiffculture.com/products/afnan-rare-carbon"
           }
         ]
       }
@@ -12350,15 +12649,6 @@
     "is_hot_seller": false,
     "community_sellers": [
       {
-        "seller_id": "second_theory",
-        "seller_name": "Second Theory",
-        "price": 2100,
-        "whatsapp": "8076851481",
-        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
         "price": 2100,
@@ -12386,20 +12676,10 @@
         "dispatch": "24-48 hrs",
         "product_url": "https://www.fragranceheaven.in/products/armaf-odyssey-mandarin-sky-limited-edition-edp-200ml-for-men-online-india",
         "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 3309,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/armaf-odyssey-dubai-chocolat-copy",
-        "verified": true
       }
     ],
     "in_second_theory_sheet": true,
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": false,
@@ -12412,12 +12692,9 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "30ml": 899,
-          "5ml": 189,
-          "8ml": 269,
-          "10ml": 269
+          "30ml": 2959
         },
-        "lowest_price": 189,
+        "lowest_price": 2959,
         "in_stock": true,
         "verified": true
       },
@@ -12437,47 +12714,14 @@
       }
     ],
     "has_decants": true,
-    "lowest_decant_price": 189,
+    "lowest_decant_price": 399,
     "lowest_decant_seller": "Liquid Emotions",
     "lowest_decant_size": "5ml",
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 189,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 189,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-wheel-of-odyssey-mandarin-sky-set"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 269,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 269,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-wheel-of-odyssey-mandarin-sky-set"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 269,
-        "lowest_seller": "Whiff Culture",
+        "lowest_price": 399,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 269,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-wheel-of-odyssey-mandarin-sky-set"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -12488,13 +12732,13 @@
         ]
       },
       "30ml": {
-        "lowest_price": 899,
+        "lowest_price": 2959,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 899,
+            "price": 2959,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-wheel-of-odyssey-mandarin-sky-set"
           }
@@ -14307,16 +14551,6 @@
         "verified": true
       },
       {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 2999,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-ice",
-        "verified": true
-      },
-      {
         "seller_id": "fragrance_heaven",
         "seller_name": "Fragrance Heaven",
         "price": 3250,
@@ -14334,6 +14568,16 @@
         "shipping": "Pan-India Shipping",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-3",
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 3699,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze",
         "verified": true
       }
     ],
@@ -14380,12 +14624,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial",
+        "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 1349,
           "5ml": 249,
           "8ml": 349,
           "10ml": 349,
@@ -14435,7 +14678,7 @@
             "seller_name": "Whiff Culture",
             "price": 249,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
           }
         ]
       },
@@ -14448,7 +14691,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
           }
         ]
       },
@@ -14468,7 +14711,7 @@
             "seller_name": "Whiff Culture",
             "price": 349,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
           },
           {
             "seller_id": "bluewings",
@@ -14503,13 +14746,6 @@
             "price": 800,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1349,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
           }
         ]
       },
@@ -14536,7 +14772,7 @@
             "seller_name": "Whiff Culture",
             "price": 1189,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze-partial"
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
           }
         ]
       }
@@ -76478,12 +76714,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial",
+        "website": "https://www.whiffculture.com/products/rayhaan-aquatica",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 959,
           "5ml": 189,
           "8ml": 279,
           "10ml": 279,
@@ -76536,7 +76771,7 @@
             "seller_name": "Whiff Culture",
             "price": 189,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
           }
         ]
       },
@@ -76549,7 +76784,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
           }
         ]
       },
@@ -76562,7 +76797,7 @@
             "seller_name": "Whiff Culture",
             "price": 279,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
           },
           {
             "seller_id": "liquid_emotions",
@@ -76604,13 +76839,6 @@
             "price": 600,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 959,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
           }
         ]
       },
@@ -76630,7 +76858,7 @@
             "seller_name": "Whiff Culture",
             "price": 909,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rayhaan-aquatica-partial"
+            "website": "https://www.whiffculture.com/products/rayhaan-aquatica"
           }
         ]
       }
@@ -83218,12 +83446,11 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 319,
           "8ml": 469,
           "10ml": 469,
           "30ml": 1599
         },
-        "lowest_price": 319,
+        "lowest_price": 469,
         "in_stock": true,
         "verified": true
       }
@@ -83247,13 +83474,6 @@
             "price": 265,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 319,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/afnan-supremacy-not-only-intense-collectors-edition"
           }
         ]
       },
@@ -103523,12 +103743,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial",
+        "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 1169,
           "5ml": 219,
           "8ml": 319,
           "10ml": 319,
@@ -103574,7 +103793,7 @@
             "seller_name": "Whiff Culture",
             "price": 219,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial"
+            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky"
           }
         ]
       },
@@ -103587,7 +103806,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial"
+            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky"
           }
         ]
       },
@@ -103607,7 +103826,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial"
+            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky"
           },
           {
             "seller_id": "aar_fragrances",
@@ -103628,13 +103847,6 @@
             "price": 580,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1169,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial"
           }
         ]
       },
@@ -103654,7 +103866,7 @@
             "seller_name": "Whiff Culture",
             "price": 1049,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky-partial"
+            "website": "https://www.whiffculture.com/products/khadlaj-shiyaaka-sky"
           }
         ]
       }
@@ -120732,19 +120944,10 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 4900,
+    "community_price": 5999,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "second_theory",
-        "seller_name": "Second Theory",
-        "price": 4900,
-        "whatsapp": "8076851481",
-        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
       {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
@@ -120753,16 +120956,6 @@
         "shipping": "Pan-India Shipping",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-oud",
-        "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 8599,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud",
         "verified": true
       },
       {
@@ -120821,7 +121014,7 @@
       ]
     },
     "description": "Armaf Club de Nuit OUD is a community favorite priced at ₹4900 by Second Theory. Features oud accords with notes of Saffron, Bergamot and Amber.",
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "AAR Fragrances",
     "in_seller_stock": true,
     "in_fragfever_sheet": false,
     "dna_twins": [
@@ -120845,23 +121038,6 @@
     "in_apex_aroma_sheet": false,
     "community_decants": [
       {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud",
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 459,
-          "8ml": 659,
-          "10ml": 659,
-          "30ml": 2339
-        },
-        "lowest_price": 459,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decantsample-armaf-club-de-nuit-oud",
@@ -120878,43 +121054,10 @@
     ],
     "has_decants": true,
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 459,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 459,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 659,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 659,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 659,
-        "lowest_seller": "Whiff Culture",
+        "lowest_price": 799,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 659,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -120923,22 +121066,9 @@
             "website": "https://www.aarfragrances.com/product/decantsample-armaf-club-de-nuit-oud"
           }
         ]
-      },
-      "30ml": {
-        "lowest_price": 2339,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 2339,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
-          }
-        ]
       }
     },
-    "lowest_decant_price": 459,
+    "lowest_decant_price": 799,
     "review_summary": {
       "community_verdict": "A standout community favorite from Armaf. Loved for its luminous Oud, Woody, Amber harmony and lasting Amber, Musk drydown. Celebrating the iconic profile of Middle Eastern Luxury Oud. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -121850,23 +121980,6 @@
         "verified": true
       },
       {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 275,
-          "10ml": 490,
-          "20ml": 950,
-          "30ml": 1345
-        },
-        "lowest_price": 275,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
         "website": "https://www.whiffculture.com/products/armaf-spartacus-edp",
@@ -121920,13 +122033,6 @@
             "price": 229,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-spartacus-edp"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 275,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -121962,13 +122068,6 @@
             "website": "https://liquidemotions.vercel.app/"
           },
           {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 490,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
-          {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
             "price": 549,
@@ -121987,13 +122086,6 @@
             "price": 640,
             "whatsapp": "7982410620",
             "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 950,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       },
@@ -122014,13 +122106,6 @@
             "price": 1149,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/armaf-spartacus-edp"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 1345,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
           }
         ]
       }
@@ -138929,12 +139014,11 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial",
+        "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon",
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "20ml": 1039,
           "5ml": 229,
           "8ml": 319,
           "10ml": 319,
@@ -138970,7 +139054,7 @@
             "seller_name": "Whiff Culture",
             "price": 229,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
           }
         ]
       },
@@ -138983,7 +139067,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
           }
         ]
       },
@@ -138996,7 +139080,7 @@
             "seller_name": "Whiff Culture",
             "price": 319,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
           },
           {
             "seller_id": "aar_fragrances",
@@ -139004,19 +139088,6 @@
             "price": 399,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-lattafa-asad-bourbon"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 1039,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1039,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
           }
         ]
       },
@@ -139029,7 +139100,7 @@
             "seller_name": "Whiff Culture",
             "price": 1049,
             "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon-partial"
+            "website": "https://www.whiffculture.com/products/lattafa-asad-bourbon"
           }
         ]
       }
@@ -147856,47 +147927,10 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 3550,
+    "community_price": 4099,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 3550,
-        "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
-        "seller_id": "second_theory",
-        "seller_name": "Second Theory",
-        "price": 3600,
-        "whatsapp": "8076851481",
-        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
-        "seller_id": "apex_aroma",
-        "seller_name": "Apex Aroma",
-        "price": 3650,
-        "whatsapp": "9456411103",
-        "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 3849,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-fire",
-        "verified": true
-      },
       {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
@@ -147965,7 +147999,7 @@
       ]
     },
     "description": "Rasasi Hawas Fire is a community favorite priced at ₹3600 by Second Theory. Features aromatic accords with notes of Bergamot, Lavender and Amber.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "AAR Fragrances",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -147989,56 +148023,6 @@
     "in_apex_aroma_sheet": true,
     "community_decants": [
       {
-        "seller_id": "liquid_emotions",
-        "seller_name": "Liquid Emotions",
-        "website": "https://liquidemotions.vercel.app/",
-        "whatsapp": "7982410620",
-        "shipping": "Free above ₹1,200",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 220,
-          "10ml": 380,
-          "20ml": 720,
-          "30ml": 1040
-        },
-        "lowest_price": 220,
-        "in_stock": true,
-        "verified": true
-      },
-      {
-        "seller_id": "bluewings",
-        "seller_name": "Blue Wings Fragrances",
-        "website": "https://bluewingsfnd.com/",
-        "whatsapp": "9899401419",
-        "shipping": "Free above ₹1,500",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 245,
-          "10ml": 440,
-          "20ml": 850
-        },
-        "lowest_price": 245,
-        "in_stock": true,
-        "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/rasasi-hawas-fire",
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 309,
-          "8ml": 449,
-          "10ml": 449,
-          "30ml": 1549
-        },
-        "lowest_price": 309,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decantsample-rasasi-hawas-fire",
@@ -148054,121 +148038,20 @@
       }
     ],
     "has_decants": true,
-    "lowest_decant_price": 220,
+    "lowest_decant_price": 599,
     "lowest_decant_seller": "Liquid Emotions",
     "lowest_decant_size": "5ml",
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 220,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 220,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 245,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 309,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 449,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 449,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 380,
-        "lowest_seller": "Liquid Emotions",
+        "lowest_price": 599,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 380,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 440,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 449,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
             "price": 599,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-rasasi-hawas-fire"
-          }
-        ]
-      },
-      "20ml": {
-        "lowest_price": 720,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 720,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "bluewings",
-            "seller_name": "Blue Wings Fragrances",
-            "price": 850,
-            "whatsapp": "9899401419",
-            "website": "https://bluewingsfnd.com/"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 1040,
-        "lowest_seller": "Liquid Emotions",
-        "quotes": [
-          {
-            "seller_id": "liquid_emotions",
-            "seller_name": "Liquid Emotions",
-            "price": 1040,
-            "whatsapp": "7982410620",
-            "website": "https://liquidemotions.vercel.app/"
-          },
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 1549,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-fire"
           }
         ]
       }
@@ -164801,6 +164684,16 @@
         "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
         "dispatch": "24-48 hrs",
         "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 5639,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose",
+        "verified": true
       }
     ],
     "dna_type": "Clone / Twist",
@@ -164861,7 +164754,7 @@
       ]
     },
     "description": "ARMAF CDNi Overdose is available with FragFever at ₹3550.",
-    "lowest_seller": "fragfever",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -164882,10 +164775,177 @@
       "apex-armaf-ombredor",
       "apex-afnan-mysticbouquet"
     ],
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "liquid_emotions",
+        "seller_name": "Liquid Emotions",
+        "website": "https://liquidemotions.vercel.app/",
+        "whatsapp": "7982410620",
+        "shipping": "Free above ₹1,200",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 245,
+          "10ml": 430,
+          "20ml": 820,
+          "30ml": 1190
+        },
+        "lowest_price": 245,
+        "in_stock": true,
+        "verified": true
+      },
+      {
+        "seller_id": "bluewings",
+        "seller_name": "Blue Wings Fragrances",
+        "website": "https://bluewingsfnd.com/",
+        "whatsapp": "9899401419",
+        "shipping": "Free above ₹1,500",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 275,
+          "10ml": 490,
+          "20ml": 950,
+          "30ml": 1345
+        },
+        "lowest_price": 275,
+        "in_stock": true,
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 319,
+          "8ml": 459,
+          "10ml": 459,
+          "30ml": 1599
+        },
+        "lowest_price": 319,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 245,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 245,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 275,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 319,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 459,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 459,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 430,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 430,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 459,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 490,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "20ml": {
+        "lowest_price": 820,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 820,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 950,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1190,
+        "lowest_seller": "Liquid Emotions",
+        "quotes": [
+          {
+            "seller_id": "liquid_emotions",
+            "seller_name": "Liquid Emotions",
+            "price": 1190,
+            "whatsapp": "7982410620",
+            "website": "https://liquidemotions.vercel.app/"
+          },
+          {
+            "seller_id": "bluewings",
+            "seller_name": "Blue Wings Fragrances",
+            "price": 1345,
+            "whatsapp": "9899401419",
+            "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1599,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-intense-overdose"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 245,
     "review_summary": {
       "community_verdict": "A standout community favorite from Armaf. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of ARMAF Creation. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -165025,9 +165085,18 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 5300,
+    "community_price": 4900,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "second_theory",
+        "seller_name": "Second Theory",
+        "price": 4900,
+        "whatsapp": "8076851481",
+        "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
@@ -165035,6 +165104,16 @@
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 8599,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud",
         "verified": true
       }
     ],
@@ -165077,7 +165156,7 @@
       ]
     },
     "description": "ARMAF CDN Oud I - Collectors Pride is available with FragFever at ₹5300.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "Second Theory",
     "in_seller_stock": true,
     "in_apex_aroma_sheet": true,
     "dna_twins": [
@@ -165098,10 +165177,81 @@
       "apex-armaf-ombredor",
       "apex-afnan-mysticbouquet"
     ],
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 459,
+          "8ml": 659,
+          "10ml": 659,
+          "30ml": 2339
+        },
+        "lowest_price": 459,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 459,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 459,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 659,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 659,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 659,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 659,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 2339,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 2339,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-oud"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 459,
     "review_summary": {
       "community_verdict": "A standout community favorite from Armaf. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of ARMAF Creation. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
