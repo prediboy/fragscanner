@@ -46,24 +46,38 @@ export default function DirectFragranceSearchBar({
     const q = (searchQuery || '').trim().toLowerCase();
     if (!q || q.length < 2) return [];
 
-    return allFragrances.filter(f => {
+    const matches = [];
+    for (const f of allFragrances) {
       const name = (f.name || '').toLowerCase();
       const brand = (f.brand || '').toLowerCase();
       const inspo = (f.dna_inspiration || '').toLowerCase();
       
+      let matchedAlias = null;
+      if (Array.isArray(f.aliases)) {
+        matchedAlias = f.aliases.find(a => String(a).toLowerCase().includes(q));
+      }
+
       let matchNotes = false;
       if (f.notes && typeof f.notes === 'object') {
         const allN = [...(f.notes.top || []), ...(f.notes.middle || []), ...(f.notes.base || [])];
         matchNotes = allN.some(n => String(n).toLowerCase().includes(q));
       }
 
-      return (
+      if (
         name.includes(q) ||
         brand.includes(q) ||
         inspo.includes(q) ||
+        Boolean(matchedAlias) ||
         matchNotes
-      );
-    }).slice(0, 8); // Top 8 matches
+      ) {
+        matches.push({
+          ...f,
+          _matchedAlias: matchedAlias
+        });
+      }
+    }
+
+    return matches.slice(0, 8); // Top 8 matches
   }, [searchQuery, allFragrances]);
 
   const handleSearchSubmit = (e) => {
@@ -162,10 +176,16 @@ export default function DirectFragranceSearchBar({
                       className="min-w-0 flex-1 cursor-pointer"
                       onClick={() => handleSelect(f)}
                     >
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-cyan-100/70 text-cyan-800 border border-cyan-200 uppercase font-mono">
                           {f.brand}
                         </span>
+                        {f._matchedAlias && (
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200/80 font-semibold flex items-center gap-1">
+                            <span>Alias:</span>
+                            <span className="underline decoration-amber-400">{f._matchedAlias}</span>
+                          </span>
+                        )}
                         {f.dna_inspiration && (
                           <span className="text-[11px] text-slate-600 truncate max-w-[240px]">
                             DNA: <strong className="text-slate-800 font-semibold">{f.dna_inspiration}</strong>

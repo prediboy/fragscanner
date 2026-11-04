@@ -1,0 +1,1094 @@
+[
+  {
+    "alias": "Ombré Leather (Eau de Parfum)",
+    "canonical_name": "Ombré Leather",
+    "brand": "Tom Ford",
+    "fragrance_id": "tom-ford-ombre-leather"
+  },
+  {
+    "alias": "Bleu de Chanel (Eau de Parfum)",
+    "canonical_name": "Bleu de Chanel",
+    "brand": "Chanel",
+    "fragrance_id": "chanel-bleu-de-chanel-edp"
+  },
+  {
+    "alias": "Sauvage (Eau de Parfum)",
+    "canonical_name": "Sauvage",
+    "brand": "Dior",
+    "fragrance_id": "dior-sauvage-edp"
+  },
+  {
+    "alias": "Eros (Eau de Toilette)",
+    "canonical_name": "Eros",
+    "brand": "Versace",
+    "fragrance_id": "versace-eros-edt"
+  },
+  {
+    "alias": "Khamra",
+    "canonical_name": "Khamrah",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khamrah"
+  },
+  {
+    "alias": "Lattafa Khamrah",
+    "canonical_name": "Khamrah",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khamrah"
+  },
+  {
+    "alias": "Khamra Qahwa",
+    "canonical_name": "Khamrah Qahwa",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khamrah-qahwa"
+  },
+  {
+    "alias": "Qahwa",
+    "canonical_name": "Khamrah Qahwa",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khamrah-qahwa"
+  },
+  {
+    "alias": "Lattafa Khamrah Qahwa",
+    "canonical_name": "Khamrah Qahwa",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khamrah-qahwa"
+  },
+  {
+    "alias": "Lattafa Asad",
+    "canonical_name": "Asad",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-asad"
+  },
+  {
+    "alias": "Asad Black",
+    "canonical_name": "Asad",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-asad"
+  },
+  {
+    "alias": "Zanzibar",
+    "canonical_name": "Asad Zanzibar",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-asad-zanzibar"
+  },
+  {
+    "alias": "Asad Zanzibar Lattafa",
+    "canonical_name": "Asad Zanzibar",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-asad-zanzibar"
+  },
+  {
+    "alias": "Bade'e Al Oud (Oud for Glory)",
+    "canonical_name": "Bade'e Al Oud Oud for Glory",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-badee-al-oud-oud-for-glory"
+  },
+  {
+    "alias": "Bade'e Al Oud (Honor & Glory)",
+    "canonical_name": "Bade'e Al Oud Honor & Glory",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-badee-al-oud-honor-glory"
+  },
+  {
+    "alias": "Bade'e Al Oud (Sublime)",
+    "canonical_name": "Bade'e Al Oud Sublime",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-badee-al-oud-sublime"
+  },
+  {
+    "alias": "Yara (Pink)",
+    "canonical_name": "Yara",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-yara-pink"
+  },
+  {
+    "alias": "Yara Tous (Mango)",
+    "canonical_name": "Yara Tous",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-yara-tous"
+  },
+  {
+    "alias": "Yara Moi (White)",
+    "canonical_name": "Yara Moi",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-yara-moi"
+  },
+  {
+    "alias": "Liam Gray",
+    "canonical_name": "Liam Grey",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-liam-grey"
+  },
+  {
+    "alias": "Lattafa Liam Grey",
+    "canonical_name": "Liam Grey",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-liam-grey"
+  },
+  {
+    "alias": "Lattafa Vintage Radio",
+    "canonical_name": "Vintage Radio",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-vintage-radio"
+  },
+  {
+    "alias": "Vintage Radio Lattafa",
+    "canonical_name": "Vintage Radio",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-vintage-radio"
+  },
+  {
+    "alias": "Lattafa Nebras",
+    "canonical_name": "Nebras",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-nebras"
+  },
+  {
+    "alias": "Caprice",
+    "canonical_name": "Al Nashama Caprice",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-al-nashama-caprice"
+  },
+  {
+    "alias": "Nashama Caprice",
+    "canonical_name": "Al Nashama Caprice",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-al-nashama-caprice"
+  },
+  {
+    "alias": "Maahir Legacy (Silver)",
+    "canonical_name": "Maahir Legacy",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-maahir-legacy"
+  },
+  {
+    "alias": "9PM",
+    "canonical_name": "9 Pm",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9pm"
+  },
+  {
+    "alias": "9 PM Black",
+    "canonical_name": "9 Pm",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9pm"
+  },
+  {
+    "alias": "Afnan 9PM",
+    "canonical_name": "9 Pm",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9pm"
+  },
+  {
+    "alias": "9pm",
+    "canonical_name": "9 Pm",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9pm"
+  },
+  {
+    "alias": "9AM Dive",
+    "canonical_name": "9 AM Dive",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9am-dive"
+  },
+  {
+    "alias": "Afnan 9AM Dive",
+    "canonical_name": "9 AM Dive",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-9am-dive"
+  },
+  {
+    "alias": "Supremacy Not Only Intense 150ml",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "Afnan Supremacy Not Only Intense 150ml",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "st-9021",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "SNOI 100 ML",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "Afnan SNOI 100 ML",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "apex-afnan-snoi",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "SNOI",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "SNOI 150 ML",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "Supremacy NOI",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "Supremacy Not Only Intense (SNOI)",
+    "canonical_name": "Supremacy Not Only Intense",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-not-only-intense"
+  },
+  {
+    "alias": "Turathi",
+    "canonical_name": "Turathi Blue",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-turathi-blue"
+  },
+  {
+    "alias": "Afnan Turathi Blue",
+    "canonical_name": "Turathi Blue",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-turathi-blue"
+  },
+  {
+    "alias": "Turathi Blue Afnan",
+    "canonical_name": "Turathi Blue",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-turathi-blue"
+  },
+  {
+    "alias": "Club de Nuit Intense Man EDT 105ml",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "Armaf Club de Nuit Intense Man EDT 105ml",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "st-9121",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "CDNIM",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "CDNIM EDT",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "CDNIM 105ml",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "CDNIM Man",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "Club de Nuit Intense Man (CDNIM)",
+    "canonical_name": "Club de Nuit Intense Man",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man"
+  },
+  {
+    "alias": "CDNI Milestone",
+    "canonical_name": "Club de Nuit Milestone",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-milestone"
+  },
+  {
+    "alias": "CDNIM Milestone",
+    "canonical_name": "Club de Nuit Milestone",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-milestone"
+  },
+  {
+    "alias": "CDNI Sillage",
+    "canonical_name": "Club de Nuit Sillage",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-sillage"
+  },
+  {
+    "alias": "CDNIM Sillage",
+    "canonical_name": "Club de Nuit Sillage",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-sillage"
+  },
+  {
+    "alias": "CDNI Untold",
+    "canonical_name": "Club de Nuit Untold",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-untold"
+  },
+  {
+    "alias": "CDNIM Untold",
+    "canonical_name": "Club de Nuit Untold",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-untold"
+  },
+  {
+    "alias": "CDNI Iconic",
+    "canonical_name": "Club de Nuit Blue Iconic",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-iconic"
+  },
+  {
+    "alias": "CDNIM Iconic",
+    "canonical_name": "Club de Nuit Blue Iconic",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-iconic"
+  },
+  {
+    "alias": "Club De Nuit Iconic",
+    "canonical_name": "Club de Nuit Blue Iconic",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-iconic"
+  },
+  {
+    "alias": "Hawas Ice",
+    "canonical_name": "Hawas Ice for Him",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-hawas-ice"
+  },
+  {
+    "alias": "Rasasi Hawas Ice",
+    "canonical_name": "Hawas Ice for Him",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-hawas-ice"
+  },
+  {
+    "alias": "Hawas Ice Freeze",
+    "canonical_name": "Hawas Ice for Him",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-hawas-ice"
+  },
+  {
+    "alias": "Rasasi Hawas Black",
+    "canonical_name": "Hawas Black",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-hawas-black"
+  },
+  {
+    "alias": "Fattan",
+    "canonical_name": "Fattan Pour Homme",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-fattan-pour-homme"
+  },
+  {
+    "alias": "Rasasi Fattan",
+    "canonical_name": "Fattan Pour Homme",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-fattan-pour-homme"
+  },
+  {
+    "alias": "Fattan Green",
+    "canonical_name": "Fattan Pour Homme",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-fattan-pour-homme"
+  },
+  {
+    "alias": "Qaed Al Fursan Unlimited (White)",
+    "canonical_name": "Qaed Al Fursan Unlimited",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-qaed-al-fursan-white"
+  },
+  {
+    "alias": "SUPREMACY HEAVEN",
+    "canonical_name": "Supremacy In Heaven",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-in-heaven"
+  },
+  {
+    "alias": "Afnan SUPREMACY HEAVEN",
+    "canonical_name": "Supremacy In Heaven",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-in-heaven"
+  },
+  {
+    "alias": "apex-afnan-supremacyheaven",
+    "canonical_name": "Supremacy In Heaven",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-in-heaven"
+  },
+  {
+    "alias": "Supremacy Heaven",
+    "canonical_name": "Supremacy In Heaven",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-in-heaven"
+  },
+  {
+    "alias": "Rumz Al Rasasi 9325 Pour Lui (Zebra)",
+    "canonical_name": "Rumz Al Rasasi 9325 Pour Lui",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-rumz-al-rasasi-9325-pour-lui"
+  },
+  {
+    "alias": "Lattafa Ana Abiyedh",
+    "canonical_name": "Ana Abiyedh",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-ana-abiyedh"
+  },
+  {
+    "alias": "st-9215",
+    "canonical_name": "Ana Abiyedh",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-ana-abiyedh"
+  },
+  {
+    "alias": "Ana Abiyedh (White)",
+    "canonical_name": "Ana Abiyedh",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-ana-abiyedh"
+  },
+  {
+    "alias": "Eclair",
+    "canonical_name": "Eclaire",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-eclaire"
+  },
+  {
+    "alias": "Éclair",
+    "canonical_name": "Eclaire",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-eclaire"
+  },
+  {
+    "alias": "Lattafa Eclaire",
+    "canonical_name": "Eclaire",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-eclaire"
+  },
+  {
+    "alias": "Zimaya Sharaf Blend",
+    "canonical_name": "Sharaf Blend",
+    "brand": "Zimaya",
+    "fragrance_id": "zimaya-sharaf-blend"
+  },
+  {
+    "alias": "st-9292",
+    "canonical_name": "Sharaf Blend",
+    "brand": "Zimaya",
+    "fragrance_id": "zimaya-sharaf-blend"
+  },
+  {
+    "alias": "Sharaf Blend Zimaya",
+    "canonical_name": "Sharaf Blend",
+    "brand": "Zimaya",
+    "fragrance_id": "zimaya-sharaf-blend"
+  },
+  {
+    "alias": "Sharaf Blend (Zimaya)",
+    "canonical_name": "Sharaf Blend",
+    "brand": "Zimaya",
+    "fragrance_id": "zimaya-sharaf-blend"
+  },
+  {
+    "alias": "Supremacy Collector's Edition",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "Afnan Supremacy Collector's Edition",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "st-9020",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "Supremacy Collector Edition",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "SNOI CE",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "SNOI Collectors",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "Supremacy Not Only Intense (Collector's Edition)",
+    "canonical_name": "Supremacy Not Only Intense Collector\\'s Edition",
+    "brand": "Afnan",
+    "fragrance_id": "afnan-supremacy-collectors-edition"
+  },
+  {
+    "alias": "Khalis Musk (Pure Musk)",
+    "canonical_name": "Khalis Musk",
+    "brand": "Lattafa",
+    "fragrance_id": "lattafa-khalis-musk"
+  },
+  {
+    "alias": "Rumz Al Rasasi 9325 Pour Homme (Zebra)",
+    "canonical_name": "Rumz Al Rasasi 9325 Pour Homme",
+    "brand": "Rasasi",
+    "fragrance_id": "rasasi-rumz-al-rasasi-9325-zebra"
+  },
+  {
+    "alias": "Liquid Brun Limited Edition 150ml",
+    "canonical_name": "Liquid Brun",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-liquid-brun"
+  },
+  {
+    "alias": "French Avenue Liquid Brun Limited Edition 150ml",
+    "canonical_name": "Liquid Brun",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-liquid-brun"
+  },
+  {
+    "alias": "french-avenue-liquid-brun-150ml",
+    "canonical_name": "Liquid Brun",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-liquid-brun"
+  },
+  {
+    "alias": "Liquid Brun 150ml",
+    "canonical_name": "Liquid Brun",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-liquid-brun"
+  },
+  {
+    "alias": "Liquid Brun Limited Edition",
+    "canonical_name": "Liquid Brun",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-liquid-brun"
+  },
+  {
+    "alias": "After Effect French Avenue",
+    "canonical_name": "After Effect",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-after-effect"
+  },
+  {
+    "alias": "FA After Effect",
+    "canonical_name": "After Effect",
+    "brand": "French Avenue",
+    "fragrance_id": "french-avenue-after-effect"
+  },
+  {
+    "alias": "California Signature 50ml",
+    "canonical_name": "California Signature",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9004"
+  },
+  {
+    "alias": "Conquer 50ml",
+    "canonical_name": "Conquer",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9005"
+  },
+  {
+    "alias": "Glitch 50ml",
+    "canonical_name": "Glitch",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9006"
+  },
+  {
+    "alias": "Luminos 50ml",
+    "canonical_name": "Luminos",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9007"
+  },
+  {
+    "alias": "Monaco Royale 50ml",
+    "canonical_name": "Monaco Royale",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9008"
+  },
+  {
+    "alias": "Penthouse 50ml",
+    "canonical_name": "Penthouse",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9009"
+  },
+  {
+    "alias": "Pink Beach 50ml",
+    "canonical_name": "Pink Beach",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9010"
+  },
+  {
+    "alias": "Pink Drops 50ml",
+    "canonical_name": "Pink Drops",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9011"
+  },
+  {
+    "alias": "Reflection 50ml",
+    "canonical_name": "Reflection",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9012"
+  },
+  {
+    "alias": "Reflection Elixir 50ml",
+    "canonical_name": "Reflection Elixir",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9013"
+  },
+  {
+    "alias": "Imperium 100ml",
+    "canonical_name": "Imperium",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9015"
+  },
+  {
+    "alias": "Inferno 100ml",
+    "canonical_name": "Inferno",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9016"
+  },
+  {
+    "alias": "Marbella 100ml",
+    "canonical_name": "Marbella",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9017"
+  },
+  {
+    "alias": "Untamed 100ml",
+    "canonical_name": "Untamed",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9018"
+  },
+  {
+    "alias": "Utopia 100ml",
+    "canonical_name": "Utopia",
+    "brand": "Mykonos",
+    "fragrance_id": "st-9019"
+  },
+  {
+    "alias": "Mahd Al Dahab Extrait de Parfum 60ml",
+    "canonical_name": "Mahd Al Dahab Extrait de Parfum",
+    "brand": "Arabiyat Prestige",
+    "fragrance_id": "st-9035"
+  },
+  {
+    "alias": "Wild Colt 200ml",
+    "canonical_name": "Wild Colt",
+    "brand": "Assaf",
+    "fragrance_id": "st-9045"
+  },
+  {
+    "alias": "Wild Colt Bakhur 150ml",
+    "canonical_name": "Wild Colt Bakhur",
+    "brand": "Assaf",
+    "fragrance_id": "st-9046"
+  },
+  {
+    "alias": "Frankel Aventus 100ml",
+    "canonical_name": "Frankel Aventus",
+    "brand": "Assaf",
+    "fragrance_id": "st-9047"
+  },
+  {
+    "alias": "Frankel Imagination 100ml",
+    "canonical_name": "Frankel Imagination",
+    "brand": "Assaf",
+    "fragrance_id": "st-9048"
+  },
+  {
+    "alias": "Champion 200ml",
+    "canonical_name": "Champion",
+    "brand": "Laverne",
+    "fragrance_id": "st-9051"
+  },
+  {
+    "alias": "Tyrant 200ml",
+    "canonical_name": "Tyrant",
+    "brand": "Laverne",
+    "fragrance_id": "st-9052"
+  },
+  {
+    "alias": "La'Dor Bakhur 200ml",
+    "canonical_name": "La'Dor Bakhur",
+    "brand": "Laverne",
+    "fragrance_id": "st-9053"
+  },
+  {
+    "alias": "Fearless EDP 200ml",
+    "canonical_name": "Fearless EDP",
+    "brand": "Laverne",
+    "fragrance_id": "st-9054"
+  },
+  {
+    "alias": "Blue Laverne Bakhur 200ml",
+    "canonical_name": "Blue Laverne Bakhur",
+    "brand": "Laverne",
+    "fragrance_id": "st-9055"
+  },
+  {
+    "alias": "Reef 33 100ml",
+    "canonical_name": "Reef 33",
+    "brand": "Reef",
+    "fragrance_id": "st-9056"
+  },
+  {
+    "alias": "Reef 33 White 100ml",
+    "canonical_name": "Reef 33 White",
+    "brand": "Reef",
+    "fragrance_id": "st-9057"
+  },
+  {
+    "alias": "Attacks-150ml",
+    "canonical_name": "Attacks",
+    "brand": "Assaf",
+    "fragrance_id": "st-9158"
+  },
+  {
+    "alias": "Glitch - 150ml",
+    "canonical_name": "Glitch",
+    "brand": "Assaf",
+    "fragrance_id": "st-9159"
+  },
+  {
+    "alias": "Risk - 150ml",
+    "canonical_name": "Risk",
+    "brand": "Assaf",
+    "fragrance_id": "st-9160"
+  },
+  {
+    "alias": "Imperial Valley 200ml",
+    "canonical_name": "Imperial Valley",
+    "brand": "Gissah",
+    "fragrance_id": "st-9181"
+  },
+  {
+    "alias": "Voila 200ml",
+    "canonical_name": "Voila",
+    "brand": "Gissah",
+    "fragrance_id": "st-9182"
+  },
+  {
+    "alias": "Akoya 200ml",
+    "canonical_name": "Akoya",
+    "brand": "Gissah",
+    "fragrance_id": "st-9183"
+  },
+  {
+    "alias": "French Tobacco 100ml",
+    "canonical_name": "French Tobacco",
+    "brand": "Ibrahim Al Qureshi",
+    "fragrance_id": "st-9184"
+  },
+  {
+    "alias": "Spanish Tobacco 100ml",
+    "canonical_name": "Spanish Tobacco",
+    "brand": "Ibrahim Al Qureshi",
+    "fragrance_id": "st-9185"
+  },
+  {
+    "alias": "Cuban Tobacco 100ml",
+    "canonical_name": "Cuban Tobacco",
+    "brand": "Ibrahim Al Qureshi",
+    "fragrance_id": "st-9186"
+  },
+  {
+    "alias": "Arabian Tobacco 100ml",
+    "canonical_name": "Arabian Tobacco",
+    "brand": "Ibrahim Al Qureshi",
+    "fragrance_id": "st-9187"
+  },
+  {
+    "alias": "Dominican Tobacco 100ml",
+    "canonical_name": "Dominican Tobacco",
+    "brand": "Ibrahim Al Qureshi",
+    "fragrance_id": "st-9188"
+  },
+  {
+    "alias": "Privee (all)",
+    "canonical_name": "Privee",
+    "brand": "Riiffs",
+    "fragrance_id": "st-9273"
+  },
+  {
+    "alias": "Goodness Oud (Purple)",
+    "canonical_name": "Goodness Oud",
+    "brand": "Riiffs",
+    "fragrance_id": "st-9279"
+  },
+  {
+    "alias": "Goodness Oud (Black)",
+    "canonical_name": "Goodness Oud",
+    "brand": "Riiffs",
+    "fragrance_id": "st-9280"
+  },
+  {
+    "alias": "MUSK and Roses",
+    "canonical_name": "Musk & Roses",
+    "brand": "Ahmed Al Maghribi",
+    "fragrance_id": "apex-ahmedalmaghribi-muskandroses"
+  },
+  {
+    "alias": "Oud and Roses",
+    "canonical_name": "Oud & Roses",
+    "brand": "Ahmed Al Maghribi",
+    "fragrance_id": "apex-ahmedalmaghribi-oudandroses"
+  },
+  {
+    "alias": "Aqua Dubai 100ML",
+    "canonical_name": "Aqua Dubai",
+    "brand": "Al Haramain",
+    "fragrance_id": "apex-alharamain-aquadubai"
+  },
+  {
+    "alias": "Gold Edition 60ML",
+    "canonical_name": "Amber Oud Gold Edition",
+    "brand": "Al Haramain",
+    "fragrance_id": "apex-alharamain-goldedition"
+  },
+  {
+    "alias": "Raees Twilight Edition 180Ml",
+    "canonical_name": "Raees Twilight Edition",
+    "brand": "Arabiyat Prestige",
+    "fragrance_id": "apex-arabiyatprestige-raeestwilightedition"
+  },
+  {
+    "alias": "CDNIM PP",
+    "canonical_name": "Club de Nuit Intense Man Pure Parfum",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man-pure-parfum"
+  },
+  {
+    "alias": "CDNIM PP 150 ML",
+    "canonical_name": "Club de Nuit Intense Man Pure Parfum",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man-pure-parfum"
+  },
+  {
+    "alias": "CDNIM Pure Parfum",
+    "canonical_name": "Club de Nuit Intense Man Pure Parfum",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man-pure-parfum"
+  },
+  {
+    "alias": "Club de nuit intense PP 150ml",
+    "canonical_name": "Club de Nuit Intense Man Pure Parfum",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man-pure-parfum"
+  },
+  {
+    "alias": "Armaf CDNIM Pure Parfum",
+    "canonical_name": "Club de Nuit Intense Man Pure Parfum",
+    "brand": "Armaf",
+    "fragrance_id": "armaf-club-de-nuit-intense-man-pure-parfum"
+  },
+  {
+    "alias": "Proud of You (For Men)",
+    "canonical_name": "Proud of You For Men",
+    "brand": "Fragrance World",
+    "fragrance_id": "apex-fragranceworld-proudofyouformen"
+  },
+  {
+    "alias": "Blue Diamond Aqua 150ML",
+    "canonical_name": "Blue Diamond Aqua",
+    "brand": "Ibraq",
+    "fragrance_id": "apex-ibraq-bluediamondaqua"
+  },
+  {
+    "alias": "Cafe Drops 50ML",
+    "canonical_name": "Cafe Drops",
+    "brand": "Mykonos",
+    "fragrance_id": "apex-mykonos-cafedrops"
+  },
+  {
+    "alias": "Dreamscape 50ML",
+    "canonical_name": "Dreamscape",
+    "brand": "Mykonos",
+    "fragrance_id": "apex-mykonos-dreamscape"
+  },
+  {
+    "alias": "33 Black 200ML",
+    "canonical_name": "Reef 33 Black",
+    "brand": "Reef",
+    "fragrance_id": "apex-reef-33black"
+  },
+  {
+    "alias": "Club de nuit intense PP 150ml",
+    "canonical_name": "Club de nuit intense PP",
+    "brand": "Armaf",
+    "fragrance_id": "apex-armaf-clubdenuitintensepp"
+  },
+  {
+    "alias": "Amber Oud 60ml",
+    "canonical_name": "Amber Oud",
+    "brand": "Al Haramain",
+    "fragrance_id": "apex-alharamain-amberoud"
+  },
+  {
+    "alias": "L'aventure Intense (Tester)",
+    "canonical_name": "L'aventure Intense",
+    "brand": "Al Haramain",
+    "fragrance_id": "apex-alharamain-laventureintensetester"
+  },
+  {
+    "alias": "33 100ml",
+    "canonical_name": "Reef 33",
+    "brand": "Reef",
+    "fragrance_id": "apex-reef-33"
+  },
+  {
+    "alias": "Madinah 200ml",
+    "canonical_name": "Madinah",
+    "brand": "Al Haramain",
+    "fragrance_id": "apex-alharamain-madinah"
+  },
+  {
+    "alias": "Misk Rijali 10ml",
+    "canonical_name": "Misk Rijali",
+    "brand": "Ajmal",
+    "fragrance_id": "apex-ajmal-miskrijali"
+  },
+  {
+    "alias": "Coco Vanille (Open box)",
+    "canonical_name": "Coco Vanille",
+    "brand": "Mancera",
+    "fragrance_id": "apex-mancera-cocovanilleopenbox"
+  },
+  {
+    "alias": "Kismet Magic (Kismet Angel)",
+    "canonical_name": "Kismet Magic",
+    "brand": "Maison Alhambra",
+    "fragrance_id": "maison-alhambra-kismet-magic"
+  },
+  {
+    "alias": "Shaghaf Oud(golden)",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Swiss Arabian Shaghaf Oud(golden)",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "st-9266",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Shaghaf Oud Gold",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Shaghaf Oud golden",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Swiss Arabian Shaghaf Oud",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Shaghaf Oud (Gold)",
+    "canonical_name": "Shaghaf Oud",
+    "brand": "Swiss Arabian",
+    "fragrance_id": "swiss-arabian-shaghaf-oud"
+  },
+  {
+    "alias": "Maison Alhambra Jean Lowe Noir",
+    "canonical_name": "Jean Lowe Noir",
+    "brand": "Maison Alhambra",
+    "fragrance_id": "maison-alhambra-jean-lowe-noir"
+  },
+  {
+    "alias": "st-9108",
+    "canonical_name": "Jean Lowe Noir",
+    "brand": "Maison Alhambra",
+    "fragrance_id": "maison-alhambra-jean-lowe-noir"
+  },
+  {
+    "alias": "Jean Lowe Noir (Ombre)",
+    "canonical_name": "Jean Lowe Noir",
+    "brand": "Maison Alhambra",
+    "fragrance_id": "maison-alhambra-jean-lowe-noir"
+  },
+  {
+    "alias": "Café Drops 50ml",
+    "canonical_name": "Café Drops",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-cafe-drops"
+  },
+  {
+    "alias": "Mykonos Café Drops 50ml",
+    "canonical_name": "Café Drops",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-cafe-drops"
+  },
+  {
+    "alias": "st-9003",
+    "canonical_name": "Café Drops",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-cafe-drops"
+  },
+  {
+    "alias": "Sorrento 50ml",
+    "canonical_name": "Sorrento",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-sorrento"
+  },
+  {
+    "alias": "Mykonos Sorrento 50ml",
+    "canonical_name": "Sorrento",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-sorrento"
+  },
+  {
+    "alias": "st-9014",
+    "canonical_name": "Sorrento",
+    "brand": "Mykonos",
+    "fragrance_id": "mykonos-sorrento"
+  }
+]

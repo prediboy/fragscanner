@@ -124,6 +124,7 @@ export default function App() {
       const name = (f.name || '').toLowerCase();
       const brand = (f.brand || '').toLowerCase();
       const inspo = (f.dna_inspiration || '').toLowerCase();
+      const matchAlias = Array.isArray(f.aliases) && f.aliases.some(a => String(a).toLowerCase().includes(q));
       
       let mNotes = false;
       if (f.notes && typeof f.notes === 'object') {
@@ -131,7 +132,7 @@ export default function App() {
         mNotes = allN.some(n => String(n).toLowerCase().includes(q));
       }
 
-      return name.includes(q) || brand.includes(q) || inspo.includes(q) || mNotes;
+      return name.includes(q) || brand.includes(q) || inspo.includes(q) || matchAlias || mNotes;
     }).slice(0, 10);
   }, [anchorSearch, allFragrances, popularAnchors]);
 

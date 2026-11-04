@@ -278,8 +278,24 @@ async function runMasterRefresh() {
       nClean = EXPLICIT_ALIASES[aliasKey];
     }
 
-    // 1. Exact brand + name match
+    // 0. Match by registered canonical aliases
     let match = fragrances.find(f => {
+      const fbClean = cleanStr(f.brand);
+      const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
+      if (!sameBrand) return false;
+
+      if (Array.isArray(f.aliases)) {
+        return f.aliases.some(a => {
+          const aClean = cleanStr(a);
+          return aClean === nClean || (aClean.length >= 4 && (nClean.includes(aClean) || aClean.includes(nClean)));
+        });
+      }
+      return false;
+    });
+    if (match) return match;
+
+    // 1. Exact brand + name match
+    match = fragrances.find(f => {
       const fbClean = cleanStr(f.brand);
       const fnClean = cleanStr(f.name);
       return fbClean === bClean && fnClean === nClean;
