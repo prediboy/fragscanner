@@ -6750,19 +6750,9 @@
     "community_seller_name": "FragFever",
     "community_whatsapp": "9716764787",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2349,
+    "community_price": 2600,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 2349,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice",
-        "verified": true
-      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -6792,6 +6782,16 @@
         "verified": true
       },
       {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 2789,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice",
+        "verified": true
+      },
+      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "price": 2899,
@@ -6803,7 +6803,7 @@
       }
     ],
     "in_second_theory_sheet": false,
-    "lowest_seller": "Whiff Culture",
+    "lowest_seller": "Second Theory",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": false,
@@ -6816,12 +6816,12 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 199,
-          "8ml": 279,
-          "10ml": 279,
-          "30ml": 959
+          "5ml": 239,
+          "8ml": 329,
+          "10ml": 329,
+          "30ml": 1109
         },
-        "lowest_price": 199,
+        "lowest_price": 239,
         "in_stock": true,
         "verified": true
       },
@@ -6843,39 +6843,39 @@
     "has_decants": true,
     "decant_comparison": {
       "5ml": {
-        "lowest_price": 199,
+        "lowest_price": 239,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 199,
+            "price": 239,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice"
           }
         ]
       },
       "8ml": {
-        "lowest_price": 279,
+        "lowest_price": 329,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 279,
+            "price": 329,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice"
           }
         ]
       },
       "10ml": {
-        "lowest_price": 279,
+        "lowest_price": 329,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 279,
+            "price": 329,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice"
           },
@@ -6889,20 +6889,20 @@
         ]
       },
       "30ml": {
-        "lowest_price": 959,
+        "lowest_price": 1109,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 959,
+            "price": 1109,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/lattafa-al-nashama-caprice"
           }
         ]
       }
     },
-    "lowest_decant_price": 199,
+    "lowest_decant_price": 239,
     "description": "Spicy cardamom, zesty ginger, Calabrian bergamot, soothing lavender, mint, and geranium over amber and cedarwood. Restores the legendary discontinued YSL Bleu Electrique DNA with superior longevity.",
     "lowest_decant_seller": "Whiff Culture",
     "lowest_decant_size": "5ml",
@@ -14629,12 +14629,12 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 249,
+          "5ml": 309,
           "8ml": 349,
           "10ml": 349,
           "30ml": 1189
         },
-        "lowest_price": 249,
+        "lowest_price": 309,
         "in_stock": true,
         "verified": true
       },
@@ -14676,7 +14676,7 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 249,
+            "price": 309,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze"
           }
@@ -79874,18 +79874,100 @@
     "community_seller_name": null,
     "community_whatsapp": null,
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": null,
+    "community_price": 6569,
     "is_hot_seller": false,
-    "community_sellers": [],
+    "community_sellers": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 6569,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite",
+        "verified": true
+      }
+    ],
     "in_second_theory_sheet": false,
-    "lowest_seller": null,
-    "in_seller_stock": false,
+    "lowest_seller": "Whiff Culture",
+    "in_seller_stock": true,
     "in_fragfever_sheet": false,
     "in_apex_aroma_sheet": false,
-    "community_decants": [],
-    "has_decants": false,
-    "decant_comparison": null,
-    "lowest_decant_price": null,
+    "community_decants": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite",
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "sizes": {
+          "5ml": 359,
+          "8ml": 519,
+          "10ml": 519,
+          "30ml": 1789
+        },
+        "lowest_price": 359,
+        "in_stock": true,
+        "verified": true
+      }
+    ],
+    "has_decants": true,
+    "decant_comparison": {
+      "5ml": {
+        "lowest_price": 359,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 359,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite"
+          }
+        ]
+      },
+      "8ml": {
+        "lowest_price": 519,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 519,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite"
+          }
+        ]
+      },
+      "10ml": {
+        "lowest_price": 519,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 519,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite"
+          }
+        ]
+      },
+      "30ml": {
+        "lowest_price": 1789,
+        "lowest_seller": "Whiff Culture",
+        "quotes": [
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 1789,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-elite"
+          }
+        ]
+      }
+    },
+    "lowest_decant_price": 359,
     "lowest_decant_seller": null,
     "aliases": []
   },
@@ -89551,7 +89633,7 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "price": 3199,
+        "price": 3369,
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
@@ -89619,12 +89701,12 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 269,
-          "8ml": 379,
-          "10ml": 379,
-          "30ml": 1279
+          "5ml": 279,
+          "8ml": 399,
+          "10ml": 399,
+          "30ml": 1349
         },
-        "lowest_price": 269,
+        "lowest_price": 279,
         "in_stock": true,
         "verified": true
       },
@@ -89662,20 +89744,20 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 269,
+            "price": 279,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/french-avenue-liquid-brun-limited-edition"
           }
         ]
       },
       "8ml": {
-        "lowest_price": 379,
+        "lowest_price": 399,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 379,
+            "price": 399,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/french-avenue-liquid-brun-limited-edition"
           }
@@ -89695,7 +89777,7 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 379,
+            "price": 399,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/french-avenue-liquid-brun-limited-edition"
           },
@@ -89735,7 +89817,7 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 1279,
+            "price": 1349,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/french-avenue-liquid-brun-limited-edition"
           }
@@ -96377,14 +96459,14 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1899,
+    "community_price": 1850,
     "in_second_theory_sheet": true,
     "is_hot_seller": true,
     "community_sellers": [
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
-        "price": 1899,
+        "price": 1850,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
         "dispatch": "24-48 hrs",
@@ -100890,7 +100972,7 @@
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
-        "price": 2759,
+        "price": 2989,
         "whatsapp": "9811377357",
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
@@ -101035,12 +101117,12 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
-          "5ml": 229,
-          "8ml": 329,
-          "10ml": 329,
-          "30ml": 1099
+          "5ml": 249,
+          "8ml": 359,
+          "10ml": 359,
+          "30ml": 1189
         },
-        "lowest_price": 229,
+        "lowest_price": 249,
         "in_stock": true,
         "verified": true
       },
@@ -101085,20 +101167,20 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 229,
+            "price": 249,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rasasi-hawas-kobra"
           }
         ]
       },
       "8ml": {
-        "lowest_price": 329,
+        "lowest_price": 359,
         "lowest_seller": "Whiff Culture",
         "quotes": [
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 329,
+            "price": 359,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rasasi-hawas-kobra"
           }
@@ -101116,18 +101198,18 @@
             "website": "https://liquidemotions.vercel.app/"
           },
           {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 329,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/rasasi-hawas-kobra"
-          },
-          {
             "seller_id": "bluewings",
             "seller_name": "Blue Wings Fragrances",
             "price": 350,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 359,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/rasasi-hawas-kobra"
           },
           {
             "seller_id": "aar_fragrances",
@@ -101179,7 +101261,7 @@
           {
             "seller_id": "whiffculture",
             "seller_name": "Whiff Culture",
-            "price": 1099,
+            "price": 1189,
             "whatsapp": "9811377357",
             "website": "https://www.whiffculture.com/products/rasasi-hawas-kobra"
           }
@@ -114989,19 +115071,10 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1750,
+    "community_price": 1799,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 1750,
-        "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
       {
         "seller_id": "whiffculture",
         "seller_name": "Whiff Culture",
@@ -115010,6 +115083,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/ajmal-kuro-flash-sale",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1800,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -115096,7 +115178,7 @@
       ]
     },
     "description": "Ajmal Kuro is a community favorite priced at ₹1850 by Second Theory. Features fresh spicy accords with notes of Bergamot, Geranium and Patchouli.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "Whiff Culture",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -127737,10 +127819,20 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 2700,
+    "community_price": 1999,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 1999,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/arabiyat-prestige-ramad-oriental-tester",
+        "verified": true
+      },
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
@@ -127748,16 +127840,6 @@
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 2789,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/arabiyat-prestige-ramad-oriental-flash-sale",
         "verified": true
       },
       {
@@ -127837,7 +127919,7 @@
       ]
     },
     "description": "Arabiyat Prestige Ramad is a community favorite priced at ₹2900 by Second Theory. Features aromatic accords with notes of Bergamot, Lavender and Amber.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "Whiff Culture",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -128662,67 +128744,10 @@
       "st-9024"
     ],
     "in_apex_aroma_sheet": false,
-    "community_decants": [
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/assaf-attacks",
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 319,
-          "8ml": 449,
-          "10ml": 449
-        },
-        "lowest_price": 319,
-        "in_stock": true,
-        "verified": true
-      }
-    ],
-    "has_decants": true,
-    "decant_comparison": {
-      "5ml": {
-        "lowest_price": 319,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 319,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/assaf-attacks"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 449,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 449,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/assaf-attacks"
-          }
-        ]
-      },
-      "10ml": {
-        "lowest_price": 449,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 449,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/assaf-attacks"
-          }
-        ]
-      }
-    },
-    "lowest_decant_price": 319,
+    "community_decants": [],
+    "has_decants": false,
+    "decant_comparison": null,
+    "lowest_decant_price": null,
     "review_summary": {
       "community_verdict": "A standout community favorite from Assaf. Loved for its luminous Aromatic, Woody, Amber harmony and lasting Amber, White Musk drydown. Celebrating the iconic profile of Assaf Signature Creation. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
@@ -161454,16 +161479,6 @@
         "verified": true
       },
       {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 1329,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/arabiyat-prestige-oud-al-layl-aswad",
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "price": 1399,
@@ -161555,8 +161570,7 @@
         "sizes": {
           "5ml": 119,
           "8ml": 169,
-          "10ml": 169,
-          "30ml": 499
+          "10ml": 169
         },
         "lowest_price": 119,
         "in_stock": true,
@@ -161622,19 +161636,6 @@
             "price": 319,
             "whatsapp": "9873520545",
             "website": "https://www.aarfragrances.com/product/decantsample-arabiyat-oud-al-layl-aswad-by-my-perfumes"
-          }
-        ]
-      },
-      "30ml": {
-        "lowest_price": 499,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 499,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/arabiyat-prestige-oud-al-layl-aswad"
           }
         ]
       }
@@ -194654,16 +194655,6 @@
         "verified": true
       },
       {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 2479,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/al-haramain-detour-noir",
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "price": 2899,
@@ -194736,23 +194727,6 @@
     ],
     "community_decants": [
       {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "website": "https://www.whiffculture.com/products/al-haramain-detour-noir",
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "sizes": {
-          "5ml": 199,
-          "8ml": 289,
-          "10ml": 289,
-          "30ml": 919
-        },
-        "lowest_price": 199,
-        "in_stock": true,
-        "verified": true
-      },
-      {
         "seller_id": "aar_fragrances",
         "seller_name": "AAR Fragrances",
         "website": "https://www.aarfragrances.com/product/decantsample-al-haramain-detour-noir-intense",
@@ -194769,43 +194743,10 @@
     ],
     "has_decants": true,
     "decant_comparison": {
-      "5ml": {
-        "lowest_price": 199,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 199,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-detour-noir"
-          }
-        ]
-      },
-      "8ml": {
-        "lowest_price": 289,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 289,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-detour-noir"
-          }
-        ]
-      },
       "10ml": {
-        "lowest_price": 289,
-        "lowest_seller": "Whiff Culture",
+        "lowest_price": 399,
+        "lowest_seller": "AAR Fragrances",
         "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 289,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-detour-noir"
-          },
           {
             "seller_id": "aar_fragrances",
             "seller_name": "AAR Fragrances",
@@ -194814,22 +194755,9 @@
             "website": "https://www.aarfragrances.com/product/decantsample-al-haramain-detour-noir-intense"
           }
         ]
-      },
-      "30ml": {
-        "lowest_price": 919,
-        "lowest_seller": "Whiff Culture",
-        "quotes": [
-          {
-            "seller_id": "whiffculture",
-            "seller_name": "Whiff Culture",
-            "price": 919,
-            "whatsapp": "9811377357",
-            "website": "https://www.whiffculture.com/products/al-haramain-detour-noir"
-          }
-        ]
       }
     },
-    "lowest_decant_price": 199,
+    "lowest_decant_price": 399,
     "review_summary": {
       "community_verdict": "A standout community favorite from Al Haramain. Loved for its luminous Aromatic, Fresh Spicy, Citrus harmony and lasting Ambroxan, Cedarwood drydown. Celebrating the iconic profile of PDM Pegasus Exclusif. Offers exceptional performance (8-10 Hours) and versatility across All Year.",
       "pros": [
