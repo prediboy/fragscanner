@@ -10642,24 +10642,24 @@
     "community_seller_name": "FragFever",
     "community_whatsapp": "9716764787",
     "community_shipping_info": "Includes shipping across India (extra ₹70 for NE/J&K).",
-    "community_price": 2650,
+    "community_price": 3150,
     "is_hot_seller": false,
     "community_sellers": [
-      {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 2650,
-        "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
         "price": 3150,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3150,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
         "verified": true
       },
@@ -10675,7 +10675,7 @@
       }
     ],
     "in_second_theory_sheet": false,
-    "lowest_seller": "FragFever",
+    "lowest_seller": "Second Theory",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "in_apex_aroma_sheet": false,
@@ -14551,6 +14551,16 @@
         "verified": true
       },
       {
+        "seller_id": "whiffculture",
+        "seller_name": "Whiff Culture",
+        "price": 2999,
+        "whatsapp": "9811377357",
+        "shipping": "Free Pan-India above ₹1,499",
+        "dispatch": "24-48 hrs",
+        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-ice",
+        "verified": true
+      },
+      {
         "seller_id": "fragrance_heaven",
         "seller_name": "Fragrance Heaven",
         "price": 3250,
@@ -14568,16 +14578,6 @@
         "shipping": "Pan-India Shipping",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-3",
-        "verified": true
-      },
-      {
-        "seller_id": "whiffculture",
-        "seller_name": "Whiff Culture",
-        "price": 3699,
-        "whatsapp": "9811377357",
-        "shipping": "Free Pan-India above ₹1,499",
-        "dispatch": "24-48 hrs",
-        "product_url": "https://www.whiffculture.com/products/rasasi-hawas-ice-freeze",
         "verified": true
       }
     ],
@@ -83446,11 +83446,12 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "sizes": {
+          "5ml": 319,
           "8ml": 469,
           "10ml": 469,
           "30ml": 1599
         },
-        "lowest_price": 469,
+        "lowest_price": 319,
         "in_stock": true,
         "verified": true
       }
@@ -83474,6 +83475,13 @@
             "price": 265,
             "whatsapp": "9899401419",
             "website": "https://bluewingsfnd.com/"
+          },
+          {
+            "seller_id": "whiffculture",
+            "seller_name": "Whiff Culture",
+            "price": 319,
+            "whatsapp": "9811377357",
+            "website": "https://www.whiffculture.com/products/afnan-supremacy-not-only-intense-collectors-edition"
           }
         ]
       },
@@ -96369,25 +96377,25 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1850,
+    "community_price": 1899,
     "in_second_theory_sheet": true,
     "is_hot_seller": true,
     "community_sellers": [
-      {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 1850,
-        "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
         "price": 1899,
         "whatsapp": "8076851481",
         "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1900,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
         "verified": true
       },
@@ -96468,7 +96476,7 @@
       ]
     },
     "description": "Paris Corner Rifaaqat is a community favorite priced at ₹1899 by Second Theory. Features warm spicy accords with notes of Black Pepper, Pink Pepper and Bourbon Vanilla.",
-    "lowest_seller": "FragFever",
+    "lowest_seller": "Second Theory",
     "in_seller_stock": true,
     "in_fragfever_sheet": true,
     "dna_twins": [
@@ -105230,15 +105238,6 @@
         "verified": true
       },
       {
-        "seller_id": "fragfever",
-        "seller_name": "FragFever",
-        "price": 1850,
-        "whatsapp": "9716764787",
-        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-        "dispatch": "24-48 hrs",
-        "verified": true
-      },
-      {
         "seller_id": "fragrance_heaven",
         "seller_name": "Fragrance Heaven",
         "price": 1850,
@@ -105256,6 +105255,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/paris-corner-rifaaqat-adorn",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1900,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -105479,6 +105487,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/assaf-wild-colt-exclusive-flash-sale",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3650,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -105809,6 +105826,15 @@
         "verified": true
       },
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3350,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
         "price": 3500,
@@ -106020,6 +106046,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/assaf-frankel-imagination",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3350,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -106978,10 +107013,19 @@
     "release_year": 2023,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 4400,
+    "community_price": 4050,
     "in_second_theory_sheet": true,
     "is_hot_seller": false,
     "community_sellers": [
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 4050,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
       {
         "seller_id": "second_theory",
         "seller_name": "Second Theory",
@@ -107049,7 +107093,7 @@
       ]
     },
     "description": "Laverne La'Dor Bakhur 200ml is a community favorite priced at ₹4400 by Second Theory. Features aromatic accords with notes of Bergamot, Lavender and Amber.",
-    "lowest_seller": "Second Theory",
+    "lowest_seller": "FragFever",
     "in_seller_stock": true,
     "in_fragfever_sheet": false,
     "dna_twins": [
@@ -107449,6 +107493,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/laverne-blue-laverne",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 3400,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -118372,6 +118425,15 @@
         "verified": true
       },
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1550,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "fragrance_heaven",
         "seller_name": "Fragrance Heaven",
         "price": 1800,
@@ -119852,6 +119914,15 @@
         "shipping": "Free Pan-India above ₹1,499",
         "dispatch": "24-48 hrs",
         "product_url": "https://www.whiffculture.com/products/maison-alhambra-opulence-leather",
+        "verified": true
+      },
+      {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 1800,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
         "verified": true
       },
       {
@@ -178098,13 +178169,13 @@
     "release_year": 2024,
     "rating_value": 4.35,
     "rating_count": 850,
-    "community_price": 1950,
+    "community_price": 2000,
     "is_hot_seller": false,
     "community_sellers": [
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
-        "price": 1950,
+        "price": 2000,
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
@@ -182751,7 +182822,7 @@
       {
         "seller_id": "fragfever",
         "seller_name": "FragFever",
-        "price": 2000,
+        "price": 1950,
         "whatsapp": "9716764787",
         "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
         "dispatch": "24-48 hrs",
@@ -199811,6 +199882,15 @@
     },
     "community_sellers": [
       {
+        "seller_id": "fragfever",
+        "seller_name": "FragFever",
+        "price": 2750,
+        "whatsapp": "9716764787",
+        "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+        "dispatch": "24-48 hrs",
+        "verified": true
+      },
+      {
         "seller_id": "apex_aroma",
         "seller_name": "Apex Aroma",
         "price": 2750,
@@ -199914,7 +199994,7 @@
     },
     "in_seller_stock": true,
     "community_price": 2750,
-    "lowest_seller": "Apex Aroma",
+    "lowest_seller": "FragFever",
     "has_decants": true,
     "lowest_decant_price": 249,
     "community_seller_name": "Apex Aroma",
