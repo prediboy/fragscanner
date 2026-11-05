@@ -145,10 +145,10 @@ export default function DirectFragranceSearchBar({
         {/* Explicit Search Button */}
         <button
           type="submit"
-          className="shrink-0 px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-white font-heading font-bold text-sm shadow-sm transition-all flex items-center gap-2 active:scale-98"
+          className="shrink-0 px-3.5 sm:px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-white font-heading font-bold text-sm shadow-sm transition-all flex items-center gap-2 active:scale-98"
         >
           <Search className="w-4 h-4 text-cyan-400 dark:text-white" />
-          <span>Search</span>
+          <span className="hidden sm:inline">Search</span>
         </button>
       </form>
 

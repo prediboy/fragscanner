@@ -479,7 +479,7 @@ export default function App() {
             list.push({
               seller_id: s.seller_id,
               seller_name: s.seller_name,
-              label: s.size || '100ml Retail Bottle',
+              label: s.size || (f.bottle_size ? `${f.bottle_size} Retail Bottle` : '100ml Retail Bottle'),
               price: p,
               whatsapp: s.whatsapp,
               isBottle: true
@@ -529,10 +529,15 @@ export default function App() {
       });
     })();
 
+    const bestBottleQuote = validQuotes.find(q => q.isBottle);
+    const bottleDisplaySize = bestBottleQuote 
+      ? bestBottleQuote.label.replace(' Retail Bottle', ' Bottle') 
+      : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
+
     return (
       <div 
         key={f.id || idx}
-        className="bg-white rounded-2xl border border-glacier-border hover:border-cyan-500 shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between space-y-4"
+        className="bg-white rounded-2xl border border-glacier-border hover:border-cyan-500 shadow-xs hover:shadow-md transition-all p-4 sm:p-5 flex flex-col justify-between space-y-4 overflow-hidden"
       >
         <div>
           {/* Header with Match Percentage & Brand */}
@@ -561,11 +566,11 @@ export default function App() {
 
           {/* Title & Pricing */}
           <div className="flex items-start justify-between gap-3 mb-1">
-            <div>
-              <h3 className="font-heading font-bold text-lg text-slate-900 hover:text-cyan-700 transition-colors cursor-pointer" onClick={() => setActiveFragrance(f)}>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-heading font-bold text-lg text-slate-900 hover:text-cyan-700 transition-colors cursor-pointer truncate" onClick={() => setActiveFragrance(f)}>
                 {f.name}
               </h3>
-              <p className="text-xs text-glacier-textMuted mt-0.5">
+              <p className="text-xs text-glacier-textMuted mt-0.5 break-words">
                 {f.dna_inspiration ? (
                   <span>
                     Closest Match: <strong className="font-semibold text-slate-800">{f.dna_inspiration}</strong>
@@ -578,8 +583,13 @@ export default function App() {
 
             <div className="text-right shrink-0">
               {hasBottlePrice ? (
-                <div className="font-mono text-lg font-bold text-slate-900">
-                  ₹{bottlePriceNum.toLocaleString()}
+                <div>
+                  <div className="font-mono text-lg font-bold text-slate-900 leading-tight">
+                    ₹{bottlePriceNum.toLocaleString()}
+                  </div>
+                  <div className="text-[11px] text-glacier-textMuted font-mono font-medium">
+                    {bottleDisplaySize}
+                  </div>
                 </div>
               ) : hasDecantPrice ? (
                 <div className="text-xs text-glacier-textMuted font-mono font-medium">Decant only</div>
@@ -587,7 +597,7 @@ export default function App() {
                 <div className="text-xs text-glacier-textMuted font-mono">Unquoted</div>
               )}
               {hasDecantPrice && (
-                <div className="text-[11px] text-emerald-600 font-semibold font-mono">
+                <div className="text-[11px] text-emerald-600 font-semibold font-mono mt-0.5">
                   Decant from ₹{decantPriceNum.toLocaleString()}
                 </div>
               )}
@@ -637,7 +647,7 @@ export default function App() {
               <a
                 href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
                   bestLeadPrice > 0
-                    ? `Hi, saw your price for ${displayName} quoted at ₹${bestLeadPrice.toLocaleString()} on FragScanner. Is this in stock?`
+                    ? `Hi, saw your price for ${displayName}${hasBottlePrice && bottleDisplaySize ? ` (${bottleDisplaySize})` : ''} quoted at ₹${bestLeadPrice.toLocaleString()} on FragScanner. Is this in stock?`
                     : `Hi, saw your listing for ${displayName} on FragScanner. Is this in stock?`
                 )}`}
                 target="_blank"
@@ -712,7 +722,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-glacier-bg text-glacier-text flex flex-col antialiased">
+    <div className="min-h-screen bg-glacier-bg text-glacier-text flex flex-col antialiased overflow-x-hidden">
       
       {/* Top Glacier Frost Navigation */}
       <header className="border-b border-glacier-border bg-white/95 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 shadow-2xs">
@@ -850,7 +860,7 @@ export default function App() {
           <div className="space-y-6">
             
             {/* Direct Search Bar & Seller Filters Box */}
-            <div className="bg-white rounded-2xl border border-glacier-border p-5 shadow-xs space-y-4">
+            <div className="bg-white rounded-2xl border border-glacier-border p-3.5 sm:p-5 shadow-xs space-y-4">
               <DirectFragranceSearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}

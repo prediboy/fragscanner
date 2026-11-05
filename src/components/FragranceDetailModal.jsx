@@ -180,11 +180,14 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
                       <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
-                      <span>🍾 Full Bottles (100ml Retail / BNIB)</span>
+                      <span>🍾 Bottles & Retail Packs</span>
                     </h4>
                     {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
                       <span className="text-xs font-mono font-bold text-emerald-400">
                         Best: ₹{Number(fragrance.community_price).toLocaleString()}
+                        {fragrance.community_bottle_size && (
+                          <span className="text-slate-400 font-normal ml-1">({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})</span>
+                        )}
                       </span>
                     )}
                   </div>
@@ -196,7 +199,8 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         .map((seller, sIdx, filteredSellers) => {
                           const priceNum = Number(seller.price);
                           const isLowest = sIdx === 0 && filteredSellers.length > 1;
-                          const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (Full Bottle) quoted at ₹${priceNum.toLocaleString()} on FragScanner. Is this in stock?`;
+                          const bottleLabel = seller.size || 'Bottle';
+                          const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (${bottleLabel}) quoted at ₹${priceNum.toLocaleString()} on FragScanner. Is this in stock?`;
                           const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
 
                           return (
@@ -211,11 +215,14 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                               <div>
                                 <div className="flex items-start justify-between gap-2 mb-2">
                                   <div>
-                                    <div className="flex items-center gap-1.5">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
                                       <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
+                                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700 font-mono font-semibold">
+                                        {seller.size || '100ml Retail Bottle'}
+                                      </span>
                                       {isLowest && (
                                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
-                                          ★ Best Bottle Deal
+                                          ★ Best Deal
                                         </span>
                                       )}
                                     </div>

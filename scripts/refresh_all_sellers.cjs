@@ -108,6 +108,67 @@ function cleanStr(s) {
     .replace(/[^a-z0-9]/g, "");
 }
 
+function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
+  const brand = (brandRaw || "").trim();
+  const name = (nameRaw || "").trim();
+  const full = `${brand} ${name}`;
+
+  // 1. Explicit ML extraction
+  const mlMatch = name.match(/\b(\d+(?:\.\d+)?)\s*(?:-|\s*)?(ml|m\.l\.)\b/i) || brand.match(/\b(\d+(?:\.\d+)?)\s*(?:-|\s*)?(ml|m\.l\.)\b/i);
+
+  // 2. Fluid Ounce extraction
+  const ozMatch = name.match(/\b(\d+(?:\.\d+)?)\s*(?:fl\.?\s*oz\.?|oz\.?)\b/i);
+
+  // 3. Modifier flags
+  const isMini = /\b(mini|sample|travel|pocket|roller|roll\s*on|vial)\b/i.test(full);
+  const isTester = /\btester\b/i.test(full);
+  const isPartial = /\bpartial\b/i.test(full);
+
+  let volume = null;
+
+  if (mlMatch) {
+    volume = parseInt(mlMatch[1], 10);
+  } else if (ozMatch) {
+    volume = Math.round(parseFloat(ozMatch[1]) * 29.5735);
+  } else if (/tobacco jam\s*60\b/i.test(name)) {
+    volume = 60;
+  } else if (/tobacco jam\s*50\b/i.test(name)) {
+    volume = 50;
+  } else if (defaultCatalogSize) {
+    volume = parseInt(defaultCatalogSize, 10) || 100;
+  } else {
+    // Brand/model defaults when omitted by seller
+    const bLower = brand.toLowerCase();
+    const nLower = name.toLowerCase();
+
+    if (bLower.includes("armaf") && nLower.includes("club de nuit") && !nLower.includes("pure parfum") && !nLower.includes("200")) {
+      volume = 105;
+    } else if (nLower.includes("wild colt") && !nLower.includes("150")) {
+      volume = 200;
+    } else if (bLower === "mykonos") {
+      volume = 50;
+    } else if (nLower.includes("sauvage elixir")) {
+      volume = 60;
+    } else {
+      volume = 100;
+    }
+  }
+
+  // Human-readable size label
+  let label = "";
+  if (isMini || volume <= 20) {
+    label = `${volume}ml Mini`;
+  } else if (isPartial) {
+    label = `${volume}ml Partial`;
+  } else if (isTester) {
+    label = `${volume}ml Tester`;
+  } else {
+    label = `${volume}ml Retail Bottle`;
+  }
+
+  return { volume, label, isMini, isTester, isPartial };
+}
+
 async function runMasterRefresh() {
   console.log("=========================================================");
   console.log("🚀 MASTER REFRESH: ALL 6 COMMUNITY SELLERS & RESOURCES");
@@ -351,10 +412,11 @@ async function runMasterRefresh() {
     return null;
   }
 
-  // Helper: Add bottle seller quote
+  // Helper: Add bottle seller quote with size-aware deduplication
   function addBottleQuote(frag, sellerObj) {
     if (!frag.community_sellers) frag.community_sellers = [];
-    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id);
+    const sizeKey = sellerObj.size || '100ml Retail Bottle';
+    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id && (s.size || '100ml Retail Bottle') === sizeKey);
     if (existing) {
       if (sellerObj.price < existing.price) {
         existing.price = sellerObj.price;
@@ -413,10 +475,13 @@ async function runMasterRefresh() {
 
         const matched = findBestMatch(brandRaw, nameRaw);
         if (matched) {
+          const meta = extractBottleMetadata(brandRaw, nameRaw, matched.bottle_size);
           addBottleQuote(matched, {
             seller_id: seller.id,
             seller_name: seller.seller_name,
             price,
+            size: meta.label,
+            volume_ml: meta.volume,
             whatsapp: seller.whatsapp,
             shipping: seller.shipping,
             dispatch: seller.dispatch,
@@ -546,10 +611,13 @@ async function runMasterRefresh() {
           const brand = normalizeBrand(p.brand);
           const matched = findBestMatch(brand, rawName);
           if (matched) {
+            const meta = extractBottleMetadata(brand, rawName, matched.bottle_size);
             addBottleQuote(matched, {
               seller_id: "bluewings",
               seller_name: "Blue Wings Fragrances",
               price: Number(p.price),
+              size: meta.label,
+              volume_ml: meta.volume,
               whatsapp: "9899401419",
               shipping: "Free above ₹1,500",
               dispatch: "24-48 hrs",
@@ -644,27 +712,24 @@ async function runMasterRefresh() {
           if (!decantSizes["30ml"] || vPrice < decantSizes["30ml"]) decantSizes["30ml"] = vPrice;
         }
 
-        // Check Retail Bottle
-        if (vTitle.includes("retail pack") || vTitle.includes("100ml") || vTitle.includes("125ml") || vTitle.includes("150ml") || vTitle.includes("55ml")) {
-          if (vPrice >= 500 && (!bottlePrice || vPrice < bottlePrice)) {
-            bottlePrice = vPrice;
-          }
+        // Check Retail Bottle / Tester / Partial
+        const isDecantVariant = vTitle.includes("atomiser") || vTitle.includes("atomizer") || vTitle.includes("glass bottle") || (vPrice < 500 && !vTitle.includes("oil"));
+        if (!isDecantVariant && (vTitle.includes("retail pack") || vTitle.includes("tester") || vTitle.includes("partial") || /\b\d+\s*ml\b/i.test(vTitle) || vPrice >= 800)) {
+          const meta = extractBottleMetadata(matched.brand, `${p.title} ${v.title}`, matched.bottle_size);
+          addBottleQuote(matched, {
+            seller_id: "whiffculture",
+            seller_name: "Whiff Culture",
+            price: vPrice,
+            size: meta.label,
+            volume_ml: meta.volume,
+            whatsapp: "9811377357",
+            shipping: "Free Pan-India above ₹1,499",
+            dispatch: "24-48 hrs",
+            product_url: productUrl,
+            verified: true
+          });
+          stats.whiffculture_bottles++;
         }
-      }
-
-      // Add Bottle Quote if found
-      if (bottlePrice) {
-        addBottleQuote(matched, {
-          seller_id: "whiffculture",
-          seller_name: "Whiff Culture",
-          price: bottlePrice,
-          whatsapp: "9811377357",
-          shipping: "Free Pan-India above ₹1,499",
-          dispatch: "24-48 hrs",
-          product_url: productUrl,
-          verified: true
-        });
-        stats.whiffculture_bottles++;
       }
 
       // Add Decant Quote if found
@@ -704,10 +769,13 @@ async function runMasterRefresh() {
       for (const [fid, data] of Object.entries(aarB)) {
         const target = fragrances.find(f => f.id === fid);
         if (target && data.price > 0) {
+          const meta = extractBottleMetadata(target.brand, (data.url || fid).replace(/[-_]/g, " "), target.bottle_size);
           addBottleQuote(target, {
             seller_id: "aar_fragrances",
             seller_name: "AAR Fragrances",
             price: data.price,
+            size: meta.label,
+            volume_ml: meta.volume,
             whatsapp: "9873520545",
             shipping: "Pan-India Shipping",
             dispatch: "24-48 hrs",
@@ -744,10 +812,13 @@ async function runMasterRefresh() {
       for (const [fid, data] of Object.entries(fhB)) {
         const target = fragrances.find(f => f.id === fid);
         if (target && data.price > 0) {
+          const meta = extractBottleMetadata(target.brand, (data.url || fid).replace(/[-_]/g, " "), target.bottle_size);
           addBottleQuote(target, {
             seller_id: "fragrance_heaven",
             seller_name: "Fragrance Heaven",
             price: data.price,
+            size: meta.label,
+            volume_ml: meta.volume,
             whatsapp: "7838191410",
             shipping: "Pan-India Shipping",
             dispatch: "24-48 hrs",
@@ -817,11 +888,13 @@ async function runMasterRefresh() {
       frag.community_sellers.sort((a, b) => a.price - b.price);
       frag.in_seller_stock = true;
       frag.community_price = frag.community_sellers[0].price;
+      frag.community_bottle_size = frag.community_sellers[0].size || '100ml Retail Bottle';
       frag.lowest_seller = frag.community_sellers[0].seller_name;
       inStockBottlesCount++;
     } else {
       frag.in_seller_stock = false;
       frag.community_price = null;
+      frag.community_bottle_size = null;
       frag.lowest_seller = null;
     }
 
