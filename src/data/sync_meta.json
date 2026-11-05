@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-11-05T18:11:11.911Z",
+  "last_sync": "2026-11-05T20:55:27.403Z",
   "catalog_total": 1154,
   "in_stock_count": 889,
   "decants_available_count": 708,
@@ -34,7 +34,7 @@
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 438,
+      "bottles": 437,
       "decants": 393,
       "type": "Dual"
     }
