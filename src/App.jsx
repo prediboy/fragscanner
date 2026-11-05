@@ -479,7 +479,7 @@ export default function App() {
             list.push({
               seller_id: s.seller_id,
               seller_name: s.seller_name,
-              label: s.size || (f.bottle_size ? `${f.bottle_size} Retail Bottle` : '100ml Retail Bottle'),
+              label: s.size || (f.bottle_size ? `${f.bottle_size} Retail Bottle` : 'Retail Bottle'),
               price: p,
               whatsapp: s.whatsapp,
               isBottle: true

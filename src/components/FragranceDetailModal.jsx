@@ -218,7 +218,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                       <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
                                       <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700 font-mono font-semibold">
-                                        {seller.size || '100ml Retail Bottle'}
+                                        {seller.size || 'Retail Bottle'}
                                       </span>
                                       {isLowest && (
                                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">

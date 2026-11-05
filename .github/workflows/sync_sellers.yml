@@ -28,6 +28,8 @@ jobs:
         run: npm ci --omit=dev
 
       - name: Run Master Refresh Pipeline across All 8 Sellers
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node scripts/refresh_all_sellers.cjs
 

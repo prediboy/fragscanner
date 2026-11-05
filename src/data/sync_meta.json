@@ -1,41 +1,47 @@
 {
-  "last_sync": "2026-11-05T20:55:27.403Z",
-  "catalog_total": 1154,
-  "in_stock_count": 889,
-  "decants_available_count": 708,
-  "dual_available_count": 695,
+  "last_sync": "2026-11-05T21:05:00.000Z",
+  "sync_date": "2026-11-05",
+  "catalog_total": 1159,
+  "in_stock_count": 892,
+  "decants_available_count": 711,
+  "dual_available_count": 697,
+  "enriched_new_arrivals_count": 4,
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
-      "bottles": 411,
-      "type": "Full Bottles"
+      "bottles": 353,
+      "decants": 0,
+      "type": "Bottles"
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 453,
-      "type": "Full Bottles"
+      "bottles": 787,
+      "decants": 0,
+      "type": "Bottles"
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 208,
-      "type": "Full Bottles"
+      "bottles": 381,
+      "decants": 0,
+      "type": "Bottles"
     },
     "liquid_emotions": {
       "name": "Liquid Emotions",
-      "decants": 78,
-      "type": "Decants (5-30ml)"
+      "bottles": 0,
+      "decants": 418,
+      "type": "Decants"
     },
     "bluewings": {
       "name": "Blue Wings Fragrances",
-      "bottles": 2,
-      "decants": 93,
+      "bottles": 315,
+      "decants": 62,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
       "bottles": 437,
-      "decants": 393,
+      "decants": 396,
       "type": "Dual"
     }
   }
