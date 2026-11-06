@@ -385,6 +385,21 @@ async function runMasterRefresh() {
       nClean = EXPLICIT_ALIASES[aliasKey];
     }
 
+    // Community Shorthand Expansion
+    if (bClean === "armaf" && nClean.startsWith("cdn")) {
+      if (nClean.startsWith("cdnim") || nClean.startsWith("cdnintense")) {
+        nClean = nClean.replace(/^cdn(im|intense)/, "clubdenuitintenseman");
+      } else {
+        nClean = nClean.replace(/^cdn/, "clubdenuit");
+      }
+    }
+    if (bClean.includes("reef") && nClean.includes("33")) {
+      nClean = "33black200ml";
+    }
+    if (bClean === "ajmal" && nClean.includes("evokegold")) {
+      nClean = "evokegoldedition";
+    }
+
     // 0. Match by registered canonical aliases
     let match = fragrances.find(f => {
       const fbClean = cleanStr(f.brand);
