@@ -14,12 +14,13 @@ import {
 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 9 Sellers', tag: 'All' },
+  { id: 'all', name: 'All 10 Sellers', tag: 'All' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
   { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 Bottles' },
   { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
+  { id: 'rp_decants', name: 'RP Decants', tag: '🧪 Decants' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
   { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' },
   { id: 'aar_fragrances', name: 'AAR Fragrances', tag: '🍾 & 🧪' },
@@ -558,13 +559,15 @@ export default function App() {
           if (selectedSeller !== 'all' && s.seller_id !== selectedSeller) continue;
           const p = Number(s.price);
           if (p && !isNaN(p) && p > 0) {
+            const isTesterQuote = !!(s.is_tester || (s.size && /tester/i.test(s.size)));
             list.push({
               seller_id: s.seller_id,
               seller_name: s.seller_name,
               label: s.size || (f.bottle_size ? `${f.bottle_size} Retail Bottle` : 'Retail Bottle'),
               price: p,
               whatsapp: s.whatsapp,
-              isBottle: true
+              isBottle: true,
+              isTester: isTesterQuote
             });
           }
         }
@@ -615,6 +618,7 @@ export default function App() {
     const bottleDisplaySize = bestBottleQuote 
       ? bestBottleQuote.label.replace(' Retail Bottle', ' Bottle') 
       : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
+    const isLowestTester = !!(bestBottleQuote?.isTester || f.is_tester || (f.community_bottle_size && /tester/i.test(f.community_bottle_size)));
 
     return (
       <div 
@@ -628,6 +632,12 @@ export default function App() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/60 px-2.5 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-500/40">
                 {f.brand}
               </span>
+              {isLowestTester && (
+                <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-md bg-purple-50 text-purple-900 border border-purple-300 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-500/50 flex items-center gap-1 shadow-2xs" title="Tester Unit: 100% authentic fragrance in plain tester packaging">
+                  <span>🧪</span>
+                  <span>Tester Unit</span>
+                </span>
+              )}
               {f.is_new_arrival && (
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-500/60 font-mono flex items-center gap-1 shadow-2xs">
                   <span className="text-xs leading-none">✨</span>
@@ -801,7 +811,19 @@ export default function App() {
                 return (
                   <div key={qIdx} className="bg-white dark:bg-slate-900 border border-glacier-border dark:border-slate-800 rounded-lg p-2.5 flex items-center justify-between text-xs">
                     <div>
-                      <div className="font-bold text-slate-900 dark:text-slate-100">{q.seller_name}</div>
+                      <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
+                        <span>{q.seller_name}</span>
+                        {q.isTester && (
+                          <span className="px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 font-bold text-[9px] border border-purple-300 dark:border-purple-600 font-mono">
+                            🧪 TESTER
+                          </span>
+                        )}
+                        {!q.isTester && q.isBottle && (
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold text-[9px] border border-emerald-200 dark:border-emerald-800 font-mono">
+                            📦 BNIB
+                          </span>
+                        )}
+                      </div>
                       <div className="text-[10px] text-glacier-textMuted font-mono">{q.label} • In Stock</div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -912,8 +934,8 @@ export default function App() {
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px] shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-glacier-success animate-pulse"></span>
-              <span className="hidden md:inline">9 Community Sellers Monitored</span>
-              <span className="md:hidden">9 Sellers</span>
+              <span className="hidden md:inline">10 Community Sellers Monitored</span>
+              <span className="md:hidden">10 Sellers</span>
             </button>
           </div>
 

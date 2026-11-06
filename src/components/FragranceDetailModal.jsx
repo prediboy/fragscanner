@@ -177,7 +177,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       )}
                     </div>
                     <p className="text-xs text-slate-300">
-                      Live quotes verified across 6 sellers for both <strong>Full Bottles</strong> and <strong>Decants (5ml - 30ml)</strong>:
+                      Live quotes verified across 10 community sellers for both <strong>Full Bottles & Testers</strong> and <strong>Decants (2ml - 30ml)</strong>:
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -245,9 +245,16 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                   <div>
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                       <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
-                                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700 font-mono font-semibold">
-                                        {seller.size || 'Retail Bottle'}
-                                      </span>
+                                      {seller.is_tester || (seller.size && /tester/i.test(seller.size)) ? (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-purple-950/80 text-purple-300 border border-purple-500 font-mono font-bold flex items-center gap-1">
+                                          <span>🧪</span>
+                                          <span>{seller.size || 'Tester'}</span>
+                                        </span>
+                                      ) : (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700 font-mono font-semibold">
+                                          {seller.size || 'Retail Bottle'}
+                                        </span>
+                                      )}
                                       {isLowest && (
                                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
                                           ★ Best Deal
@@ -402,8 +409,8 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   </div>
 
                   {fragrance.has_decants && fragrance.decant_comparison ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                      {['5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                      {['2ml', '5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
                         const sizeData = fragrance.decant_comparison[size];
                         if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
 

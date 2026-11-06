@@ -310,6 +310,17 @@ async function runMasterRefresh() {
       decant_sizes: ["5ml", "10ml", "20ml", "30ml"]
     },
     {
+      id: "rp_decants",
+      seller_name: "RP Decants",
+      type: "decant",
+      sheet_url: "https://docs.google.com/spreadsheets/d/1Ti2RE9J1EuHCk6hvsWmxJyD121swkybci_BbmjAYkRQ/gviz/tq?tqx=out:csv&gid=2020759273",
+      whatsapp: "9016445533",
+      whatsapp_group: "https://chat.whatsapp.com/KcjUpP8RKXu98XNc7pv6Om",
+      shipping: "₹90 Pan-India (Free above ₹1,200)",
+      dispatch: "3-4 days",
+      decant_sizes: ["2ml", "5ml", "10ml"]
+    },
+    {
       id: "bluewings",
       seller_name: "Blue Wings Fragrances",
       type: "decant_and_bottle",
@@ -581,8 +592,12 @@ async function runMasterRefresh() {
       }
     }
 
-    const sizeKey = sellerObj.size || 'Retail Bottle';
-    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id && (s.size || 'Retail Bottle') === sizeKey);
+    const isTester = !!(sellerObj.is_tester || (sellerObj.size && /tester/i.test(sellerObj.size)) || (sellerObj.product_url && /tester/i.test(sellerObj.product_url)));
+    sellerObj.is_tester = isTester;
+    sellerObj.packaging_type = isTester ? 'Tester' : 'Retail Bottle';
+
+    const sizeKey = sellerObj.size || (isTester ? 'Tester Bottle' : 'Retail Bottle');
+    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id && (s.size || (s.is_tester ? 'Tester Bottle' : 'Retail Bottle')) === sizeKey);
     if (existing) {
       if (sellerObj.price < existing.price) {
         existing.price = sellerObj.price;
@@ -615,7 +630,8 @@ async function runMasterRefresh() {
     bluewings_bottles: 0,
     bluewings_decants: 0,
     whiffculture_bottles: 0,
-    whiffculture_decants: 0
+    whiffculture_decants: 0,
+    rp_decants: 0
   };
 
   let enrichedCount = 0;
@@ -623,9 +639,9 @@ async function runMasterRefresh() {
   const newlyEnrichedList = [];
 
   // ==========================================
-  // SOURCE 1, 2, 3, 4: GOOGLE SHEETS
+  // SOURCE 1, 2, 3, 4: GOOGLE SHEETS (BOTTLES & TESTERS)
   // ==========================================
-  const sheetSellers = sellersList.filter(s => s.sheet_url);
+  const sheetSellers = sellersList.filter(s => s.sheet_url && s.type === 'bottle');
   console.log(`\n--- Syncing Google Sheets (${sheetSellers.map(s => s.seller_name).join(', ')}) ---`);
   for (const seller of sheetSellers) {
     try {
@@ -658,8 +674,12 @@ async function runMasterRefresh() {
         if (matched) {
           const fullNameForMeta = sizeRaw ? `${nameRaw} ${sizeRaw}` : nameRaw;
           const meta = extractBottleMetadata(brandRaw, fullNameForMeta, matched.bottle_size);
+          let isTester = (typeRaw.toLowerCase() === 'tester');
+          if (seller.id === 'enigma_perfumes' && /the most wanted/i.test(nameRaw)) {
+            isTester = true;
+          }
           let label = meta.label;
-          if (typeRaw.toLowerCase() === 'tester' && !label.toLowerCase().includes('tester')) {
+          if (isTester && !label.toLowerCase().includes('tester')) {
             label = `${meta.volume}ml Tester`;
           }
           addBottleQuote(matched, {
@@ -667,6 +687,8 @@ async function runMasterRefresh() {
             seller_name: seller.seller_name,
             price,
             size: label,
+            is_tester: isTester,
+            packaging_type: isTester ? 'Tester' : 'Retail Bottle',
             volume_ml: meta.volume,
             whatsapp: seller.whatsapp,
             shipping: seller.shipping,
@@ -704,6 +726,61 @@ async function runMasterRefresh() {
       console.log(`  ✓ Matched ${stats[seller.id]} bottles for ${seller.seller_name}`);
     } catch (err) {
       console.error(`  ❌ Error syncing ${seller.seller_name}:`, err.message);
+    }
+  }
+
+  // ==========================================
+  // SOURCE 5: RP DECANTS (GOOGLE SHEET)
+  // ==========================================
+  const rpSeller = sellersList.find(s => s.id === "rp_decants");
+  if (rpSeller && rpSeller.sheet_url) {
+    try {
+      console.log(`\n--- Syncing RP Decants (${rpSeller.seller_name}) ---`);
+      const csvData = await fetchUrl(rpSeller.sheet_url);
+      const rows = parseCSV(csvData);
+      console.log(`  Read ${rows.length} rows from ${rpSeller.seller_name}`);
+      let currentBrand = "";
+
+      for (let rIdx = 1; rIdx < rows.length; rIdx++) {
+        const row = rows[rIdx];
+        const b = row[0] ? row[0].trim() : "";
+        if (b) currentBrand = b;
+        const nameRaw = row[3] ? row[3].trim() : "";
+        if (!nameRaw || nameRaw.length < 2) continue;
+
+        const p2 = parseInt((row[6] || "").replace(/[^\d]/g, ""), 10);
+        const p5 = parseInt((row[7] || "").replace(/[^\d]/g, ""), 10);
+        const p10 = parseInt((row[8] || "").replace(/[^\d]/g, ""), 10);
+        const inspiredBy = row[9] ? row[9].trim() : "";
+
+        const sizes = {};
+        if (p2 && p2 > 0) sizes["2ml"] = p2;
+        if (p5 && p5 > 0) sizes["5ml"] = p5;
+        if (p10 && p10 > 0) sizes["10ml"] = p10;
+
+        const prices = Object.values(sizes);
+        if (prices.length === 0) continue;
+
+        const brandNorm = normalizeBrand(currentBrand);
+        const matched = findBestMatch(brandNorm, nameRaw, inspiredBy);
+        if (matched) {
+          addDecantQuote(matched, {
+            seller_id: rpSeller.id,
+            seller_name: rpSeller.seller_name,
+            whatsapp: rpSeller.whatsapp,
+            shipping: rpSeller.shipping,
+            dispatch: rpSeller.dispatch,
+            sizes,
+            lowest_price: Math.min(...prices),
+            in_stock: true,
+            verified: true
+          });
+          stats.rp_decants++;
+        }
+      }
+      console.log(`  ✓ Matched ${stats.rp_decants} decants for ${rpSeller.seller_name}`);
+    } catch (err) {
+      console.error(`  ❌ Error syncing RP Decants:`, err.message);
     }
   }
 
@@ -1049,6 +1126,8 @@ async function runMasterRefresh() {
     { id: "second_theory", name: "Second Theory" },
     { id: "fragfever", name: "FragFever" },
     { id: "apex_aroma", name: "Apex Aroma" },
+    { id: "enigma_perfumes", name: "Enigma Perfumes" },
+    { id: "rp_decants", name: "RP Decants" },
     { id: "liquid_emotions", name: "Liquid Emotions" },
     { id: "bluewings", name: "Blue Wings" },
     { id: "whiffculture", name: "Whiff Culture" },
@@ -1108,6 +1187,8 @@ async function runMasterRefresh() {
       frag.community_price = best.price;
       frag.community_bottle_size = best.size || 'Retail Bottle';
       frag.lowest_seller = best.seller_name;
+      frag.is_tester = !!(best.is_tester || (best.size && /tester/i.test(best.size)));
+      frag.packaging_type = frag.is_tester ? 'Tester' : 'Retail Bottle';
       inStockBottlesCount++;
 
       const todayDate = new Date().toISOString().split('T')[0];
@@ -1208,7 +1289,7 @@ async function runMasterRefresh() {
       }
     }
 
-    // 3. Compute decant comparison per size (5ml, 8ml, 10ml, 20ml, 30ml)
+    // 3. Compute decant comparison per size (2ml, 5ml, 8ml, 10ml, 20ml, 30ml)
     if (frag.community_decants && frag.community_decants.length > 0) {
       frag.has_decants = true;
       decantsAvailableCount++;
@@ -1216,7 +1297,7 @@ async function runMasterRefresh() {
       const comp = {};
       const allPrices = [];
 
-      ['5ml', '8ml', '10ml', '20ml', '30ml'].forEach(sz => {
+      ['2ml', '5ml', '8ml', '10ml', '20ml', '30ml'].forEach(sz => {
         const quotes = [];
         frag.community_decants.forEach(d => {
           if (d.sizes && d.sizes[sz]) {
@@ -1354,15 +1435,18 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 7,
+    sellers_active: 10,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
       apex_aroma: { name: "Apex Aroma", bottles: stats.apex_aroma, type: "Full Bottles" },
-      enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, type: "Full Bottles" },
+      enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, type: "Full Bottles & Testers" },
       liquid_emotions: { name: "Liquid Emotions", decants: stats.liquid_emotions, type: "Decants (5-30ml)" },
+      rp_decants: { name: "RP Decants", decants: stats.rp_decants, type: "Decants (2-10ml)" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
-      whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" }
+      whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
+      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, decants: fragrances.filter(f => (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length, type: "Dual" },
+      fragrance_heaven: { name: "Fragrance Heaven", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'fragrance_heaven')).length, type: "Full Bottles" }
     }
   };
   fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");

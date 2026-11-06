@@ -129,7 +129,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400">
-                    Live olfactory twins • Full Bottles & Decants (5ml–30ml) Across 8 Sellers
+                    Live olfactory twins • Full Bottles & Decants (2ml–30ml) Across 10 Sellers
                   </p>
                 </div>
               </div>

@@ -73,6 +73,21 @@
     ]
   },
   {
+    "id": "rp_decants",
+    "seller_name": "RP Decants",
+    "type": "decant",
+    "sheet_url": "https://docs.google.com/spreadsheets/d/1Ti2RE9J1EuHCk6hvsWmxJyD121swkybci_BbmjAYkRQ/gviz/tq?tqx=out:csv&gid=2020759273",
+    "whatsapp": "9016445533",
+    "whatsapp_group": "https://chat.whatsapp.com/KcjUpP8RKXu98XNc7pv6Om",
+    "shipping": "₹90 Pan-India (Free above ₹1,200)",
+    "dispatch": "3-4 days",
+    "decant_sizes": [
+      "2ml",
+      "5ml",
+      "10ml"
+    ]
+  },
+  {
     "id": "bluewings",
     "seller_name": "Blue Wings Fragrances",
     "type": "decant_and_bottle",
