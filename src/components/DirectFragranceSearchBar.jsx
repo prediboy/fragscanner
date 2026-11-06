@@ -231,8 +231,8 @@ export default function DirectFragranceSearchBar({
                       <div className="flex items-center gap-3">
                         {f.community_price && !isNaN(Number(f.community_price)) && Number(f.community_price) > 0 ? (
                           <div className="text-right">
-                            <span className="text-[10px] text-slate-400 uppercase font-mono block">Bottle</span>
-                            <span className="text-xs font-bold text-slate-900 font-mono">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono block">Bottle</span>
+                            <span className="text-xs font-bold text-slate-900 dark:text-emerald-400 font-mono price-rate">
                               ₹{Number(f.community_price).toLocaleString()}
                             </span>
                           </div>
@@ -240,8 +240,8 @@ export default function DirectFragranceSearchBar({
 
                         {f.lowest_decant_price && !isNaN(Number(f.lowest_decant_price)) && Number(f.lowest_decant_price) > 0 ? (
                           <div className="text-right">
-                            <span className="text-[10px] text-slate-400 uppercase font-mono block">Decant</span>
-                            <span className="text-xs font-bold text-emerald-600 font-mono">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono block">Decant</span>
+                            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-mono price-rate">
                               ₹{Number(f.lowest_decant_price).toLocaleString()}
                             </span>
                           </div>
@@ -253,7 +253,7 @@ export default function DirectFragranceSearchBar({
                         <button
                           type="button"
                           onClick={() => handleSelect(f)}
-                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-mono font-medium flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-mono font-medium flex items-center gap-1 transition-colors border border-transparent dark:border-slate-700"
                         >
                           <span>Rates</span>
                           <ArrowRight className="w-3 h-3" />

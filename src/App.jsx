@@ -618,13 +618,13 @@ export default function App() {
     return (
       <div 
         key={f.id || idx}
-        className={`bg-white rounded-2xl border ${f.is_price_drop ? 'border-emerald-300 ring-1 ring-emerald-500/20 shadow-sm' : 'border-glacier-border'} hover:border-cyan-500 shadow-xs hover:shadow-md transition-all p-3.5 sm:p-5 flex flex-col justify-between space-y-4 overflow-hidden relative w-full`}
+        className={`bg-white dark:bg-slate-900/95 rounded-2xl border ${f.is_price_drop ? 'border-emerald-300 dark:border-emerald-500/50 ring-1 ring-emerald-500/20 shadow-sm' : 'border-glacier-border dark:border-slate-800'} hover:border-cyan-500 dark:hover:border-cyan-400 shadow-xs hover:shadow-md transition-all p-3.5 sm:p-5 flex flex-col justify-between space-y-4 overflow-hidden relative w-full`}
       >
         <div>
           {/* Header with Match Percentage & Brand */}
           <div className="flex items-center justify-between mb-2 flex-wrap gap-1.5">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-cyan-800 font-bold bg-cyan-50 px-2.5 py-0.5 rounded-md border border-cyan-200">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/60 px-2.5 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-500/40">
                 {f.brand}
               </span>
               {f.is_new_arrival && (
@@ -634,8 +634,8 @@ export default function App() {
                 </span>
               )}
               {f.is_price_drop && (
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 font-mono flex items-center gap-1 shadow-2xs">
-                  <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-500/60 font-mono flex items-center gap-1 shadow-2xs">
+                  <svg className="w-3 h-3 text-emerald-700 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
                     <polyline points="17 18 23 18 23 12"></polyline>
                   </svg>
@@ -643,19 +643,19 @@ export default function App() {
                 </span>
               )}
               {item.isCloneTargetMatch && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 font-mono flex items-center gap-1 shadow-2xs">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-500/60 font-mono flex items-center gap-1 shadow-2xs">
                   🎯 Closest Match
                 </span>
               )}
               {item.matchedAlias && (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-cyan-100 text-cyan-900 border border-cyan-200">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950/70 text-cyan-900 dark:text-cyan-200 border border-cyan-200 dark:border-cyan-500/50">
                   🏷 {item.matchedAlias}
                 </span>
               )}
             </div>
             
-            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 font-mono text-xs font-bold shadow-2xs">
-              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-500/50 text-amber-900 dark:text-amber-300 font-mono text-xs font-bold shadow-2xs">
+              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 dark:fill-amber-400 dark:text-amber-400" />
               {dealsSubFilter ? (
                 <span>{(Number(f.rating_value) || 4.2).toFixed(1)} on Fragrantica</span>
               ) : (
@@ -667,13 +667,13 @@ export default function App() {
           {/* Title & Pricing */}
           <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1">
             <div className="flex-1 min-w-0 pr-1">
-              <h3 className="font-heading font-bold text-lg text-slate-900 hover:text-cyan-700 transition-colors cursor-pointer truncate" onClick={() => setActiveFragrance(f)}>
+              <h3 className="font-heading font-bold text-lg text-slate-900 dark:text-slate-100 hover:text-cyan-700 dark:hover:text-cyan-400 transition-colors cursor-pointer truncate" onClick={() => setActiveFragrance(f)}>
                 {f.name}
               </h3>
               <p className="text-xs text-glacier-textMuted mt-0.5 break-words">
                 {f.dna_inspiration ? (
                   <span>
-                    Inspired by: <strong className="font-semibold text-slate-800">{f.dna_inspiration}</strong>
+                    Inspired by: <strong className="font-semibold text-slate-800 dark:text-slate-200">{f.dna_inspiration}</strong>
                   </span>
                 ) : (
                   f.dna_type
@@ -686,18 +686,18 @@ export default function App() {
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-end gap-0.5 sm:gap-1.5 items-end">
                     {f.is_price_drop && f.previous_price && (
-                      <span className="text-[11px] text-slate-400 line-through font-mono font-medium">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 line-through font-mono font-medium">
                         ₹{Number(f.previous_price).toLocaleString()}
                       </span>
                     )}
-                    <div className={`font-mono text-lg font-bold leading-tight ${f.is_price_drop ? 'text-emerald-600 font-black' : 'text-slate-900'}`}>
+                    <div className={`font-mono text-lg font-bold leading-tight price-rate ${f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400 font-black price-rate-drop' : 'text-slate-900 dark:text-emerald-400'}`}>
                       ₹{bottlePriceNum.toLocaleString()}
                     </div>
                   </div>
                   <div className="text-[11px] text-glacier-textMuted font-mono font-medium flex items-center justify-end gap-1 mt-0.5">
                     <span>{bottleDisplaySize}</span>
                     {f.is_price_drop && (
-                      <span className="text-emerald-700 bg-emerald-100/90 px-1.5 py-0.2 rounded text-[10px] font-bold">
+                      <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-600/40 px-1.5 py-0.2 rounded text-[10px] font-bold">
                         📉 -{f.price_change_percentage || Math.round((Math.abs(f.previous_price - bottlePriceNum) / f.previous_price) * 100)}%
                       </span>
                     )}
@@ -709,7 +709,7 @@ export default function App() {
                 <div className="text-xs text-glacier-textMuted font-mono">Unquoted</div>
               )}
               {hasDecantPrice && (
-                <div className="text-[11px] text-emerald-600 font-semibold font-mono mt-0.5">
+                <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold font-mono mt-0.5 price-rate">
                   Decant from ₹{decantPriceNum.toLocaleString()}
                 </div>
               )}
@@ -717,14 +717,14 @@ export default function App() {
           </div>
 
           {/* EXACT STRUCTURED PROOF BREAKDOWN */}
-          <div className="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+          <div className="mt-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 space-y-2 text-xs">
             {item.likeReasons.map((reason, rIdx) => {
               const match = reason.match(/^([^\s\w]+)\s*(.*)$/u);
               const emoji = match ? match[1] : '•';
               const text = match ? match[2] : reason;
 
               return (
-                <div key={rIdx} className="flex items-start gap-2 leading-relaxed text-slate-800">
+                <div key={rIdx} className="flex items-start gap-2 leading-relaxed text-slate-800 dark:text-slate-200">
                   <span className="shrink-0 text-sm mt-0.5">{emoji}</span>
                   <span>{text}</span>
                 </div>
@@ -734,10 +734,10 @@ export default function App() {
         </div>
 
         {/* In-Stock Seller Spread & Actions */}
-        <div className="pt-2 border-t border-glacier-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="pt-2 border-t border-glacier-subtle dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="text-[11px] text-glacier-textMuted">
             <span>In stock: </span>
-            <strong className="text-slate-900">
+            <strong className="text-slate-900 dark:text-slate-100">
               {f.community_sellers && f.community_sellers.length > 0 
                 ? (f.community_seller_name || f.community_sellers[0].seller_name)
                 : f.community_decants && f.community_decants.length > 0
@@ -749,7 +749,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setExpandedCardId(isExpanded ? null : f.id)}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-800 text-xs font-mono font-medium transition-colors bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1 shadow-2xs"
+              className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-800 dark:hover:border-cyan-400 text-xs font-mono font-medium transition-colors bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 flex items-center gap-1 shadow-2xs"
             >
               <span>{isExpanded ? 'Close' : 'Compare Rates'}</span>
               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -782,7 +782,7 @@ export default function App() {
 
         {/* Expanded Sellers Drawer */}
         {isExpanded && (
-          <div className="mt-3 pt-3 border-t border-glacier-border space-y-2 bg-glacier-bg/60 p-3 rounded-xl animate-in fade-in duration-100">
+          <div className="mt-3 pt-3 border-t border-glacier-border dark:border-slate-800 space-y-2 bg-glacier-bg/60 dark:bg-slate-950/70 p-3 rounded-xl animate-in fade-in duration-100">
             <span className="text-[11px] font-mono text-glacier-textMuted uppercase font-bold block">
               Direct Community Quotes ({validQuotes.length}):
             </span>
@@ -798,13 +798,13 @@ export default function App() {
                 const wa = phoneDigits ? `https://wa.me/${intlPhone}?text=${msg}` : null;
 
                 return (
-                  <div key={qIdx} className="bg-white border border-glacier-border rounded-lg p-2.5 flex items-center justify-between text-xs">
+                  <div key={qIdx} className="bg-white dark:bg-slate-900 border border-glacier-border dark:border-slate-800 rounded-lg p-2.5 flex items-center justify-between text-xs">
                     <div>
-                      <div className="font-bold text-slate-900">{q.seller_name}</div>
+                      <div className="font-bold text-slate-900 dark:text-slate-100">{q.seller_name}</div>
                       <div className="text-[10px] text-glacier-textMuted font-mono">{q.label} • In Stock</div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="font-mono font-bold text-slate-900">₹{q.price.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-slate-900 dark:text-emerald-400 price-rate">₹{q.price.toLocaleString()}</span>
                       {wa && (
                         <a 
                           href={wa} 
