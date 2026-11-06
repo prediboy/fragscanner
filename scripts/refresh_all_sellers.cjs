@@ -201,7 +201,7 @@ async function runMasterRefresh() {
   const sellerConfigPath = path.join(__dirname, "../src/data/seller_config.json");
   const syncMetaPath = path.join(__dirname, "../src/data/sync_meta.json");
 
-  const fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
+  let fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
   console.log(`Loaded ${fragrances.length} catalog fragrances.`);
 
   // Backup existing quotes & price snapshots to capture price history with dates
@@ -282,6 +282,22 @@ async function runMasterRefresh() {
       inspired_col: 3,
       hot_col: -1,
       start_row: 9
+    },
+    {
+      id: "enigma_perfumes",
+      seller_name: "Enigma Perfumes",
+      type: "bottle",
+      sheet_url: "https://docs.google.com/spreadsheets/d/14sQZhYjsWjZtAkZhFRgzq0rfzn1wKXqiVOMhwk6ks0E/gviz/tq?tqx=out:csv&gid=0",
+      whatsapp: "7982410620",
+      shipping: "Free Pan-India Delivery (Extra for remote areas)",
+      dispatch: "24-48 hrs",
+      type_col: 0,
+      brand_col: 1,
+      product_col: 2,
+      size_col: 3,
+      price_col: 4,
+      hot_col: -1,
+      start_row: 1
     },
     {
       id: "liquid_emotions",
@@ -594,6 +610,7 @@ async function runMasterRefresh() {
     second_theory: 0,
     fragfever: 0,
     apex_aroma: 0,
+    enigma_perfumes: 0,
     liquid_emotions: 0,
     bluewings_bottles: 0,
     bluewings_decants: 0,
@@ -606,10 +623,11 @@ async function runMasterRefresh() {
   const newlyEnrichedList = [];
 
   // ==========================================
-  // SOURCE 1, 2, 3: GOOGLE SHEETS
+  // SOURCE 1, 2, 3, 4: GOOGLE SHEETS
   // ==========================================
-  console.log("\n--- Syncing Google Sheets (Second Theory, FragFever, Apex Aroma) ---");
-  for (const seller of [sellersList[0], sellersList[1], sellersList[2]]) {
+  const sheetSellers = sellersList.filter(s => s.sheet_url);
+  console.log(`\n--- Syncing Google Sheets (${sheetSellers.map(s => s.seller_name).join(', ')}) ---`);
+  for (const seller of sheetSellers) {
     try {
       console.log(`Fetching CSV for ${seller.seller_name}...`);
       const csvData = await fetchUrl(seller.sheet_url);
@@ -623,6 +641,13 @@ async function runMasterRefresh() {
         const brandRaw = row[seller.brand_col]?.trim() || "";
         const nameRaw = row[seller.product_col]?.trim() || "";
         const priceClean = (row[seller.price_col] || "").replace(/[^\d]/g, "");
+        const typeRaw = seller.type_col !== undefined ? (row[seller.type_col]?.trim() || "") : "";
+        const sizeRaw = seller.size_col !== undefined ? (row[seller.size_col]?.trim() || "") : "";
+
+        // Skip sample vials or decants from full bottle sheets
+        if (typeRaw && /vial|sample/i.test(typeRaw)) continue;
+        if (sizeRaw && /\b(1\.5ml|1\.7ml|2ml|5ml|8ml|10ml)\b/i.test(sizeRaw)) continue;
+
         if (!brandRaw || !nameRaw || !priceClean || !/[a-zA-Z]{3,}/.test(nameRaw) || /^\d+$/.test(nameRaw.trim())) continue;
         const price = parseInt(priceClean, 10);
         if (price < 400 || price > 50000) continue;
@@ -631,12 +656,17 @@ async function runMasterRefresh() {
 
         const matched = findBestMatch(brandRaw, nameRaw);
         if (matched) {
-          const meta = extractBottleMetadata(brandRaw, nameRaw, matched.bottle_size);
+          const fullNameForMeta = sizeRaw ? `${nameRaw} ${sizeRaw}` : nameRaw;
+          const meta = extractBottleMetadata(brandRaw, fullNameForMeta, matched.bottle_size);
+          let label = meta.label;
+          if (typeRaw.toLowerCase() === 'tester' && !label.toLowerCase().includes('tester')) {
+            label = `${meta.volume}ml Tester`;
+          }
           addBottleQuote(matched, {
             seller_id: seller.id,
             seller_name: seller.seller_name,
             price,
-            size: meta.label,
+            size: label,
             volume_ml: meta.volume,
             whatsapp: seller.whatsapp,
             shipping: seller.shipping,
@@ -647,7 +677,8 @@ async function runMasterRefresh() {
         } else if (!isDesigner(brandRaw) && !isDesigner(nameRaw) && price >= 800 && enrichedCount < MAX_AUTO_ENRICH_PER_SYNC) {
           const alreadyExists = fragrances.some(f => cleanStr(f.brand) === cleanStr(brandRaw) && cleanStr(f.name) === cleanStr(nameRaw));
           if (!alreadyExists) {
-            const meta = extractBottleMetadata(brandRaw, nameRaw);
+            const fullNameForMeta = sizeRaw ? `${nameRaw} ${sizeRaw}` : nameRaw;
+            const meta = extractBottleMetadata(brandRaw, fullNameForMeta);
             if (meta.volume >= 30 && !meta.isMini) {
               try {
                 const newEntry = await enrichAndAddPerfume(brandRaw, nameRaw, price, meta.label, {
@@ -1323,11 +1354,12 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 6,
+    sellers_active: 7,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
       apex_aroma: { name: "Apex Aroma", bottles: stats.apex_aroma, type: "Full Bottles" },
+      enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, type: "Full Bottles" },
       liquid_emotions: { name: "Liquid Emotions", decants: stats.liquid_emotions, type: "Decants (5-30ml)" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" }

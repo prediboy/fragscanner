@@ -14,10 +14,11 @@ import {
 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 8 Sellers', tag: 'All' },
+  { id: 'all', name: 'All 9 Sellers', tag: 'All' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
+  { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 Bottles' },
   { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
   { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' },
@@ -911,8 +912,8 @@ export default function App() {
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px] shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-glacier-success animate-pulse"></span>
-              <span className="hidden md:inline">8 Community Sellers Monitored</span>
-              <span className="md:hidden">8 Sellers</span>
+              <span className="hidden md:inline">9 Community Sellers Monitored</span>
+              <span className="md:hidden">9 Sellers</span>
             </button>
           </div>
 

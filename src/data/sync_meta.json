@@ -1,25 +1,73 @@
 {
-  "last_sync": "2026-11-06T18:20:59.133Z",
+  "last_sync": "2026-11-06T19:18:46.888Z",
   "sync_date": "2026-11-06",
-  "catalog_total": 1180,
-  "in_stock_count": 913,
-  "decants_available_count": 723,
-  "dual_available_count": 711,
-  "enriched_new_arrivals_count": 2,
-  "price_drops_count": 18,
-  "new_arrivals_count": 8,
+  "catalog_total": 1183,
+  "in_stock_count": 916,
+  "decants_available_count": 724,
+  "dual_available_count": 712,
+  "enriched_new_arrivals_count": 5,
+  "price_drops_count": 47,
+  "new_arrivals_count": 11,
   "active_price_drops": [
+    {
+      "id": "rasasi-hawas-fire",
+      "name": "Hawas Fire",
+      "brand": "Rasasi",
+      "current_price": 3500,
+      "previous_price": 3550,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "lattafa-khamrah",
+      "name": "Khamrah",
+      "brand": "Lattafa",
+      "current_price": 3000,
+      "previous_price": 3050,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
     {
       "id": "lattafa-khamrah-qahwa",
       "name": "Khamrah Qahwa",
       "brand": "Lattafa",
-      "current_price": 3050,
-      "previous_price": 3449,
-      "drop_amount": 399,
-      "drop_percentage": 12,
-      "seller": "FragFever",
+      "current_price": 3000,
+      "previous_price": 3050,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
       "drop_date": "2026-11-06",
-      "drop_time": "16:39:12"
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "lattafa-al-nashama-caprice",
+      "name": "Al Nashama Caprice",
+      "brand": "Lattafa",
+      "current_price": 2350,
+      "previous_price": 2600,
+      "drop_amount": 250,
+      "drop_percentage": 10,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "lattafa-ameer-al-oudh-intense",
+      "name": "Ameer Al Oudh Intense Oud",
+      "brand": "Lattafa",
+      "current_price": 1875,
+      "previous_price": 1900,
+      "drop_amount": 25,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
     },
     {
       "id": "lattafa-qaed-al-fursan",
@@ -34,18 +82,6 @@
       "drop_time": "16:39:12"
     },
     {
-      "id": "afnan-9am-dive",
-      "name": "9 AM Dive",
-      "brand": "Afnan",
-      "current_price": 2600,
-      "previous_price": 2650,
-      "drop_amount": 50,
-      "drop_percentage": 2,
-      "seller": "FragFever",
-      "drop_date": "2026-11-06",
-      "drop_time": "18:20:53"
-    },
-    {
       "id": "afnan-turathi-brown",
       "name": "Turathi Brown",
       "brand": "Afnan",
@@ -58,6 +94,18 @@
       "drop_time": "16:39:12"
     },
     {
+      "id": "armaf-club-de-nuit-untold",
+      "name": "Club de Nuit Untold",
+      "brand": "Armaf",
+      "current_price": 3550,
+      "previous_price": 3600,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
       "id": "armaf-club-de-nuit-urban-man-elixir",
       "name": "Club de Nuit Urban Man Elixir",
       "brand": "Armaf",
@@ -68,6 +116,54 @@
       "seller": "FragFever",
       "drop_date": "2026-11-06",
       "drop_time": "17:21:55"
+    },
+    {
+      "id": "rasasi-hawas-ice",
+      "name": "Hawas Ice for Him",
+      "brand": "Rasasi",
+      "current_price": 2700,
+      "previous_price": 2750,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "rasasi-fattan-pour-homme",
+      "name": "Fattan Pour Homme",
+      "brand": "Rasasi",
+      "current_price": 1500,
+      "previous_price": 1600,
+      "drop_amount": 100,
+      "drop_percentage": 6,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-homme",
+      "name": "Shuhrah Pour Homme",
+      "brand": "Rasasi",
+      "current_price": 2750,
+      "previous_price": 2949,
+      "drop_amount": 199,
+      "drop_percentage": 7,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "rayhaan-lion",
+      "name": "Lion",
+      "brand": "Rayhaan",
+      "current_price": 2200,
+      "previous_price": 2250,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
     },
     {
       "id": "rasasi-daarej-pour-femme",
@@ -118,6 +214,42 @@
       "drop_time": "16:39:12"
     },
     {
+      "id": "rasasi-hawas-for-him",
+      "name": "Hawas For Him",
+      "brand": "Rasasi",
+      "current_price": 2500,
+      "previous_price": 2550,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "lattafa-angham",
+      "name": "Angham",
+      "brand": "Lattafa",
+      "current_price": 2500,
+      "previous_price": 2550,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "afnan-rare-reef",
+      "name": "Rare Reef",
+      "brand": "Afnan",
+      "current_price": 2650,
+      "previous_price": 2700,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
       "id": "afnan-turathi-electric",
       "name": "Turathi Electric",
       "brand": "Afnan",
@@ -128,6 +260,42 @@
       "seller": "Whiff Culture",
       "drop_date": "2026-11-06",
       "drop_time": "16:39:12"
+    },
+    {
+      "id": "rayhaan-italia",
+      "name": "Italia",
+      "brand": "Rayhaan",
+      "current_price": 2200,
+      "previous_price": 2250,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "french-avenue-liquid-brun",
+      "name": "Liquid Brun",
+      "brand": "French Avenue",
+      "current_price": 2950,
+      "previous_price": 2999,
+      "drop_amount": 49,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "french-avenue-vulcan-feu",
+      "name": "Vulcan Feu",
+      "brand": "French Avenue",
+      "current_price": 2900,
+      "previous_price": 3050,
+      "drop_amount": 150,
+      "drop_percentage": 5,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
     },
     {
       "id": "st-9002",
@@ -142,6 +310,18 @@
       "drop_time": "16:32:37"
     },
     {
+      "id": "st-9012",
+      "name": "Reflection",
+      "brand": "Mykonos",
+      "current_price": 1850,
+      "previous_price": 1950,
+      "drop_amount": 100,
+      "drop_percentage": 5,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
       "id": "st-9013",
       "name": "Reflection Elixir",
       "brand": "Mykonos",
@@ -152,6 +332,78 @@
       "seller": "Second Theory",
       "drop_date": "2026-11-06",
       "drop_time": "16:39:12"
+    },
+    {
+      "id": "st-9022",
+      "name": "Hawas Sapphire",
+      "brand": "Rasasi",
+      "current_price": 3500,
+      "previous_price": 3550,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9032",
+      "name": "Atheeri",
+      "brand": "Lattafa",
+      "current_price": 3000,
+      "previous_price": 3100,
+      "drop_amount": 100,
+      "drop_percentage": 3,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9036",
+      "name": "Aristo",
+      "brand": "Arabiyat Prestige",
+      "current_price": 2800,
+      "previous_price": 2950,
+      "drop_amount": 150,
+      "drop_percentage": 5,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9041",
+      "name": "Jean Lowe Immortel",
+      "brand": "Maison Alhambra",
+      "current_price": 2500,
+      "previous_price": 2550,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9042",
+      "name": "Incense 01",
+      "brand": "Swiss Arabian",
+      "current_price": 4150,
+      "previous_price": 4200,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9060",
+      "name": "9PM Nightout",
+      "brand": "Afnan",
+      "current_price": 3350,
+      "previous_price": 3400,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
     },
     {
       "id": "st-9078",
@@ -190,6 +442,90 @@
       "drop_time": "17:21:55"
     },
     {
+      "id": "st-9138",
+      "name": "Hamdan the Sheikh",
+      "brand": "Arabiyat Prestige",
+      "current_price": 2750,
+      "previous_price": 2950,
+      "drop_amount": 200,
+      "drop_percentage": 7,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9236",
+      "name": "Khair",
+      "brand": "Paris Corner",
+      "current_price": 1500,
+      "previous_price": 1749,
+      "drop_amount": 249,
+      "drop_percentage": 14,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9253",
+      "name": "Hawas Elixir",
+      "brand": "Rasasi",
+      "current_price": 2500,
+      "previous_price": 2550,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9265",
+      "name": "Opulence of Dubai",
+      "brand": "Swiss Arabian",
+      "current_price": 3800,
+      "previous_price": 4329,
+      "drop_amount": 529,
+      "drop_percentage": 12,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "st-9287",
+      "name": "Momento",
+      "brand": "Riiffs",
+      "current_price": 2800,
+      "previous_price": 2850,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "apex-pariscorner-moscowmule",
+      "name": "Moscow Mule",
+      "brand": "Paris Corner",
+      "current_price": 2600,
+      "previous_price": 2949,
+      "drop_amount": 349,
+      "drop_percentage": 12,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
+      "id": "apex-rayhaan-cedrusblanc",
+      "name": "Cedrus Blanc",
+      "brand": "Rayhaan",
+      "current_price": 2300,
+      "previous_price": 2350,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
+    },
+    {
       "id": "apex-reef-33black",
       "name": "Reef 33 Black",
       "brand": "Reef",
@@ -224,6 +560,18 @@
       "seller": "Whiff Culture",
       "drop_date": "2026-11-06",
       "drop_time": "05:12:21"
+    },
+    {
+      "id": "azzaro-wanted-by-night",
+      "name": "Wanted by Night",
+      "brand": "Azzaro",
+      "current_price": 5000,
+      "previous_price": 6300,
+      "drop_amount": 1300,
+      "drop_percentage": 21,
+      "seller": "Enigma Perfumes",
+      "drop_date": "2026-11-06",
+      "drop_time": "19:18:38"
     }
   ],
   "active_new_arrivals": [
@@ -235,7 +583,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -245,7 +593,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -255,7 +603,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -265,7 +613,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -275,17 +623,7 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
-    },
-    {
-      "id": "rasasi-shuhrah-pour-homme",
-      "name": "Shuhrah Pour Homme",
-      "brand": "Rasasi",
-      "price": 3350,
-      "seller": "Fragrance Heaven",
-      "size": "90ml Retail Bottle",
-      "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -295,20 +633,60 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     },
     {
-      "id": "rasasi-shuhrah-pour-homme",
-      "name": "Shuhrah Pour Homme",
-      "brand": "Rasasi",
-      "price": 2500,
-      "seller": "FragFever",
-      "size": "Retail Bottle",
+      "id": "arabiyat-prestige-noire-absolu",
+      "name": "Noire Absolu",
+      "brand": "Arabiyat Prestige",
+      "price": 2800,
+      "seller": "Enigma Perfumes",
+      "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T18:20:53.302Z"
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
+    },
+    {
+      "id": "azzaro-the-most-wanted-parfum",
+      "name": "The Most Wanted Parfum",
+      "brand": "Azzaro",
+      "price": 5600,
+      "seller": "Enigma Perfumes",
+      "size": "100ml Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
+    },
+    {
+      "id": "azzaro-wanted-by-night",
+      "name": "Wanted by Night",
+      "brand": "Azzaro",
+      "price": 5000,
+      "seller": "Enigma Perfumes",
+      "size": "100ml Tester",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
+    },
+    {
+      "id": "alfred-dunhill-indian-sandalwood",
+      "name": "Indian Sandalwood",
+      "brand": "Alfred Dunhill",
+      "price": 5500,
+      "seller": "Enigma Perfumes",
+      "size": "100ml Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
+    },
+    {
+      "id": "rochas-moustache-eau-de-parfum",
+      "name": "Moustache Eau de Parfum",
+      "brand": "Rochas",
+      "price": 4400,
+      "seller": "Enigma Perfumes",
+      "size": "125ml Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T19:18:38.940Z"
     }
   ],
-  "sellers_active": 6,
+  "sellers_active": 7,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
@@ -317,12 +695,17 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 467,
+      "bottles": 466,
       "type": "Full Bottles"
     },
     "apex_aroma": {
       "name": "Apex Aroma",
       "bottles": 209,
+      "type": "Full Bottles"
+    },
+    "enigma_perfumes": {
+      "name": "Enigma Perfumes",
+      "bottles": 66,
       "type": "Full Bottles"
     },
     "liquid_emotions": {
@@ -338,8 +721,8 @@
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 425,
-      "decants": 407,
+      "bottles": 426,
+      "decants": 408,
       "type": "Dual"
     }
   }

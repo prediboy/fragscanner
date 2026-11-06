@@ -42,6 +42,22 @@
     "start_row": 9
   },
   {
+    "id": "enigma_perfumes",
+    "seller_name": "Enigma Perfumes",
+    "type": "bottle",
+    "sheet_url": "https://docs.google.com/spreadsheets/d/14sQZhYjsWjZtAkZhFRgzq0rfzn1wKXqiVOMhwk6ks0E/gviz/tq?tqx=out:csv&gid=0",
+    "whatsapp": "7982410620",
+    "shipping": "Free Pan-India Delivery (Extra for remote areas)",
+    "dispatch": "24-48 hrs",
+    "type_col": 0,
+    "brand_col": 1,
+    "product_col": 2,
+    "size_col": 3,
+    "price_col": 4,
+    "hot_col": -1,
+    "start_row": 1
+  },
+  {
     "id": "liquid_emotions",
     "seller_name": "Liquid Emotions",
     "type": "decant",
