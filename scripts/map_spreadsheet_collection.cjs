@@ -6,7 +6,7 @@ const fragrances = JSON.parse(fs.readFileSync(catalogPath, "utf-8"));
 console.log(`Loaded ${fragrances.length} catalog fragrances with canonical Fragrantica names.`);
 
 function cleanStr(s) {
-  return (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function normalizeBrand(b) {
@@ -92,18 +92,47 @@ function findBestMatchWithDetails(brandRaw, nameRaw, inspoRaw = "") {
 
   // Community Shorthand Expansion
   if (bClean === "armaf") {
-    if (nClean.includes("cdnoud") || nClean.includes("collectorspride")) {
+    if (nClean.includes("hunter")) {
+      nClean = "hunterintense";
+    } else if (nClean.includes("soul")) {
+      nClean = "soul";
+    } else if (nClean.includes("cdnoud") || nClean.includes("collectorspride") || (nClean.includes("oud") && nClean.includes("clubdenuit"))) {
       nClean = "clubdenuitoud";
-    } else if (nClean.startsWith("cdnim")) {
-      nClean = nClean.replace(/^cdnim/, "clubdenuitintenseman");
-    } else if (nClean.startsWith("cdni") || nClean.startsWith("cdnintense")) {
-      nClean = nClean.replace(/^cdn(intense|i)/, "clubdenuitintense");
+    } else if (nClean.includes("lionheart")) {
+      nClean = "clubdenuitlionheartman";
+    } else if (nClean.includes("precieux")) {
+      nClean = "clubdenuitprecieux1";
+    } else if (nClean.includes("urban") && nClean.includes("elixir")) {
+      nClean = "clubdenuiturbanmanelixir";
+    } else if (nClean.includes("iconic")) {
+      nClean = "clubdenuitblueiconic";
+    } else if (nClean.includes("sillage")) {
+      nClean = "clubdenuitsillage";
+    } else if (nClean.includes("milestone")) {
+      nClean = "clubdenuitmilestone";
+    } else if (nClean.includes("untold")) {
+      nClean = "clubdenuituntold";
+    } else if (nClean.includes("overdose")) {
+      nClean = "clubdenuitintenseoverdose";
+    } else if (/\b(limited\s*edition|le)\b/i.test(nameRaw) || nClean.includes("limitededition") || nClean.includes("limited")) {
+      nClean = "clubdenuitintensemanlimitededitionparfum";
+    } else if (nClean.includes("pureparfum") || nClean.includes("pp") || (nClean.includes("intense") && nClean.includes("150ml"))) {
+      nClean = "clubdenuitintensemanparfum";
+    } else if (nClean.includes("edp") || (nClean.includes("intense") && (nClean.includes("200ml") || nClean.includes("250ml")))) {
+      nClean = "clubdenuitintensemaneaudeparfum";
+    } else if (nClean.includes("woman") || nClean.includes("women")) {
+      if (nClean.includes("intense") || nClean.includes("cdni")) {
+        nClean = "clubdenuitintensewoman";
+      } else {
+        nClean = "clubdenuitwoman";
+      }
+    } else if (nClean.includes("manedttransparent") || nClean === "clubdenuitman" || nClean === "cdnman") {
+      nClean = "clubdenuitman";
+    } else if (nClean.startsWith("cdnim") || nClean.startsWith("cdni") || nClean.includes("intenseman") || nClean.includes("intense")) {
+      nClean = "clubdenuitintenseman";
     } else if (nClean.startsWith("cdn")) {
       nClean = nClean.replace(/^cdn/, "clubdenuit");
     }
-  }
-  if (bClean === "armaf" && nClean.includes("lionheart")) {
-    nClean = "clubdenuitlionheartman";
   }
   if (bClean.includes("reef") && nClean.includes("33")) {
     nClean = "33black200ml";

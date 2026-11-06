@@ -1,12 +1,12 @@
 {
-  "last_sync": "2026-11-06T16:39:18.534Z",
+  "last_sync": "2026-11-06T17:24:55.285Z",
   "sync_date": "2026-11-06",
-  "catalog_total": 1158,
-  "in_stock_count": 898,
-  "decants_available_count": 714,
-  "dual_available_count": 702,
+  "catalog_total": 1176,
+  "in_stock_count": 909,
+  "decants_available_count": 722,
+  "dual_available_count": 710,
   "enriched_new_arrivals_count": 0,
-  "price_drops_count": 14,
+  "price_drops_count": 17,
   "new_arrivals_count": 4,
   "active_price_drops": [
     {
@@ -44,6 +44,42 @@
       "seller": "FragFever",
       "drop_date": "2026-11-06",
       "drop_time": "16:39:12"
+    },
+    {
+      "id": "armaf-club-de-nuit-urban-man-elixir",
+      "name": "Club de Nuit Urban Man Elixir",
+      "brand": "Armaf",
+      "current_price": 2800,
+      "previous_price": 3429,
+      "drop_amount": 629,
+      "drop_percentage": 18,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "17:21:55"
+    },
+    {
+      "id": "rasasi-daarej-pour-femme",
+      "name": "Daarej Pour Femme",
+      "brand": "Rasasi",
+      "current_price": 2200,
+      "previous_price": 2949,
+      "drop_amount": 749,
+      "drop_percentage": 25,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "17:21:55"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-femme",
+      "name": "Shuhrah Pour Femme",
+      "brand": "Rasasi",
+      "current_price": 2500,
+      "previous_price": 2899,
+      "drop_amount": 399,
+      "drop_percentage": 14,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "17:21:55"
     },
     {
       "id": "lattafa-bade-e-al-oud",
@@ -118,52 +154,52 @@
       "drop_time": "16:32:37"
     },
     {
-      "id": "st-9123",
-      "name": "Club de Nuit Intense Man LIMITED EDITION",
+      "id": "st-9095",
+      "name": "Evoke Gold Edition",
+      "brand": "Ajmal",
+      "current_price": 2500,
+      "previous_price": 2650,
+      "drop_amount": 150,
+      "drop_percentage": 6,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "17:21:55"
+    },
+    {
+      "id": "st-9125",
+      "name": "Pour Homme",
       "brand": "Armaf",
-      "current_price": 5900,
-      "previous_price": 7100,
-      "drop_amount": 1200,
-      "drop_percentage": 17,
+      "current_price": 1850,
+      "previous_price": 2040,
+      "drop_amount": 190,
+      "drop_percentage": 9,
       "seller": "Second Theory",
       "drop_date": "2026-11-06",
-      "drop_time": "16:39:12"
+      "drop_time": "17:21:55"
     },
     {
-      "id": "st-9131",
-      "name": "Club de Nuit Iconic",
-      "brand": "Armaf",
-      "current_price": 4079,
-      "previous_price": 4200,
-      "drop_amount": 121,
-      "drop_percentage": 3,
-      "seller": "Whiff Culture",
-      "drop_date": "2026-11-06",
-      "drop_time": "16:39:12"
-    },
-    {
-      "id": "apex-reef-33",
-      "name": "Reef 33",
+      "id": "apex-reef-33black",
+      "name": "Reef 33 Black",
       "brand": "Reef",
-      "current_price": 3749,
-      "previous_price": 4749,
-      "drop_amount": 1000,
-      "drop_percentage": 21,
-      "seller": "Whiff Culture",
+      "current_price": 3500,
+      "previous_price": 3650,
+      "drop_amount": 150,
+      "drop_percentage": 4,
+      "seller": "Second Theory",
       "drop_date": "2026-11-06",
-      "drop_time": "16:39:12"
+      "drop_time": "17:21:55"
     },
     {
-      "id": "al-haramain-amber-oud-tobacco",
-      "name": "Amber Oud Tobacco Edition",
+      "id": "apex-alharamain-amberoud",
+      "name": "Amber Oud",
       "brand": "Al Haramain",
       "current_price": 3400,
-      "previous_price": 6499,
-      "drop_amount": 3099,
-      "drop_percentage": 48,
+      "previous_price": 4000,
+      "drop_amount": 600,
+      "drop_percentage": 15,
       "seller": "Apex Aroma",
       "drop_date": "2026-11-06",
-      "drop_time": "16:39:12"
+      "drop_time": "17:21:55"
     },
     {
       "id": "lattafa-fakhar-platin",
@@ -187,7 +223,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:39:12.231Z"
+      "added_timestamp": "2026-11-06T17:24:50.120Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -197,7 +233,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:39:12.231Z"
+      "added_timestamp": "2026-11-06T17:24:50.120Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -207,7 +243,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:39:12.231Z"
+      "added_timestamp": "2026-11-06T17:24:50.120Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -217,19 +253,19 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:39:12.231Z"
+      "added_timestamp": "2026-11-06T17:24:50.120Z"
     }
   ],
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
-      "bottles": 410,
+      "bottles": 411,
       "type": "Full Bottles"
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 453,
+      "bottles": 464,
       "type": "Full Bottles"
     },
     "apex_aroma": {
@@ -244,14 +280,14 @@
     },
     "bluewings": {
       "name": "Blue Wings Fragrances",
-      "bottles": 2,
-      "decants": 91,
+      "bottles": 1,
+      "decants": 92,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 421,
-      "decants": 401,
+      "bottles": 425,
+      "decants": 408,
       "type": "Dual"
     }
   }
