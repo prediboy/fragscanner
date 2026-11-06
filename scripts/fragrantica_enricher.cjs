@@ -1,11 +1,18 @@
 const { createClient } = require('@supabase/supabase-js');
 
-// Ensure .env is loaded if present
-try {
-  require('dotenv').config();
-} catch (e) {}
-
-const API_KEY = process.env.GEMINI_API_KEY;
+let API_KEY = process.env.GEMINI_API_KEY;
+if (!API_KEY) {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const envPath = path.join(__dirname, '../.env');
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf-8');
+      const match = content.match(/GEMINI_API_KEY=(.+)/);
+      if (match) API_KEY = match[1].trim();
+    }
+  } catch (e) {}
+}
 const SUPABASE_URL = 'https://lvivmkdlaxaetnazmcat.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_8eXJXa7QmS1okuJ3tFwsbg_GyE7RaKC';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -114,7 +121,7 @@ CRITICAL RULES:
   }
 }`;
 
-  const models = ["gemini-3.1-flash-lite", "gemini-3.5-flash-lite"];
+  const models = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
   let lastErr = null;
 
   for (const model of models) {
