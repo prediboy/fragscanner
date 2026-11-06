@@ -367,7 +367,8 @@ async function runMasterRefresh() {
 
   const FLANKER_DISTINCT_TOKENS = [
     'freeze', 'dukhan', 'waha', 'platin', 'flames', 'elixir', 'collector',
-    'nightout', 'rebel', 'sapphire', 'kobra', 'tropical', 'dive', 'sahara', 'atlantis'
+    'nightout', 'rebel', 'sapphire', 'kobra', 'tropical', 'dive', 'sahara', 'atlantis',
+    'noir', 'incense', 'silver', 'heaven'
   ];
 
   // Helper: Find best fragrance match in catalog
@@ -390,10 +391,23 @@ async function runMasterRefresh() {
       const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
       if (!sameBrand) return false;
 
+      // Prevent flanker token collision even in alias matching
+      for (const token of FLANKER_DISTINCT_TOKENS) {
+        const inIncoming = nClean.includes(token);
+        const inCatalog = cleanStr(f.name).includes(token);
+        if (inIncoming !== inCatalog) return false;
+      }
+
       if (Array.isArray(f.aliases)) {
         return f.aliases.some(a => {
           const aClean = cleanStr(a);
-          return aClean === nClean || (aClean.length >= 4 && (nClean.includes(aClean) || aClean.includes(nClean)));
+          if (aClean === nClean) return true;
+          // Allow size / bottle variations without partial word corruption (e.g. SNOI 100ml matching SNOI)
+          if (aClean.length >= 4 && (nClean.startsWith(aClean) || aClean.startsWith(nClean))) {
+            const remainder = nClean.replace(aClean, "");
+            return remainder.length === 0 || /^(100|150|200|50|75|30|edp|edt|extrait|retail|bottle|ml)*$/.test(remainder);
+          }
+          return false;
         });
       }
       return false;

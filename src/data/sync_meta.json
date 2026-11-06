@@ -1,14 +1,86 @@
 {
-  "last_sync": "2026-11-06T16:32:45.172Z",
+  "last_sync": "2026-11-06T16:39:18.534Z",
   "sync_date": "2026-11-06",
   "catalog_total": 1158,
-  "in_stock_count": 891,
-  "decants_available_count": 711,
-  "dual_available_count": 697,
+  "in_stock_count": 898,
+  "decants_available_count": 714,
+  "dual_available_count": 702,
   "enriched_new_arrivals_count": 0,
-  "price_drops_count": 3,
+  "price_drops_count": 14,
   "new_arrivals_count": 4,
   "active_price_drops": [
+    {
+      "id": "lattafa-khamrah-qahwa",
+      "name": "Khamrah Qahwa",
+      "brand": "Lattafa",
+      "current_price": 3050,
+      "previous_price": 3449,
+      "drop_amount": 399,
+      "drop_percentage": 12,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "lattafa-qaed-al-fursan",
+      "name": "Qaed Al Fursan",
+      "brand": "Lattafa",
+      "current_price": 1850,
+      "previous_price": 1950,
+      "drop_amount": 100,
+      "drop_percentage": 5,
+      "seller": "Apex Aroma",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "afnan-turathi-brown",
+      "name": "Turathi Brown",
+      "brand": "Afnan",
+      "current_price": 2750,
+      "previous_price": 3049,
+      "drop_amount": 299,
+      "drop_percentage": 10,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "lattafa-bade-e-al-oud",
+      "name": "Bade'E Al Oud",
+      "brand": "Lattafa",
+      "current_price": 2600,
+      "previous_price": 2650,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Second Theory",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "afnan-supremacy-noir",
+      "name": "Supremacy Noir",
+      "brand": "Afnan",
+      "current_price": 2850,
+      "previous_price": 3499,
+      "drop_amount": 649,
+      "drop_percentage": 19,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "afnan-turathi-electric",
+      "name": "Turathi Electric",
+      "brand": "Afnan",
+      "current_price": 2659,
+      "previous_price": 2799,
+      "drop_amount": 140,
+      "drop_percentage": 5,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
     {
       "id": "st-9002",
       "name": "Rifaaqat",
@@ -22,6 +94,18 @@
       "drop_time": "16:32:37"
     },
     {
+      "id": "st-9013",
+      "name": "Reflection Elixir",
+      "brand": "Mykonos",
+      "current_price": 1950,
+      "previous_price": 2649,
+      "drop_amount": 699,
+      "drop_percentage": 26,
+      "seller": "Second Theory",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
       "id": "st-9078",
       "name": "Rawdha",
       "brand": "Ahmed Al Maghribi",
@@ -32,6 +116,54 @@
       "seller": "Whiff Culture",
       "drop_date": "2026-11-06",
       "drop_time": "16:32:37"
+    },
+    {
+      "id": "st-9123",
+      "name": "Club de Nuit Intense Man LIMITED EDITION",
+      "brand": "Armaf",
+      "current_price": 5900,
+      "previous_price": 7100,
+      "drop_amount": 1200,
+      "drop_percentage": 17,
+      "seller": "Second Theory",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "st-9131",
+      "name": "Club de Nuit Iconic",
+      "brand": "Armaf",
+      "current_price": 4079,
+      "previous_price": 4200,
+      "drop_amount": 121,
+      "drop_percentage": 3,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "apex-reef-33",
+      "name": "Reef 33",
+      "brand": "Reef",
+      "current_price": 3749,
+      "previous_price": 4749,
+      "drop_amount": 1000,
+      "drop_percentage": 21,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
+    },
+    {
+      "id": "al-haramain-amber-oud-tobacco",
+      "name": "Amber Oud Tobacco Edition",
+      "brand": "Al Haramain",
+      "current_price": 3400,
+      "previous_price": 6499,
+      "drop_amount": 3099,
+      "drop_percentage": 48,
+      "seller": "Apex Aroma",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:39:12"
     },
     {
       "id": "lattafa-fakhar-platin",
@@ -55,7 +187,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:32:37.743Z"
+      "added_timestamp": "2026-11-06T16:39:12.231Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -65,7 +197,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:32:37.743Z"
+      "added_timestamp": "2026-11-06T16:39:12.231Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -75,7 +207,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:32:37.743Z"
+      "added_timestamp": "2026-11-06T16:39:12.231Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -85,7 +217,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T16:32:37.743Z"
+      "added_timestamp": "2026-11-06T16:39:12.231Z"
     }
   ],
   "sellers_active": 6,
@@ -97,12 +229,12 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 456,
+      "bottles": 453,
       "type": "Full Bottles"
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 210,
+      "bottles": 209,
       "type": "Full Bottles"
     },
     "liquid_emotions": {
@@ -113,13 +245,13 @@
     "bluewings": {
       "name": "Blue Wings Fragrances",
       "bottles": 2,
-      "decants": 92,
+      "decants": 91,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 422,
-      "decants": 402,
+      "bottles": 421,
+      "decants": 401,
       "type": "Dual"
     }
   }
