@@ -21,10 +21,17 @@ export default function FragranceCard({ fragrance, onSelect, onOpenRecommendatio
       <div>
         {/* Top Badges */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${getBrandBadgeColor(fragrance.brand)}`}>
-            {fragrance.brand}
-          </span>
-          <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full text-amber-400 text-xs font-bold">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${getBrandBadgeColor(fragrance.brand)}`}>
+              {fragrance.brand}
+            </span>
+            {fragrance.concentration && (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-300 font-mono">
+                {fragrance.concentration}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full text-amber-400 text-xs font-bold shrink-0">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
             <span>{fragrance.rating_value.toFixed(2)}</span>
             <span className="text-[10px] text-slate-400 font-normal">({(fragrance.rating_count / 1000).toFixed(1)}k)</span>
@@ -46,14 +53,14 @@ export default function FragranceCard({ fragrance, onSelect, onOpenRecommendatio
           <div className="my-3 p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 text-xs">
             <div className="flex items-center gap-1.5 text-amber-400 font-semibold mb-0.5">
               <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>Closest Match</span>
+              <span>Clone DNA / Inspired By</span>
             </div>
             <p className="text-slate-300 font-medium truncate">
               {fragrance.dna_inspiration}
             </p>
             <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
               <span>{fragrance.dna_type}</span>
-              <span className="text-amber-300 font-semibold">{fragrance.similarity_percentage}% match</span>
+              <span className="text-amber-300 font-semibold">{fragrance.similarity_percentage}% DNA Match</span>
             </div>
           </div>
         )}

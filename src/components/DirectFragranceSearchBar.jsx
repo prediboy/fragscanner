@@ -199,9 +199,16 @@ export default function DirectFragranceSearchBar({
                         )}
                       </div>
 
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors truncate">
-                        {f.name}
-                      </h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors truncate">
+                          {f.name}
+                        </h4>
+                        {f.concentration && (
+                          <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-100 dark:bg-cyan-950/80 border border-cyan-300 dark:border-cyan-800 text-cyan-800 dark:text-cyan-300 font-mono">
+                            {f.concentration}
+                          </span>
+                        )}
+                      </div>
 
                       <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                         <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold" title="Fragrantica Community Rating">
@@ -209,7 +216,7 @@ export default function DirectFragranceSearchBar({
                           <span>{(Number(f.rating_value) || 4.2).toFixed(1)} on Fragrantica</span>
                         </span>
                         <span>•</span>
-                        <span>{f.collection || f.concentration}</span>
+                        <span>{f.collection ? `${f.collection} • ${f.concentration}` : f.concentration}</span>
                         {f.primary_season && (
                           <>
                             <span>•</span>
