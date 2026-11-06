@@ -1,13 +1,13 @@
 {
-  "last_sync": "2026-11-06T17:24:55.285Z",
+  "last_sync": "2026-11-06T17:49:12.718Z",
   "sync_date": "2026-11-06",
-  "catalog_total": 1176,
-  "in_stock_count": 909,
-  "decants_available_count": 722,
-  "dual_available_count": 710,
-  "enriched_new_arrivals_count": 0,
-  "price_drops_count": 17,
-  "new_arrivals_count": 4,
+  "catalog_total": 1178,
+  "in_stock_count": 911,
+  "decants_available_count": 723,
+  "dual_available_count": 711,
+  "enriched_new_arrivals_count": 2,
+  "price_drops_count": 18,
+  "new_arrivals_count": 6,
   "active_price_drops": [
     {
       "id": "lattafa-khamrah-qahwa",
@@ -212,6 +212,18 @@
       "seller": "Whiff Culture",
       "drop_date": "2026-11-06",
       "drop_time": "05:12:21"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-homme",
+      "name": "Shuhrah Pour Homme",
+      "brand": "Rasasi",
+      "current_price": 2500,
+      "previous_price": 2949,
+      "drop_amount": 449,
+      "drop_percentage": 15,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "17:49:02"
     }
   ],
   "active_new_arrivals": [
@@ -223,7 +235,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:24:50.120Z"
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -233,7 +245,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:24:50.120Z"
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -243,7 +255,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:24:50.120Z"
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -253,7 +265,27 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:24:50.120Z"
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
+    },
+    {
+      "id": "arabiyat-prestige-raees",
+      "name": "Raees",
+      "brand": "Arabiyat Prestige",
+      "price": 2950,
+      "seller": "FragFever",
+      "size": "180ml Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-homme",
+      "name": "Shuhrah Pour Homme",
+      "brand": "Rasasi",
+      "price": 2500,
+      "seller": "FragFever",
+      "size": "Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T17:49:02.862Z"
     }
   ],
   "sellers_active": 6,
@@ -265,7 +297,7 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 464,
+      "bottles": 466,
       "type": "Full Bottles"
     },
     "apex_aroma": {
