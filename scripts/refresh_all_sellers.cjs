@@ -1066,7 +1066,17 @@ async function runMasterRefresh() {
       frag.is_price_drop = false;
     }
 
-    // 2. Compute decant comparison per size (5ml, 8ml, 10ml, 20ml, 30ml)
+    // 2. Compute 4-day rolling window expiration for new arrivals
+    if (frag.is_new_arrival) {
+      const arrivalDate = frag.new_arrival_timestamp || frag.new_arrival_date || frag.price_updated_at;
+      const arrivalTimeMs = arrivalDate ? new Date(arrivalDate).getTime() : 0;
+      const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
+      if (arrivalTimeMs && (Date.now() - arrivalTimeMs > fourDaysMs)) {
+        frag.is_new_arrival = false;
+      }
+    }
+
+    // 3. Compute decant comparison per size (5ml, 8ml, 10ml, 20ml, 30ml)
     if (frag.community_decants && frag.community_decants.length > 0) {
       frag.has_decants = true;
       decantsAvailableCount++;
@@ -1170,6 +1180,7 @@ async function runMasterRefresh() {
 
   // Save sync_meta.json
   const activeDrops = fragrances.filter(f => f.is_price_drop && f.previous_price);
+  const activeNewArrivals = fragrances.filter(f => f.is_new_arrival && f.community_price);
 
   const syncMeta = {
     last_sync: new Date().toISOString(),
@@ -1180,6 +1191,7 @@ async function runMasterRefresh() {
     dual_available_count: dualAvailableCount,
     enriched_new_arrivals_count: enrichedCount,
     price_drops_count: activeDrops.length,
+    new_arrivals_count: activeNewArrivals.length,
     active_price_drops: activeDrops.map(d => ({
       id: d.id,
       name: d.name,
@@ -1191,6 +1203,16 @@ async function runMasterRefresh() {
       seller: d.lowest_seller,
       drop_date: d.price_change_date || d.price_date,
       drop_time: d.price_change_time || null
+    })),
+    active_new_arrivals: activeNewArrivals.map(n => ({
+      id: n.id,
+      name: n.name,
+      brand: n.brand,
+      price: n.community_price,
+      seller: n.lowest_seller,
+      size: n.community_bottle_size,
+      added_date: n.new_arrival_date || n.price_date,
+      added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
     sellers_active: 6,
     seller_breakdown: {

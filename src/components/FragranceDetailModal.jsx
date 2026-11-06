@@ -157,6 +157,24 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Hot Selling</span>
                         </span>
                       )}
+                      {fragrance.is_new_arrival && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold flex items-center gap-1.5 shadow-xs">
+                          <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-400"></span>
+                          </span>
+                          <span>New Arrival (Last 4 Days)</span>
+                        </span>
+                      )}
+                      {fragrance.is_price_drop && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold flex items-center gap-1.5 shadow-xs">
+                          <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                          </span>
+                          <span>Price Drop (Last 2 Days)</span>
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-slate-300">
                       Live quotes verified across 6 sellers for both <strong>Full Bottles</strong> and <strong>Decants (5ml - 30ml)</strong>:
@@ -183,10 +201,20 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       <span>🍾 Bottles & Retail Packs</span>
                     </h4>
                     {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
-                      <span className="text-xs font-mono font-bold text-emerald-400">
-                        Best: ₹{Number(fragrance.community_price).toLocaleString()}
+                      <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5 flex-wrap">
+                        {fragrance.is_price_drop && fragrance.previous_price && (
+                          <span className="text-slate-400 line-through text-[11px] font-normal">
+                            ₹{Number(fragrance.previous_price).toLocaleString()}
+                          </span>
+                        )}
+                        <span>Best: ₹{Number(fragrance.community_price).toLocaleString()}</span>
                         {fragrance.community_bottle_size && (
-                          <span className="text-slate-400 font-normal ml-1">({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})</span>
+                          <span className="text-slate-400 font-normal ml-0.5">({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})</span>
+                        )}
+                        {fragrance.is_price_drop && (
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                            📉 -{fragrance.price_change_percentage || Math.round((Math.abs(fragrance.previous_price - fragrance.community_price) / fragrance.previous_price) * 100)}% Drop
+                          </span>
                         )}
                       </span>
                     )}

@@ -140,6 +140,8 @@ export default function App() {
   // Theme state: 'fresh' (Glacier Fresh Day) or 'night' (Midnight Frost Dark)
   const [theme, setTheme] = useState(() => {
     try {
+      const p = new URLSearchParams(window.location.search).get('theme');
+      if (p === 'night' || p === 'fresh') return p;
       return localStorage.getItem('fragscanner_theme') || 'fresh';
     } catch {
       return 'fresh';
@@ -180,6 +182,14 @@ export default function App() {
     }
   });
   const [selectedSeller, setSelectedSeller] = useState('all');
+  const [dealsSubFilter, setDealsSubFilter] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search).get('deals');
+      return p === 'drops' || p === 'new' ? p : 'all';
+    } catch {
+      return 'all';
+    }
+  }); // 'all' | 'drops' | 'new'
   
   // Step 1: Taste Anchor Search & Selection (Starts Clean & Empty)
   const [anchorSearch, setAnchorSearch] = useState('');
@@ -409,24 +419,95 @@ export default function App() {
     return LUXURY_TARGETS.find(t => t.id === selectedLuxuryTarget) || LUXURY_TARGETS[0];
   }, [selectedLuxuryTarget]);
 
+  const priceDropsCount = useMemo(() => allFragrances.filter(f => f.is_price_drop && f.community_price).length, [allFragrances]);
+  
+  // 4-Day Rolling Window for New Arrivals
+  const newArrivalsCount = useMemo(() => {
+    const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
+    return allFragrances.filter(f => {
+      if (!f.is_new_arrival || !f.community_price) return false;
+      const arrivalDate = f.new_arrival_timestamp || f.new_arrival_date || f.created_at || f.price_updated_at;
+      if (!arrivalDate) return true;
+      const arrivalTimeMs = new Date(arrivalDate).getTime();
+      return arrivalTimeMs && (Date.now() - arrivalTimeMs <= fourDaysMs);
+    }).length;
+  }, [allFragrances]);
+
+  const filteredByDealType = useMemo(() => {
+    if (dealsSubFilter === 'drops') {
+      return allFragrances
+        .filter(f => f.is_price_drop && f.community_price)
+        .map(f => ({
+          fragrance: f,
+          matchOutOfFive: Number(f.rating_value) || 4.8,
+          likeReasons: [
+            `📉 Price Drop: Saved ₹${Math.abs(f.price_change || (f.previous_price - f.community_price))} (-${f.price_change_percentage || Math.round((Math.abs(f.previous_price - f.community_price) / f.previous_price) * 100)}%) in last 2 days`,
+            `🍾 Lowest quote ₹${Number(f.community_price).toLocaleString()} via ${f.lowest_seller} (${f.community_bottle_size || 'Bottle'})`,
+            `🎯 Closest Match: ${f.dna_inspiration || 'Community Verified Stock'}`
+          ]
+        }));
+    }
+    if (dealsSubFilter === 'new') {
+      const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
+      return allFragrances
+        .filter(f => {
+          if (!f.is_new_arrival || !f.community_price) return false;
+          const arrivalDate = f.new_arrival_timestamp || f.new_arrival_date || f.created_at || f.price_updated_at;
+          if (!arrivalDate) return true;
+          const arrivalTimeMs = new Date(arrivalDate).getTime();
+          return arrivalTimeMs && (Date.now() - arrivalTimeMs <= fourDaysMs);
+        })
+        .sort((a, b) => {
+          // Strict ordering by when perfume was added (newest added first)
+          const timeA = new Date(a.new_arrival_timestamp || a.price_updated_at || a.new_arrival_date || a.price_date || 0).getTime();
+          const timeB = new Date(b.new_arrival_timestamp || b.price_updated_at || b.new_arrival_date || b.price_date || 0).getTime();
+          return timeB - timeA;
+        })
+        .map(f => ({
+          fragrance: f,
+          matchOutOfFive: Number(f.rating_value) || 4.7,
+          likeReasons: [
+            `✨ New Arrival: Added ${f.new_arrival_date ? new Date(f.new_arrival_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'recently'} (within last 4 days)`,
+            `🍾 Lowest quote ₹${Number(f.community_price).toLocaleString()} via ${f.lowest_seller} (${f.community_bottle_size || 'Bottle'})`,
+            `🎯 Closest Match: ${f.dna_inspiration || 'Community Verified Stock'}`
+          ]
+        }));
+    }
+    return null;
+  }, [dealsSubFilter, allFragrances]);
+
   const isSearchActive = searchQuery.trim().length >= 2;
   const isProfileActive = likedIds.length > 0;
 
   const displayedItems = isSearchActive
     ? directSearchResults
-    : (isProfileActive ? recommendations : trendingCommunityHits);
+    : (dealsSubFilter !== 'all' && filteredByDealType
+        ? filteredByDealType
+        : (isProfileActive ? recommendations : trendingCommunityHits));
 
   const displayTitle = isSearchActive
     ? `Price Discovery: "${searchQuery}"`
-    : (isProfileActive ? "Your Tailored Scent Twins in Stock" : "🔥 Trending Community Hits (Live Lowest Rates)");
+    : dealsSubFilter === 'drops'
+      ? `📉 Live Price Drops (Last 2 Days)`
+      : dealsSubFilter === 'new'
+        ? `✨ New Community Arrivals (Last 4 Days)`
+        : (isProfileActive ? "Your Tailored Scent Twins in Stock" : "🔥 Trending Community Hits (Live Lowest Rates)");
 
   const displaySubtitle = isSearchActive
     ? `Showing ${directSearchResults.length} perfumes matching "${searchQuery}" across verified sellers`
-    : (isProfileActive ? "Pure Olfactory Vector & Lineage Math • Zero AI Fluff" : "Directly verified across FragFever, Second Theory, Whiff Culture, Apex Aroma & AAR");
+    : dealsSubFilter === 'drops'
+      ? `Verified full bottles that dropped in price within the last 48 hours`
+      : dealsSubFilter === 'new'
+        ? `Newly listed community bottles added in the last 4 days • Ordered by newest added`
+        : (isProfileActive ? "Pure Olfactory Vector & Lineage Math • Zero AI Fluff" : "Directly verified across FragFever, Second Theory, Whiff Culture, Apex Aroma & AAR");
 
   const displayBadge = isSearchActive
     ? `${directSearchResults.length} In Stock`
-    : (isProfileActive ? `${recommendations.length} Matches` : `${trendingCommunityHits.length} Hot Deals`);
+    : dealsSubFilter === 'drops'
+      ? `${priceDropsCount} Drops Live`
+      : dealsSubFilter === 'new'
+        ? `${newArrivalsCount} New Bottles`
+        : (isProfileActive ? `${recommendations.length} Matches` : `${trendingCommunityHits.length} Hot Deals`);
 
   // Telemetry: Log Step 01 taste anchor searches
   useEffect(() => {
@@ -537,7 +618,7 @@ export default function App() {
     return (
       <div 
         key={f.id || idx}
-        className="bg-white rounded-2xl border border-glacier-border hover:border-cyan-500 shadow-xs hover:shadow-md transition-all p-4 sm:p-5 flex flex-col justify-between space-y-4 overflow-hidden"
+        className={`bg-white rounded-2xl border ${f.is_price_drop ? 'border-emerald-300 ring-1 ring-emerald-500/20 shadow-sm' : 'border-glacier-border'} hover:border-cyan-500 shadow-xs hover:shadow-md transition-all p-3.5 sm:p-5 flex flex-col justify-between space-y-4 overflow-hidden relative w-full`}
       >
         <div>
           {/* Header with Match Percentage & Brand */}
@@ -546,6 +627,21 @@ export default function App() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-cyan-800 font-bold bg-cyan-50 px-2.5 py-0.5 rounded-md border border-cyan-200">
                 {f.brand}
               </span>
+              {f.is_new_arrival && (
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-500/60 font-mono flex items-center gap-1 shadow-2xs">
+                  <span className="text-xs leading-none">✨</span>
+                  <span>New Arrival</span>
+                </span>
+              )}
+              {f.is_price_drop && (
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 font-mono flex items-center gap-1 shadow-2xs">
+                  <svg className="w-3 h-3 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                    <polyline points="17 18 23 18 23 12"></polyline>
+                  </svg>
+                  Price Drop
+                </span>
+              )}
               {item.isCloneTargetMatch && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 font-mono flex items-center gap-1 shadow-2xs">
                   🎯 Closest Match
@@ -565,8 +661,8 @@ export default function App() {
           </div>
 
           {/* Title & Pricing */}
-          <div className="flex items-start justify-between gap-3 mb-1">
-            <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1">
+            <div className="flex-1 min-w-0 pr-1">
               <h3 className="font-heading font-bold text-lg text-slate-900 hover:text-cyan-700 transition-colors cursor-pointer truncate" onClick={() => setActiveFragrance(f)}>
                 {f.name}
               </h3>
@@ -584,11 +680,23 @@ export default function App() {
             <div className="text-right shrink-0">
               {hasBottlePrice ? (
                 <div>
-                  <div className="font-mono text-lg font-bold text-slate-900 leading-tight">
-                    ₹{bottlePriceNum.toLocaleString()}
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-end gap-0.5 sm:gap-1.5 items-end">
+                    {f.is_price_drop && f.previous_price && (
+                      <span className="text-[11px] text-slate-400 line-through font-mono font-medium">
+                        ₹{Number(f.previous_price).toLocaleString()}
+                      </span>
+                    )}
+                    <div className={`font-mono text-lg font-bold leading-tight ${f.is_price_drop ? 'text-emerald-600 font-black' : 'text-slate-900'}`}>
+                      ₹{bottlePriceNum.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="text-[11px] text-glacier-textMuted font-mono font-medium">
-                    {bottleDisplaySize}
+                  <div className="text-[11px] text-glacier-textMuted font-mono font-medium flex items-center justify-end gap-1 mt-0.5">
+                    <span>{bottleDisplaySize}</span>
+                    {f.is_price_drop && (
+                      <span className="text-emerald-700 bg-emerald-100/90 px-1.5 py-0.2 rounded text-[10px] font-bold">
+                        📉 -{f.price_change_percentage || Math.round((Math.abs(f.previous_price - bottlePriceNum) / f.previous_price) * 100)}%
+                      </span>
+                    )}
                   </div>
                 </div>
               ) : hasDecantPrice ? (
@@ -912,6 +1020,76 @@ export default function App() {
                     Reset Seller [x]
                   </button>
                 )}
+              </div>
+
+              {/* Quick Deals Sub-Filter Pills (Price Drops & New Arrivals) */}
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 border-t border-slate-100 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setDealsSubFilter('all')}
+                  className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all border flex items-center gap-1.5 shrink-0 ${
+                    dealsSubFilter === 'all'
+                      ? 'bg-slate-900 text-white border-slate-950 shadow-xs dark:bg-cyan-600 dark:border-cyan-500'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  <span>All Deals</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setDealsSubFilter(dealsSubFilter === 'drops' ? 'all' : 'drops')}
+                  className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all border flex items-center gap-2 shrink-0 ${
+                    dealsSubFilter === 'drops'
+                      ? 'bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 text-white border-emerald-800 shadow-md ring-2 ring-emerald-500/30 scale-[1.02]'
+                      : 'from-emerald-50 bg-gradient-to-r via-teal-50 to-emerald-50/80 hover:from-emerald-100 hover:to-teal-100 text-emerald-950 border-emerald-300 shadow-xs hover:shadow-sm'
+                  }`}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dealsSubFilter === 'drops' ? 'bg-white' : 'bg-emerald-400'}`}></span>
+                    <span className={`relative inline-flex rounded-full h-2 w-2 ${dealsSubFilter === 'drops' ? 'bg-white' : 'bg-emerald-600 dark:bg-emerald-400'}`}></span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className={`w-3.5 h-3.5 ${dealsSubFilter === 'drops' ? 'text-white' : 'text-emerald-700 dark:text-emerald-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                      <polyline points="17 18 23 18 23 12"></polyline>
+                    </svg>
+                    <span>Price Drops (Last 2 Days)</span>
+                  </span>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs ${
+                    dealsSubFilter === 'drops'
+                      ? 'bg-white text-emerald-800 font-extrabold dark:bg-slate-900 dark:text-emerald-300'
+                      : 'bg-emerald-600 text-white dark:bg-emerald-500 dark:text-slate-950'
+                  }`}>
+                    {priceDropsCount}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setDealsSubFilter(dealsSubFilter === 'new' ? 'all' : 'new')}
+                  className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all border flex items-center gap-2 shrink-0 ${
+                    dealsSubFilter === 'new'
+                      ? 'bg-gradient-to-r from-amber-600 via-amber-700 to-orange-700 text-white border-amber-800 shadow-md ring-2 ring-amber-500/30 scale-[1.02]'
+                      : 'from-amber-50 bg-gradient-to-r via-amber-50/70 to-orange-50/40 hover:from-amber-100 hover:to-orange-100 text-amber-950 border-amber-300 shadow-xs hover:shadow-sm'
+                  }`}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dealsSubFilter === 'new' ? 'bg-white' : 'bg-amber-400'}`}></span>
+                    <span className={`relative inline-flex rounded-full h-2 w-2 ${dealsSubFilter === 'new' ? 'bg-white' : 'bg-amber-600 dark:bg-amber-400'}`}></span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-xs leading-none">✨</span>
+                    <span>New Arrivals (Last 4 Days)</span>
+                  </span>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs ${
+                    dealsSubFilter === 'new'
+                      ? 'bg-white text-amber-800 font-extrabold dark:bg-slate-900 dark:text-amber-300'
+                      : 'bg-amber-600 text-white dark:bg-amber-400 dark:text-slate-950'
+                  }`}>
+                    {newArrivalsCount}
+                  </span>
+                </button>
               </div>
             </div>
 
