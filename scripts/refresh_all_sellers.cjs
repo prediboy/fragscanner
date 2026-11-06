@@ -227,7 +227,9 @@ async function runMasterRefresh() {
         const vol = s.volume_ml || parseInt(s.size, 10);
         const url = (s.product_url || '').toLowerCase();
         const size = (s.size || '').toLowerCase();
-        return !url.includes('decant-set') && !url.includes('/decant') && !size.includes('vial') && (!vol || vol >= 14);
+        const isNonPerfume = /\b(deo|deodorant|body[\s_-]*spray|body[\s_-]*mist|hair[\s_-]*mist|shower[\s_-]*gel|lotion|roll[\s_-]*on|after[\s_-]*shave)\b/i.test(url) ||
+          /\b(deo|deodorant|body[\s_-]*spray|body[\s_-]*mist|hair[\s_-]*mist|shower[\s_-]*gel|lotion|roll[\s_-]*on|after[\s_-]*shave)\b/i.test(size);
+        return !isNonPerfume && !url.includes('decant-set') && !url.includes('/decant') && !size.includes('vial') && (!vol || vol >= 14);
       }),
       decants: f.community_decants || []
     };
@@ -465,6 +467,22 @@ async function runMasterRefresh() {
     const size = (sellerObj.size || '').toLowerCase();
     if (url.includes('decant-set') || url.includes('/decant') || size.includes('vial') || (vol && vol < 14)) {
       return;
+    }
+
+    // Protect against non-perfumes: Deodorants, Body Sprays, Hair Mists, Shower Gels, Lotions, Roll-ons
+    const nonPerfumeRegex = /\b(deo|deodorant|body[\s_-]*spray|body[\s_-]*mist|hair[\s_-]*mist|shower[\s_-]*gel|lotion|roll[\s_-]*on|after[\s_-]*shave)\b/i;
+    if (nonPerfumeRegex.test(url) || nonPerfumeRegex.test(size)) {
+      return;
+    }
+
+    // Strict Flanker Mismatch Guard:
+    // If quote URL or title contains a flanker token that is NOT part of frag.id or frag.name, reject it!
+    const fragIdNorm = frag.id.toLowerCase().replace(/[-_]/g, '');
+    const fragNameNorm = frag.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const token of FLANKER_DISTINCT_TOKENS) {
+      if (url.includes(token) && !fragIdNorm.includes(token) && !fragNameNorm.includes(token)) {
+        return;
+      }
     }
 
     const sizeKey = sellerObj.size || 'Retail Bottle';

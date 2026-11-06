@@ -1,11 +1,93 @@
 {
-  "last_sync": "2026-11-06T05:12:30.427Z",
+  "last_sync": "2026-11-06T16:32:45.172Z",
   "sync_date": "2026-11-06",
   "catalog_total": 1158,
   "in_stock_count": 891,
   "decants_available_count": 711,
   "dual_available_count": 697,
   "enriched_new_arrivals_count": 0,
+  "price_drops_count": 3,
+  "new_arrivals_count": 4,
+  "active_price_drops": [
+    {
+      "id": "st-9002",
+      "name": "Rifaaqat",
+      "brand": "Paris Corner",
+      "current_price": 1800,
+      "previous_price": 1850,
+      "drop_amount": 50,
+      "drop_percentage": 3,
+      "seller": "Apex Aroma",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:32:37"
+    },
+    {
+      "id": "st-9078",
+      "name": "Rawdha",
+      "brand": "Ahmed Al Maghribi",
+      "current_price": 3499,
+      "previous_price": 3500,
+      "drop_amount": 1,
+      "drop_percentage": 0,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "16:32:37"
+    },
+    {
+      "id": "lattafa-fakhar-platin",
+      "name": "Fakhar Platin",
+      "brand": "Lattafa",
+      "current_price": 2229,
+      "previous_price": 2450,
+      "drop_amount": 221,
+      "drop_percentage": 9,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "05:12:21"
+    }
+  ],
+  "active_new_arrivals": [
+    {
+      "id": "lattafa-fakhar-platin",
+      "name": "Fakhar Platin",
+      "brand": "Lattafa",
+      "price": 2229,
+      "seller": "Whiff Culture",
+      "size": "100ml Retail Bottle",
+      "added_date": "2026-11-05",
+      "added_timestamp": "2026-11-06T16:32:37.743Z"
+    },
+    {
+      "id": "lattafa-nebras-elixir",
+      "name": "Nebras Elixir",
+      "brand": "Lattafa",
+      "price": 2550,
+      "seller": "FragFever",
+      "size": "Retail Bottle",
+      "added_date": "2026-11-05",
+      "added_timestamp": "2026-11-06T16:32:37.743Z"
+    },
+    {
+      "id": "laverne-heritage-bakhur-150ml",
+      "name": "Heritage Bakhur 150ML",
+      "brand": "Laverne",
+      "price": 3650,
+      "seller": "FragFever",
+      "size": "150ml Retail Bottle",
+      "added_date": "2026-11-05",
+      "added_timestamp": "2026-11-06T16:32:37.743Z"
+    },
+    {
+      "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
+      "name": "Daring Blue for Life",
+      "brand": "Maison Alhambra",
+      "price": 1650,
+      "seller": "FragFever",
+      "size": "Retail Bottle",
+      "added_date": "2026-11-05",
+      "added_timestamp": "2026-11-06T16:32:37.743Z"
+    }
+  ],
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
@@ -20,7 +102,7 @@
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 207,
+      "bottles": 210,
       "type": "Full Bottles"
     },
     "liquid_emotions": {
@@ -31,29 +113,14 @@
     "bluewings": {
       "name": "Blue Wings Fragrances",
       "bottles": 2,
-      "decants": 93,
+      "decants": 92,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 420,
-      "decants": 396,
+      "bottles": 422,
+      "decants": 402,
       "type": "Dual"
     }
-  },
-  "price_drops_count": 1,
-  "active_price_drops": [
-    {
-      "id": "lattafa-fakhar-platin",
-      "name": "Fakhar Platin",
-      "brand": "Lattafa",
-      "current_price": 2229,
-      "previous_price": 2450,
-      "drop_amount": 221,
-      "drop_percentage": 9,
-      "seller": "Whiff Culture",
-      "drop_date": "2026-11-06",
-      "drop_time": "05:12:21"
-    }
-  ]
+  }
 }
