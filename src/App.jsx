@@ -486,7 +486,7 @@ export default function App() {
         : (isProfileActive ? recommendations : trendingCommunityHits));
 
   const displayTitle = isSearchActive
-    ? `Price Discovery: "${searchQuery}"`
+    ? `Fragrantica Search: "${searchQuery}"`
     : dealsSubFilter === 'drops'
       ? `📉 Live Price Drops (Last 2 Days)`
       : dealsSubFilter === 'new'
@@ -494,7 +494,7 @@ export default function App() {
         : (isProfileActive ? "Your Tailored Scent Twins in Stock" : "🔥 Trending Community Hits (Live Lowest Rates)");
 
   const displaySubtitle = isSearchActive
-    ? `Showing ${directSearchResults.length} perfumes matching "${searchQuery}" across verified sellers`
+    ? `Showing ${directSearchResults.length} Fragrantica-indexed perfumes matching "${searchQuery}" across verified sellers`
     : dealsSubFilter === 'drops'
       ? `Verified full bottles that dropped in price within the last 48 hours`
       : dealsSubFilter === 'new'
@@ -969,6 +969,21 @@ export default function App() {
             
             {/* Direct Search Bar & Seller Filters Box */}
             <div className="bg-white rounded-2xl border border-glacier-border p-3.5 sm:p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-1 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-800 font-bold flex items-center gap-1.5">
+                    <span className="text-xs">🌸</span>
+                    <span>FRAGRANTICA-DRIVEN PRICE SEARCH</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
+                    1,158+ Verified Bottles
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-slate-400 hidden sm:inline">
+                  Search by official Fragrantica name or luxury target
+                </span>
+              </div>
+
               <DirectFragranceSearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}

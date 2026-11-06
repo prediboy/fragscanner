@@ -117,7 +117,7 @@ export default function DirectFragranceSearchBar({
             onFocus={() => {
               if (searchQuery && searchQuery.trim().length >= 2) setIsOpen(true);
             }}
-            placeholder="🔍 Direct Price Search: Find any perfume, clone (e.g. Angels' Share, Hawas, 9 PM), or note..."
+            placeholder="Search Fragrantica catalog or luxury scent twins (e.g. YSL Y Elixir, Absolu Aventus, Hawas, Angels' Share)..."
             className="w-full bg-white hover:bg-slate-50/50 focus:bg-white border-2 border-slate-200 focus:border-cyan-600 rounded-2xl pl-11 pr-20 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 transition-all shadow-xs"
           />
 
@@ -156,17 +156,17 @@ export default function DirectFragranceSearchBar({
       {isOpen && searchQuery && searchQuery.trim().length >= 2 && (
         <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-cyan-200/80 rounded-2xl shadow-xl overflow-hidden backdrop-blur-xl max-h-[75vh] flex flex-col divide-y divide-slate-100 animate-in fade-in duration-150">
           
-          <div className="p-3 bg-cyan-50/70 border-b border-cyan-100 flex items-center justify-between text-xs text-slate-600">
-            <span className="font-bold flex items-center gap-1.5 text-cyan-800 font-mono uppercase tracking-wider text-[11px]">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
-              <span>Instant Discovery Results ({results.length} matches)</span>
+          <div className="p-3 bg-cyan-50/70 dark:bg-slate-800 border-b border-cyan-100 dark:border-slate-700 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
+            <span className="font-bold flex items-center gap-1.5 text-cyan-800 dark:text-cyan-300 font-mono uppercase tracking-wider text-[11px]">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+              <span>Fragrantica-Verified Catalog ({results.length} matches)</span>
             </span>
-            <span className="text-[11px] text-slate-500 font-mono">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
               Press Enter to view in full catalog
             </span>
           </div>
 
-          <div className="overflow-y-auto divide-y divide-slate-100">
+          <div className="overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
             {results.length > 0 ? (
               results.map((f) => {
                 const isLiked = likedIds.includes(f.id);
@@ -175,7 +175,7 @@ export default function DirectFragranceSearchBar({
                 return (
                   <div
                     key={f.id}
-                    className="p-3.5 hover:bg-slate-50 transition-colors flex items-center justify-between gap-3 group"
+                    className="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors flex items-center justify-between gap-3 group"
                   >
                     <div 
                       className="min-w-0 flex-1 cursor-pointer"
@@ -192,21 +192,21 @@ export default function DirectFragranceSearchBar({
                           </span>
                         )}
                         {f.dna_inspiration && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 font-medium truncate max-w-[260px] inline-flex items-center gap-1 shadow-2xs">
-                            <span>Closest Match:</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-600/50 font-medium truncate max-w-[280px] inline-flex items-center gap-1 shadow-2xs">
+                            <span className="text-amber-700 dark:text-amber-400 font-semibold">Fragrantica Target:</span>
                             <strong className="font-bold">{f.dna_inspiration}</strong>
                           </span>
                         )}
                       </div>
 
-                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-cyan-700 transition-colors truncate">
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors truncate">
                         {f.name}
                       </h4>
 
-                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500 font-mono">
-                        <span className="flex items-center gap-0.5 text-amber-600 font-bold">
+                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                        <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold" title="Fragrantica Community Rating">
                           <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                          {(Number(f.rating_value) || 4.2).toFixed(1)}
+                          <span>{(Number(f.rating_value) || 4.2).toFixed(1)} on Fragrantica</span>
                         </span>
                         <span>•</span>
                         <span>{f.collection || f.concentration}</span>
