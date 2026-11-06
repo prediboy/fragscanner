@@ -88,6 +88,24 @@
     ]
   },
   {
+    "id": "gryv_scents",
+    "seller_name": "GRYV Scents",
+    "type": "decant_and_bottle",
+    "sheet_url_retail": "https://docs.google.com/spreadsheets/d/1IrMWUtwKIeKWY-f_z1JXO7Wp2nX2pSwEGCl7A2qtVgE/gviz/tq?tqx=out:csv&gid=816101257",
+    "sheet_url_decants": "https://docs.google.com/spreadsheets/d/1IrMWUtwKIeKWY-f_z1JXO7Wp2nX2pSwEGCl7A2qtVgE/gviz/tq?tqx=out:csv&gid=592974531",
+    "whatsapp": "6304654406",
+    "shipping": "Pan-India ₹100 (Free above ₹1,500 on 3+ decants)",
+    "dispatch": "2-3 days",
+    "decant_sizes": [
+      "3ml",
+      "5ml",
+      "8ml",
+      "10ml",
+      "20ml",
+      "30ml"
+    ]
+  },
+  {
     "id": "bluewings",
     "seller_name": "Blue Wings Fragrances",
     "type": "decant_and_bottle",

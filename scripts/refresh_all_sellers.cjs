@@ -102,6 +102,7 @@ function cleanStr(s) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/9:00\s*pm/gi, "9pm")
+    .replace(/shaikh/gi, "sheikh")
     .replace(/immortel/gi, "immortal")
     .replace(/[^a-z0-9]/g, "");
 }
@@ -319,6 +320,17 @@ async function runMasterRefresh() {
       shipping: "₹90 Pan-India (Free above ₹1,200)",
       dispatch: "3-4 days",
       decant_sizes: ["2ml", "5ml", "10ml"]
+    },
+    {
+      id: "gryv_scents",
+      seller_name: "GRYV Scents",
+      type: "decant_and_bottle",
+      sheet_url_retail: "https://docs.google.com/spreadsheets/d/1IrMWUtwKIeKWY-f_z1JXO7Wp2nX2pSwEGCl7A2qtVgE/gviz/tq?tqx=out:csv&gid=816101257",
+      sheet_url_decants: "https://docs.google.com/spreadsheets/d/1IrMWUtwKIeKWY-f_z1JXO7Wp2nX2pSwEGCl7A2qtVgE/gviz/tq?tqx=out:csv&gid=592974531",
+      whatsapp: "6304654406",
+      shipping: "Pan-India ₹100 (Free above ₹1,500 on 3+ decants)",
+      dispatch: "2-3 days",
+      decant_sizes: ["3ml", "5ml", "8ml", "10ml", "20ml", "30ml"]
     },
     {
       id: "bluewings",
@@ -631,7 +643,9 @@ async function runMasterRefresh() {
     bluewings_decants: 0,
     whiffculture_bottles: 0,
     whiffculture_decants: 0,
-    rp_decants: 0
+    rp_decants: 0,
+    gryv_scents_bottles: 0,
+    gryv_scents_decants: 0
   };
 
   let enrichedCount = 0;
@@ -781,6 +795,118 @@ async function runMasterRefresh() {
       console.log(`  ✓ Matched ${stats.rp_decants} decants for ${rpSeller.seller_name}`);
     } catch (err) {
       console.error(`  ❌ Error syncing RP Decants:`, err.message);
+    }
+  }
+
+  // ==========================================
+  // SOURCE 6: GRYV SCENTS (RETAIL BOTTLES & DECANTS)
+  // ==========================================
+  const gryvSeller = sellersList.find(s => s.id === "gryv_scents");
+  if (gryvSeller) {
+    // 1. Retail Pack Catalog (GID: 816101257)
+    if (gryvSeller.sheet_url_retail) {
+      try {
+        console.log(`\n--- Syncing GRYV Scents Retail Bottles ---`);
+        const csvData = await fetchUrl(gryvSeller.sheet_url_retail);
+        const rows = parseCSV(csvData);
+        console.log(`  Read ${rows.length} rows from GRYV Scents Retail`);
+        for (let rIdx = 1; rIdx < rows.length; rIdx++) {
+          const row = rows[rIdx];
+          const brandRaw = row[1]?.trim() || "";
+          const nameRaw = row[2]?.trim() || "";
+          const sizeRaw = row[3]?.trim() || "";
+          const priceClean = (row[4] || "").replace(/[^\d]/g, "");
+          const stockStatus = (row[5] || "").trim().toLowerCase();
+
+          // Skip empty rows, header rows, notes, or out of stock
+          if (!brandRaw || !nameRaw || !priceClean || stockStatus.includes("out of stock")) continue;
+          if (brandRaw.toLowerCase().includes("brand name") || nameRaw.toLowerCase().includes("perfume name") || brandRaw.toLowerCase().includes("designer")) continue;
+
+          const price = parseInt(priceClean, 10);
+          if (price < 400 || price > 50000) continue;
+
+          const brandNorm = normalizeBrand(brandRaw);
+          let cleanedName = nameRaw.replace(/^afnan\s+/i, '');
+          const matched = findBestMatch(brandNorm, cleanedName);
+          if (matched) {
+            const fullNameForMeta = sizeRaw ? `${cleanedName} ${sizeRaw}` : cleanedName;
+            const meta = extractBottleMetadata(brandNorm, fullNameForMeta, matched.bottle_size);
+            addBottleQuote(matched, {
+              seller_id: gryvSeller.id,
+              seller_name: gryvSeller.seller_name,
+              price,
+              size: meta.label,
+              volume_ml: meta.volume,
+              whatsapp: gryvSeller.whatsapp,
+              shipping: gryvSeller.shipping,
+              dispatch: gryvSeller.dispatch,
+              is_tester: false,
+              packaging_type: 'Retail Bottle',
+              verified: true
+            });
+            stats.gryv_scents_bottles++;
+          }
+        }
+        console.log(`  ✓ Matched ${stats.gryv_scents_bottles} bottles for GRYV Scents`);
+      } catch (err) {
+        console.error(`  ❌ Error syncing GRYV Scents Retail:`, err.message);
+      }
+    }
+
+    // 2. Decant Catalog (GID: 592974531)
+    if (gryvSeller.sheet_url_decants) {
+      try {
+        console.log(`\n--- Syncing GRYV Scents Decants ---`);
+        const csvData = await fetchUrl(gryvSeller.sheet_url_decants);
+        const rows = parseCSV(csvData);
+        console.log(`  Read ${rows.length} rows from GRYV Scents Decants`);
+        for (let rIdx = 2; rIdx < rows.length; rIdx++) {
+          const row = rows[rIdx];
+          const brandRaw = row[0]?.trim() || "";
+          const nameRaw = row[1]?.trim() || "";
+          const inspiredBy = row[2]?.trim() || "";
+          if (!brandRaw || !nameRaw || brandRaw.toLowerCase().includes("brand") || nameRaw.toLowerCase().includes("fragrance name")) continue;
+
+          const p3 = parseInt((row[3] || "").replace(/[^\d]/g, ""), 10);
+          const p5 = parseInt((row[4] || "").replace(/[^\d]/g, ""), 10);
+          const p8 = parseInt((row[5] || "").replace(/[^\d]/g, ""), 10);
+          const p10 = parseInt((row[6] || "").replace(/[^\d]/g, ""), 10);
+          const p20 = parseInt((row[7] || "").replace(/[^\d]/g, ""), 10);
+          const p30 = parseInt((row[8] || "").replace(/[^\d]/g, ""), 10);
+
+          const sizes = {};
+          if (p3 > 0) sizes["3ml"] = p3;
+          if (p5 > 0) sizes["5ml"] = p5;
+          if (p8 > 0) sizes["8ml"] = p8;
+          if (p10 > 0) sizes["10ml"] = p10;
+          if (p20 > 0) sizes["20ml"] = p20;
+          if (p30 > 0) sizes["30ml"] = p30;
+
+          const prices = Object.values(sizes);
+          if (prices.length === 0) continue;
+
+          const brandNorm = normalizeBrand(brandRaw);
+          let cleanedName = nameRaw.replace(/^afnan\s+/i, '');
+          const matched = findBestMatch(brandNorm, cleanedName, inspiredBy);
+          if (matched) {
+            addDecantQuote(matched, {
+              seller_id: gryvSeller.id,
+              seller_name: gryvSeller.seller_name,
+              whatsapp: gryvSeller.whatsapp,
+              shipping: gryvSeller.shipping,
+              dispatch: gryvSeller.dispatch,
+              sizes,
+              lowest_price: Math.min(...prices),
+              in_stock: true,
+              verified: true
+            });
+            stats.gryv_scents_decants++;
+          }
+        }
+        console.log(`  ✓ Matched ${stats.gryv_scents_decants} decants for GRYV Scents`);
+      } catch (err) {
+        console.error(`  ❌ Error syncing GRYV Scents Decants:`, err.message);
+      }
     }
   }
 
@@ -1128,6 +1254,7 @@ async function runMasterRefresh() {
     { id: "apex_aroma", name: "Apex Aroma" },
     { id: "enigma_perfumes", name: "Enigma Perfumes" },
     { id: "rp_decants", name: "RP Decants" },
+    { id: "gryv_scents", name: "GRYV Scents" },
     { id: "liquid_emotions", name: "Liquid Emotions" },
     { id: "bluewings", name: "Blue Wings" },
     { id: "whiffculture", name: "Whiff Culture" },
@@ -1289,7 +1416,7 @@ async function runMasterRefresh() {
       }
     }
 
-    // 3. Compute decant comparison per size (2ml, 5ml, 8ml, 10ml, 20ml, 30ml)
+    // 3. Compute decant comparison per size (2ml, 3ml, 5ml, 8ml, 10ml, 20ml, 30ml)
     if (frag.community_decants && frag.community_decants.length > 0) {
       frag.has_decants = true;
       decantsAvailableCount++;
@@ -1297,7 +1424,7 @@ async function runMasterRefresh() {
       const comp = {};
       const allPrices = [];
 
-      ['2ml', '5ml', '8ml', '10ml', '20ml', '30ml'].forEach(sz => {
+      ['2ml', '3ml', '5ml', '8ml', '10ml', '20ml', '30ml'].forEach(sz => {
         const quotes = [];
         frag.community_decants.forEach(d => {
           if (d.sizes && d.sizes[sz]) {
@@ -1435,7 +1562,7 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 10,
+    sellers_active: 11,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
@@ -1443,6 +1570,7 @@ async function runMasterRefresh() {
       enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, type: "Full Bottles & Testers" },
       liquid_emotions: { name: "Liquid Emotions", decants: stats.liquid_emotions, type: "Decants (5-30ml)" },
       rp_decants: { name: "RP Decants", decants: stats.rp_decants, type: "Decants (2-10ml)" },
+      gryv_scents: { name: "GRYV Scents", bottles: stats.gryv_scents_bottles, decants: stats.gryv_scents_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
       aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, decants: fragrances.filter(f => (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length, type: "Dual" },

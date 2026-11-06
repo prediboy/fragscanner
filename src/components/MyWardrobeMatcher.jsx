@@ -9,13 +9,14 @@ import { getProfileRecommendations } from '../utils/userProfiler';
 import { logWardrobeSelection } from '../lib/supabaseTelemetry';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All Sellers', tag: 'All 10' },
+  { id: 'all', name: 'All Sellers', tag: 'All 11' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
   { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 Bottles' },
   { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
   { id: 'rp_decants', name: 'RP Decants', tag: '🧪 Decants' },
+  { id: 'gryv_scents', name: 'GRYV Scents', tag: '🍾 & 🧪' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
   { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' },
   { id: 'aar_fragrances', name: 'AAR Fragrances', tag: '🍾 & 🧪' },
@@ -208,7 +209,7 @@ export default function MyWardrobeMatcher({
             </span>
           </div>
           <p className="text-xs text-slate-300">
-            Check scents you <strong className="text-emerald-400">Like (👍)</strong> and <strong className="text-rose-400">Dislike (👎)</strong> below. The algorithm finds your scent twins and checks live stock across 10 community sellers.
+            Check scents you <strong className="text-emerald-400">Like (👍)</strong> and <strong className="text-rose-400">Dislike (👎)</strong> below. The algorithm finds your scent twins and checks live stock across 11 community sellers.
           </p>
         </div>
 
@@ -1172,7 +1173,7 @@ export default function MyWardrobeMatcher({
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified across 10 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, Liquid Emotions, RP Decants, Blue Wings, Whiff Culture, AAR Fragrances & Fragrance Heaven
+                  Verified across 11 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, Liquid Emotions, RP Decants, GRYV Scents, Blue Wings, Whiff Culture, AAR Fragrances & Fragrance Heaven
                 </p>
               </div>
               <button 
