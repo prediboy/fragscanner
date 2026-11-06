@@ -91,18 +91,44 @@ function findBestMatchWithDetails(brandRaw, nameRaw, inspoRaw = "") {
   }
 
   // Community Shorthand Expansion
-  if (bClean === "armaf" && nClean.startsWith("cdn")) {
-    if (nClean.startsWith("cdnim") || nClean.startsWith("cdnintense")) {
-      nClean = nClean.replace(/^cdn(im|intense)/, "clubdenuitintenseman");
-    } else {
+  if (bClean === "armaf") {
+    if (nClean.includes("cdnoud") || nClean.includes("collectorspride")) {
+      nClean = "clubdenuitoud";
+    } else if (nClean.startsWith("cdnim")) {
+      nClean = nClean.replace(/^cdnim/, "clubdenuitintenseman");
+    } else if (nClean.startsWith("cdni") || nClean.startsWith("cdnintense")) {
+      nClean = nClean.replace(/^cdn(intense|i)/, "clubdenuitintense");
+    } else if (nClean.startsWith("cdn")) {
       nClean = nClean.replace(/^cdn/, "clubdenuit");
     }
+  }
+  if (bClean === "armaf" && nClean.includes("lionheart")) {
+    nClean = "clubdenuitlionheartman";
   }
   if (bClean.includes("reef") && nClean.includes("33")) {
     nClean = "33black200ml";
   }
   if (bClean === "ajmal" && nClean.includes("evokegold")) {
     nClean = "evokegoldedition";
+  }
+  if (bClean.includes("alhambra") || bClean.includes("lattafa") || bClean.includes("asdaaf")) {
+    if (nClean.includes("brightpeach")) nClean = "brightpeach";
+    if (nClean.includes("rosepetals")) nClean = "rosepetals";
+    if (nClean.includes("larougebaroque") || nClean.includes("baroquerouge")) nClean = "baroquerouge540";
+    if (nClean.includes("darkdoorintense")) nClean = "darkdoorintense";
+    if (nClean.includes("fantasme")) nClean = "jeanlowefantasme";
+    if (nClean.includes("maitre") || nClean.includes("matiere")) nClean = "jeanlowemaitre";
+    if (nClean.includes("jorgediprofumo")) nClean = "jorgediprofumoaqua";
+    if (nClean.includes("miadolcezza")) nClean = "miadolcezza";
+    if (nClean.includes("yourtouchwomen") || nClean.includes("yourtouchw")) nClean = "yourtouchwomen";
+    if (nClean.includes("yourtouchsantal")) nClean = "yourtouchsantal";
+    if (nClean.includes("yourtouchmen") || nClean.includes("yourtouchm") || nClean === "yourtouch") nClean = "yourtouch";
+    if (nClean.includes("portoneroli")) nClean = "portoneroli";
+    if (nClean.includes("fabulointense")) nClean = "fabulointense";
+    if (nClean.includes("delilah")) nClean = "delilah";
+    if (nClean.includes("khamrahwaha") || nClean.includes("waha")) nClean = "khamrahwaha";
+    if (nClean.includes("yaraelixir")) nClean = "yaraelixir";
+    if (nClean.includes("roseprive") || nClean.includes("priverose") || nClean.includes("ameeratalarab")) nClean = "ameeratalarabpriverose";
   }
 
   // 0. Registered canonical aliases
@@ -302,6 +328,11 @@ async function runMappingExercise() {
       // Skip non-product rows (headers, disclaimer footers, empty rows)
       if (!rawBrand || !rawName || !/[a-zA-Z]{2,}/.test(rawName) || /^\d+$/.test(rawName.trim())) continue;
       if (rawBrand.toLowerCase().includes("brand") || rawName.toLowerCase().includes("perfume name") || rawName.toLowerCase().includes("terms & conditions") || rawName.toLowerCase().includes("shipping")) continue;
+
+      // Skip non-perfumes (aerosol deodorant cans 200ml under ₹400, or attar oil roll-ons under ₹300)
+      const pNum = parseInt(rawPrice.replace(/[^\d]/g, ""), 10);
+      if (rawName.toLowerCase().includes("200ml") && pNum > 0 && pNum <= 400) continue;
+      if (/\b(12ml|15ml)\b/i.test(rawName) && pNum > 0 && pNum <= 300) continue;
 
       stats.totalRows++;
       stats.bySeller[s.seller_name].total++;
