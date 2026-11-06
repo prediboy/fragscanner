@@ -1146,7 +1146,7 @@ export default function App() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {displayedItems.slice(0, 16).map((item, idx) => renderFragranceCard(item, idx))}
+                  {displayedItems.map((item, idx) => renderFragranceCard(item, idx))}
                 </div>
               )}
             </section>
