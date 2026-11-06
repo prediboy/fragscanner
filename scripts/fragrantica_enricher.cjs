@@ -62,16 +62,22 @@ ${fragEvidence || "Rely on authoritative fragrance knowledge."}
 ${dupeEvidence || "Rely on authoritative fragrance community consensus."}
 
 CRITICAL RULES:
-1. Identify the exact luxury designer/niche perfume it clones or is inspired by (the #1 Fragrantica "This perfume reminds me of" consensus).
+1. CANONICAL FRAGRANTICA NAMING (ABSOLUTE PRIORITY):
+   - The perfume name ("name") MUST be driven strictly by the official Fragrantica title!
+   - NEVER use retailer typos, messy sheet abbreviations, or hybrid/Frankenstein names (e.g. NEVER produce "Supremacy Not Only Intense Collector's Edition" — the official Fragrantica name is "Supremacy Collector's Edition").
+   - Strip redundant brand prefixes from the perfume name (e.g. "Daring Blue for Life", NOT "Maison Alhambra Daring Blue for Life").
+2. Identify the exact luxury designer/niche perfume it clones or is inspired by (the #1 Fragrantica "This perfume reminds me of" consensus).
    - Accurately distinguish flankers in famous clone series! For example:
      * Lattafa Fakhar Black -> Yves Saint Laurent Y EDP
      * Lattafa Fakhar Platin (Platinum) -> Yves Saint Laurent Y L'Elixir
      * Lattafa Fakhar Gold Extrait -> Paco Rabanne 1 Million Parfum / Solar Amber
      * Lattafa Fakhar Rose -> Givenchy L'Interdit
+     * Afnan Supremacy Collector's Edition -> Creed Absolu Aventus (NOT Hacivat / SNOI)
+     * Afnan Supremacy Not Only Intense -> Nishane Hacivat
    - Do NOT default to generic blue perfumes (like Bleu de Chanel) unless the scent is specifically a dedicated clone of it (e.g. Armaf CDN Iconic).
-2. Extract the exact Fragrantica notes pyramid (top, middle, and base notes).
-3. Extract dominant olfactory accords with hex colors.
-4. Output strictly a valid JSON object matching our catalog schema:
+3. Extract the exact Fragrantica notes pyramid (top, middle, and base notes).
+4. Extract dominant olfactory accords with hex colors.
+5. Output strictly a valid JSON object matching our catalog schema:
 {
   "name": "Clean Fragrance Name",
   "brand": "Standard Brand Name",
@@ -179,8 +185,14 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
   console.log(`   ↳ Compiling fragrance profile with Gemini...`);
   const compiled = await compileFragranceData(brandRaw, nameRaw, fragResult.text, dupeResult.text);
 
+  const brandClean = (compiled.brand || brandRaw).trim();
+  let cleanName = (compiled.name || nameRaw).trim();
+  if (cleanName.toLowerCase().startsWith(brandClean.toLowerCase() + " ")) {
+    cleanName = cleanName.slice(brandClean.length).trim();
+  }
+
   // Generate clean ID
-  const cleanId = (compiled.brand + " " + compiled.name)
+  const cleanId = (brandClean + " " + cleanName)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
@@ -191,8 +203,8 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
   // Create full catalog item
   const newPerfume = {
     id: cleanId,
-    name: compiled.name || nameRaw,
-    brand: compiled.brand || brandRaw,
+    name: cleanName,
+    brand: brandClean,
     collection: compiled.collection || "Classic Collection",
     rating_value: compiled.rating_value || 4.3,
     rating_count: compiled.rating_count || 350,

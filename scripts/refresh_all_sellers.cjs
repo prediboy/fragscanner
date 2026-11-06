@@ -101,6 +101,7 @@ function cleanStr(s) {
     .toLowerCase()
     .replace(/\bcdnim\b/gi, "club de nuit intense man")
     .replace(/\bcdn\b/gi, "club de nuit")
+    .replace(/\bsnoi\s*(ce|collector|collectors|collector's)\b/gi, "supremacy collectors edition")
     .replace(/\bsnoi\b/gi, "supremacy not only intense")
     .replace(/9:00\s*pm/gi, "9pm")
     .replace(/immortel/gi, "immortal")
