@@ -1,13 +1,13 @@
 {
-  "last_sync": "2026-11-06T17:49:12.718Z",
+  "last_sync": "2026-11-06T18:20:59.133Z",
   "sync_date": "2026-11-06",
-  "catalog_total": 1178,
-  "in_stock_count": 911,
+  "catalog_total": 1180,
+  "in_stock_count": 913,
   "decants_available_count": 723,
   "dual_available_count": 711,
   "enriched_new_arrivals_count": 2,
   "price_drops_count": 18,
-  "new_arrivals_count": 6,
+  "new_arrivals_count": 8,
   "active_price_drops": [
     {
       "id": "lattafa-khamrah-qahwa",
@@ -32,6 +32,18 @@
       "seller": "Apex Aroma",
       "drop_date": "2026-11-06",
       "drop_time": "16:39:12"
+    },
+    {
+      "id": "afnan-9am-dive",
+      "name": "9 AM Dive",
+      "brand": "Afnan",
+      "current_price": 2600,
+      "previous_price": 2650,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "FragFever",
+      "drop_date": "2026-11-06",
+      "drop_time": "18:20:53"
     },
     {
       "id": "afnan-turathi-brown",
@@ -212,18 +224,6 @@
       "seller": "Whiff Culture",
       "drop_date": "2026-11-06",
       "drop_time": "05:12:21"
-    },
-    {
-      "id": "rasasi-shuhrah-pour-homme",
-      "name": "Shuhrah Pour Homme",
-      "brand": "Rasasi",
-      "current_price": 2500,
-      "previous_price": 2949,
-      "drop_amount": 449,
-      "drop_percentage": 15,
-      "seller": "FragFever",
-      "drop_date": "2026-11-06",
-      "drop_time": "17:49:02"
     }
   ],
   "active_new_arrivals": [
@@ -235,7 +235,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -245,7 +245,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -255,7 +255,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -265,7 +265,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -275,7 +275,27 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-homme",
+      "name": "Shuhrah Pour Homme",
+      "brand": "Rasasi",
+      "price": 3350,
+      "seller": "Fragrance Heaven",
+      "size": "90ml Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
+    },
+    {
+      "id": "nusuk-mukhtalif-extrait",
+      "name": "Mukhtalif Extrait",
+      "brand": "Nusuk",
+      "price": 2150,
+      "seller": "FragFever",
+      "size": "Retail Bottle",
+      "added_date": "2026-11-06",
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     },
     {
       "id": "rasasi-shuhrah-pour-homme",
@@ -285,7 +305,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T17:49:02.862Z"
+      "added_timestamp": "2026-11-06T18:20:53.302Z"
     }
   ],
   "sellers_active": 6,
@@ -297,7 +317,7 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 466,
+      "bottles": 467,
       "type": "Full Bottles"
     },
     "apex_aroma": {
@@ -319,7 +339,7 @@
     "whiffculture": {
       "name": "Whiff Culture",
       "bottles": 425,
-      "decants": 408,
+      "decants": 407,
       "type": "Dual"
     }
   }

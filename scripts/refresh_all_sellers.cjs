@@ -657,7 +657,7 @@ async function runMasterRefresh() {
                   shipping: seller.shipping,
                   dispatch: seller.dispatch
                 });
-                if (newEntry) {
+                if (newEntry && !fragrances.some(f => f.id === newEntry.id)) {
                   fragrances.push(newEntry);
                   newlyEnrichedList.push(newEntry);
                   stats[seller.id]++;
@@ -1221,6 +1221,14 @@ async function runMasterRefresh() {
     if (frag.in_seller_stock && frag.has_decants) {
       dualAvailableCount++;
     }
+  });
+
+  // Deduplicate catalog by ID to guarantee primary key uniqueness
+  const seenCatalogIds = new Set();
+  fragrances = fragrances.filter(f => {
+    if (seenCatalogIds.has(f.id)) return false;
+    seenCatalogIds.add(f.id);
+    return true;
   });
 
   // Save updated fragrances.json
