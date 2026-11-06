@@ -443,7 +443,7 @@ export default function App() {
           likeReasons: [
             `📉 Price Drop: Saved ₹${Math.abs(f.price_change || (f.previous_price - f.community_price))} (-${f.price_change_percentage || Math.round((Math.abs(f.previous_price - f.community_price) / f.previous_price) * 100)}%) in last 2 days`,
             `🍾 Lowest quote ₹${Number(f.community_price).toLocaleString()} via ${f.lowest_seller} (${f.community_bottle_size || 'Bottle'})`,
-            `🎯 Closest Match: ${f.dna_inspiration || 'Community Verified Stock'}`
+            `🧬 Cloned DNA: ${f.dna_inspiration || 'Community Verified Stock'}`
           ]
         }));
     }
@@ -654,9 +654,13 @@ export default function App() {
               )}
             </div>
             
-            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono text-xs font-bold shadow-2xs">
-              <Star className="w-3.5 h-3.5 fill-emerald-500 text-emerald-500" />
-              <span>{item.matchOutOfFive.toFixed(1)} / 5.0 Match</span>
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 font-mono text-xs font-bold shadow-2xs">
+              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+              {dealsSubFilter ? (
+                <span>{(Number(f.rating_value) || 4.2).toFixed(1)} on Fragrantica</span>
+              ) : (
+                <span>{item.matchOutOfFive.toFixed(1)} / 5.0 Match</span>
+              )}
             </div>
           </div>
 
@@ -669,7 +673,7 @@ export default function App() {
               <p className="text-xs text-glacier-textMuted mt-0.5 break-words">
                 {f.dna_inspiration ? (
                   <span>
-                    Closest Match: <strong className="font-semibold text-slate-800">{f.dna_inspiration}</strong>
+                    Inspired by: <strong className="font-semibold text-slate-800">{f.dna_inspiration}</strong>
                   </span>
                 ) : (
                   f.dna_type
