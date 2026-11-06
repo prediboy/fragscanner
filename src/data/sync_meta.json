@@ -1,48 +1,59 @@
 {
-  "last_sync": "2026-11-05T21:05:00.000Z",
-  "sync_date": "2026-11-05",
-  "catalog_total": 1159,
-  "in_stock_count": 892,
+  "last_sync": "2026-11-06T05:12:30.427Z",
+  "sync_date": "2026-11-06",
+  "catalog_total": 1158,
+  "in_stock_count": 891,
   "decants_available_count": 711,
   "dual_available_count": 697,
-  "enriched_new_arrivals_count": 4,
+  "enriched_new_arrivals_count": 0,
   "sellers_active": 6,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
-      "bottles": 353,
-      "decants": 0,
-      "type": "Bottles"
+      "bottles": 410,
+      "type": "Full Bottles"
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 787,
-      "decants": 0,
-      "type": "Bottles"
+      "bottles": 456,
+      "type": "Full Bottles"
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 381,
-      "decants": 0,
-      "type": "Bottles"
+      "bottles": 207,
+      "type": "Full Bottles"
     },
     "liquid_emotions": {
       "name": "Liquid Emotions",
-      "bottles": 0,
-      "decants": 418,
-      "type": "Decants"
+      "decants": 78,
+      "type": "Decants (5-30ml)"
     },
     "bluewings": {
       "name": "Blue Wings Fragrances",
-      "bottles": 315,
-      "decants": 62,
+      "bottles": 2,
+      "decants": 93,
       "type": "Dual"
     },
     "whiffculture": {
       "name": "Whiff Culture",
-      "bottles": 437,
+      "bottles": 420,
       "decants": 396,
       "type": "Dual"
     }
-  }
+  },
+  "price_drops_count": 1,
+  "active_price_drops": [
+    {
+      "id": "lattafa-fakhar-platin",
+      "name": "Fakhar Platin",
+      "brand": "Lattafa",
+      "current_price": 2229,
+      "previous_price": 2450,
+      "drop_amount": 221,
+      "drop_percentage": 9,
+      "seller": "Whiff Culture",
+      "drop_date": "2026-11-06",
+      "drop_time": "05:12:21"
+    }
+  ]
 }

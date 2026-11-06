@@ -997,21 +997,35 @@ async function runMasterRefresh() {
         frag.price_date = todayDate;
         frag.price_updated_at = nowIso;
 
+        const currentP = Number(bestFullBottleQuote.price);
         const lastHistory = frag.price_history[frag.price_history.length - 1];
+
         if (!lastHistory) {
           frag.price_history.push({
             date: todayDate,
-            price: Number(bestFullBottleQuote.price),
+            time: nowIso.slice(11, 19),
+            timestamp: nowIso,
+            price: currentP,
             size: bestFullBottleQuote.size || 'Retail Bottle',
             seller: bestFullBottleQuote.seller_name,
             seller_id: bestFullBottleQuote.seller_id
           });
-        } else if (lastHistory.price !== Number(bestFullBottleQuote.price) || lastHistory.size !== bestFullBottleQuote.size) {
-          frag.previous_price = lastHistory.price;
+          frag.is_price_drop = false;
+          frag.price_change = 0;
+        } else if (lastHistory.price !== currentP || lastHistory.size !== bestFullBottleQuote.size) {
+          const oldP = Number(lastHistory.price);
+          frag.previous_price = oldP;
           frag.previous_price_date = lastHistory.date;
+          frag.previous_price_time = lastHistory.time || null;
+          frag.price_change = currentP - oldP;
+          frag.price_change_date = todayDate;
+          frag.price_change_time = nowIso.slice(11, 19);
+
           frag.price_history.push({
             date: todayDate,
-            price: Number(bestFullBottleQuote.price),
+            time: nowIso.slice(11, 19),
+            timestamp: nowIso,
+            price: currentP,
             size: bestFullBottleQuote.size || 'Retail Bottle',
             seller: bestFullBottleQuote.seller_name,
             seller_id: bestFullBottleQuote.seller_id
@@ -1019,6 +1033,29 @@ async function runMasterRefresh() {
         } else if (lastHistory.date === todayDate) {
           lastHistory.seller = bestFullBottleQuote.seller_name;
           lastHistory.seller_id = bestFullBottleQuote.seller_id;
+          if (!lastHistory.timestamp) lastHistory.timestamp = nowIso;
+          if (!lastHistory.time) lastHistory.time = nowIso.slice(11, 19);
+        }
+
+        // Strict 2-Day Rolling Window for Price Drops:
+        // A fragrance is only considered an active price drop if:
+        // 1. Current price is strictly lower than previous price (diff < 0)
+        // 2. The drop occurred within the last 2 days (<= 48 hours / 2 days)
+        if (frag.previous_price && Number(frag.community_price) < Number(frag.previous_price)) {
+          const dropDate = frag.price_change_date || frag.price_date;
+          const dropTimeMs = new Date(dropDate).getTime();
+          const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+          const isWithin2Days = dropTimeMs && (Date.now() - dropTimeMs <= twoDaysMs);
+
+          if (isWithin2Days) {
+            frag.is_price_drop = true;
+            frag.price_change = Number(frag.community_price) - Number(frag.previous_price);
+            frag.price_change_percentage = Math.round((Math.abs(frag.price_change) / Number(frag.previous_price)) * 100);
+          } else {
+            frag.is_price_drop = false;
+          }
+        } else {
+          frag.is_price_drop = false;
         }
       }
     } else {
@@ -1026,6 +1063,7 @@ async function runMasterRefresh() {
       frag.community_price = null;
       frag.community_bottle_size = null;
       frag.lowest_seller = null;
+      frag.is_price_drop = false;
     }
 
     // 2. Compute decant comparison per size (5ml, 8ml, 10ml, 20ml, 30ml)
@@ -1131,6 +1169,8 @@ async function runMasterRefresh() {
   }
 
   // Save sync_meta.json
+  const activeDrops = fragrances.filter(f => f.is_price_drop && f.previous_price);
+
   const syncMeta = {
     last_sync: new Date().toISOString(),
     sync_date: new Date().toISOString().split('T')[0],
@@ -1139,6 +1179,19 @@ async function runMasterRefresh() {
     decants_available_count: decantsAvailableCount,
     dual_available_count: dualAvailableCount,
     enriched_new_arrivals_count: enrichedCount,
+    price_drops_count: activeDrops.length,
+    active_price_drops: activeDrops.map(d => ({
+      id: d.id,
+      name: d.name,
+      brand: d.brand,
+      current_price: d.community_price,
+      previous_price: d.previous_price,
+      drop_amount: Math.abs(d.price_change || (d.previous_price - d.community_price)),
+      drop_percentage: d.price_change_percentage || Math.round((Math.abs(d.previous_price - d.community_price) / d.previous_price) * 100),
+      seller: d.lowest_seller,
+      drop_date: d.price_change_date || d.price_date,
+      drop_time: d.price_change_time || null
+    })),
     sellers_active: 6,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
