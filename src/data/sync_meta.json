@@ -1,10 +1,10 @@
 {
-  "last_sync": "2026-11-07T21:00:36.407Z",
+  "last_sync": "2026-11-07T23:19:27.157Z",
   "sync_date": "2026-11-07",
   "catalog_total": 1189,
-  "in_stock_count": 922,
+  "in_stock_count": 921,
   "decants_available_count": 808,
-  "dual_available_count": 764,
+  "dual_available_count": 763,
   "enriched_new_arrivals_count": 0,
   "price_drops_count": 60,
   "new_arrivals_count": 16,
@@ -739,7 +739,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -749,7 +749,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -759,7 +759,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -769,7 +769,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -779,7 +779,7 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -789,7 +789,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "arabiyat-prestige-noire-absolu",
@@ -799,7 +799,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "azzaro-the-most-wanted-parfum",
@@ -809,7 +809,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -819,7 +819,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "alfred-dunhill-indian-sandalwood",
@@ -829,7 +829,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "rochas-moustache-eau-de-parfum",
@@ -839,7 +839,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "carolina-herrera-bad-boy-cobalt-eau-de-parfum-lectrique",
@@ -849,7 +849,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-intense",
@@ -859,7 +859,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "lalique-encre-noire-l-extr-me",
@@ -869,7 +869,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-sport",
@@ -879,7 +879,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     },
     {
       "id": "rasasi-shuhrah-pour-homme-avenoir",
@@ -889,7 +889,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-07",
-      "added_timestamp": "2026-11-07T21:00:29.270Z"
+      "added_timestamp": "2026-11-07T23:19:18.381Z"
     }
   ],
   "sellers_active": 11,
@@ -906,7 +906,7 @@
     },
     "apex_aroma": {
       "name": "Apex Aroma",
-      "bottles": 209,
+      "bottles": 206,
       "type": "Full Bottles"
     },
     "enigma_perfumes": {
