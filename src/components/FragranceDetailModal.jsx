@@ -7,7 +7,7 @@ import {
 import { getFragranceRecommendations } from '../utils/recommender';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
-export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther }) {
+export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther, selectedSeller = 'all' }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
 
   if (!fragrance) return null;
@@ -227,6 +227,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         .map((seller, sIdx, filteredSellers) => {
                           const priceNum = Number(seller.price);
                           const isLowest = sIdx === 0 && filteredSellers.length > 1;
+                          const isCurrentSelected = selectedSeller !== 'all' && seller.seller_id === selectedSeller;
                           const bottleLabel = seller.size || 'Bottle';
                           const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (${bottleLabel}) quoted at ₹${priceNum.toLocaleString()} on FragScanner. Is this in stock?`;
                           const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
@@ -235,9 +236,11 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                             <div 
                               key={sIdx}
                               className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
-                                isLowest
-                                  ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
-                                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                                isCurrentSelected
+                                  ? 'bg-cyan-950/40 border-cyan-400 shadow-md ring-2 ring-cyan-500/40'
+                                  : isLowest
+                                    ? 'bg-emerald-950/30 border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
+                                    : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
                               }`}
                             >
                               <div>
@@ -245,6 +248,12 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                   <div>
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                       <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
+                                      {isCurrentSelected && (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-500 font-mono font-bold flex items-center gap-1">
+                                          <span>🎯</span>
+                                          <span>Selected Seller</span>
+                                        </span>
+                                      )}
                                       {seller.is_partial || (seller.size && /partial/i.test(seller.size)) ? (
                                         <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-300 border border-amber-500 font-mono font-bold flex items-center gap-1">
                                           <span>🏷️</span>

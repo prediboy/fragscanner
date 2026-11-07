@@ -7,23 +7,24 @@ import PowerFragranceCard from './components/PowerFragranceCard';
 import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
+import { filterCatalogSemantically } from './utils/semanticSearch';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All 11 Verified Sellers' },
-  { id: 'enigma_perfumes', name: 'Enigma Perfumes (70 bottles, 79 decants)' },
-  { id: 'sovereign_scents', name: 'Sovereign Scents (28 bottles, 608 decants)' },
-  { id: 'fragfever', name: 'FragFever (466 bottles)' },
-  { id: 'second_theory', name: 'Second Theory (411 bottles)' },
-  { id: 'apex_aroma', name: 'Apex Aroma (209 bottles)' },
-  { id: 'whiffculture', name: 'Whiff Culture (429 bottles, 411 decants)' },
-  { id: 'rp_decants', name: 'RP Decants (274 decants)' },
-  { id: 'gryv_scents', name: 'GRYV Scents (35 bottles, 87 decants)' },
-  { id: 'bluewings', name: 'Blue Wings (1 bottle, 92 decants)' },
-  { id: 'aar_fragrances', name: 'AAR Fragrances (732 bottles)' },
-  { id: 'fragrance_heaven', name: 'Fragrance Heaven (543 bottles)' }
+  { id: 'enigma_perfumes', name: 'Enigma Perfumes' },
+  { id: 'sovereign_scents', name: 'Sovereign Scents' },
+  { id: 'fragfever', name: 'FragFever' },
+  { id: 'second_theory', name: 'Second Theory' },
+  { id: 'apex_aroma', name: 'Apex Aroma' },
+  { id: 'whiffculture', name: 'Whiff Culture' },
+  { id: 'rp_decants', name: 'RP Decants' },
+  { id: 'gryv_scents', name: 'GRYV Scents' },
+  { id: 'bluewings', name: 'Blue Wings' },
+  { id: 'aar_fragrances', name: 'AAR Fragrances' },
+  { id: 'fragrance_heaven', name: 'Fragrance Heaven' }
 ];
 
 export default function App() {
@@ -96,31 +97,19 @@ export default function App() {
     }
   });
 
-  // Debounced search query telemetry
-  useEffect(() => {
-    if (searchQuery.trim().length >= 2) {
-      const t = setTimeout(() => {
-        logSearchQuery(searchQuery.trim(), filteredFragrances.length);
-      }, 1500);
-      return () => clearTimeout(t);
-    }
-  }, [searchQuery]);
-
-  const resetAllFilters = () => {
-    setSearchQuery('');
-    setQuickFilterTab('all');
-    setFilterState({
-      formats: ['retail', 'decant'],
-      maxBudget: 15000,
-      selectedSeller: 'all',
-      dealsOnly: null,
-      selectedDna: null,
-      selectedVibe: null,
-      sortBy: 'price_asc'
+  // 1. STRICTLY ACTIVE IN-STOCK INVENTORY BASE
+  // Preserves all 1,188 in master fragrancesData, but strictly hides the 223 unquoted items from the shopping feed
+  const inStockCatalog = useMemo(() => {
+    return fragrancesData.filter(f => {
+      const hasBottles = Array.isArray(f.community_sellers) && f.community_sellers.some(s => Number(s.price) > 0);
+      const hasDecants = Array.isArray(f.community_decants) && f.community_decants.some(d => (
+        Number(d.lowest_price) > 0 || (d.sizes && Object.values(d.sizes).some(v => Number(v) > 0))
+      ));
+      return (f.in_seller_stock || f.has_decants) && (hasBottles || hasDecants);
     });
-  };
+  }, []);
 
-  // Compute live catalog statistics
+  // Compute live catalog statistics on verified stock
   const catalogCounts = useMemo(() => {
     let inStock = 0;
     let drops = 0;
@@ -129,7 +118,7 @@ export default function App() {
     let partials = 0;
     let retail = 0;
 
-    for (const f of fragrancesData) {
+    for (const f of inStockCatalog) {
       if (f.in_seller_stock) inStock++;
       if (f.is_price_drop && f.community_price) drops++;
       if (f.has_decants) decants++;
@@ -139,63 +128,89 @@ export default function App() {
     }
 
     return { inStock, drops, decants, testers, partials, retail };
-  }, []);
+  }, [inStockCatalog]);
 
-  // Filter & Sort Engine
-  const filteredFragrances = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
+  // Compute live seller inventory count list
+  const sellersWithLiveCounts = useMemo(() => {
+    return COMMUNITY_SELLERS.map(s => {
+      if (s.id === 'all') return s;
+      const count = inStockCatalog.filter(f => {
+        const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(q => q.seller_id === s.id && Number(q.price) > 0);
+        const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === s.id);
+        return inB || inD;
+      }).length;
+      return {
+        ...s,
+        count
+      };
+    });
+  }, [inStockCatalog]);
+
+  // Step 1: Base Facet Filtering (Seller, Formats, Budget, Deals, Vibe)
+  const baseFiltered = useMemo(() => {
     const {
       formats,
       maxBudget,
       selectedSeller,
       dealsOnly,
       selectedDna,
-      selectedVibe,
-      sortBy
+      selectedVibe
     } = filterState;
 
     const normalizeStr = (s) => (s || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-    return fragrancesData.filter(f => {
-      // 1. Search Query Filter
-      if (q) {
-        const nameMatch = normalizeStr(f.name).includes(q);
-        const brandMatch = normalizeStr(f.brand).includes(q);
-        const dnaMatch = normalizeStr(f.dna_inspiration).includes(q);
-        const notesMatch = f.notes && typeof f.notes === 'object' && Object.values(f.notes).flat().some(n => normalizeStr(n).includes(q));
-        const sellerMatch = Array.isArray(f.community_sellers) && f.community_sellers.some(s => normalizeStr(s.seller_name).includes(q));
-        if (!nameMatch && !brandMatch && !dnaMatch && !notesMatch && !sellerMatch) return false;
+    return inStockCatalog.filter(f => {
+      // 1. Seller Isolation Filter: If a specific seller is selected, perfume MUST be in that seller's active stock!
+      if (selectedSeller !== 'all') {
+        const inBottles = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && Number(s.price) > 0);
+        const inDecants = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === selectedSeller);
+        if (!inBottles && !inDecants) return false;
       }
 
       // 2. Deals Only Filter
       if (dealsOnly === 'drops' && (!f.is_price_drop || !f.community_price)) return false;
       if (dealsOnly === 'new' && (!f.is_new_arrival || !f.community_price)) return false;
 
-      // 3. Format & Stock Filter
+      // 3. Format & Packaging Filter
       if (formats.length > 0 && formats.length < 4) {
-        const hasRetail = formats.includes('retail') && f.in_seller_stock && !f.is_tester && !f.is_partial;
-        const hasTester = formats.includes('tester') && (f.is_tester || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester)));
-        const hasPartial = formats.includes('partial') && (f.is_partial || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial)));
-        const hasDecant = formats.includes('decant') && f.has_decants;
+        let hasRetail = false;
+        let hasTester = false;
+        let hasPartial = false;
+        let hasDecant = false;
+
+        if (selectedSeller === 'all') {
+          hasRetail = formats.includes('retail') && f.in_seller_stock && !f.is_tester && !f.is_partial;
+          hasTester = formats.includes('tester') && (f.is_tester || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester)));
+          hasPartial = formats.includes('partial') && (f.is_partial || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial)));
+          hasDecant = formats.includes('decant') && f.has_decants;
+        } else {
+          // Seller-specific format check
+          hasRetail = formats.includes('retail') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && !s.is_tester && !s.is_partial && Number(s.price) > 0);
+          hasTester = formats.includes('tester') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && s.is_tester && Number(s.price) > 0);
+          hasPartial = formats.includes('partial') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && s.is_partial && Number(s.price) > 0);
+          hasDecant = formats.includes('decant') && Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === selectedSeller);
+        }
 
         if (!hasRetail && !hasTester && !hasPartial && !hasDecant) return false;
       }
 
       // 4. Max Budget Filter
       if (maxBudget < 15000) {
-        const bottleP = Number(f.community_price || 999999);
-        const decantP = Number(f.lowest_decant_price || 999999);
-        if (bottleP > maxBudget && decantP > maxBudget) return false;
+        if (selectedSeller === 'all') {
+          const bottleP = Number(f.community_price || 999999);
+          const decantP = Number(f.lowest_decant_price || 999999);
+          if (bottleP > maxBudget && decantP > maxBudget) return false;
+        } else {
+          // Check against selected seller's actual price
+          const sellerBottle = Array.isArray(f.community_sellers) ? f.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
+          const sellerDecant = Array.isArray(f.community_decants) ? f.community_decants.find(d => d.seller_id === selectedSeller) : null;
+          const bPrice = sellerBottle ? Number(sellerBottle.price) : 999999;
+          const dPrice = sellerDecant ? Number(sellerDecant.lowest_price || 999999) : 999999;
+          if (bPrice > maxBudget && dPrice > maxBudget) return false;
+        }
       }
 
-      // 5. Selected Seller Filter
-      if (selectedSeller !== 'all') {
-        const inBottles = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller);
-        const inDecants = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === selectedSeller);
-        if (!inBottles && !inDecants) return false;
-      }
-
-      // 6. Cloned DNA Target Filter
+      // 5. Cloned DNA Target Filter (Quick chips)
       if (selectedDna) {
         const term = selectedDna.toLowerCase();
         const inspo = normalizeStr(f.dna_inspiration);
@@ -203,7 +218,7 @@ export default function App() {
         if (!inspo.includes(term) && !name.includes(term)) return false;
       }
 
-      // 7. Olfactory Vibe Filter
+      // 6. Olfactory Vibe & Accords Filter
       if (selectedVibe) {
         const accords = Array.isArray(f.accords) ? f.accords.map(a => a.name.toLowerCase()).join(' ') : '';
         const inspo = normalizeStr(f.dna_inspiration);
@@ -219,17 +234,45 @@ export default function App() {
       }
 
       return true;
-    }).sort((a, b) => {
-      // Sorting Logic
+    });
+  }, [inStockCatalog, filterState]);
+
+  // Step 2: Semantic Search Filter (Typo-tolerant, clone-aware, notes-aware)
+  const searchFiltered = useMemo(() => {
+    if (!searchQuery.trim()) return baseFiltered;
+    return filterCatalogSemantically(baseFiltered, searchQuery.trim());
+  }, [baseFiltered, searchQuery]);
+
+  // Step 3: Sorting Engine
+  const finalSortedFragrances = useMemo(() => {
+    const { sortBy, selectedSeller } = filterState;
+    const isSpecificSeller = selectedSeller !== 'all';
+
+    return [...searchFiltered].sort((a, b) => {
+      // Helper to extract effective price based on seller context
+      const getPriceA = (item) => {
+        if (isSpecificSeller) {
+          const sB = Array.isArray(item.community_sellers) ? item.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
+          const sD = Array.isArray(item.community_decants) ? item.community_decants.find(d => d.seller_id === selectedSeller) : null;
+          return sB ? Number(sB.price) : (sD ? Number(sD.lowest_price || 999999) : 999999);
+        }
+        return Number(item.community_price || item.lowest_decant_price || 999999);
+      };
+
+      const getPriceB = (item) => {
+        if (isSpecificSeller) {
+          const sB = Array.isArray(item.community_sellers) ? item.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
+          const sD = Array.isArray(item.community_decants) ? item.community_decants.find(d => d.seller_id === selectedSeller) : null;
+          return sB ? Number(sB.price) : (sD ? Number(sD.lowest_price || 999999) : 999999);
+        }
+        return Number(item.community_price || item.lowest_decant_price || 999999);
+      };
+
       if (sortBy === 'price_asc') {
-        const pa = Number(a.community_price || a.lowest_decant_price || 999999);
-        const pb = Number(b.community_price || b.lowest_decant_price || 999999);
-        return pa - pb;
+        return getPriceA(a) - getPriceB(b);
       }
       if (sortBy === 'price_desc') {
-        const pa = Number(a.community_price || a.lowest_decant_price || 0);
-        const pb = Number(b.community_price || b.lowest_decant_price || 0);
-        return pb - pa;
+        return getPriceB(b) - getPriceA(a);
       }
       if (sortBy === 'drop_percent') {
         const da = a.is_price_drop ? Number(a.price_change_percentage || 0) : -1;
@@ -251,7 +294,31 @@ export default function App() {
       }
       return 0;
     });
-  }, [searchQuery, filterState]);
+  }, [searchFiltered, filterState]);
+
+  // Debounced search query telemetry
+  useEffect(() => {
+    if (searchQuery.trim().length >= 2) {
+      const t = setTimeout(() => {
+        logSearchQuery(searchQuery.trim(), finalSortedFragrances.length);
+      }, 1500);
+      return () => clearTimeout(t);
+    }
+  }, [searchQuery, finalSortedFragrances.length]);
+
+  const resetAllFilters = () => {
+    setSearchQuery('');
+    setQuickFilterTab('all');
+    setFilterState({
+      formats: ['retail', 'decant'],
+      maxBudget: 15000,
+      selectedSeller: 'all',
+      dealsOnly: null,
+      selectedDna: null,
+      selectedVibe: null,
+      sortBy: 'price_asc'
+    });
+  };
 
   // Active filter count for mobile badge
   const activeFiltersCount = useMemo(() => {
@@ -330,7 +397,7 @@ export default function App() {
           filterState={filterState}
           setFilterState={setFilterState}
           onResetFilters={resetAllFilters}
-          totalMatching={filteredFragrances.length}
+          totalMatching={finalSortedFragrances.length}
           quickFilterTab={quickFilterTab}
           setQuickFilterTab={setQuickFilterTab}
           counts={catalogCounts}
@@ -345,12 +412,12 @@ export default function App() {
             setFilterState={setFilterState}
             onResetFilters={resetAllFilters}
             counts={catalogCounts}
-            sellers={COMMUNITY_SELLERS.filter(s => s.id !== 'all')}
+            sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
           />
 
           {/* MAIN FRAGRANCE CARDS STREAM */}
           <div className="flex-1 min-w-0">
-            {filteredFragrances.length === 0 ? (
+            {finalSortedFragrances.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-xl font-mono">
                   ∅
@@ -372,7 +439,7 @@ export default function App() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredFragrances.map((f, idx) => (
+                {finalSortedFragrances.map((f, idx) => (
                   <PowerFragranceCard
                     key={f.id || idx}
                     fragrance={f}
@@ -395,10 +462,10 @@ export default function App() {
         filterState={filterState}
         setFilterState={setFilterState}
         onResetFilters={resetAllFilters}
-        resultCount={filteredFragrances.length}
+        resultCount={finalSortedFragrances.length}
         activeFilterCount={activeFiltersCount}
         counts={catalogCounts}
-        sellers={COMMUNITY_SELLERS.filter(s => s.id !== 'all')}
+        sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
       />
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}
@@ -408,6 +475,7 @@ export default function App() {
           allFragrances={fragrancesData}
           onClose={() => setActiveFragrance(null)}
           onSelectOther={(other) => setActiveFragrance(other)}
+          selectedSeller={filterState.selectedSeller}
         />
       )}
 
