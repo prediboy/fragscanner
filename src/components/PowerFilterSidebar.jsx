@@ -196,31 +196,6 @@ export default function PowerFilterSidebar({
         </select>
       </div>
 
-      {/* Cloned DNA Targets */}
-      <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800">
-        <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block">
-          Cloned Luxury DNA Targets
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {['Aventus', 'BR540', 'Tygar', "Angels' Share", 'Sauvage Elixir', 'Pacific Chill', 'Naxos'].map(dna => {
-            const isSelected = selectedDna === dna;
-            return (
-              <button
-                key={dna}
-                onClick={() => toggleDna(dna)}
-                className={`text-[10px] font-mono px-2 py-0.5 rounded-md transition-all ${
-                  isSelected 
-                    ? 'bg-cyan-600 text-white font-bold shadow-xs' 
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                }`}
-              >
-                {dna}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Fragrance Vibe & Occasion (Rethought Taste Lab) */}
       <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800">
         <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block">

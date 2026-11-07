@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TrendingDown, Sparkles, DollarSign, Store, ArrowRight, Crown } from 'lucide-react';
+import { TrendingDown, Sparkles, Store, ArrowRight } from 'lucide-react';
 import PowerFragranceCard from './PowerFragranceCard';
 
 export default function CuratedSpotlightHub({
@@ -31,70 +31,6 @@ export default function CuratedSpotlightHub({
       .slice(0, 6);
   }, [catalog]);
 
-  // 3. High-Value Budget Monsters (< ₹2,500 with Rating >= 4.0)
-  const budgetBeasts = useMemo(() => {
-    return catalog
-      .filter(f => {
-        const p = Number(f.community_price);
-        const r = Number(f.rating_value) || 0;
-        return p > 0 && p <= 2500 && r >= 4.0;
-      })
-      .sort((a, b) => (Number(b.rating_value) || 0) - (Number(a.rating_value) || 0))
-      .slice(0, 6);
-  }, [catalog]);
-
-  // 4. Iconic Luxury DNA Hub Data
-  const iconicDnas = [
-    {
-      name: 'Creed Aventus',
-      filterTerm: 'Aventus',
-      tagline: 'Smoky Pineapple & Birch',
-      samplePerfumes: 'CDNIM, SNOI, Cedrat Boise, Lynked',
-      icon: '🍍',
-      color: 'from-amber-500/10 to-yellow-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400'
-    },
-    {
-      name: 'Bvlgari Tygar',
-      filterTerm: 'Tygar',
-      tagline: 'Sparkling Grapefruit & Ambroxan',
-      samplePerfumes: 'Turathi Blue, Theoreme, Al Qiam',
-      icon: '⚡',
-      color: 'from-cyan-500/10 to-blue-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400'
-    },
-    {
-      name: "Kilian Angels' Share",
-      filterTerm: "Angels' Share",
-      tagline: 'Cognac, Cinnamon & Warm Amber',
-      samplePerfumes: 'Khamrah, Kismet Magic, Sharaf Blend',
-      icon: '🥃',
-      color: 'from-amber-600/10 to-orange-500/10 border-amber-600/30 text-amber-700 dark:text-amber-300'
-    },
-    {
-      name: 'Dior Sauvage Elixir',
-      filterTerm: 'Sauvage Elixir',
-      tagline: 'Dark Lavender, Licorice & Spices',
-      samplePerfumes: 'Asad, Salvo Elixir, Ventana',
-      icon: '🔥',
-      color: 'from-purple-500/10 to-indigo-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400'
-    },
-    {
-      name: 'Louis Vuitton Imagination',
-      filterTerm: 'Imagination',
-      tagline: 'Chinese Black Tea, Ambrox & Citrus',
-      samplePerfumes: 'Art of Arabia I, Marwa, Sand Dunes',
-      icon: '🍵',
-      color: 'from-emerald-500/10 to-teal-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-    },
-    {
-      name: 'PDM Althair',
-      filterTerm: 'Althair',
-      tagline: 'Bourbon Vanilla, Orange Blossom & Praline',
-      samplePerfumes: 'Liquid Brun, French Avenue',
-      icon: '🍨',
-      color: 'from-rose-500/10 to-amber-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400'
-    }
-  ];
-
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
@@ -111,10 +47,10 @@ export default function CuratedSpotlightHub({
               </span>
             </div>
             <h2 className="text-lg sm:text-xl font-heading font-extrabold text-white tracking-tight">
-              Don't browse blindly. Filter by seller, budget, or luxury DNA clone.
+              Don't browse blindly. Filter by community seller, packaging, or budget.
             </h2>
             <p className="text-xs text-slate-300 max-w-xl">
-              Showing verified price drops, new arrivals, and top budget deals below. Use the Power Rail on the left or search above to zero in on any specific perfume.
+              Showing verified price drops and new community stock arrivals below. Use the Power Rail on the left or search above to zero in on any specific perfume.
             </p>
           </div>
 
@@ -219,95 +155,7 @@ export default function CuratedSpotlightHub({
         </div>
       </section>
 
-      {/* SHELF 3: CLONED LUXURY DNA HUBS */}
-      <section className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-              <Crown className="w-4 h-4 text-amber-500" />
-              <span>Browse by Iconic Cloned DNA</span>
-            </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Jump straight to the highest quality Middle Eastern alternatives to iconic luxury houses
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {iconicDnas.map(dna => (
-            <button
-              key={dna.name}
-              onClick={() => onApplyFilter({ selectedDna: dna.filterTerm })}
-              className={`p-3.5 rounded-2xl border bg-gradient-to-br ${dna.color} hover:scale-[1.01] transition-all text-left flex flex-col justify-between`}
-            >
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xl">{dna.icon}</span>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Explore Clones →
-                  </span>
-                </div>
-                <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white">
-                  {dna.name}
-                </h4>
-                <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">
-                  {dna.tagline}
-                </p>
-              </div>
-              <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate">
-                Popular: {dna.samplePerfumes}
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* SHELF 4: HIGH-VALUE BUDGET BEASTS UNDER ₹2,500 */}
-      {budgetBeasts.length > 0 && (
-        <section className="space-y-3.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-cyan-100 dark:bg-cyan-950/70 border border-cyan-300 dark:border-cyan-800 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
-                <DollarSign className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-                  <span>Top Rated Under ₹2,500</span>
-                  <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800">
-                    Value Kings
-                  </span>
-                </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Fragrantica community rating ≥ 4.0/5 priced under ₹2,500
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => onApplyFilter({ maxBudget: 2500 })}
-              className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
-            >
-              <span>View all under ₹2.5k</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {budgetBeasts.map(f => (
-              <PowerFragranceCard
-                key={`budget-${f.id}`}
-                fragrance={f}
-                onSelect={onSelectFragrance}
-                isExpanded={expandedCardId === f.id}
-                onToggleExpand={onToggleExpand}
-                selectedSeller="all"
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* SHELF 5: FRESH COMMUNITY ARRIVALS */}
+      {/* SHELF 3: FRESH COMMUNITY ARRIVALS */}
       {newArrivals.length > 0 && (
         <section className="space-y-3.5 pt-2 border-t border-slate-200 dark:border-slate-800">
           <div className="flex items-center justify-between">

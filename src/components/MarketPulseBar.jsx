@@ -200,20 +200,6 @@ export default function MarketPulseBar({
         >
           🏷️ Partials ({counts.partials || 28})
         </button>
-
-        <button
-          onClick={() => {
-            setQuickFilterTab('under2k');
-            setFilterState(prev => ({ ...prev, maxBudget: 2000, formats: ['retail'] }));
-          }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
-            maxBudget === 2000
-              ? 'bg-cyan-600 text-white border-cyan-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-cyan-400'
-          }`}
-        >
-          ⚡ Under ₹2,000 Steals
-        </button>
       </div>
 
       {/* Active Dismissible Chips Row */}
