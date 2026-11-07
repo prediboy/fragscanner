@@ -6,6 +6,7 @@ import MobileFilterDrawer from './components/MobileFilterDrawer';
 import PowerFragranceCard from './components/PowerFragranceCard';
 import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
+import ModalErrorBoundary from './components/ModalErrorBoundary';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
@@ -501,13 +502,15 @@ export default function App() {
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}
       {activeFragrance && (
-        <FragranceDetailModal
-          fragrance={activeFragrance}
-          allFragrances={pageItems}
-          onClose={() => setActiveFragrance(null)}
-          onSelectOther={(other) => setActiveFragrance(other)}
-          selectedSeller={filterState.selectedSeller}
-        />
+        <ModalErrorBoundary onClose={() => setActiveFragrance(null)}>
+          <FragranceDetailModal
+            fragrance={activeFragrance}
+            allFragrances={pageItems}
+            onClose={() => setActiveFragrance(null)}
+            onSelectOther={(other) => setActiveFragrance(other)}
+            selectedSeller={filterState.selectedSeller}
+          />
+        </ModalErrorBoundary>
       )}
 
       {/* SYNC STATS MODAL */}

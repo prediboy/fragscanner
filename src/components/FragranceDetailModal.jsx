@@ -12,10 +12,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
   if (!fragrance) return null;
 
-  const recommendations = getFragranceRecommendations(fragrance.id, allFragrances, 8) || { flankers: [], dnaTwins: [], similarAccords: [] };
+  const recommendations = getFragranceRecommendations(fragrance, allFragrances, 8) || { flankers: [], dnaTwins: [], topMatches: [] };
 
   const getBrandBadgeColor = (brand) => {
-    switch (brand.toLowerCase()) {
+    switch ((brand || '').toLowerCase()) {
       case 'french avenue': return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30';
       case 'lattafa': return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
       case 'afnan': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
@@ -28,9 +28,11 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
     }
   };
 
-  const modalDisplayName = fragrance.brand && !fragrance.name.toLowerCase().includes(fragrance.brand.toLowerCase())
-    ? `${fragrance.brand} ${fragrance.name}`
-    : fragrance.name;
+  const fName = fragrance?.name || 'Perfume';
+  const fBrand = fragrance?.brand || '';
+  const modalDisplayName = fBrand && !fName.toLowerCase().includes(fBrand.toLowerCase())
+    ? `${fBrand} ${fName}`
+    : fName;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
@@ -107,7 +109,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
             <Sparkles className="w-4 h-4 text-amber-400" />
             <span>"You Will Also Like" Engine</span>
             <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              {(recommendations?.flankers.length || 0) + (recommendations?.dnaTwins.length || 0) + (recommendations?.topMatches.length || 0)}
+              {(recommendations?.flankers?.length || 0) + (recommendations?.dnaTwins?.length || 0) + (recommendations?.topMatches?.length || 0)}
             </span>
           </button>
         </div>
@@ -832,7 +834,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
               </div>
 
               {/* 1. Same Line Flankers & Variations */}
-              {recommendations?.flankers.length > 0 && (
+              {(recommendations?.flankers?.length || 0) > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -874,7 +876,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
               )}
 
               {/* 2. Middle Eastern DNA Twins (Targeting same high-end DNA) */}
-              {recommendations?.dnaTwins.length > 0 && (
+              {(recommendations?.dnaTwins?.length || 0) > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -895,7 +897,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       >
                         <div className="flex items-center justify-between text-xs mb-1">
                           <span className="font-bold text-emerald-400">{twin.brand}</span>
-                          <span className="text-amber-400 font-bold">★ {twin.rating_value.toFixed(2)}</span>
+                          <span className="text-amber-400 font-bold">★ {(Number(twin.rating_value) || 4.2).toFixed(2)}</span>
                         </div>
                         <h4 className="font-bold text-slate-100 group-hover:text-emerald-300 transition-colors">
                           {twin.name}
@@ -927,8 +929,9 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400">Ranked by algorithm score</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {recommendations?.topMatches.map((match, idx) => (
+                {(recommendations?.topMatches?.length || 0) > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {recommendations.topMatches.map((match, idx) => (
                     <div 
                       key={idx}
                       onClick={() => onSelectOther(match.fragrance)}
@@ -981,7 +984,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
                       <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
                         <span className="text-slate-400">
-                          {match.fragrance.dna_inspiration ? `Inspired by ${match.fragrance.dna_inspiration}` : match.fragrance.primary_season}
+                          {match.fragrance?.dna_inspiration ? `Inspired by ${match.fragrance.dna_inspiration}` : match.fragrance?.primary_season}
                         </span>
                         <span className="text-amber-300 font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
                           View scent <ArrowRight className="w-3.5 h-3.5" />
@@ -990,6 +993,11 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 font-mono">
+                  Browse more perfumes to see accord similarity recommendations.
+                </div>
+              )}
               </div>
 
             </div>
