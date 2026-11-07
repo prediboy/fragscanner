@@ -128,77 +128,103 @@ export default function MarketPulseBar({
 
       </div>
 
-      {/* 1-Tap Quick Lenses Ribbon (Scrollable horizontally) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar text-xs font-mono">
+      {/* Mutually Exclusive Mode Toggle Bar */}
+      <div className="bg-slate-100 dark:bg-slate-900/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1 overflow-x-auto hide-scrollbar text-xs font-mono shadow-2xs">
+        
+        {/* Toggle 1: Curated Highlights */}
         <button
           onClick={() => {
             onResetFilters();
           }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
             isCuratedActive
-              ? 'bg-cyan-600 text-white border-cyan-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-cyan-400'
+              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
           }`}
         >
-          ✨ Curated Highlights
+          <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+          <span>Curated Highlights</span>
         </button>
 
+        {/* Toggle 2: Price Drops */}
         <button
           onClick={() => {
             setQuickFilterTab('drops');
-            setFilterState(prev => ({ ...prev, dealsOnly: 'drops' }));
+            setFilterState(prev => ({ ...prev, dealsOnly: 'drops', formats: ['retail'] }));
           }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
             dealsOnly === 'drops'
-              ? 'bg-emerald-600 text-white border-emerald-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 hover:border-emerald-500'
+              ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
           }`}
         >
-          <TrendingDown className="w-3.5 h-3.5" />
-          <span>Price Drops ({counts.drops || 14})</span>
+          <TrendingDown className="w-3.5 h-3.5 text-emerald-500" />
+          <span>Price Drops ({counts.drops || 12})</span>
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
+        {/* Toggle 3: New Arrivals */}
+        <button
+          onClick={() => {
+            setQuickFilterTab('new');
+            setFilterState(prev => ({ ...prev, dealsOnly: 'new', formats: ['retail'] }));
+          }}
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            dealsOnly === 'new'
+              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <span>✨</span>
+          <span>New Arrivals ({counts.newArrivals || 12})</span>
+        </button>
+
+        {/* Toggle 4: Decants Ready */}
         <button
           onClick={() => {
             setQuickFilterTab('decants');
             setFilterState(prev => ({ ...prev, formats: ['decant'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
-            formats.length === 1 && formats.includes('decant')
-              ? 'bg-cyan-600 text-white border-cyan-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-cyan-400'
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            formats.length === 1 && formats.includes('decant') && !dealsOnly
+              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
           }`}
         >
-          💧 Decants Ready ({counts.decants || 808})
+          <span>💧</span>
+          <span>Decants Ready ({counts.decants || 808})</span>
         </button>
 
+        {/* Toggle 5: Testers */}
         <button
           onClick={() => {
             setQuickFilterTab('testers');
             setFilterState(prev => ({ ...prev, formats: ['tester'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
-            formats.length === 1 && formats.includes('tester')
-              ? 'bg-purple-600 text-white border-purple-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-purple-400'
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            formats.length === 1 && formats.includes('tester') && !dealsOnly
+              ? 'bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
           }`}
         >
-          🧪 Testers ({counts.testers || 240})
+          <span>🧪</span>
+          <span>Testers ({counts.testers || 240})</span>
         </button>
 
+        {/* Toggle 6: Partials */}
         <button
           onClick={() => {
             setQuickFilterTab('partials');
             setFilterState(prev => ({ ...prev, formats: ['partial'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
-            formats.length === 1 && formats.includes('partial')
-              ? 'bg-amber-600 text-white border-amber-500 font-bold shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-400'
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            formats.length === 1 && formats.includes('partial') && !dealsOnly
+              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
           }`}
         >
-          🏷️ Partials ({counts.partials || 28})
+          <span>🏷️</span>
+          <span>Partials ({counts.partials || 28})</span>
         </button>
       </div>
 

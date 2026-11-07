@@ -116,7 +116,8 @@ export default function App() {
   const catalogCounts = useMemo(() => {
     return {
       inStock: curatedData.inStockCount || 965,
-      drops: curatedData.topPriceDrops?.length || 14,
+      drops: curatedData.topPriceDrops?.length || 12,
+      newArrivals: curatedData.newArrivals?.length || 12,
       decants: 808,
       testers: 240,
       partials: 28,
