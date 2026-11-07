@@ -64,7 +64,13 @@ export default function App() {
   const [activeFragrance, setActiveFragrance] = useState(null);
   const [syncStatsOpen, setSyncStatsOpen] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState(null);
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(() => {
+    try {
+      return new URLSearchParams(window.location.search).get('drawer') === 'open';
+    } catch {
+      return false;
+    }
+  });
 
   // Search query
   const [searchQuery, setSearchQuery] = useState(() => {
@@ -89,8 +95,9 @@ export default function App() {
   const [filterState, setFilterState] = useState(() => {
     try {
       const dealsParam = new URLSearchParams(window.location.search).get('deals');
+      const formatParam = new URLSearchParams(window.location.search).get('format');
       return {
-        formats: ['retail'],
+        formats: formatParam ? [formatParam] : ['retail'],
         maxBudget: 15000,
         selectedSeller: 'all',
         selectedBrand: 'all',
