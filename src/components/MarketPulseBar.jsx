@@ -108,6 +108,7 @@ export default function MarketPulseBar({
               onChange={(e) => setFilterState(prev => ({ ...prev, sortBy: e.target.value }))}
               className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-cyan-400 focus:outline-none"
             >
+              {searchQuery.trim() && <option value="relevance">Best Match (Relevance)</option>}
               <option value="price_asc">Lowest Bottle Rate (₹ ↑)</option>
               <option value="price_desc">Highest Bottle Rate (₹ ↓)</option>
               <option value="drop_percent">Deepest Price Drop %</option>
