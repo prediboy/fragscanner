@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   X, Star, Sparkles, Wind, Sun, Moon, Calendar, 
   CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, Zap, Tag, Flame,
@@ -33,6 +33,56 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
   const modalDisplayName = fBrand && !fName.toLowerCase().includes(fBrand.toLowerCase())
     ? `${fBrand} ${fName}`
     : fName;
+
+  const effectiveDecantComparison = useMemo(() => {
+    // 1. If fragrance already has an object with sizes, check if it has keys
+    if (
+      fragrance.decant_comparison &&
+      typeof fragrance.decant_comparison === 'object' &&
+      !Array.isArray(fragrance.decant_comparison) &&
+      Object.keys(fragrance.decant_comparison).length > 0
+    ) {
+      return fragrance.decant_comparison;
+    }
+
+    // 2. Otherwise build it directly from fragrance.community_decants!
+    if (Array.isArray(fragrance.community_decants) && fragrance.community_decants.length > 0) {
+      const comparison = {};
+      for (const seller of fragrance.community_decants) {
+        if (!seller.sizes || typeof seller.sizes !== 'object') continue;
+        for (const [sizeRaw, priceRaw] of Object.entries(seller.sizes)) {
+          const price = Number(priceRaw);
+          if (!price || isNaN(price) || price <= 0) continue;
+          const size = sizeRaw.toLowerCase().trim();
+          if (!comparison[size]) {
+            comparison[size] = {
+              quotes: [],
+              lowest_price: price,
+              lowest_seller: seller.seller_name
+            };
+          }
+          comparison[size].quotes.push({
+            seller_id: seller.seller_id,
+            seller_name: seller.seller_name,
+            price: price,
+            whatsapp: seller.whatsapp,
+            website: seller.website,
+            shipping: seller.shipping,
+            dispatch: seller.dispatch
+          });
+          if (price < comparison[size].lowest_price) {
+            comparison[size].lowest_price = price;
+            comparison[size].lowest_seller = seller.seller_name;
+          }
+        }
+      }
+      for (const size of Object.keys(comparison)) {
+        comparison[size].quotes.sort((a, b) => a.price - b.price);
+      }
+      return Object.keys(comparison).length > 0 ? comparison : null;
+    }
+    return null;
+  }, [fragrance.decant_comparison, fragrance.community_decants]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
@@ -388,7 +438,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         <span>🧪 Decants & Samples (5ml • 8ml • 10ml • 20ml • 30ml)</span>
                       </h4>
                       <p className="text-[11px] text-slate-400">
-                        Comparing live decant rates from <strong>Liquid Emotions</strong>, <strong>Blue Wings</strong> & <strong>Whiff Culture</strong>:
+                        Comparing live decant rates from <strong>Enigma Perfumes</strong>, <strong>Blue Wings</strong> & <strong>Whiff Culture</strong>:
                       </p>
                     </div>
 
@@ -400,7 +450,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium"
                       >
                         <Globe className="w-3 h-3" />
-                        <span>Liquid Emotions</span>
+                        <span>Enigma Perfumes</span>
                         <ExternalLink className="w-2.5 h-2.5" />
                       </a>
                       <span className="text-slate-600">•</span>
@@ -428,10 +478,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     </div>
                   </div>
 
-                  {fragrance.has_decants && fragrance.decant_comparison ? (
+                  {fragrance.has_decants && effectiveDecantComparison ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {['2ml', '3ml', '5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
-                        const sizeData = fragrance.decant_comparison[size];
+                        const sizeData = effectiveDecantComparison[size];
                         if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
 
                         const validQuotes = sizeData.quotes.filter(q => {
@@ -538,13 +588,13 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       </p>
                       <div className="flex items-center gap-2 flex-wrap pt-1">
                         <a
-                          href={`https://wa.me/917982410620?text=${encodeURIComponent(`Hi Liquid Emotions, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          href={`https://wa.me/917982410620?text=${encodeURIComponent(`Hi Enigma Perfumes, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
                         >
                           <FlaskConical className="w-3 h-3 text-cyan-400" />
-                          <span>Ask Liquid Emotions</span>
+                          <span>Ask Enigma Perfumes</span>
                         </a>
                         <a
                           href={`https://wa.me/919899401419?text=${encodeURIComponent(`Hi Blue Wings, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}

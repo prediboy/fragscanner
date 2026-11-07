@@ -58,6 +58,14 @@ export default function App() {
   // Session attribution visit logging
   useEffect(() => {
     logSessionVisit();
+    try {
+      const modalParam = new URLSearchParams(window.location.search).get('modal');
+      if (modalParam) {
+        fetchFragranceDetail(modalParam).then(f => {
+          if (f) setActiveFragrance(f);
+        });
+      }
+    } catch {}
   }, []);
 
   // Modals state

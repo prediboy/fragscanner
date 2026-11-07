@@ -10,7 +10,7 @@ export default function FragScannerAIAgent({ onSelectFragrance }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), comparing live prices for **Full Bottles** (*Second Theory, FragFever, Apex Aroma*) and **Decants 5ml–30ml** (*Liquid Emotions, Blue Wings, Whiff Culture*)!",
+      content: "👋 Hello! I am your **FragScanner AI Sommelier**.\n\nAsk me anything: recommendations by occasion, finding twin clones for designer favorites (*Angels' Share, Sauvage, Aventus, Tygar*), comparing live prices for **Full Bottles** (*Second Theory, FragFever, Apex Aroma*) and **Decants 5ml–30ml** (*Enigma Perfumes, Blue Wings, Whiff Culture*)!",
       data: null
     }
   ]);

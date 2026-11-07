@@ -76,8 +76,8 @@ export function processSommelierQuery(queryText) {
     };
   }
 
-  // 2. Decant & Sample Inquiries (Liquid Emotions, Blue Wings & Whiff Culture)
-  if (q.includes('decant') || q.includes('sample') || q.includes('5ml') || q.includes('8ml') || q.includes('10ml') || q.includes('20ml') || q.includes('30ml') || q.includes('liquid emotion') || q.includes('blue wing') || q.includes('whiff culture') || q.includes('whiffculture')) {
+  // 2. Decant & Sample Inquiries (Enigma Perfumes, Blue Wings & Whiff Culture)
+  if (q.includes('decant') || q.includes('sample') || q.includes('5ml') || q.includes('8ml') || q.includes('10ml') || q.includes('20ml') || q.includes('30ml') || q.includes('enigma') || q.includes('liquid emotion') || q.includes('blue wing') || q.includes('whiff culture') || q.includes('whiffculture')) {
     const decantCandidates = fragrancesData.filter(f => f.has_decants && f.community_decants && f.community_decants.length > 0);
     let matched = decantCandidates.filter(f => q.includes(f.name.toLowerCase()) || q.includes(f.brand.toLowerCase()));
     
@@ -87,7 +87,7 @@ export function processSommelierQuery(queryText) {
     }
 
     const featured = matched.slice(0, 3);
-    let decantText = `### 🧪 **Verified Decants & Samples (5ml – 30ml)**\n\nLive decant rates compared across **Liquid Emotions**, **Blue Wings**, and **Whiff Culture**:\n\n`;
+    let decantText = `### 🧪 **Verified Decants & Samples (5ml – 30ml)**\n\nLive decant rates compared across **Enigma Perfumes**, **Blue Wings**, and **Whiff Culture**:\n\n`;
 
     featured.forEach(f => {
       decantText += `**${f.brand} ${f.name}**\n`;
