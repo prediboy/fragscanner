@@ -128,14 +128,14 @@ export default function App() {
 
   // 1. PAGE-WISE INVENTORY STATE (Loads strictly 24 items per page on-demand)
   const [pageItems, setPageItems] = useState([]);
-  const [totalMatching, setTotalMatching] = useState(curatedData.inStockCount || 921);
-  const [totalPages, setTotalPages] = useState(Math.ceil((curatedData.inStockCount || 921) / 24));
+  const [totalMatching, setTotalMatching] = useState(921);
+  const [totalPages, setTotalPages] = useState(Math.ceil(921 / 24));
   const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [spotlightDrops, setSpotlightDrops] = useState([]);
+  const [spotlightNew, setSpotlightNew] = useState([]);
 
   // Live brand list loaded directly from Supabase DB, pre-sorted A-Z
-  const [brandsList, setBrandsList] = useState(() =>
-    (curatedData.brands || []).slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
-  );
+  const [brandsList, setBrandsList] = useState([]);
 
   useEffect(() => {
     fetchCatalogBrands().then(list => {
@@ -180,6 +180,15 @@ export default function App() {
     }).catch(err => {
       console.warn('Could not refresh sync metadata from DB:', err);
     });
+
+    // Load spotlight drops and new arrivals directly from Supabase for the spotlight hub
+    fetchInventoryPage({ dealsOnly: 'drops', page: 1, pageSize: 12 })
+      .then(res => setSpotlightDrops(res.items || []))
+      .catch(e => console.warn('Spotlight drops error:', e));
+
+    fetchInventoryPage({ dealsOnly: 'new', page: 1, pageSize: 12 })
+      .then(res => setSpotlightNew(res.items || []))
+      .catch(e => console.warn('Spotlight new arrivals error:', e));
   }, []);
 
   // Compute live seller inventory count list from Supabase sync metadata
@@ -386,8 +395,8 @@ export default function App() {
           <div className="flex-1 min-w-0">
             {isUnfiltered ? (
               <CuratedSpotlightHub
-                priceDrops={curatedData.topPriceDrops}
-                newArrivals={curatedData.newArrivals}
+                priceDrops={spotlightDrops}
+                newArrivals={spotlightNew}
                 catalogCount={catalogCounts.inStock || 965}
                 selectedFormats={filterState.formats}
                 onSelectFragrance={async (selected) => {
