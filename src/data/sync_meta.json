@@ -1,13 +1,13 @@
 {
-  "last_sync": "2026-11-06T20:04:26.770Z",
-  "sync_date": "2026-11-06",
-  "catalog_total": 1187,
-  "in_stock_count": 921,
-  "decants_available_count": 769,
-  "dual_available_count": 738,
+  "last_sync": "2026-11-07T06:41:43.576Z",
+  "sync_date": "2026-11-07",
+  "catalog_total": 1188,
+  "in_stock_count": 922,
+  "decants_available_count": 770,
+  "dual_available_count": 739,
   "enriched_new_arrivals_count": 1,
   "price_drops_count": 54,
-  "new_arrivals_count": 15,
+  "new_arrivals_count": 16,
   "active_price_drops": [
     {
       "id": "rasasi-hawas-fire",
@@ -667,7 +667,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -677,7 +677,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -687,7 +687,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -697,7 +697,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -707,7 +707,7 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -717,7 +717,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "arabiyat-prestige-noire-absolu",
@@ -727,7 +727,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "azzaro-the-most-wanted-parfum",
@@ -737,7 +737,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -747,7 +747,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "alfred-dunhill-indian-sandalwood",
@@ -757,7 +757,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.279Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "rochas-moustache-eau-de-parfum",
@@ -767,7 +767,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.280Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "carolina-herrera-bad-boy-cobalt-eau-de-parfum-lectrique",
@@ -777,7 +777,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.280Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-intense",
@@ -787,7 +787,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.280Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "lalique-encre-noire-l-extr-me",
@@ -797,7 +797,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.280Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-sport",
@@ -805,12 +805,22 @@
       "brand": "Issey Miyake",
       "price": 2600,
       "seller": "Enigma Perfumes",
-      "size": "100ml Retail Bottle",
+      "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-06T20:04:19.280Z"
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
+    },
+    {
+      "id": "rasasi-shuhrah-avenoir",
+      "name": "Shuhrah Avenoir",
+      "brand": "Rasasi",
+      "price": 2500,
+      "seller": "FragFever",
+      "size": "Retail Bottle",
+      "added_date": "2026-11-07",
+      "added_timestamp": "2026-11-07T06:41:36.228Z"
     }
   ],
-  "sellers_active": 11,
+  "sellers_active": 10,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
@@ -819,7 +829,7 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 466,
+      "bottles": 467,
       "type": "Full Bottles"
     },
     "apex_aroma": {
@@ -830,12 +840,8 @@
     "enigma_perfumes": {
       "name": "Enigma Perfumes",
       "bottles": 70,
-      "type": "Full Bottles & Testers"
-    },
-    "liquid_emotions": {
-      "name": "Liquid Emotions",
       "decants": 79,
-      "type": "Decants (5-30ml)"
+      "type": "Dual"
     },
     "rp_decants": {
       "name": "RP Decants",
@@ -857,7 +863,7 @@
     "whiffculture": {
       "name": "Whiff Culture",
       "bottles": 429,
-      "decants": 411,
+      "decants": 412,
       "type": "Dual"
     },
     "aar_fragrances": {

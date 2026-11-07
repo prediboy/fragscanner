@@ -228,7 +228,12 @@ async function runMasterRefresh() {
           /\b(deo|deodorant|body[\s_-]*spray|body[\s_-]*mist|hair[\s_-]*mist|shower[\s_-]*gel|lotion|roll[\s_-]*on|after[\s_-]*shave)\b/i.test(size);
         return !isNonPerfume && !url.includes('decant-set') && !url.includes('/decant') && !size.includes('vial') && (!vol || vol >= 14);
       }),
-      decants: f.community_decants || []
+      decants: (f.community_decants || []).map(d => {
+        if (d.seller_id === 'liquid_emotions') {
+          return { ...d, seller_id: 'enigma_perfumes', seller_name: 'Enigma Perfumes' };
+        }
+        return d;
+      })
     };
     f.community_sellers = [];
     f.community_decants = [];
@@ -287,11 +292,13 @@ async function runMasterRefresh() {
     {
       id: "enigma_perfumes",
       seller_name: "Enigma Perfumes",
-      type: "bottle",
+      type: "decant_and_bottle",
       sheet_url: "https://docs.google.com/spreadsheets/d/14sQZhYjsWjZtAkZhFRgzq0rfzn1wKXqiVOMhwk6ks0E/gviz/tq?tqx=out:csv&gid=0",
+      decant_url: "https://liquidemotions.vercel.app/",
       whatsapp: "7982410620",
-      shipping: "Free Pan-India Delivery (Extra for remote areas)",
+      shipping: "Free Pan-India Delivery on orders above ₹1,200",
       dispatch: "24-48 hrs",
+      decant_sizes: ["5ml", "10ml", "20ml", "30ml"],
       type_col: 0,
       brand_col: 1,
       product_col: 2,
@@ -299,16 +306,6 @@ async function runMasterRefresh() {
       price_col: 4,
       hot_col: -1,
       start_row: 1
-    },
-    {
-      id: "liquid_emotions",
-      seller_name: "Liquid Emotions",
-      type: "decant",
-      url: "https://liquidemotions.vercel.app/",
-      whatsapp: "7982410620",
-      shipping: "Free Pan-India Delivery on orders above ₹1,200",
-      dispatch: "24-48 hrs",
-      decant_sizes: ["5ml", "10ml", "20ml", "30ml"]
     },
     {
       id: "rp_decants",
@@ -638,7 +635,7 @@ async function runMasterRefresh() {
     fragfever: 0,
     apex_aroma: 0,
     enigma_perfumes: 0,
-    liquid_emotions: 0,
+    enigma_perfumes_decants: 0,
     bluewings_bottles: 0,
     bluewings_decants: 0,
     whiffculture_bottles: 0,
@@ -655,7 +652,7 @@ async function runMasterRefresh() {
   // ==========================================
   // SOURCE 1, 2, 3, 4: GOOGLE SHEETS (BOTTLES & TESTERS)
   // ==========================================
-  const sheetSellers = sellersList.filter(s => s.sheet_url && s.type === 'bottle');
+  const sheetSellers = sellersList.filter(s => s.sheet_url && (s.type === 'bottle' || s.type === 'decant_and_bottle'));
   console.log(`\n--- Syncing Google Sheets (${sheetSellers.map(s => s.seller_name).join(', ')}) ---`);
   for (const seller of sheetSellers) {
     try {
@@ -911,15 +908,15 @@ async function runMasterRefresh() {
   }
 
   // ==========================================
-  // SOURCE 4: LIQUID EMOTIONS
+  // SOURCE 4: ENIGMA PERFUMES DECANTS (LIQUID EMOTIONS)
   // ==========================================
-  console.log("\n--- Syncing Liquid Emotions Decants ---");
+  console.log("\n--- Syncing Enigma Perfumes Decants (Liquid Emotions) ---");
   try {
     const leCode = await fetchUrl("https://liquidemotions.vercel.app/store.js");
     const leMatch = leCode.match(/const LE_ALL_FRAGRANCES\s*=\s*(\[[\s\S]*?\]);\s*(?:const|let|var|function|\/\*)/);
     if (leMatch) {
       const leItems = eval(leMatch[1]);
-      console.log(`  Fetched ${leItems.length} products from Liquid Emotions`);
+      console.log(`  Fetched ${leItems.length} products from Enigma Perfumes (Liquid Emotions)`);
       for (const item of leItems) {
         const brand = normalizeBrand(item.house);
         if (!item.name || isDesigner(brand || item.name)) continue;
@@ -936,25 +933,25 @@ async function runMasterRefresh() {
           const prices = Object.values(sizes);
           if (prices.length > 0) {
             addDecantQuote(matched, {
-              seller_id: "liquid_emotions",
-              seller_name: "Liquid Emotions",
+              seller_id: "enigma_perfumes",
+              seller_name: "Enigma Perfumes",
               website: "https://liquidemotions.vercel.app/",
               whatsapp: "7982410620",
-              shipping: "Free above ₹1,200",
+              shipping: "Free Pan-India Delivery on orders above ₹1,200",
               dispatch: "24-48 hrs",
               sizes,
               lowest_price: Math.min(...prices),
               in_stock: true,
               verified: true
             });
-            stats.liquid_emotions++;
+            stats.enigma_perfumes_decants++;
           }
         }
       }
-      console.log(`  ✓ Matched ${stats.liquid_emotions} decants for Liquid Emotions`);
+      console.log(`  ✓ Matched ${stats.enigma_perfumes_decants} decants for Enigma Perfumes`);
     }
   } catch (err) {
-    console.error("  ❌ Error syncing Liquid Emotions:", err.message);
+    console.error("  ❌ Error syncing Enigma Perfumes Decants:", err.message);
   }
 
   // ==========================================
@@ -1255,7 +1252,6 @@ async function runMasterRefresh() {
     { id: "enigma_perfumes", name: "Enigma Perfumes" },
     { id: "rp_decants", name: "RP Decants" },
     { id: "gryv_scents", name: "GRYV Scents" },
-    { id: "liquid_emotions", name: "Liquid Emotions" },
     { id: "bluewings", name: "Blue Wings" },
     { id: "whiffculture", name: "Whiff Culture" },
     { id: "aar_fragrances", name: "AAR Fragrances" },
@@ -1562,13 +1558,12 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 11,
+    sellers_active: 10,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
       apex_aroma: { name: "Apex Aroma", bottles: stats.apex_aroma, type: "Full Bottles" },
-      enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, type: "Full Bottles & Testers" },
-      liquid_emotions: { name: "Liquid Emotions", decants: stats.liquid_emotions, type: "Decants (5-30ml)" },
+      enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, decants: stats.enigma_perfumes_decants, type: "Dual" },
       rp_decants: { name: "RP Decants", decants: stats.rp_decants, type: "Decants (2-10ml)" },
       gryv_scents: { name: "GRYV Scents", bottles: stats.gryv_scents_bottles, decants: stats.gryv_scents_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
@@ -1589,7 +1584,7 @@ async function runMasterRefresh() {
   console.log(`  - Second Theory: ${stats.second_theory} bottles`);
   console.log(`  - FragFever: ${stats.fragfever} bottles`);
   console.log(`  - Apex Aroma: ${stats.apex_aroma} bottles`);
-  console.log(`  - Liquid Emotions: ${stats.liquid_emotions} decants`);
+  console.log(`  - Enigma Perfumes: ${stats.enigma_perfumes} bottles & ${stats.enigma_perfumes_decants} decants`);
   console.log(`  - Blue Wings: ${stats.bluewings_bottles} bottles & ${stats.bluewings_decants} decants`);
   console.log(`  - Whiff Culture: ${stats.whiffculture_bottles} bottles & ${stats.whiffculture_decants} decants`);
   console.log("=========================================================");

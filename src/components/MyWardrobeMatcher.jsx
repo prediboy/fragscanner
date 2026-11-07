@@ -9,12 +9,11 @@ import { getProfileRecommendations } from '../utils/userProfiler';
 import { logWardrobeSelection } from '../lib/supabaseTelemetry';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All Sellers', tag: 'All 11' },
+  { id: 'all', name: 'All Sellers', tag: 'All 10' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
-  { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 Bottles' },
-  { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
+  { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 & 🧪' },
   { id: 'rp_decants', name: 'RP Decants', tag: '🧪 Decants' },
   { id: 'gryv_scents', name: 'GRYV Scents', tag: '🍾 & 🧪' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },

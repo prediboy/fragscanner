@@ -14,12 +14,11 @@ import {
 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 11 Sellers', tag: 'All' },
+  { id: 'all', name: 'All 10 Sellers', tag: 'All' },
   { id: 'second_theory', name: 'Second Theory', tag: '🍾 Bottles' },
   { id: 'fragfever', name: 'FragFever', tag: '🍾 Bottles' },
   { id: 'apex_aroma', name: 'Apex Aroma', tag: '🍾 Bottles' },
-  { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 Bottles' },
-  { id: 'liquid_emotions', name: 'Liquid Emotions', tag: '🧪 Decants' },
+  { id: 'enigma_perfumes', name: 'Enigma Perfumes', tag: '🍾 & 🧪' },
   { id: 'rp_decants', name: 'RP Decants', tag: '🧪 Decants' },
   { id: 'gryv_scents', name: 'GRYV Scents', tag: '🍾 & 🧪' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
