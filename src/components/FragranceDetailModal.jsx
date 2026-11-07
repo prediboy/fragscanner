@@ -197,28 +197,32 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
                 {/* SECTION 1: FULL BOTTLES (BNIB) */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 shrink-0">
                       <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
                       <span>🍾 Bottles & Retail Packs</span>
                     </h4>
                     {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
-                      <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5 flex-wrap">
+                      <div className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2 flex-wrap">
                         {fragrance.is_price_drop && fragrance.previous_price && (
                           <span className="text-slate-400 line-through text-[11px] font-normal">
                             ₹{Number(fragrance.previous_price).toLocaleString()}
                           </span>
                         )}
-                        <span>Best: ₹{Number(fragrance.community_price).toLocaleString()}</span>
+                        <span className="shrink-0 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-md whitespace-nowrap">
+                          Best: ₹{Number(fragrance.community_price).toLocaleString()}
+                        </span>
                         {fragrance.community_bottle_size && (
-                          <span className="text-slate-400 font-normal ml-0.5">({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})</span>
+                          <span className="text-slate-400 font-normal text-[11px] shrink-0">
+                            ({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})
+                          </span>
                         )}
                         {fragrance.is_price_drop && (
-                          <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold shrink-0">
                             📉 -{fragrance.price_change_percentage || Math.round((Math.abs(fragrance.previous_price - fragrance.community_price) / fragrance.previous_price) * 100)}% Drop
                           </span>
                         )}
-                      </span>
+                      </div>
                     )}
                   </div>
 
@@ -272,7 +276,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                         </span>
                                       )}
                                       {isLowest && (
-                                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5">
+                                        <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5 shrink-0 whitespace-nowrap">
                                           ★ Best Deal
                                         </span>
                                       )}
@@ -469,7 +473,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                       <div className="flex items-center gap-1 truncate mr-1">
                                         <span className="font-semibold truncate">{q.seller_name}</span>
                                         {isWinning && (
-                                          <span className="text-[9px] px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-200 font-bold shrink-0">
+                                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/30 text-cyan-200 font-bold shrink-0 whitespace-nowrap">
                                             Best
                                           </span>
                                         )}

@@ -253,24 +253,26 @@ export default function PowerFragranceCard({
 
       {/* In-Stock Seller Spread & Actions */}
       <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-        <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate flex items-center gap-1">
+        <div className="min-w-0 flex-1 flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400">
           {isSpecificSeller ? (
-            <span className="text-cyan-700 dark:text-cyan-400 font-semibold truncate flex items-center gap-1">
+            <span className="text-cyan-700 dark:text-cyan-400 font-semibold truncate flex items-center gap-1 min-w-0">
               <Store className="w-3 h-3 text-cyan-500 shrink-0" />
-              <span>{primarySellerName}</span>
+              <span className="truncate">{primarySellerName}</span>
             </span>
           ) : (
-            <>
-              <span>Best: </span>
-              <strong className="text-slate-800 dark:text-emerald-400 font-semibold">{primarySellerName}</strong>
-            </>
+            <div className="flex items-center gap-1 min-w-0">
+              <span className="shrink-0 font-mono text-slate-400 font-semibold whitespace-nowrap">Best:</span>
+              <strong className="text-slate-800 dark:text-emerald-400 font-semibold truncate" title={primarySellerName}>
+                {primarySellerName}
+              </strong>
+            </div>
           )}
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={() => onToggleExpand && onToggleExpand(f.id)}
-            className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1 shadow-2xs"
+            className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1 shadow-2xs cursor-pointer"
             title="Compare rates from all community sellers"
           >
             <span>Sellers ({allQuotes.length})</span>
@@ -293,7 +295,7 @@ export default function PowerFragranceCard({
                 price: bestLeadPrice,
                 format: hasBottlePrice ? 'bottle' : 'decant'
               })}
-              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 active:scale-95"
+              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 active:scale-95 shrink-0"
             >
               <span>WhatsApp</span>
               <span className="text-[9px]">↗</span>
