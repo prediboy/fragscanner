@@ -10,7 +10,8 @@ export default function MarketPulseBar({
   totalMatching,
   quickFilterTab,
   setQuickFilterTab,
-  counts = {}
+  counts = {},
+  isCuratedActive = false
 }) {
   const {
     formats = [],
@@ -116,7 +117,11 @@ export default function MarketPulseBar({
           </div>
 
           <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0 pl-1 border-l border-slate-200 dark:border-slate-800">
-            <strong className="text-slate-900 dark:text-white font-bold">{totalMatching}</strong> items
+            {isCuratedActive ? (
+              <span className="text-cyan-600 dark:text-cyan-400 font-bold">Curated Deals</span>
+            ) : (
+              <><strong className="text-slate-900 dark:text-white font-bold">{totalMatching}</strong> matches</>
+            )}
           </div>
         </div>
 
@@ -126,16 +131,15 @@ export default function MarketPulseBar({
       <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar text-xs font-mono">
         <button
           onClick={() => {
-            setQuickFilterTab('all');
-            setFilterState(prev => ({ ...prev, dealsOnly: null, formats: ['retail', 'decant'] }));
+            onResetFilters();
           }}
           className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-all shrink-0 font-medium ${
-            quickFilterTab === 'all' && !dealsOnly
+            isCuratedActive
               ? 'bg-cyan-600 text-white border-cyan-500 font-bold shadow-xs'
               : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-cyan-400'
           }`}
         >
-          All In-Stock ({counts.inStock || 921})
+          ✨ Curated Highlights
         </button>
 
         <button

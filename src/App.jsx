@@ -7,6 +7,7 @@ import PowerFragranceCard from './components/PowerFragranceCard';
 import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
+import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import { filterCatalogSemantically } from './utils/semanticSearch';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
@@ -70,6 +71,9 @@ export default function App() {
 
   // Top quick filter tab: 'all' | 'drops' | 'decants' | 'testers' | 'partials' | 'under2k'
   const [quickFilterTab, setQuickFilterTab] = useState('all');
+
+  // Explicit user override to show all catalog
+  const [showFullCatalog, setShowFullCatalog] = useState(false);
 
   // Unified Filter State
   const [filterState, setFilterState] = useState(() => {
@@ -309,6 +313,7 @@ export default function App() {
   const resetAllFilters = () => {
     setSearchQuery('');
     setQuickFilterTab('all');
+    setShowFullCatalog(false);
     setFilterState({
       formats: ['retail', 'decant'],
       maxBudget: 15000,
@@ -319,6 +324,18 @@ export default function App() {
       sortBy: 'price_asc'
     });
   };
+
+  // Determine whether we are in the default unfiltered landing state
+  const isUnfiltered = useMemo(() => {
+    return !showFullCatalog &&
+      !searchQuery.trim() &&
+      filterState.selectedSeller === 'all' &&
+      !filterState.dealsOnly &&
+      !filterState.selectedDna &&
+      !filterState.selectedVibe &&
+      filterState.maxBudget >= 15000 &&
+      (filterState.formats.length >= 2 || filterState.formats.length === 0);
+  }, [showFullCatalog, searchQuery, filterState]);
 
   // Active filter count for mobile badge
   const activeFiltersCount = useMemo(() => {
@@ -393,14 +410,21 @@ export default function App() {
         {/* Search, Lenses & Sorting Bar */}
         <MarketPulseBar
           searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          setSearchQuery={(q) => {
+            setSearchQuery(q);
+            if (q.trim()) setShowFullCatalog(false);
+          }}
           filterState={filterState}
-          setFilterState={setFilterState}
+          setFilterState={(updater) => {
+            setFilterState(updater);
+            setShowFullCatalog(false);
+          }}
           onResetFilters={resetAllFilters}
           totalMatching={finalSortedFragrances.length}
           quickFilterTab={quickFilterTab}
           setQuickFilterTab={setQuickFilterTab}
           counts={catalogCounts}
+          isCuratedActive={isUnfiltered}
         />
 
         {/* 2-Column Responsive Layout: Power Rail Sidebar + Card Grid */}
@@ -409,15 +433,31 @@ export default function App() {
           {/* DESKTOP POWER FILTER RAIL */}
           <PowerFilterSidebar
             filterState={filterState}
-            setFilterState={setFilterState}
+            setFilterState={(updater) => {
+              setFilterState(updater);
+              setShowFullCatalog(false);
+            }}
             onResetFilters={resetAllFilters}
             counts={catalogCounts}
             sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
           />
 
-          {/* MAIN FRAGRANCE CARDS STREAM */}
+          {/* MAIN FRAGRANCE CONTENT STREAM */}
           <div className="flex-1 min-w-0">
-            {finalSortedFragrances.length === 0 ? (
+            {isUnfiltered ? (
+              <CuratedSpotlightHub
+                catalog={inStockCatalog}
+                onSelectFragrance={(selected) => setActiveFragrance(selected)}
+                onApplyFilter={(newFilter) => {
+                  setFilterState(prev => ({ ...prev, ...newFilter }));
+                  setShowFullCatalog(false);
+                }}
+                expandedCardId={expandedCardId}
+                onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
+                sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
+                onShowAll={() => setShowFullCatalog(true)}
+              />
+            ) : finalSortedFragrances.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-xl font-mono">
                   ∅
@@ -434,21 +474,62 @@ export default function App() {
                   onClick={resetAllFilters}
                   className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all shadow-xs"
                 >
-                  Clear All Filters
+                  Back to Curated Highlights
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {finalSortedFragrances.map((f, idx) => (
-                  <PowerFragranceCard
-                    key={f.id || idx}
-                    fragrance={f}
-                    onSelect={(selected) => setActiveFragrance(selected)}
-                    isExpanded={expandedCardId === f.id}
-                    onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
-                    selectedSeller={filterState.selectedSeller}
-                  />
-                ))}
+              <div className="space-y-4">
+                {/* Active Filter Bar Header */}
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-heading font-bold text-sm text-slate-900 dark:text-white">
+                      Filtered Inventory
+                    </span>
+                    <span className="text-xs font-mono font-bold bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800">
+                      {finalSortedFragrances.length} matches
+                    </span>
+                    {filterState.selectedSeller !== 'all' && (
+                      <span className="text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                        Seller: {sellersWithLiveCounts.find(s => s.id === filterState.selectedSeller)?.name || filterState.selectedSeller}
+                      </span>
+                    )}
+                    {filterState.dealsOnly && (
+                      <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                        {filterState.dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Stock'}
+                      </span>
+                    )}
+                    {filterState.selectedDna && (
+                      <span className="text-xs font-mono font-bold bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 px-2 py-0.5 rounded-full border border-purple-200 dark:border-purple-800">
+                        Clones: {filterState.selectedDna}
+                      </span>
+                    )}
+                    {filterState.maxBudget < 15000 && (
+                      <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                        &lt; ₹{filterState.maxBudget.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={resetAllFilters}
+                    className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 hover:underline"
+                  >
+                    ← Back to Highlights
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {finalSortedFragrances.map((f, idx) => (
+                    <PowerFragranceCard
+                      key={f.id || idx}
+                      fragrance={f}
+                      onSelect={(selected) => setActiveFragrance(selected)}
+                      isExpanded={expandedCardId === f.id}
+                      onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
+                      selectedSeller={filterState.selectedSeller}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -460,7 +541,10 @@ export default function App() {
       {/* MOBILE BOTTOM SHEET & FLOATING THUMB CAPSULE */}
       <MobileFilterDrawer
         filterState={filterState}
-        setFilterState={setFilterState}
+        setFilterState={(updater) => {
+          setFilterState(updater);
+          setShowFullCatalog(false);
+        }}
         onResetFilters={resetAllFilters}
         resultCount={finalSortedFragrances.length}
         activeFilterCount={activeFiltersCount}
