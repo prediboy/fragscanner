@@ -121,24 +121,15 @@ export async function fetchInventoryPage({
 
     if (tokens.length > 0) {
       const scored = filtered.map(item => ({ item, score: scoreRelevance(item, tokens) }));
-      if (sortBy === 'price_desc') {
-        scored.sort((a, b) => Number(b.item.community_price || 0) - Number(a.item.community_price || 0));
-      } else if (sortBy === 'price_asc') {
-        scored.sort((a, b) => b.score !== a.score ? b.score - a.score : (Number(a.item.community_price || 0) - Number(b.item.community_price || 0)));
-      } else if (sortBy === 'rating') {
-        scored.sort((a, b) => (Number(b.item.rating_value) || 0) - (Number(a.item.rating_value) || 0));
-      } else {
-        scored.sort((a, b) => b.score - a.score);
-      }
+      scored.sort((a, b) => b.score - a.score);
       filtered = scored.map(x => x.item);
     } else {
-      if (sortBy === 'price_desc') {
-        filtered.sort((a, b) => Number(b.community_price || 0) - Number(a.community_price || 0));
-      } else if (sortBy === 'rating') {
-        filtered.sort((a, b) => (Number(b.rating_value) || 0) - (Number(a.rating_value) || 0));
-      } else {
-        filtered.sort((a, b) => Number(a.community_price || 999999) - Number(b.community_price || 999999));
-      }
+      // Always sort price drops and new arrivals by latest discovered
+      filtered.sort((a, b) => {
+        const timeA = new Date(a.discovered_at || a.price_change_date || a.new_arrival_date || a.price_updated_at || 0).getTime();
+        const timeB = new Date(b.discovered_at || b.price_change_date || b.new_arrival_date || b.price_updated_at || 0).getTime();
+        return timeB - timeA;
+      });
     }
 
     const totalCount = filtered.length;
@@ -439,24 +430,17 @@ function filterClientCatalog(catalog, { page, pageSize, search, seller, brand, f
 
   if (tokens.length > 0) {
     const scored = filtered.map(item => ({ item, score: scoreRelevance(item, tokens) }));
-    if (sortBy === 'price_desc') {
-      scored.sort((a, b) => Number(b.item.community_price || 0) - Number(a.item.community_price || 0));
-    } else if (sortBy === 'price_asc') {
-      scored.sort((a, b) => b.score !== a.score ? b.score - a.score : (Number(a.item.community_price || 0) - Number(b.item.community_price || 0)));
-    } else if (sortBy === 'rating') {
-      scored.sort((a, b) => (Number(b.item.rating_value) || 0) - (Number(a.item.rating_value) || 0));
-    } else {
-      scored.sort((a, b) => b.score - a.score);
-    }
+    scored.sort((a, b) => b.score - a.score);
     filtered = scored.map(x => x.item);
+  } else if (dealsOnly) {
+    // Always sort price drops and new arrivals by latest discovered
+    filtered.sort((a, b) => {
+      const timeA = new Date(a.discovered_at || a.price_change_date || a.new_arrival_date || a.price_updated_at || 0).getTime();
+      const timeB = new Date(b.discovered_at || b.price_change_date || b.new_arrival_date || b.price_updated_at || 0).getTime();
+      return timeB - timeA;
+    });
   } else {
-    if (sortBy === 'price_desc') {
-      filtered.sort((a, b) => Number(b.community_price || 0) - Number(a.community_price || 0));
-    } else if (sortBy === 'rating') {
-      filtered.sort((a, b) => (Number(b.rating_value) || 0) - (Number(a.rating_value) || 0));
-    } else {
-      filtered.sort((a, b) => Number(a.community_price || 999999) - Number(b.community_price || 999999));
-    }
+    filtered.sort((a, b) => Number(a.community_price || 999999) - Number(b.community_price || 999999));
   }
 
   const totalCount = filtered.length;

@@ -15,25 +15,31 @@ export default function CuratedSpotlightHub({
   catalogCount = 965,
   selectedFormats = ['retail']
 }) {
-  // 1. Top Verified Price Drops (highest discount percentage first)
+  // 1. Top Verified Price Drops (always sorted by latest discovered)
   const topPriceDrops = useMemo(() => {
-    if (priceDrops && priceDrops.length > 0) return priceDrops.slice(0, 6);
+    if (priceDrops && priceDrops.length > 0) {
+      return [...priceDrops]
+        .filter(f => Number(f.community_price) > 0)
+        .sort((a, b) => new Date(b.discovered_at || b.price_change_date || 0) - new Date(a.discovered_at || a.price_change_date || 0))
+        .slice(0, 6);
+    }
     return (catalog || [])
       .filter(f => f.is_price_drop && Number(f.community_price) > 0)
-      .sort((a, b) => {
-        const pctA = Number(a.price_change_percentage) || 0;
-        const pctB = Number(b.price_change_percentage) || 0;
-        return pctB - pctA;
-      })
+      .sort((a, b) => new Date(b.discovered_at || b.price_change_date || b.price_updated_at || 0) - new Date(a.discovered_at || a.price_change_date || a.price_updated_at || 0))
       .slice(0, 6);
   }, [catalog, priceDrops]);
 
-  // 2. New Community Arrivals
+  // 2. New Community Arrivals (always sorted by latest discovered)
   const newArrivals = useMemo(() => {
-    if (customNewArrivals && customNewArrivals.length > 0) return customNewArrivals.slice(0, 6);
+    if (customNewArrivals && customNewArrivals.length > 0) {
+      return [...customNewArrivals]
+        .filter(f => Number(f.community_price) > 0)
+        .sort((a, b) => new Date(b.discovered_at || b.new_arrival_date || 0) - new Date(a.discovered_at || a.new_arrival_date || 0))
+        .slice(0, 6);
+    }
     return (catalog || [])
       .filter(f => f.is_new_arrival && Number(f.community_price) > 0)
-      .sort((a, b) => new Date(b.new_arrival_date || 0) - new Date(a.new_arrival_date || 0))
+      .sort((a, b) => new Date(b.discovered_at || b.new_arrival_date || b.price_updated_at || 0) - new Date(a.discovered_at || a.new_arrival_date || a.price_updated_at || 0))
       .slice(0, 6);
   }, [catalog, customNewArrivals]);
 

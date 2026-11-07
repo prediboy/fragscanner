@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X, TrendingDown, Sparkles, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
+import { Search, X, TrendingDown, Sparkles, SlidersHorizontal } from 'lucide-react';
 
 export default function MarketPulseBar({
   searchQuery,
@@ -106,26 +106,9 @@ export default function MarketPulseBar({
           )}
         </div>
 
-        {/* Right Controls: Sort Dropdown & Matches Count */}
+        {/* Right Match Count Status */}
         <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 min-w-0 flex-1 sm:flex-initial">
-            <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
-            <select
-              value={sortBy}
-              onChange={(e) => setFilterState(prev => ({ ...prev, sortBy: e.target.value }))}
-              className="w-full sm:w-auto bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-cyan-400 focus:outline-none truncate"
-            >
-              {searchQuery.trim() && <option value="relevance">Best Match (Relevance)</option>}
-              <option value="price_asc">Lowest Bottle (₹ ↑)</option>
-              <option value="price_desc">Highest Bottle (₹ ↓)</option>
-              <option value="drop_percent">Deepest Drop %</option>
-              <option value="decant_asc">Lowest Decant</option>
-              <option value="rating">Fragrantica Rating</option>
-              <option value="newest">Newest Arrivals</option>
-            </select>
-          </div>
-
-          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0 pl-2 border-l border-slate-200 dark:border-slate-800 whitespace-nowrap">
+          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">
             {isCuratedActive ? (
               <span className="text-cyan-600 dark:text-cyan-400 font-bold">Curated Deals</span>
             ) : (

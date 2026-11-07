@@ -123,199 +123,10 @@
           "in_stock": true,
           "verified": true
         }
-      ]
-    },
-    {
-      "id": "st-9013",
-      "name": "Reflection Elixir",
-      "brand": "Mykonos",
-      "rating_value": 4.35,
-      "rating_count": 850,
-      "concentration": "Eau de Parfum",
-      "community_price": 1950,
-      "previous_price": 2649,
-      "is_price_drop": true,
-      "price_change_percentage": 26,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 90,
-      "dna_type": "Luminous Neroli Orris Jasmine Sandalwood Cedar",
-      "dna_inspiration": "Amouage Reflection Man",
-      "community_sellers": [
-        {
-          "seller_id": "second_theory",
-          "seller_name": "Second Theory",
-          "price": 1950,
-          "size": "50ml Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 50,
-          "whatsapp": "8076851481",
-          "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "fragfever",
-          "seller_name": "FragFever",
-          "price": 2000,
-          "size": "50ml Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 50,
-          "whatsapp": "9716764787",
-          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "whiffculture",
-          "seller_name": "Whiff Culture",
-          "price": 2179,
-          "size": "50ml Retail Bottle",
-          "volume_ml": 50,
-          "whatsapp": "9811377357",
-          "shipping": "Free Pan-India above ₹1,499",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.whiffculture.com/products/mykonos-reflection-elixir",
-          "verified": true,
-          "is_partial": false,
-          "is_tester": false,
-          "packaging_type": "Retail Bottle"
-        },
-        {
-          "seller_id": "fragrance_heaven",
-          "seller_name": "Fragrance Heaven",
-          "price": 2649,
-          "size": "50ml Retail Bottle",
-          "volume_ml": 50,
-          "whatsapp": "7838191410",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.fragranceheaven.in/products/mykonos-reflection-elixir-extrait-de-parfum-50ml-unisex",
-          "verified": true
-        }
       ],
-      "community_decants": [
-        {
-          "seller_id": "rp_decants",
-          "seller_name": "RP Decants",
-          "whatsapp": "9016445533",
-          "shipping": "₹90 Pan-India (Free above ₹1,200)",
-          "dispatch": "3-4 days",
-          "sizes": {
-            "2ml": 90,
-            "5ml": 160,
-            "10ml": 300
-          },
-          "lowest_price": 90,
-          "in_stock": true,
-          "verified": true
-        },
-        {
-          "seller_id": "sovereign_scents",
-          "seller_name": "Sovereign Scents",
-          "whatsapp": "8826709398",
-          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "3ml": 180,
-            "5ml": 270,
-            "8ml": 400,
-            "10ml": 500,
-            "20ml": 600,
-            "30ml": 800
-          },
-          "lowest_price": 180,
-          "in_stock": true,
-          "verified": true
-        },
-        {
-          "seller_id": "whiffculture",
-          "seller_name": "Whiff Culture",
-          "website": "https://www.whiffculture.com/products/mykonos-reflection-elixir",
-          "whatsapp": "9811377357",
-          "shipping": "Free Pan-India above ₹1,499",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "5ml": 329,
-            "8ml": 469,
-            "10ml": 469,
-            "30ml": 1609
-          },
-          "lowest_price": 329,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
-    },
-    {
-      "id": "rasasi-daarej-pour-femme",
-      "name": "Daarej Pour Femme",
-      "brand": "Rasasi",
-      "rating_value": 4.37,
-      "rating_count": 2659,
-      "concentration": "Eau de Parfum",
-      "community_price": 2200,
-      "previous_price": 2949,
-      "is_price_drop": true,
-      "price_change_percentage": 25,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 449,
-      "dna_type": "Sweet Cotton Candy Pink Pepper Peach Caramel Musk",
-      "dna_inspiration": "Carolina Herrera 212 Sexy",
-      "community_sellers": [
-        {
-          "seller_id": "fragfever",
-          "seller_name": "FragFever",
-          "price": 2200,
-          "size": "Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9716764787",
-          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "price": 2949,
-          "size": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.aarfragrances.com/product/rasasi-daarej-pour-femme-aurelia",
-          "verified": true,
-          "is_partial": false,
-          "is_tester": false,
-          "packaging_type": "Retail Bottle"
-        }
-      ],
-      "community_decants": [
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "website": "https://www.aarfragrances.com/product/decantsample-rasasi-daarej-pour-femme-aurelia",
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "10ml": 449
-          },
-          "lowest_price": 449,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
+      "discovered_at": "2026-11-07T10:01:33",
+      "price_change_date": "2026-11-07",
+      "price_change_time": "10:01:33"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -398,327 +209,10 @@
           "in_stock": true,
           "verified": true
         }
-      ]
-    },
-    {
-      "id": "afnan-supremacy-noir",
-      "name": "Supremacy Noir",
-      "brand": "Afnan",
-      "rating_value": 4.21,
-      "rating_count": 2493,
-      "concentration": "Eau de Parfum",
-      "community_price": 2850,
-      "previous_price": 3499,
-      "is_price_drop": true,
-      "price_change_percentage": 19,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 499,
-      "dna_type": "Powdery Violet Spiced Nutmeg Amber Patchouli",
-      "dna_inspiration": "Tom Ford Noir",
-      "community_sellers": [
-        {
-          "seller_id": "fragfever",
-          "seller_name": "FragFever",
-          "price": 2850,
-          "size": "Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9716764787",
-          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "price": 3499,
-          "size": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.aarfragrances.com/product/afnan-supremacy-noir",
-          "verified": true,
-          "is_partial": false,
-          "is_tester": false,
-          "packaging_type": "Retail Bottle"
-        }
       ],
-      "community_decants": [
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "website": "https://www.aarfragrances.com/product/decantsample-afnan-supremacy-noir",
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "10ml": 499
-          },
-          "lowest_price": 499,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
-    },
-    {
-      "id": "armaf-club-de-nuit-urban-man-elixir",
-      "name": "Club de Nuit Urban Man Elixir",
-      "brand": "Armaf",
-      "rating_value": 4.31,
-      "rating_count": 3100,
-      "concentration": "Eau de Parfum",
-      "community_price": 2800,
-      "previous_price": 3429,
-      "is_price_drop": true,
-      "price_change_percentage": 18,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 150,
-      "dna_type": "Powerhouse Hybrid",
-      "dna_inspiration": "Dior Sauvage + Creed Aventus Hybrid",
-      "community_sellers": [
-        {
-          "seller_id": "fragfever",
-          "seller_name": "FragFever",
-          "price": 2800,
-          "size": "105ml Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 105,
-          "whatsapp": "9716764787",
-          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "second_theory",
-          "seller_name": "Second Theory",
-          "price": 2850,
-          "size": "105ml Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 105,
-          "whatsapp": "8076851481",
-          "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "fragrance_heaven",
-          "seller_name": "Fragrance Heaven",
-          "price": 3500,
-          "size": "105ml Retail Bottle",
-          "volume_ml": 105,
-          "whatsapp": "7838191410",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.fragranceheaven.in/products/armaf-club-de-nuit-urban-man-elixir-105-ml-eau-de-parfum",
-          "verified": true
-        }
-      ],
-      "community_decants": [
-        {
-          "seller_id": "sovereign_scents",
-          "seller_name": "Sovereign Scents",
-          "whatsapp": "8826709398",
-          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "3ml": 150,
-            "5ml": 220,
-            "8ml": 320,
-            "10ml": 400
-          },
-          "lowest_price": 150,
-          "in_stock": true,
-          "verified": true
-        },
-        {
-          "seller_id": "bluewings",
-          "seller_name": "Blue Wings Fragrances",
-          "website": "https://bluewingsfnd.com/",
-          "whatsapp": "9899401419",
-          "shipping": "Free above ₹1,500",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "5ml": 210,
-            "10ml": 375,
-            "20ml": 725,
-            "30ml": 1020
-          },
-          "lowest_price": 210,
-          "in_stock": true,
-          "verified": true
-        },
-        {
-          "seller_id": "whiffculture",
-          "seller_name": "Whiff Culture",
-          "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-urban-man-elixir",
-          "whatsapp": "9811377357",
-          "shipping": "Free Pan-India above ₹1,499",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "5ml": 229,
-            "8ml": 329,
-            "10ml": 329,
-            "30ml": 1139
-          },
-          "lowest_price": 229,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
-    },
-    {
-      "id": "apex-alharamain-amberoud",
-      "name": "Amber Oud",
-      "brand": "Al Haramain",
-      "rating_value": 4.35,
-      "rating_count": 850,
-      "concentration": "Eau de Parfum",
-      "community_price": 3400,
-      "previous_price": 4000,
-      "is_price_drop": true,
-      "price_change_percentage": 15,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 210,
-      "dna_type": "Sweet Calabrian Bergamot Tropical Fruits White Musk",
-      "dna_inspiration": "Xerjoff Erba Pura",
-      "community_sellers": [
-        {
-          "seller_id": "apex_aroma",
-          "seller_name": "Apex Aroma",
-          "price": 3400,
-          "size": "60ml Tester",
-          "is_tester": true,
-          "packaging_type": "Tester",
-          "volume_ml": 60,
-          "whatsapp": "9456411103",
-          "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "apex_aroma",
-          "seller_name": "Apex Aroma",
-          "price": 4000,
-          "size": "60ml Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 60,
-          "whatsapp": "9456411103",
-          "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        }
-      ],
-      "community_decants": [
-        {
-          "seller_id": "sovereign_scents",
-          "seller_name": "Sovereign Scents",
-          "whatsapp": "8826709398",
-          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "3ml": 210,
-            "5ml": 320,
-            "8ml": 480,
-            "10ml": 590
-          },
-          "lowest_price": 210,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
-    },
-    {
-      "id": "rasasi-shuhrah-pour-femme",
-      "name": "Shuhrah Pour Femme",
-      "brand": "Rasasi",
-      "rating_value": 4.27,
-      "rating_count": 2799,
-      "concentration": "Eau de Parfum",
-      "community_price": 2500,
-      "previous_price": 2899,
-      "is_price_drop": true,
-      "price_change_percentage": 14,
-      "is_new_arrival": false,
-      "in_seller_stock": true,
-      "has_decants": true,
-      "lowest_decant_price": 499,
-      "dna_type": "Sunny Mimosa Yellow Floral Amber Jasmine White Musk",
-      "dna_inspiration": "Lancôme Poême",
-      "community_sellers": [
-        {
-          "seller_id": "fragfever",
-          "seller_name": "FragFever",
-          "price": 2500,
-          "size": "Retail Bottle",
-          "is_tester": false,
-          "packaging_type": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9716764787",
-          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
-          "dispatch": "24-48 hrs",
-          "verified": true,
-          "is_partial": false
-        },
-        {
-          "seller_id": "fragrance_heaven",
-          "seller_name": "Fragrance Heaven",
-          "price": 2899,
-          "size": "90ml Retail Bottle",
-          "volume_ml": 90,
-          "whatsapp": "7838191410",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.fragranceheaven.in/products/rasasi-shuhrah-pour-femme-edp-90ml-for-women",
-          "verified": true
-        },
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "price": 2949,
-          "size": "Retail Bottle",
-          "volume_ml": 100,
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "product_url": "https://www.aarfragrances.com/product/rasasi-shuhrah-pour-femme-opulence",
-          "verified": true,
-          "is_partial": false,
-          "is_tester": false,
-          "packaging_type": "Retail Bottle"
-        }
-      ],
-      "community_decants": [
-        {
-          "seller_id": "aar_fragrances",
-          "seller_name": "AAR Fragrances",
-          "website": "https://www.aarfragrances.com/product/decantsample-rasasi-shuhrah-pour-femme",
-          "whatsapp": "9873520545",
-          "shipping": "Pan-India Shipping",
-          "dispatch": "24-48 hrs",
-          "sizes": {
-            "10ml": 499
-          },
-          "lowest_price": 499,
-          "in_stock": true,
-          "verified": true
-        }
-      ]
+      "discovered_at": "2026-11-06T19:18:38",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "19:18:38"
     },
     {
       "id": "st-9236",
@@ -875,7 +369,10 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T19:18:38",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "19:18:38"
     },
     {
       "id": "st-9265",
@@ -1077,7 +574,10 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T19:18:38",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "19:18:38"
     },
     {
       "id": "lattafa-al-nashama-caprice",
@@ -1217,7 +717,540 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T19:18:38",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "19:18:38"
+    },
+    {
+      "id": "rasasi-daarej-pour-femme",
+      "name": "Daarej Pour Femme",
+      "brand": "Rasasi",
+      "rating_value": 4.37,
+      "rating_count": 2659,
+      "concentration": "Eau de Parfum",
+      "community_price": 2200,
+      "previous_price": 2949,
+      "is_price_drop": true,
+      "price_change_percentage": 25,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 449,
+      "dna_type": "Sweet Cotton Candy Pink Pepper Peach Caramel Musk",
+      "dna_inspiration": "Carolina Herrera 212 Sexy",
+      "community_sellers": [
+        {
+          "seller_id": "fragfever",
+          "seller_name": "FragFever",
+          "price": 2200,
+          "size": "Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9716764787",
+          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "price": 2949,
+          "size": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.aarfragrances.com/product/rasasi-daarej-pour-femme-aurelia",
+          "verified": true,
+          "is_partial": false,
+          "is_tester": false,
+          "packaging_type": "Retail Bottle"
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "website": "https://www.aarfragrances.com/product/decantsample-rasasi-daarej-pour-femme-aurelia",
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "10ml": 449
+          },
+          "lowest_price": 449,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T17:21:55",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "17:21:55"
+    },
+    {
+      "id": "armaf-club-de-nuit-urban-man-elixir",
+      "name": "Club de Nuit Urban Man Elixir",
+      "brand": "Armaf",
+      "rating_value": 4.31,
+      "rating_count": 3100,
+      "concentration": "Eau de Parfum",
+      "community_price": 2800,
+      "previous_price": 3429,
+      "is_price_drop": true,
+      "price_change_percentage": 18,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 150,
+      "dna_type": "Powerhouse Hybrid",
+      "dna_inspiration": "Dior Sauvage + Creed Aventus Hybrid",
+      "community_sellers": [
+        {
+          "seller_id": "fragfever",
+          "seller_name": "FragFever",
+          "price": 2800,
+          "size": "105ml Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 105,
+          "whatsapp": "9716764787",
+          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "second_theory",
+          "seller_name": "Second Theory",
+          "price": 2850,
+          "size": "105ml Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 105,
+          "whatsapp": "8076851481",
+          "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "fragrance_heaven",
+          "seller_name": "Fragrance Heaven",
+          "price": 3500,
+          "size": "105ml Retail Bottle",
+          "volume_ml": 105,
+          "whatsapp": "7838191410",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.fragranceheaven.in/products/armaf-club-de-nuit-urban-man-elixir-105-ml-eau-de-parfum",
+          "verified": true
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "sovereign_scents",
+          "seller_name": "Sovereign Scents",
+          "whatsapp": "8826709398",
+          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "3ml": 150,
+            "5ml": 220,
+            "8ml": 320,
+            "10ml": 400
+          },
+          "lowest_price": 150,
+          "in_stock": true,
+          "verified": true
+        },
+        {
+          "seller_id": "bluewings",
+          "seller_name": "Blue Wings Fragrances",
+          "website": "https://bluewingsfnd.com/",
+          "whatsapp": "9899401419",
+          "shipping": "Free above ₹1,500",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "5ml": 210,
+            "10ml": 375,
+            "20ml": 725,
+            "30ml": 1020
+          },
+          "lowest_price": 210,
+          "in_stock": true,
+          "verified": true
+        },
+        {
+          "seller_id": "whiffculture",
+          "seller_name": "Whiff Culture",
+          "website": "https://www.whiffculture.com/products/armaf-club-de-nuit-urban-man-elixir",
+          "whatsapp": "9811377357",
+          "shipping": "Free Pan-India above ₹1,499",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "5ml": 229,
+            "8ml": 329,
+            "10ml": 329,
+            "30ml": 1139
+          },
+          "lowest_price": 229,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T17:21:55",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "17:21:55"
+    },
+    {
+      "id": "apex-alharamain-amberoud",
+      "name": "Amber Oud",
+      "brand": "Al Haramain",
+      "rating_value": 4.35,
+      "rating_count": 850,
+      "concentration": "Eau de Parfum",
+      "community_price": 3400,
+      "previous_price": 4000,
+      "is_price_drop": true,
+      "price_change_percentage": 15,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 210,
+      "dna_type": "Sweet Calabrian Bergamot Tropical Fruits White Musk",
+      "dna_inspiration": "Xerjoff Erba Pura",
+      "community_sellers": [
+        {
+          "seller_id": "apex_aroma",
+          "seller_name": "Apex Aroma",
+          "price": 3400,
+          "size": "60ml Tester",
+          "is_tester": true,
+          "packaging_type": "Tester",
+          "volume_ml": 60,
+          "whatsapp": "9456411103",
+          "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "apex_aroma",
+          "seller_name": "Apex Aroma",
+          "price": 4000,
+          "size": "60ml Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 60,
+          "whatsapp": "9456411103",
+          "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "sovereign_scents",
+          "seller_name": "Sovereign Scents",
+          "whatsapp": "8826709398",
+          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "3ml": 210,
+            "5ml": 320,
+            "8ml": 480,
+            "10ml": 590
+          },
+          "lowest_price": 210,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T17:21:55",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "17:21:55"
+    },
+    {
+      "id": "rasasi-shuhrah-pour-femme",
+      "name": "Shuhrah Pour Femme",
+      "brand": "Rasasi",
+      "rating_value": 4.27,
+      "rating_count": 2799,
+      "concentration": "Eau de Parfum",
+      "community_price": 2500,
+      "previous_price": 2899,
+      "is_price_drop": true,
+      "price_change_percentage": 14,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 499,
+      "dna_type": "Sunny Mimosa Yellow Floral Amber Jasmine White Musk",
+      "dna_inspiration": "Lancôme Poême",
+      "community_sellers": [
+        {
+          "seller_id": "fragfever",
+          "seller_name": "FragFever",
+          "price": 2500,
+          "size": "Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9716764787",
+          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "fragrance_heaven",
+          "seller_name": "Fragrance Heaven",
+          "price": 2899,
+          "size": "90ml Retail Bottle",
+          "volume_ml": 90,
+          "whatsapp": "7838191410",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.fragranceheaven.in/products/rasasi-shuhrah-pour-femme-edp-90ml-for-women",
+          "verified": true
+        },
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "price": 2949,
+          "size": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.aarfragrances.com/product/rasasi-shuhrah-pour-femme-opulence",
+          "verified": true,
+          "is_partial": false,
+          "is_tester": false,
+          "packaging_type": "Retail Bottle"
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "website": "https://www.aarfragrances.com/product/decantsample-rasasi-shuhrah-pour-femme",
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "10ml": 499
+          },
+          "lowest_price": 499,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T17:21:55",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "17:21:55"
+    },
+    {
+      "id": "st-9013",
+      "name": "Reflection Elixir",
+      "brand": "Mykonos",
+      "rating_value": 4.35,
+      "rating_count": 850,
+      "concentration": "Eau de Parfum",
+      "community_price": 1950,
+      "previous_price": 2649,
+      "is_price_drop": true,
+      "price_change_percentage": 26,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 90,
+      "dna_type": "Luminous Neroli Orris Jasmine Sandalwood Cedar",
+      "dna_inspiration": "Amouage Reflection Man",
+      "community_sellers": [
+        {
+          "seller_id": "second_theory",
+          "seller_name": "Second Theory",
+          "price": 1950,
+          "size": "50ml Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 50,
+          "whatsapp": "8076851481",
+          "shipping": "Free Pan-India Delivery (Extra ₹70 for NE, J&K)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "fragfever",
+          "seller_name": "FragFever",
+          "price": 2000,
+          "size": "50ml Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 50,
+          "whatsapp": "9716764787",
+          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "whiffculture",
+          "seller_name": "Whiff Culture",
+          "price": 2179,
+          "size": "50ml Retail Bottle",
+          "volume_ml": 50,
+          "whatsapp": "9811377357",
+          "shipping": "Free Pan-India above ₹1,499",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.whiffculture.com/products/mykonos-reflection-elixir",
+          "verified": true,
+          "is_partial": false,
+          "is_tester": false,
+          "packaging_type": "Retail Bottle"
+        },
+        {
+          "seller_id": "fragrance_heaven",
+          "seller_name": "Fragrance Heaven",
+          "price": 2649,
+          "size": "50ml Retail Bottle",
+          "volume_ml": 50,
+          "whatsapp": "7838191410",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.fragranceheaven.in/products/mykonos-reflection-elixir-extrait-de-parfum-50ml-unisex",
+          "verified": true
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "rp_decants",
+          "seller_name": "RP Decants",
+          "whatsapp": "9016445533",
+          "shipping": "₹90 Pan-India (Free above ₹1,200)",
+          "dispatch": "3-4 days",
+          "sizes": {
+            "2ml": 90,
+            "5ml": 160,
+            "10ml": 300
+          },
+          "lowest_price": 90,
+          "in_stock": true,
+          "verified": true
+        },
+        {
+          "seller_id": "sovereign_scents",
+          "seller_name": "Sovereign Scents",
+          "whatsapp": "8826709398",
+          "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "3ml": 180,
+            "5ml": 270,
+            "8ml": 400,
+            "10ml": 500,
+            "20ml": 600,
+            "30ml": 800
+          },
+          "lowest_price": 180,
+          "in_stock": true,
+          "verified": true
+        },
+        {
+          "seller_id": "whiffculture",
+          "seller_name": "Whiff Culture",
+          "website": "https://www.whiffculture.com/products/mykonos-reflection-elixir",
+          "whatsapp": "9811377357",
+          "shipping": "Free Pan-India above ₹1,499",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "5ml": 329,
+            "8ml": 469,
+            "10ml": 469,
+            "30ml": 1609
+          },
+          "lowest_price": 329,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T16:39:12",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "16:39:12"
+    },
+    {
+      "id": "afnan-supremacy-noir",
+      "name": "Supremacy Noir",
+      "brand": "Afnan",
+      "rating_value": 4.21,
+      "rating_count": 2493,
+      "concentration": "Eau de Parfum",
+      "community_price": 2850,
+      "previous_price": 3499,
+      "is_price_drop": true,
+      "price_change_percentage": 19,
+      "is_new_arrival": false,
+      "in_seller_stock": true,
+      "has_decants": true,
+      "lowest_decant_price": 499,
+      "dna_type": "Powdery Violet Spiced Nutmeg Amber Patchouli",
+      "dna_inspiration": "Tom Ford Noir",
+      "community_sellers": [
+        {
+          "seller_id": "fragfever",
+          "seller_name": "FragFever",
+          "price": 2850,
+          "size": "Retail Bottle",
+          "is_tester": false,
+          "packaging_type": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9716764787",
+          "shipping": "Free Regular Courier (Extra ₹50 for Blue Dart / Remote)",
+          "dispatch": "24-48 hrs",
+          "verified": true,
+          "is_partial": false
+        },
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "price": 3499,
+          "size": "Retail Bottle",
+          "volume_ml": 100,
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "product_url": "https://www.aarfragrances.com/product/afnan-supremacy-noir",
+          "verified": true,
+          "is_partial": false,
+          "is_tester": false,
+          "packaging_type": "Retail Bottle"
+        }
+      ],
+      "community_decants": [
+        {
+          "seller_id": "aar_fragrances",
+          "seller_name": "AAR Fragrances",
+          "website": "https://www.aarfragrances.com/product/decantsample-afnan-supremacy-noir",
+          "whatsapp": "9873520545",
+          "shipping": "Pan-India Shipping",
+          "dispatch": "24-48 hrs",
+          "sizes": {
+            "10ml": 499
+          },
+          "lowest_price": 499,
+          "in_stock": true,
+          "verified": true
+        }
+      ],
+      "discovered_at": "2026-11-06T16:39:12",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "16:39:12"
     },
     {
       "id": "afnan-turathi-brown",
@@ -1324,7 +1357,10 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T16:39:12",
+      "price_change_date": "2026-11-06",
+      "price_change_time": "16:39:12"
     }
   ],
   "newArrivals": [
@@ -1376,7 +1412,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -1409,7 +1447,9 @@
           "is_partial": false
         }
       ],
-      "community_decants": []
+      "community_decants": [],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "arabiyat-prestige-noire-absolu",
@@ -1442,7 +1482,9 @@
           "is_partial": false
         }
       ],
-      "community_decants": []
+      "community_decants": [],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "azzaro-the-most-wanted-parfum",
@@ -1558,7 +1600,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -1641,7 +1685,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "alfred-dunhill-indian-sandalwood",
@@ -1691,7 +1737,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "rochas-moustache-eau-de-parfum",
@@ -1724,7 +1772,9 @@
           "is_partial": false
         }
       ],
-      "community_decants": []
+      "community_decants": [],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "carolina-herrera-bad-boy-cobalt-eau-de-parfum-lectrique",
@@ -1758,7 +1808,9 @@
           "is_partial": false
         }
       ],
-      "community_decants": []
+      "community_decants": [],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-intense",
@@ -1857,7 +1909,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "lalique-encre-noire-l-extr-me",
@@ -1973,7 +2027,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-sport",
@@ -2025,7 +2081,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-06T12:00:00Z",
+      "new_arrival_date": "2026-11-06"
     },
     {
       "id": "lattafa-fakhar-platin",
@@ -2125,7 +2183,9 @@
           "in_stock": true,
           "verified": true
         }
-      ]
+      ],
+      "discovered_at": "2026-11-05T12:00:00Z",
+      "new_arrival_date": "2026-11-05"
     }
   ],
   "sellerCounts": {
