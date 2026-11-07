@@ -132,6 +132,13 @@ export default function PowerFragranceCard({
     ? selectedFormats
     : ['retail'];
 
+  // Filter quotes strictly matching active formats for both display and Compare Rates
+  const formatQuotes = useMemo(() => {
+    const base = isSpecificSeller ? currentSellerQuotes : allQuotes;
+    const filtered = base.filter(q => activeFormats.includes(q.type));
+    return filtered.length > 0 ? filtered : base;
+  }, [allQuotes, currentSellerQuotes, activeFormats, isSpecificSeller]);
+
   // What format pods should render on the card?
   let showRetail = activeFormats.includes('retail') && !!lowestRetail;
   let showTester = activeFormats.includes('tester') && !!lowestTester;
@@ -441,7 +448,7 @@ export default function PowerFragranceCard({
           className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
           title="Compare rates from all community sellers"
         >
-          <span>Compare Rates ({allQuotes.length})</span>
+          <span>Compare Rates ({formatQuotes.length})</span>
           {isExpanded ? <ChevronUp className="w-3 h-3 text-cyan-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
         </button>
 
@@ -460,17 +467,17 @@ export default function PowerFragranceCard({
       {isExpanded && (
         <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 bg-slate-50 dark:bg-slate-950/80 p-2.5 rounded-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 font-bold">
-            <span>Direct Verified Quotes ({allQuotes.length}):</span>
+            <span>Direct Verified Quotes ({formatQuotes.length}):</span>
             <span className="text-cyan-400">Ranked by Price ↑</span>
           </div>
 
           <div className="space-y-1 max-h-56 overflow-y-auto pr-0.5">
-            {allQuotes.length === 0 ? (
+            {formatQuotes.length === 0 ? (
               <div className="text-xs text-slate-400 py-2 text-center">
                 No active quotes found for this selection.
               </div>
             ) : (
-              allQuotes.map((q, qIdx) => {
+              formatQuotes.map((q, qIdx) => {
                 const isSelectedSellerQuote = isSpecificSeller && q.seller_id === selectedSeller;
                 return (
                   <div 
