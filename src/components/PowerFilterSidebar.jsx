@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Filter, RotateCcw, TrendingDown, Sparkles, Tag } from 'lucide-react';
 
 export default function PowerFilterSidebar({
@@ -18,6 +18,11 @@ export default function PowerFilterSidebar({
     selectedDna = null,
     selectedVibe = null
   } = filterState;
+
+  // Ensure brands are strictly sorted alphabetically A-Z
+  const sortedBrands = useMemo(() => {
+    return [...(brands || [])].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  }, [brands]);
 
   const toggleFormat = (fmt) => {
     const next = formats.includes(fmt)
@@ -195,9 +200,9 @@ export default function PowerFilterSidebar({
           )}
         </div>
 
-        {/* Quick Popular Brand Pills */}
+        {/* Quick Popular Brand Pills (A-Z) */}
         <div className="flex flex-wrap gap-1 text-[11px] font-mono">
-          {['all', 'Afnan', 'Lattafa', 'Armaf', 'Rasasi', 'French Avenue'].map(bName => {
+          {['all', 'Afnan', 'Armaf', 'French Avenue', 'Lattafa', 'Rasasi'].map(bName => {
             const isSelected = (bName === 'all' && selectedBrand === 'all') || selectedBrand === bName;
             return (
               <button
@@ -215,14 +220,14 @@ export default function PowerFilterSidebar({
           })}
         </div>
 
-        {/* Full Brand Select Dropdown */}
+        {/* Full Brand Select Dropdown (A-Z from Database) */}
         <select
           value={selectedBrand}
           onChange={(e) => setFilterState(prev => ({ ...prev, selectedBrand: e.target.value }))}
           className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-400 focus:outline-none cursor-pointer"
         >
-          <option value="all">All Brands ({brands.length || 53})</option>
-          {brands.map(b => (
+          <option value="all">All Brands ({sortedBrands.length || 53})</option>
+          {sortedBrands.map(b => (
             <option key={b.name} value={b.name}>
               {b.name} ({b.count})
             </option>

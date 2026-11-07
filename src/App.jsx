@@ -9,7 +9,7 @@ import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
-import { fetchInventoryPage, fetchFragranceDetail } from './services/inventoryApi.js';
+import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
@@ -113,6 +113,21 @@ export default function App() {
   const [totalMatching, setTotalMatching] = useState(curatedData.inStockCount || 921);
   const [totalPages, setTotalPages] = useState(Math.ceil((curatedData.inStockCount || 921) / 24));
   const [isLoadingPage, setIsLoadingPage] = useState(false);
+
+  // Live brand list loaded directly from Supabase DB, pre-sorted A-Z
+  const [brandsList, setBrandsList] = useState(() =>
+    (curatedData.brands || []).slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+  );
+
+  useEffect(() => {
+    fetchCatalogBrands().then(list => {
+      if (list && list.length > 0) {
+        setBrandsList(list);
+      }
+    }).catch(err => {
+      console.warn('Could not refresh brands from DB:', err);
+    });
+  }, []);
 
   // Compute live catalog statistics on verified stock
   const catalogCounts = useMemo(() => {
@@ -324,7 +339,7 @@ export default function App() {
             onResetFilters={resetAllFilters}
             counts={catalogCounts}
             sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
-            brands={curatedData.brands || []}
+            brands={brandsList}
           />
 
           {/* MAIN FRAGRANCE CONTENT STREAM */}
@@ -481,7 +496,7 @@ export default function App() {
         activeFilterCount={activeFiltersCount}
         counts={catalogCounts}
         sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
-        brands={curatedData.brands || []}
+        brands={brandsList}
       />
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}

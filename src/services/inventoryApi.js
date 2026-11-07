@@ -269,6 +269,54 @@ export async function fetchInventoryPage({
   }
 }
 
+let cachedBrands = null;
+
+/**
+ * Fetch distinct brands with live in-stock counts directly from Supabase database
+ * Sorted alphabetically A-Z
+ */
+export async function fetchCatalogBrands() {
+  if (cachedBrands && cachedBrands.length > 0) {
+    return cachedBrands;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('fragrances')
+      .select('brand, in_seller_stock, community_price')
+      .not('brand', 'is', null);
+
+    if (error || !data) throw error;
+
+    const brandStats = {};
+    data.forEach(row => {
+      const b = (row.brand || '').trim();
+      if (!b) return;
+      if (!brandStats[b]) brandStats[b] = { count: 0, inStock: 0 };
+      brandStats[b].count++;
+      if (row.in_seller_stock && Number(row.community_price) > 0) {
+        brandStats[b].inStock++;
+      }
+    });
+
+    const list = Object.entries(brandStats).map(([name, s]) => ({
+      name,
+      count: s.inStock || s.count
+    }));
+
+    // Sort strictly A-Z by brand name
+    list.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+    cachedBrands = list;
+    return list;
+  } catch (err) {
+    console.warn('Failed to fetch brands from database, using fallback:', err);
+    const fallback = (curatedData.brands || []).slice().sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    );
+    return fallback;
+  }
+}
+
 /**
  * Fetch full fragrance record for the modal view on demand
  */
