@@ -8,6 +8,7 @@ import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
+import PaginationControls from './components/PaginationControls';
 import { filterCatalogSemantically } from './utils/semanticSearch';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
@@ -74,6 +75,10 @@ export default function App() {
 
   // Explicit user override to show all catalog
   const [showFullCatalog, setShowFullCatalog] = useState(false);
+
+  // Pagination state (24 perfumes per page for fast DOM rendering & mobile battery)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(24);
 
   // Unified Filter State
   const [filterState, setFilterState] = useState(() => {
@@ -300,6 +305,20 @@ export default function App() {
     });
   }, [searchFiltered, filterState]);
 
+  // Reset page to 1 whenever search, filter, or catalog mode changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterState, showFullCatalog]);
+
+  // Pagination calculation
+  const totalPages = Math.max(1, Math.ceil(finalSortedFragrances.length / pageSize));
+  const validatedPage = Math.min(Math.max(1, currentPage), totalPages);
+
+  const paginatedFragrances = useMemo(() => {
+    const startIdx = (validatedPage - 1) * pageSize;
+    return finalSortedFragrances.slice(startIdx, startIdx + pageSize);
+  }, [finalSortedFragrances, validatedPage, pageSize]);
+
   // Debounced search query telemetry
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
@@ -314,6 +333,7 @@ export default function App() {
     setSearchQuery('');
     setQuickFilterTab('all');
     setShowFullCatalog(false);
+    setCurrentPage(1);
     setFilterState({
       formats: ['retail', 'decant'],
       maxBudget: 15000,
@@ -480,7 +500,7 @@ export default function App() {
             ) : (
               <div className="space-y-4">
                 {/* Active Filter Bar Header */}
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                <div id="fragrance-grid-top" className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800 flex-wrap gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-heading font-bold text-sm text-slate-900 dark:text-white">
                       Filtered Inventory
@@ -488,6 +508,11 @@ export default function App() {
                     <span className="text-xs font-mono font-bold bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800">
                       {finalSortedFragrances.length} matches
                     </span>
+                    {totalPages > 1 && (
+                      <span className="text-[11px] font-mono text-slate-400">
+                        (Page {validatedPage} of {totalPages})
+                      </span>
+                    )}
                     {filterState.selectedSeller !== 'all' && (
                       <span className="text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
                         Seller: {sellersWithLiveCounts.find(s => s.id === filterState.selectedSeller)?.name || filterState.selectedSeller}
@@ -518,8 +543,9 @@ export default function App() {
                   </button>
                 </div>
 
+                {/* Paginated 24-Card Grid (Fast DOM render) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {finalSortedFragrances.map((f, idx) => (
+                  {paginatedFragrances.map((f, idx) => (
                     <PowerFragranceCard
                       key={f.id || idx}
                       fragrance={f}
@@ -530,6 +556,19 @@ export default function App() {
                     />
                   ))}
                 </div>
+
+                {/* E-Commerce Standard Pagination Controls */}
+                <PaginationControls
+                  currentPage={validatedPage}
+                  totalPages={totalPages}
+                  totalItems={finalSortedFragrances.length}
+                  pageSize={pageSize}
+                  onPageChange={(p) => setCurrentPage(p)}
+                  onPageSizeChange={(sz) => {
+                    setPageSize(sz);
+                    setCurrentPage(1);
+                  }}
+                />
               </div>
             )}
           </div>
