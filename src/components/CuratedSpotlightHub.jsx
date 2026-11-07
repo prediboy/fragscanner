@@ -4,6 +4,8 @@ import PowerFragranceCard from './PowerFragranceCard';
 
 export default function CuratedSpotlightHub({
   catalog = [],
+  priceDrops = [],
+  newArrivals: customNewArrivals = [],
   onSelectFragrance,
   onApplyFilter,
   expandedCardId,
@@ -13,7 +15,8 @@ export default function CuratedSpotlightHub({
 }) {
   // 1. Top Verified Price Drops (highest discount percentage first)
   const topPriceDrops = useMemo(() => {
-    return catalog
+    if (priceDrops && priceDrops.length > 0) return priceDrops.slice(0, 6);
+    return (catalog || [])
       .filter(f => f.is_price_drop && Number(f.community_price) > 0)
       .sort((a, b) => {
         const pctA = Number(a.price_change_percentage) || 0;
@@ -21,15 +24,16 @@ export default function CuratedSpotlightHub({
         return pctB - pctA;
       })
       .slice(0, 6);
-  }, [catalog]);
+  }, [catalog, priceDrops]);
 
   // 2. New Community Arrivals
   const newArrivals = useMemo(() => {
-    return catalog
+    if (customNewArrivals && customNewArrivals.length > 0) return customNewArrivals.slice(0, 6);
+    return (catalog || [])
       .filter(f => f.is_new_arrival && Number(f.community_price) > 0)
       .sort((a, b) => new Date(b.new_arrival_date || 0) - new Date(a.new_arrival_date || 0))
       .slice(0, 6);
-  }, [catalog]);
+  }, [catalog, customNewArrivals]);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-200">

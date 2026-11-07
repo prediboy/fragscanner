@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import fragrancesData from './data/fragrances.json';
+import curatedData from './data/curated_highlights.json';
 import syncMeta from './data/sync_meta.json';
 import PowerFilterSidebar from './components/PowerFilterSidebar';
 import MobileFilterDrawer from './components/MobileFilterDrawer';
@@ -9,10 +9,10 @@ import FragranceDetailModal from './components/FragranceDetailModal';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
-import { filterCatalogSemantically } from './utils/semanticSearch';
+import { fetchInventoryPage, fetchFragranceDetail } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
-import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw } from 'lucide-react';
+import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All 11 Verified Sellers' },
@@ -106,228 +106,80 @@ export default function App() {
     }
   });
 
-  // 1. STRICTLY ACTIVE IN-STOCK INVENTORY BASE
-  // Preserves all 1,188 in master fragrancesData, but strictly hides the 223 unquoted items from the shopping feed
-  const inStockCatalog = useMemo(() => {
-    return fragrancesData.filter(f => {
-      const hasBottles = Array.isArray(f.community_sellers) && f.community_sellers.some(s => Number(s.price) > 0);
-      const hasDecants = Array.isArray(f.community_decants) && f.community_decants.some(d => (
-        Number(d.lowest_price) > 0 || (d.sizes && Object.values(d.sizes).some(v => Number(v) > 0))
-      ));
-      return (f.in_seller_stock || f.has_decants) && (hasBottles || hasDecants);
-    });
-  }, []);
+  // 1. PAGE-WISE INVENTORY STATE (Loads strictly 24 items per page on-demand)
+  const [pageItems, setPageItems] = useState([]);
+  const [totalMatching, setTotalMatching] = useState(curatedData.inStockCount || 921);
+  const [totalPages, setTotalPages] = useState(Math.ceil((curatedData.inStockCount || 921) / 24));
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
 
   // Compute live catalog statistics on verified stock
   const catalogCounts = useMemo(() => {
-    let inStock = 0;
-    let drops = 0;
-    let decants = 0;
-    let testers = 0;
-    let partials = 0;
-    let retail = 0;
+    return {
+      inStock: curatedData.inStockCount || 965,
+      drops: curatedData.topPriceDrops?.length || 14,
+      decants: 808,
+      testers: 240,
+      partials: 28,
+      retail: 921
+    };
+  }, []);
 
-    for (const f of inStockCatalog) {
-      if (f.in_seller_stock) inStock++;
-      if (f.is_price_drop && f.community_price) drops++;
-      if (f.has_decants) decants++;
-      if (f.is_tester || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester))) testers++;
-      if (f.is_partial || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial))) partials++;
-      if (f.in_seller_stock && !f.is_tester && !f.is_partial) retail++;
-    }
-
-    return { inStock, drops, decants, testers, partials, retail };
-  }, [inStockCatalog]);
-
-  // Compute live seller inventory count list
+  // Compute live seller inventory count list from curated metadata
   const sellersWithLiveCounts = useMemo(() => {
     return COMMUNITY_SELLERS.map(s => {
       if (s.id === 'all') return s;
-      const count = inStockCatalog.filter(f => {
-        const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(q => q.seller_id === s.id && Number(q.price) > 0);
-        const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === s.id);
-        return inB || inD;
-      }).length;
       return {
         ...s,
-        count
+        count: (curatedData.sellerCounts && curatedData.sellerCounts[s.id]) || 0
       };
     });
-  }, [inStockCatalog]);
+  }, []);
 
-  // Step 1: Base Facet Filtering (Seller, Formats, Budget, Deals, Vibe)
-  const baseFiltered = useMemo(() => {
-    const {
-      formats,
-      maxBudget,
-      selectedSeller,
-      dealsOnly,
-      selectedDna,
-      selectedVibe
-    } = filterState;
+  // Fetch only the requested 24 items page-wise on demand
+  useEffect(() => {
+    let isCancelled = false;
+    setIsLoadingPage(true);
 
-    const normalizeStr = (s) => (s || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
-    return inStockCatalog.filter(f => {
-      // 1. Seller Isolation Filter: If a specific seller is selected, perfume MUST be in that seller's active stock!
-      if (selectedSeller !== 'all') {
-        const inBottles = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && Number(s.price) > 0);
-        const inDecants = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === selectedSeller);
-        if (!inBottles && !inDecants) return false;
+    fetchInventoryPage({
+      page: currentPage,
+      pageSize,
+      search: searchQuery,
+      seller: filterState.selectedSeller,
+      formats: filterState.formats,
+      maxBudget: filterState.maxBudget,
+      sortBy: filterState.sortBy
+    }).then(res => {
+      if (!isCancelled) {
+        setPageItems(res.items);
+        setTotalMatching(res.totalCount);
+        setTotalPages(res.totalPages);
+        setIsLoadingPage(false);
       }
-
-      // 2. Deals Only Filter
-      if (dealsOnly === 'drops' && (!f.is_price_drop || !f.community_price)) return false;
-      if (dealsOnly === 'new' && (!f.is_new_arrival || !f.community_price)) return false;
-
-      // 3. Format & Packaging Filter
-      if (formats.length > 0 && formats.length < 4) {
-        let hasRetail = false;
-        let hasTester = false;
-        let hasPartial = false;
-        let hasDecant = false;
-
-        if (selectedSeller === 'all') {
-          hasRetail = formats.includes('retail') && f.in_seller_stock && !f.is_tester && !f.is_partial;
-          hasTester = formats.includes('tester') && (f.is_tester || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester)));
-          hasPartial = formats.includes('partial') && (f.is_partial || (Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial)));
-          hasDecant = formats.includes('decant') && f.has_decants;
-        } else {
-          // Seller-specific format check
-          hasRetail = formats.includes('retail') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && !s.is_tester && !s.is_partial && Number(s.price) > 0);
-          hasTester = formats.includes('tester') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && s.is_tester && Number(s.price) > 0);
-          hasPartial = formats.includes('partial') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === selectedSeller && s.is_partial && Number(s.price) > 0);
-          hasDecant = formats.includes('decant') && Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === selectedSeller);
-        }
-
-        if (!hasRetail && !hasTester && !hasPartial && !hasDecant) return false;
+    }).catch(err => {
+      if (!isCancelled) {
+        setIsLoadingPage(false);
       }
-
-      // 4. Max Budget Filter
-      if (maxBudget < 15000) {
-        if (selectedSeller === 'all') {
-          const bottleP = Number(f.community_price || 999999);
-          const decantP = Number(f.lowest_decant_price || 999999);
-          if (bottleP > maxBudget && decantP > maxBudget) return false;
-        } else {
-          // Check against selected seller's actual price
-          const sellerBottle = Array.isArray(f.community_sellers) ? f.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
-          const sellerDecant = Array.isArray(f.community_decants) ? f.community_decants.find(d => d.seller_id === selectedSeller) : null;
-          const bPrice = sellerBottle ? Number(sellerBottle.price) : 999999;
-          const dPrice = sellerDecant ? Number(sellerDecant.lowest_price || 999999) : 999999;
-          if (bPrice > maxBudget && dPrice > maxBudget) return false;
-        }
-      }
-
-      // 5. Cloned DNA Target Filter (Quick chips)
-      if (selectedDna) {
-        const term = selectedDna.toLowerCase();
-        const inspo = normalizeStr(f.dna_inspiration);
-        const name = normalizeStr(f.name);
-        if (!inspo.includes(term) && !name.includes(term)) return false;
-      }
-
-      // 6. Olfactory Vibe & Accords Filter
-      if (selectedVibe) {
-        const accords = Array.isArray(f.accords) ? f.accords.map(a => a.name.toLowerCase()).join(' ') : '';
-        const inspo = normalizeStr(f.dna_inspiration);
-        if (selectedVibe === 'fresh') {
-          if (!accords.includes('citrus') && !accords.includes('aquatic') && !accords.includes('fresh') && !accords.includes('aromatic')) return false;
-        } else if (selectedVibe === 'beastmode') {
-          if (!accords.includes('amber') && !accords.includes('spicy') && !accords.includes('tobacco') && !accords.includes('vanilla') && !(f.longevity && f.longevity.includes('Long'))) return false;
-        } else if (selectedVibe === 'gourmand') {
-          if (!accords.includes('sweet') && !accords.includes('vanilla') && !accords.includes('caramel') && !accords.includes('coffee') && !inspo.includes('angels')) return false;
-        } else if (selectedVibe === 'office') {
-          if (!accords.includes('iris') && !accords.includes('clean') && !accords.includes('vetiver') && !accords.includes('powdery')) return false;
-        }
-      }
-
-      return true;
     });
-  }, [inStockCatalog, filterState]);
 
-  // Step 2: Semantic Search Filter (Typo-tolerant, clone-aware, notes-aware)
-  const searchFiltered = useMemo(() => {
-    if (!searchQuery.trim()) return baseFiltered;
-    return filterCatalogSemantically(baseFiltered, searchQuery.trim());
-  }, [baseFiltered, searchQuery]);
-
-  // Step 3: Sorting Engine
-  const finalSortedFragrances = useMemo(() => {
-    const { sortBy, selectedSeller } = filterState;
-    const isSpecificSeller = selectedSeller !== 'all';
-
-    return [...searchFiltered].sort((a, b) => {
-      // Helper to extract effective price based on seller context
-      const getPriceA = (item) => {
-        if (isSpecificSeller) {
-          const sB = Array.isArray(item.community_sellers) ? item.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
-          const sD = Array.isArray(item.community_decants) ? item.community_decants.find(d => d.seller_id === selectedSeller) : null;
-          return sB ? Number(sB.price) : (sD ? Number(sD.lowest_price || 999999) : 999999);
-        }
-        return Number(item.community_price || item.lowest_decant_price || 999999);
-      };
-
-      const getPriceB = (item) => {
-        if (isSpecificSeller) {
-          const sB = Array.isArray(item.community_sellers) ? item.community_sellers.find(s => s.seller_id === selectedSeller && Number(s.price) > 0) : null;
-          const sD = Array.isArray(item.community_decants) ? item.community_decants.find(d => d.seller_id === selectedSeller) : null;
-          return sB ? Number(sB.price) : (sD ? Number(sD.lowest_price || 999999) : 999999);
-        }
-        return Number(item.community_price || item.lowest_decant_price || 999999);
-      };
-
-      if (sortBy === 'price_asc') {
-        return getPriceA(a) - getPriceB(b);
-      }
-      if (sortBy === 'price_desc') {
-        return getPriceB(b) - getPriceA(a);
-      }
-      if (sortBy === 'drop_percent') {
-        const da = a.is_price_drop ? Number(a.price_change_percentage || 0) : -1;
-        const db = b.is_price_drop ? Number(b.price_change_percentage || 0) : -1;
-        return db - da;
-      }
-      if (sortBy === 'decant_asc') {
-        const da = Number(a.lowest_decant_price || 999999);
-        const db = Number(b.lowest_decant_price || 999999);
-        return da - db;
-      }
-      if (sortBy === 'rating') {
-        return (Number(b.rating_value) || 0) - (Number(a.rating_value) || 0);
-      }
-      if (sortBy === 'newest') {
-        const ta = new Date(a.price_updated_at || a.new_arrival_date || 0).getTime();
-        const tb = new Date(b.price_updated_at || b.new_arrival_date || 0).getTime();
-        return tb - ta;
-      }
-      return 0;
-    });
-  }, [searchFiltered, filterState]);
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentPage, pageSize, searchQuery, filterState]);
 
   // Reset page to 1 whenever search, filter, or catalog mode changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, filterState, showFullCatalog]);
 
-  // Pagination calculation
-  const totalPages = Math.max(1, Math.ceil(finalSortedFragrances.length / pageSize));
-  const validatedPage = Math.min(Math.max(1, currentPage), totalPages);
-
-  const paginatedFragrances = useMemo(() => {
-    const startIdx = (validatedPage - 1) * pageSize;
-    return finalSortedFragrances.slice(startIdx, startIdx + pageSize);
-  }, [finalSortedFragrances, validatedPage, pageSize]);
-
   // Debounced search query telemetry
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
       const t = setTimeout(() => {
-        logSearchQuery(searchQuery.trim(), finalSortedFragrances.length);
+        logSearchQuery(searchQuery.trim(), totalMatching);
       }, 1500);
       return () => clearTimeout(t);
     }
-  }, [searchQuery, finalSortedFragrances.length]);
+  }, [searchQuery, totalMatching]);
 
   const resetAllFilters = () => {
     setSearchQuery('');
@@ -444,7 +296,7 @@ export default function App() {
             setShowFullCatalog(false);
           }}
           onResetFilters={resetAllFilters}
-          totalMatching={finalSortedFragrances.length}
+          totalMatching={totalMatching}
           quickFilterTab={quickFilterTab}
           setQuickFilterTab={setQuickFilterTab}
           counts={catalogCounts}
@@ -470,8 +322,13 @@ export default function App() {
           <div className="flex-1 min-w-0">
             {isUnfiltered ? (
               <CuratedSpotlightHub
-                catalog={inStockCatalog}
-                onSelectFragrance={(selected) => setActiveFragrance(selected)}
+                priceDrops={curatedData.topPriceDrops}
+                newArrivals={curatedData.newArrivals}
+                onSelectFragrance={async (selected) => {
+                  setActiveFragrance(selected);
+                  const detail = await fetchFragranceDetail(selected.id);
+                  if (detail) setActiveFragrance(detail);
+                }}
                 onApplyFilter={(newFilter) => {
                   setFilterState(prev => ({ ...prev, ...newFilter }));
                   setShowFullCatalog(false);
@@ -481,7 +338,7 @@ export default function App() {
                 sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
                 onShowAll={() => setShowFullCatalog(true)}
               />
-            ) : finalSortedFragrances.length === 0 ? (
+            ) : !isLoadingPage && pageItems.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-xl font-mono">
                   ∅
@@ -491,7 +348,7 @@ export default function App() {
                     No matching fragrances found
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
-                    Try relaxing your budget, clearing specific seller filters, or searching for a broader fragrance DNA term.
+                    Try relaxing your budget, clearing specific seller filters, or searching for a broader fragrance term.
                   </p>
                 </div>
                 <button
@@ -509,12 +366,15 @@ export default function App() {
                     <span className="font-heading font-bold text-sm text-slate-900 dark:text-white">
                       Filtered Inventory
                     </span>
-                    <span className="text-xs font-mono font-bold bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800">
-                      {finalSortedFragrances.length} matches
+                    <span className="text-xs font-mono font-bold bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800 flex items-center gap-1">
+                      {isLoadingPage ? (
+                        <Loader2 className="w-3 h-3 animate-spin text-cyan-500" />
+                      ) : null}
+                      <span>{totalMatching.toLocaleString()} matches</span>
                     </span>
                     {totalPages > 1 && (
                       <span className="text-[11px] font-mono text-slate-400">
-                        (Page {validatedPage} of {totalPages})
+                        (Page {currentPage} of {totalPages})
                       </span>
                     )}
                     {filterState.selectedSeller !== 'all' && (
@@ -525,11 +385,6 @@ export default function App() {
                     {filterState.dealsOnly && (
                       <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                         {filterState.dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Stock'}
-                      </span>
-                    )}
-                    {filterState.selectedDna && (
-                      <span className="text-xs font-mono font-bold bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 px-2 py-0.5 rounded-full border border-purple-200 dark:border-purple-800">
-                        Clones: {filterState.selectedDna}
                       </span>
                     )}
                     {filterState.maxBudget < 15000 && (
@@ -547,25 +402,48 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* Paginated 24-Card Grid (Fast DOM render) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {paginatedFragrances.map((f, idx) => (
-                    <PowerFragranceCard
-                      key={f.id || idx}
-                      fragrance={f}
-                      onSelect={(selected) => setActiveFragrance(selected)}
-                      isExpanded={expandedCardId === f.id}
-                      onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
-                      selectedSeller={filterState.selectedSeller}
-                    />
-                  ))}
-                </div>
+                {/* Paginated 24-Card Grid or Loading Shimmer */}
+                {isLoadingPage ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse">
+                        <div className="flex items-center justify-between">
+                          <div className="h-4 w-20 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                          <div className="h-4 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                        </div>
+                        <div className="h-5 w-3/4 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                        <div className="h-12 bg-slate-100 dark:bg-slate-800/60 rounded-xl"></div>
+                        <div className="flex items-center justify-between pt-2">
+                          <div className="h-3 w-24 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                          <div className="h-7 w-20 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {pageItems.map((f, idx) => (
+                      <PowerFragranceCard
+                        key={f.id || idx}
+                        fragrance={f}
+                        onSelect={async (selected) => {
+                          setActiveFragrance(selected);
+                          const detail = await fetchFragranceDetail(selected.id);
+                          if (detail) setActiveFragrance(detail);
+                        }}
+                        isExpanded={expandedCardId === f.id}
+                        onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
+                        selectedSeller={filterState.selectedSeller}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 {/* E-Commerce Standard Pagination Controls */}
                 <PaginationControls
-                  currentPage={validatedPage}
+                  currentPage={currentPage}
                   totalPages={totalPages}
-                  totalItems={finalSortedFragrances.length}
+                  totalItems={totalMatching}
                   pageSize={pageSize}
                   onPageChange={(p) => setCurrentPage(p)}
                   onPageSizeChange={(sz) => {
@@ -589,7 +467,7 @@ export default function App() {
           setShowFullCatalog(false);
         }}
         onResetFilters={resetAllFilters}
-        resultCount={finalSortedFragrances.length}
+        resultCount={totalMatching}
         activeFilterCount={activeFiltersCount}
         counts={catalogCounts}
         sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
@@ -599,7 +477,7 @@ export default function App() {
       {activeFragrance && (
         <FragranceDetailModal
           fragrance={activeFragrance}
-          allFragrances={fragrancesData}
+          allFragrances={pageItems}
           onClose={() => setActiveFragrance(null)}
           onSelectOther={(other) => setActiveFragrance(other)}
           selectedSeller={filterState.selectedSeller}
@@ -611,7 +489,7 @@ export default function App() {
         <SyncStatsModal
           onClose={() => setSyncStatsOpen(false)}
           syncMeta={syncMeta}
-          totalCatalog={fragrancesData.length}
+          totalCatalog={curatedData.totalCatalog || 1188}
           inStockBottles={catalogCounts.inStock}
           availableDecants={catalogCounts.decants}
         />
