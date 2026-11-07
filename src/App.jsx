@@ -335,7 +335,7 @@ export default function App() {
         matchOutOfFive: Number(f.rating_value) || 4.6,
         likeReasons: [
           f.dna_inspiration ? `🎯 Closest Match: ${f.dna_inspiration}` : '🔥 Community Verified Beastmode Hit',
-          `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.community_seller_name || 'Verified Sellers'}`,
+          `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || f.community_seller_name || 'Verified Sellers'}`,
           `⭐ ${getFragranceSummarySnippet(f)}`
         ]
       }));
@@ -384,7 +384,7 @@ export default function App() {
             : matchedAlias 
               ? `🏷 Matched Community Alias "${matchedAlias}"` 
               : f.dna_inspiration ? `Closest Match: ${f.dna_inspiration}` : 'Community Verified Stock',
-          `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.community_seller_name || 'Verified Sellers'}`,
+          `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || f.community_seller_name || 'Verified Sellers'}`,
           `⭐ ${getFragranceSummarySnippet(f)}`
         ]
       };
@@ -412,7 +412,7 @@ export default function App() {
       isCloneTargetMatch: true,
       likeReasons: [
         `🎯 Closest Match to ${target.name} in stock`,
-        `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.community_seller_name || 'Verified Sellers'}`,
+        `⚡ Lowest Pan-India rate at ₹${Number(f.community_price || f.lowest_decant_price || 0).toLocaleString()} via ${f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || f.community_seller_name || 'Verified Sellers'}`,
         `⭐ ${getFragranceSummarySnippet(f, 'Save up to ~92% vs original retail price')}`
       ]
     }));
@@ -623,6 +623,9 @@ export default function App() {
       : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
     const isLowestPartial = !!(bestBottleQuote?.isPartial || f.is_partial || (f.community_bottle_size && /partial/i.test(f.community_bottle_size)));
     const isLowestTester = !isLowestPartial && !!(bestBottleQuote?.isTester || f.is_tester || (f.community_bottle_size && /tester/i.test(f.community_bottle_size)));
+    const primaryQuote = hasBottlePrice ? (bestBottleQuote || validQuotes[0]) : (validQuotes.find(q => !q.isBottle) || validQuotes[0]);
+    const primarySellerName = primaryQuote?.seller_name || f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || f.community_decants?.[0]?.seller_name || f.community_seller_name || 'Verified Sellers (Inquire)';
+    const primaryWhatsApp = primaryQuote?.whatsapp || (hasBottlePrice ? f.community_sellers?.[0]?.whatsapp : f.community_decants?.[0]?.whatsapp) || f.community_whatsapp;
 
     return (
       <div 
@@ -759,11 +762,7 @@ export default function App() {
           <div className="text-[11px] text-glacier-textMuted">
             <span>In stock: </span>
             <strong className="text-slate-900 dark:text-slate-100">
-              {f.community_sellers && f.community_sellers.length > 0 
-                ? (f.community_seller_name || f.community_sellers[0].seller_name)
-                : f.community_decants && f.community_decants.length > 0
-                  ? (f.community_seller_name || f.community_decants[0].seller_name)
-                  : 'Verified Sellers (Inquire)'}
+              {primarySellerName}
             </strong>
           </div>
 
@@ -776,9 +775,9 @@ export default function App() {
               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
             
-            {f.community_whatsapp ? (
+            {primaryWhatsApp ? (
               <a
-                href={`https://wa.me/${String(f.community_whatsapp).replace(/\D/g, '').startsWith('91') ? String(f.community_whatsapp).replace(/\D/g, '') : `91${String(f.community_whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
+                href={`https://wa.me/${String(primaryWhatsApp).replace(/\D/g, '').startsWith('91') ? String(primaryWhatsApp).replace(/\D/g, '') : `91${String(primaryWhatsApp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
                   bestLeadPrice > 0
                     ? `Hi, saw your price for ${displayName}${hasBottlePrice && bottleDisplaySize ? ` (${bottleDisplaySize})` : ''} quoted at ₹${bestLeadPrice.toLocaleString()} on FragScanner. Is this in stock?`
                     : `Hi, saw your listing for ${displayName} on FragScanner. Is this in stock?`
@@ -786,7 +785,7 @@ export default function App() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => logWhatsAppClick({
-                  sellerName: f.lowest_seller || f.community_sellers?.[0]?.seller_name || f.lowest_decant_seller || 'Community Seller',
+                  sellerName: primarySellerName,
                   fragranceName: f.name,
                   brand: f.brand,
                   price: bestLeadPrice,

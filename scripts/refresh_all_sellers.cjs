@@ -241,6 +241,9 @@ async function runMasterRefresh() {
     f.in_seller_stock = false;
     f.community_price = null;
     f.lowest_seller = null;
+    f.lowest_decant_seller = null;
+    f.community_seller_name = null;
+    f.community_whatsapp = null;
     f.has_decants = false;
     f.lowest_decant_price = null;
   });
@@ -1445,6 +1448,8 @@ async function runMasterRefresh() {
       frag.community_price = best.price;
       frag.community_bottle_size = best.size || 'Retail Bottle';
       frag.lowest_seller = best.seller_name;
+      frag.community_seller_name = best.seller_name;
+      frag.community_whatsapp = best.whatsapp;
       frag.is_tester = !!(best.is_tester || (best.size && /tester/i.test(best.size)));
       frag.packaging_type = frag.is_tester ? 'Tester' : 'Retail Bottle';
       inStockBottlesCount++;
@@ -1582,10 +1587,35 @@ async function runMasterRefresh() {
 
       frag.decant_comparison = comp;
       frag.lowest_decant_price = allPrices.length > 0 ? Math.min(...allPrices) : null;
+
+      // Find overall lowest decant quote seller
+      let overallBestDecant = null;
+      let minDecantPrice = Infinity;
+      ['2ml', '3ml', '5ml', '8ml', '10ml', '20ml', '30ml'].forEach(sz => {
+        if (comp[sz] && comp[sz].quotes && comp[sz].quotes[0]) {
+          if (comp[sz].lowest_price < minDecantPrice) {
+            minDecantPrice = comp[sz].lowest_price;
+            overallBestDecant = comp[sz].quotes[0];
+          }
+        }
+      });
+      if (overallBestDecant) {
+        frag.lowest_decant_seller = overallBestDecant.seller_name;
+        if (!frag.in_seller_stock) {
+          frag.community_seller_name = overallBestDecant.seller_name;
+          frag.community_whatsapp = overallBestDecant.whatsapp;
+        }
+      }
     } else {
       frag.has_decants = false;
       frag.decant_comparison = null;
       frag.lowest_decant_price = null;
+      frag.lowest_decant_seller = null;
+    }
+
+    if (!frag.in_seller_stock && !frag.has_decants) {
+      frag.community_seller_name = null;
+      frag.community_whatsapp = null;
     }
 
     if (frag.in_seller_stock && frag.has_decants) {
