@@ -2,6 +2,14 @@ import React, { useMemo } from 'react';
 import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Store } from 'lucide-react';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
+function getWhatsAppUrl(phone, message) {
+  if (!phone) return null;
+  const cleaned = String(phone).replace(/\D/g, '');
+  if (!cleaned) return null;
+  const num = cleaned.startsWith('91') ? cleaned : `91${cleaned}`;
+  return `https://wa.me/${num}?text=${encodeURIComponent(message)}`;
+}
+
 export default function PowerFragranceCard({ 
   fragrance: f, 
   onSelect, 
@@ -130,15 +138,21 @@ export default function PowerFragranceCard({
   const isLowestPartial = !!(displayBottleQuote?.isPartial || (!isSpecificSeller && f.is_partial));
   const isLowestTester = !isLowestPartial && !!(displayBottleQuote?.isTester || (!isSpecificSeller && f.is_tester));
 
-  // Determine primary display seller and action
-  const primaryQuote = hasBottlePrice ? displayBottleQuote : displayDecantQuote;
-  const primarySellerName = primaryQuote?.seller_name || f.lowest_seller || 'Verified Seller';
-  const primaryWhatsApp = primaryQuote?.whatsapp || f.community_whatsapp;
-  const bestLeadPrice = hasBottlePrice ? bottlePrice : decantPrice;
-
   const displayName = f.brand && !f.name.toLowerCase().includes(f.brand.toLowerCase())
     ? `${f.brand} ${f.name}`
     : f.name;
+
+  // Bottle WhatsApp target & message
+  const bottleWhatsAppUrl = hasBottlePrice ? getWhatsAppUrl(
+    displayBottleQuote.whatsapp || f.community_whatsapp,
+    `Hi ${displayBottleQuote.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${bottlePrice.toLocaleString()} on FragScanner. Is this in stock?`
+  ) : null;
+
+  // Decant WhatsApp target & message
+  const decantWhatsAppUrl = hasDecantPrice ? getWhatsAppUrl(
+    displayDecantQuote.whatsapp || f.community_whatsapp,
+    `Hi ${displayDecantQuote.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${decantPrice.toLocaleString()} (${displayDecantQuote.label}) on FragScanner. What sizes are available?`
+  ) : null;
 
   return (
     <div 
@@ -211,97 +225,132 @@ export default function PowerFragranceCard({
           </div>
         </div>
 
-        {/* Pricing Pod (Bottle vs Decant) */}
-        <div 
-          onClick={() => onSelect && onSelect(f)}
-          className="cursor-pointer mt-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 flex items-baseline justify-between hover:border-cyan-400/50 transition-colors"
-          title="Click to view full olfactory profile"
-        >
-          <div>
-            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 block truncate max-w-[140px]">
-              {hasBottlePrice ? bottleDisplaySize : 'Decant only'}
-            </span>
-            <div className="flex items-baseline gap-1.5">
-              {!isSpecificSeller && f.is_price_drop && f.previous_price && (
-                <span className="text-[11px] text-slate-400 dark:text-slate-500 line-through font-mono font-medium">
-                  ₹{Number(f.previous_price).toLocaleString()}
-                </span>
-              )}
-              <div className={`font-mono text-base font-bold leading-tight ${!isSpecificSeller && f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400 font-black' : 'text-slate-900 dark:text-white'}`}>
-                {hasBottlePrice ? `₹${bottlePrice.toLocaleString()}` : (hasDecantPrice ? `₹${decantPrice.toLocaleString()}` : 'Unquoted')}
+        {/* Option A: Stacked Dual-Action Pods (Bottle vs Decant with dedicated sellers & WhatsApp) */}
+        <div className="mt-3 space-y-2">
+          {/* Bottle Offer Pod */}
+          {hasBottlePrice && (
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                  <span className="text-xs">
+                    {isLowestPartial ? '🏷️' : isLowestTester ? '🧪' : '🍾'}
+                  </span>
+                  <span className="font-medium truncate">{bottleDisplaySize}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={displayBottleQuote.seller_name}>{displayBottleQuote.seller_name}</strong>
+                </div>
               </div>
-              {!isSpecificSeller && f.is_price_drop && (
-                <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-1 py-0.2 rounded text-[9px] font-mono font-bold">
-                  -{f.price_change_percentage || Math.round((Math.abs(f.previous_price - bottlePrice) / f.previous_price) * 100)}%
-                </span>
-              )}
-            </div>
-          </div>
 
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="text-right">
+                  {!isSpecificSeller && f.is_price_drop && f.previous_price && (
+                    <div className="flex items-center justify-end gap-1 text-[9px] text-slate-400 line-through font-mono">
+                      <span>₹{Number(f.previous_price).toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
+                    ₹{bottlePrice.toLocaleString()}
+                  </div>
+                </div>
+
+                {bottleWhatsAppUrl ? (
+                  <a
+                    href={bottleWhatsAppUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => logWhatsAppClick({
+                      sellerName: displayBottleQuote.seller_name,
+                      fragranceName: f.name,
+                      brand: f.brand,
+                      price: bottlePrice,
+                      format: 'bottle'
+                    })}
+                    className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 shrink-0"
+                    title={`Contact ${displayBottleQuote.seller_name} on WhatsApp`}
+                  >
+                    <span>WA</span>
+                    <span className="text-[9px]">↗</span>
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          )}
+
+          {/* Decant Offer Pod */}
           {hasDecantPrice && (
-            <div className="text-right shrink-0">
-              <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 block">
-                {displayDecantQuote ? displayDecantQuote.label : 'Decant from'}
-              </span>
-              <span className="font-mono text-xs font-bold text-cyan-600 dark:text-cyan-400">
-                ₹{decantPrice.toLocaleString()}
-              </span>
+            <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                  <span className="text-xs">💧</span>
+                  <span className="font-medium truncate">{displayDecantQuote.label}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={displayDecantQuote.seller_name}>{displayDecantQuote.seller_name}</strong>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="text-right">
+                  <div className="text-[9px] font-mono text-slate-400">from</div>
+                  <div className="font-mono text-sm font-extrabold text-cyan-600 dark:text-cyan-400">
+                    ₹{decantPrice.toLocaleString()}
+                  </div>
+                </div>
+
+                {decantWhatsAppUrl ? (
+                  <a
+                    href={decantWhatsAppUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => logWhatsAppClick({
+                      sellerName: displayDecantQuote.seller_name,
+                      fragranceName: f.name,
+                      brand: f.brand,
+                      price: decantPrice,
+                      format: 'decant'
+                    })}
+                    className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 shrink-0"
+                    title={`Contact ${displayDecantQuote.seller_name} for decants on WhatsApp`}
+                  >
+                    <span>WA</span>
+                    <span className="text-[9px]">↗</span>
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          )}
+
+          {/* Fallback if neither bottle nor decant quote is available */}
+          {!hasBottlePrice && !hasDecantPrice && (
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-400 text-center font-mono">
+              Unquoted in community
             </div>
           )}
         </div>
       </div>
 
-      {/* In-Stock Seller Spread & Actions */}
+      {/* Footer Toolbar: Compare Rates & Notes/Reviews */}
       <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-        <div className="min-w-0 flex-1 flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400">
-          {isSpecificSeller ? (
-            <span className="text-cyan-700 dark:text-cyan-400 font-semibold truncate flex items-center gap-1 min-w-0">
-              <Store className="w-3 h-3 text-cyan-500 shrink-0" />
-              <span className="truncate">{primarySellerName}</span>
-            </span>
-          ) : (
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="shrink-0 font-mono text-slate-400 font-semibold whitespace-nowrap">Best:</span>
-              <strong className="text-slate-800 dark:text-emerald-400 font-semibold truncate" title={primarySellerName}>
-                {primarySellerName}
-              </strong>
-            </div>
-          )}
-        </div>
+        <button
+          type="button"
+          onClick={() => onToggleExpand && onToggleExpand(f.id)}
+          className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer"
+          title="Compare rates from all community sellers"
+        >
+          <span>Compare Rates ({allQuotes.length})</span>
+          {isExpanded ? <ChevronUp className="w-3 h-3 text-cyan-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
+        </button>
 
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            onClick={() => onToggleExpand && onToggleExpand(f.id)}
-            className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1 shadow-2xs cursor-pointer"
-            title="Compare rates from all community sellers"
-          >
-            <span>Sellers ({allQuotes.length})</span>
-            {isExpanded ? <ChevronUp className="w-3 h-3 text-cyan-400" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-          
-          {primaryWhatsApp ? (
-            <a
-              href={`https://wa.me/${String(primaryWhatsApp).replace(/\D/g, '').startsWith('91') ? String(primaryWhatsApp).replace(/\D/g, '') : `91${String(primaryWhatsApp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
-                bestLeadPrice > 0
-                  ? `Hi, saw your price for ${displayName}${hasBottlePrice && bottleDisplaySize ? ` (${bottleDisplaySize})` : ''} quoted at ₹${bestLeadPrice.toLocaleString()} on FragScanner. Is this in stock?`
-                  : `Hi, saw your listing for ${displayName} on FragScanner. Is this in stock?`
-              )}`}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => logWhatsAppClick({
-                sellerName: primarySellerName,
-                fragranceName: f.name,
-                brand: f.brand,
-                price: bestLeadPrice,
-                format: hasBottlePrice ? 'bottle' : 'decant'
-              })}
-              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 active:scale-95 shrink-0"
-            >
-              <span>WhatsApp</span>
-              <span className="text-[9px]">↗</span>
-            </a>
-          ) : null}
-        </div>
+        <button
+          type="button"
+          onClick={() => onSelect && onSelect(f)}
+          className="px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 text-[10px] font-medium text-slate-500 hover:text-cyan-600 dark:text-slate-400 dark:hover:text-cyan-400 transition-colors flex items-center gap-1 cursor-pointer"
+          title="View olfactory notes, longevity, and reviews"
+        >
+          <span>Notes & Details</span>
+          <span className="text-[9px]">→</span>
+        </button>
       </div>
 
       {/* Expanded Multi-Seller Quotes Accordion */}
