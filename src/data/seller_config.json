@@ -147,5 +147,24 @@
     "whatsapp": "7838191410",
     "shipping": "Pan-India Shipping",
     "dispatch": "24-48 hrs"
+  },
+  {
+    "id": "sovereign_scents",
+    "seller_name": "Sovereign Scents",
+    "type": "decant_and_bottle",
+    "sheet_url_decants_men": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=0",
+    "sheet_url_decants_women": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=1022333211",
+    "sheet_url_retail": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=91520254",
+    "whatsapp": "8826709398",
+    "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
+    "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "3ml",
+      "5ml",
+      "8ml",
+      "10ml",
+      "20ml",
+      "30ml"
+    ]
   }
 ]

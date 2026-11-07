@@ -367,6 +367,18 @@ async function runMasterRefresh() {
       whatsapp: "7838191410",
       shipping: "Pan-India Shipping",
       dispatch: "24-48 hrs"
+    },
+    {
+      id: "sovereign_scents",
+      seller_name: "Sovereign Scents",
+      type: "decant_and_bottle",
+      sheet_url_decants_men: "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=0",
+      sheet_url_decants_women: "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=1022333211",
+      sheet_url_retail: "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=91520254",
+      whatsapp: "8826709398",
+      shipping: "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
+      dispatch: "24-48 hrs",
+      decant_sizes: ["3ml", "5ml", "8ml", "10ml", "20ml", "30ml"]
     }
   ];
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
@@ -601,12 +613,17 @@ async function runMasterRefresh() {
       }
     }
 
-    const isTester = !!(sellerObj.is_tester || (sellerObj.size && /tester/i.test(sellerObj.size)) || (sellerObj.product_url && /tester/i.test(sellerObj.product_url)));
-    sellerObj.is_tester = isTester;
-    sellerObj.packaging_type = isTester ? 'Tester' : 'Retail Bottle';
+    const isPartial = !!(sellerObj.is_partial || (sellerObj.size && /partial|\b\d+\/\d+\s*ml\b/i.test(sellerObj.size)) || (sellerObj.product_url && /partial/i.test(sellerObj.product_url)));
+    sellerObj.is_partial = isPartial;
 
-    const sizeKey = sellerObj.size || (isTester ? 'Tester Bottle' : 'Retail Bottle');
-    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id && (s.size || (s.is_tester ? 'Tester Bottle' : 'Retail Bottle')) === sizeKey);
+    const isTester = !isPartial && !!(sellerObj.is_tester || (sellerObj.size && /tester/i.test(sellerObj.size)) || (sellerObj.product_url && /tester/i.test(sellerObj.product_url)));
+    sellerObj.is_tester = isTester;
+
+    sellerObj.packaging_type = isPartial ? 'Partial' : (isTester ? 'Tester' : 'Retail Bottle');
+
+    const defaultLabel = isPartial ? 'Partial Bottle' : (isTester ? 'Tester Bottle' : 'Retail Bottle');
+    const sizeKey = sellerObj.size || defaultLabel;
+    const existing = frag.community_sellers.find(s => s.seller_id === sellerObj.seller_id && (s.size || defaultLabel) === sizeKey);
     if (existing) {
       if (sellerObj.price < existing.price) {
         existing.price = sellerObj.price;
@@ -642,7 +659,9 @@ async function runMasterRefresh() {
     whiffculture_decants: 0,
     rp_decants: 0,
     gryv_scents_bottles: 0,
-    gryv_scents_decants: 0
+    gryv_scents_decants: 0,
+    sovereign_scents_bottles: 0,
+    sovereign_scents_decants: 0
   };
 
   let enrichedCount = 0;
@@ -903,6 +922,121 @@ async function runMasterRefresh() {
         console.log(`  ✓ Matched ${stats.gryv_scents_decants} decants for GRYV Scents`);
       } catch (err) {
         console.error(`  ❌ Error syncing GRYV Scents Decants:`, err.message);
+      }
+    }
+  }
+
+  // ==========================================
+  // SOURCE 3.5: SOVEREIGN SCENTS (BOTTLES & DECANTS)
+  // ==========================================
+  const sovSeller = sellersList.find(s => s.id === "sovereign_scents");
+  if (sovSeller) {
+    // 1. Retail Packs (Middle Eastern Retail Packs - GID: 91520254)
+    if (sovSeller.sheet_url_retail) {
+      try {
+        console.log(`\n--- Syncing Sovereign Scents Retail Packs ---`);
+        const csvData = await fetchUrl(sovSeller.sheet_url_retail);
+        const rows = parseCSV(csvData);
+        console.log(`  Read ${rows.length} rows from Sovereign Scents Retail Packs`);
+        for (let rIdx = 1; rIdx < rows.length; rIdx++) {
+          const row = rows[rIdx];
+          const brandRaw = row[0]?.trim() || "";
+          const nameRaw = row[1]?.trim() || "";
+          const sizeRaw = row[2]?.trim() || "";
+          const priceClean = (row[3] || "").replace(/[^\d]/g, "");
+          if (!brandRaw || !nameRaw || !priceClean || brandRaw.toLowerCase().includes("brand")) continue;
+
+          const price = parseInt(priceClean, 10);
+          if (price < 400 || price > 50000) continue;
+
+          const isPartial = /partial|\b\d+\/\d+\s*ml\b/i.test(nameRaw) || /partial|\b\d+\/\d+\s*ml\b/i.test(sizeRaw);
+          const brandNorm = normalizeBrand(brandRaw);
+          const matched = findBestMatch(brandNorm, nameRaw);
+          if (matched) {
+            const fullNameForMeta = sizeRaw ? `${nameRaw} ${sizeRaw}` : nameRaw;
+            const meta = extractBottleMetadata(brandNorm, fullNameForMeta, matched.bottle_size);
+            addBottleQuote(matched, {
+              seller_id: sovSeller.id,
+              seller_name: sovSeller.seller_name,
+              price,
+              size: isPartial ? `${sizeRaw || meta.label} (Partial)` : meta.label,
+              volume_ml: meta.volume,
+              whatsapp: sovSeller.whatsapp,
+              shipping: sovSeller.shipping,
+              dispatch: sovSeller.dispatch,
+              is_partial: isPartial,
+              is_tester: false,
+              packaging_type: isPartial ? 'Partial' : 'Retail Bottle',
+              verified: true
+            });
+            stats.sovereign_scents_bottles++;
+          }
+        }
+        console.log(`  ✓ Matched ${stats.sovereign_scents_bottles} bottles for Sovereign Scents`);
+      } catch (err) {
+        console.error(`  ❌ Error syncing Sovereign Scents Retail:`, err.message);
+      }
+    }
+
+    // 2. Decants (Men-UNISEX GID: 0 & For Women GID: 1022333211)
+    const decantTabs = [
+      { name: "Men-UNISEX Decants", url: sovSeller.sheet_url_decants_men },
+      { name: "Women Decants", url: sovSeller.sheet_url_decants_women }
+    ];
+
+    for (const tab of decantTabs) {
+      if (!tab.url) continue;
+      try {
+        console.log(`\n--- Syncing Sovereign Scents ${tab.name} ---`);
+        const csvData = await fetchUrl(tab.url);
+        const rows = parseCSV(csvData);
+        console.log(`  Read ${rows.length} rows from Sovereign Scents ${tab.name}`);
+        for (let rIdx = 1; rIdx < rows.length; rIdx++) {
+          const row = rows[rIdx];
+          const brandRaw = row[0]?.trim() || "";
+          const nameRaw = row[1]?.trim() || "";
+          const inspiredBy = row[2]?.trim() || "";
+          if (!brandRaw || !nameRaw || brandRaw.toLowerCase().includes("brand") || nameRaw.toLowerCase().includes("fragrance name")) continue;
+
+          const p3 = parseInt((row[3] || "").replace(/[^\d]/g, ""), 10);
+          const p5 = parseInt((row[4] || "").replace(/[^\d]/g, ""), 10);
+          const p8 = parseInt((row[5] || "").replace(/[^\d]/g, ""), 10);
+          const p10 = parseInt((row[6] || "").replace(/[^\d]/g, ""), 10);
+          const p20 = parseInt((row[7] || "").replace(/[^\d]/g, ""), 10);
+          const p30 = parseInt((row[8] || "").replace(/[^\d]/g, ""), 10);
+
+          const sizes = {};
+          if (p3 > 0) sizes["3ml"] = p3;
+          if (p5 > 0) sizes["5ml"] = p5;
+          if (p8 > 0) sizes["8ml"] = p8;
+          if (p10 > 0) sizes["10ml"] = p10;
+          if (p20 > 0) sizes["20ml"] = p20;
+          if (p30 > 0) sizes["30ml"] = p30;
+
+          const prices = Object.values(sizes);
+          if (prices.length === 0) continue;
+
+          const brandNorm = normalizeBrand(brandRaw);
+          let cleanedName = nameRaw.replace(/^afnan\s+/i, '');
+          const matched = findBestMatch(brandNorm, cleanedName, inspiredBy);
+          if (matched) {
+            addDecantQuote(matched, {
+              seller_id: sovSeller.id,
+              seller_name: sovSeller.seller_name,
+              whatsapp: sovSeller.whatsapp,
+              shipping: sovSeller.shipping,
+              dispatch: sovSeller.dispatch,
+              sizes,
+              lowest_price: Math.min(...prices),
+              in_stock: true,
+              verified: true
+            });
+            stats.sovereign_scents_decants++;
+          }
+        }
+        console.log(`  ✓ Matched ${stats.sovereign_scents_decants} decants for Sovereign Scents so far`);
+      } catch (err) {
+        console.error(`  ❌ Error syncing Sovereign Scents ${tab.name}:`, err.message);
       }
     }
   }
@@ -1255,7 +1389,8 @@ async function runMasterRefresh() {
     { id: "bluewings", name: "Blue Wings" },
     { id: "whiffculture", name: "Whiff Culture" },
     { id: "aar_fragrances", name: "AAR Fragrances" },
-    { id: "fragrance_heaven", name: "Fragrance Heaven" }
+    { id: "fragrance_heaven", name: "Fragrance Heaven" },
+    { id: "sovereign_scents", name: "Sovereign Scents" }
   ];
 
   trackedSellers.forEach(s => {
@@ -1558,7 +1693,7 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 10,
+    sellers_active: 11,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
@@ -1566,6 +1701,7 @@ async function runMasterRefresh() {
       enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, decants: stats.enigma_perfumes_decants, type: "Dual" },
       rp_decants: { name: "RP Decants", decants: stats.rp_decants, type: "Decants (2-10ml)" },
       gryv_scents: { name: "GRYV Scents", bottles: stats.gryv_scents_bottles, decants: stats.gryv_scents_decants, type: "Dual" },
+      sovereign_scents: { name: "Sovereign Scents", bottles: stats.sovereign_scents_bottles, decants: stats.sovereign_scents_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
       aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, decants: fragrances.filter(f => (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length, type: "Dual" },
@@ -1585,6 +1721,7 @@ async function runMasterRefresh() {
   console.log(`  - FragFever: ${stats.fragfever} bottles`);
   console.log(`  - Apex Aroma: ${stats.apex_aroma} bottles`);
   console.log(`  - Enigma Perfumes: ${stats.enigma_perfumes} bottles & ${stats.enigma_perfumes_decants} decants`);
+  console.log(`  - Sovereign Scents: ${stats.sovereign_scents_bottles} bottles & ${stats.sovereign_scents_decants} decants`);
   console.log(`  - Blue Wings: ${stats.bluewings_bottles} bottles & ${stats.bluewings_decants} decants`);
   console.log(`  - Whiff Culture: ${stats.whiffculture_bottles} bottles & ${stats.whiffculture_decants} decants`);
   console.log("=========================================================");

@@ -1,13 +1,13 @@
 {
-  "last_sync": "2026-11-07T06:41:43.576Z",
+  "last_sync": "2026-11-07T10:01:40.886Z",
   "sync_date": "2026-11-07",
   "catalog_total": 1188,
-  "in_stock_count": 922,
-  "decants_available_count": 770,
-  "dual_available_count": 739,
-  "enriched_new_arrivals_count": 1,
-  "price_drops_count": 54,
-  "new_arrivals_count": 16,
+  "in_stock_count": 921,
+  "decants_available_count": 808,
+  "dual_available_count": 764,
+  "enriched_new_arrivals_count": 0,
+  "price_drops_count": 60,
+  "new_arrivals_count": 15,
   "active_price_drops": [
     {
       "id": "rasasi-hawas-fire",
@@ -92,6 +92,18 @@
       "seller": "FragFever",
       "drop_date": "2026-11-06",
       "drop_time": "16:39:12"
+    },
+    {
+      "id": "armaf-club-de-nuit-intense-man",
+      "name": "Club de Nuit Intense Man",
+      "brand": "Armaf",
+      "current_price": 3100,
+      "previous_price": 3150,
+      "drop_amount": 50,
+      "drop_percentage": 2,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
     },
     {
       "id": "armaf-club-de-nuit-untold",
@@ -409,13 +421,13 @@
       "id": "st-9069",
       "name": "Blue By Ahmed",
       "brand": "Ahmed Al Maghribi",
-      "current_price": 2400,
-      "previous_price": 2450,
-      "drop_amount": 50,
-      "drop_percentage": 2,
-      "seller": "GRYV Scents",
-      "drop_date": "2026-11-06",
-      "drop_time": "20:04:19"
+      "current_price": 2300,
+      "previous_price": 2400,
+      "drop_amount": 100,
+      "drop_percentage": 4,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
     },
     {
       "id": "st-9077",
@@ -586,6 +598,42 @@
       "drop_time": "20:04:19"
     },
     {
+      "id": "apex-ahmedalmaghribi-oudandroses",
+      "name": "Oud & Roses",
+      "brand": "Ahmed Al Maghribi",
+      "current_price": 3500,
+      "previous_price": 3900,
+      "drop_amount": 400,
+      "drop_percentage": 10,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
+    },
+    {
+      "id": "armaf-club-de-nuit-intense-man-pure-parfum",
+      "name": "Club de Nuit Intense Man Parfum",
+      "brand": "Armaf",
+      "current_price": 3900,
+      "previous_price": 4000,
+      "drop_amount": 100,
+      "drop_percentage": 3,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
+    },
+    {
+      "id": "apex-frenchavenue-zenithsantal",
+      "name": "Zenith Santal",
+      "brand": "French Avenue",
+      "current_price": 3000,
+      "previous_price": 3100,
+      "drop_amount": 100,
+      "drop_percentage": 3,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
+    },
+    {
       "id": "apex-pariscorner-moscowmule",
       "name": "Moscow Mule",
       "brand": "Paris Corner",
@@ -622,6 +670,18 @@
       "drop_time": "17:21:55"
     },
     {
+      "id": "apex-zimaya-fatima",
+      "name": "Fatima",
+      "brand": "Zimaya",
+      "current_price": 1700,
+      "previous_price": 1750,
+      "drop_amount": 50,
+      "drop_percentage": 3,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
+    },
+    {
       "id": "apex-alharamain-amberoud",
       "name": "Amber Oud",
       "brand": "Al Haramain",
@@ -646,6 +706,18 @@
       "drop_time": "05:12:21"
     },
     {
+      "id": "armaf-club-de-nuit-intense-man-eau-de-parfum",
+      "name": "Club de Nuit Intense Man Eau de Parfum",
+      "brand": "Armaf",
+      "current_price": 3100,
+      "previous_price": 4400,
+      "drop_amount": 1300,
+      "drop_percentage": 30,
+      "seller": "Sovereign Scents",
+      "drop_date": "2026-11-07",
+      "drop_time": "10:01:33"
+    },
+    {
       "id": "azzaro-wanted-by-night",
       "name": "Wanted by Night",
       "brand": "Azzaro",
@@ -667,7 +739,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -677,7 +749,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -687,7 +759,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -697,7 +769,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -707,7 +779,7 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -717,7 +789,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "arabiyat-prestige-noire-absolu",
@@ -727,7 +799,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "azzaro-the-most-wanted-parfum",
@@ -737,7 +809,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -747,7 +819,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "alfred-dunhill-indian-sandalwood",
@@ -757,7 +829,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "rochas-moustache-eau-de-parfum",
@@ -767,7 +839,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "carolina-herrera-bad-boy-cobalt-eau-de-parfum-lectrique",
@@ -777,7 +849,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-intense",
@@ -787,7 +859,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "lalique-encre-noire-l-extr-me",
@@ -797,7 +869,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-sport",
@@ -807,20 +879,10 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
-    },
-    {
-      "id": "rasasi-shuhrah-avenoir",
-      "name": "Shuhrah Avenoir",
-      "brand": "Rasasi",
-      "price": 2500,
-      "seller": "FragFever",
-      "size": "Retail Bottle",
-      "added_date": "2026-11-07",
-      "added_timestamp": "2026-11-07T06:41:36.228Z"
+      "added_timestamp": "2026-11-07T10:01:33.854Z"
     }
   ],
-  "sellers_active": 10,
+  "sellers_active": 11,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
@@ -829,7 +891,7 @@
     },
     "fragfever": {
       "name": "FragFever",
-      "bottles": 467,
+      "bottles": 466,
       "type": "Full Bottles"
     },
     "apex_aroma": {
@@ -854,6 +916,12 @@
       "decants": 87,
       "type": "Dual"
     },
+    "sovereign_scents": {
+      "name": "Sovereign Scents",
+      "bottles": 28,
+      "decants": 608,
+      "type": "Dual"
+    },
     "bluewings": {
       "name": "Blue Wings Fragrances",
       "bottles": 1,
@@ -863,7 +931,7 @@
     "whiffculture": {
       "name": "Whiff Culture",
       "bottles": 429,
-      "decants": 412,
+      "decants": 411,
       "type": "Dual"
     },
     "aar_fragrances": {
