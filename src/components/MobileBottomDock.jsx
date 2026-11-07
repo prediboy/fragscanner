@@ -43,7 +43,10 @@ export default function MobileBottomDock({
         <button
           type="button"
           onClick={() => {
-            setFilterState(prev => ({ ...prev, dealsOnly: 'drops', formats: ['retail'] }));
+            setFilterState(prev => ({
+              ...prev,
+              dealsOnly: prev.dealsOnly === 'drops' ? null : 'drops'
+            }));
           }}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             isDropsActive
@@ -64,7 +67,11 @@ export default function MobileBottomDock({
         <button
           type="button"
           onClick={() => {
-            setFilterState(prev => ({ ...prev, formats: ['decant'], dealsOnly: null }));
+            setFilterState(prev => ({
+              ...prev,
+              formats: isDecantsActive ? ['retail'] : ['decant'],
+              dealsOnly: null
+            }));
           }}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             isDecantsActive

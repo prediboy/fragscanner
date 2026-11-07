@@ -403,16 +403,12 @@ function filterClientCatalog(catalog, { page, pageSize, search, seller, brand, f
   const tokens = normalizeQuery(search);
 
   let filtered = catalog.filter(f => {
-    if (formats.length === 1 && formats[0] === 'retail') {
-      if (!f.in_seller_stock || !f.community_price) return false;
-    } else if (formats.length === 1 && formats[0] === 'decant') {
-      if (!f.has_decants) return false;
-    } else if (formats.length === 1 && formats[0] === 'tester') {
-      const isT = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester);
-      if (!isT) return false;
-    } else if (formats.length === 1 && formats[0] === 'partial') {
-      const isP = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial);
-      if (!isP) return false;
+    if (formats && formats.length > 0 && formats.length < 4) {
+      const matchRetail = formats.includes('retail') && f.in_seller_stock && Number(f.community_price) > 0;
+      const matchDecant = formats.includes('decant') && f.has_decants;
+      const matchTester = formats.includes('tester') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester);
+      const matchPartial = formats.includes('partial') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial);
+      if (!matchRetail && !matchDecant && !matchTester && !matchPartial) return false;
     } else {
       if (!f.in_seller_stock && !f.has_decants) return false;
     }

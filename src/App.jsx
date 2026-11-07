@@ -363,6 +363,7 @@ export default function App() {
                 priceDrops={curatedData.topPriceDrops}
                 newArrivals={curatedData.newArrivals}
                 catalogCount={catalogCounts.inStock || 965}
+                selectedFormats={filterState.formats}
                 onSelectFragrance={async (selected) => {
                   setActiveFragrance(selected);
                   const detail = await fetchFragranceDetail(selected.id);
@@ -465,6 +466,7 @@ export default function App() {
                       <PowerFragranceCard
                         key={f.id || idx}
                         fragrance={f}
+                        selectedFormats={filterState.formats}
                         onSelect={async (selected) => {
                           setActiveFragrance(selected);
                           const detail = await fetchFragranceDetail(selected.id);

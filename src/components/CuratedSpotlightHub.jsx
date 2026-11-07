@@ -12,7 +12,8 @@ export default function CuratedSpotlightHub({
   onToggleExpand,
   sellers = [],
   onShowAll,
-  catalogCount = 965
+  catalogCount = 965,
+  selectedFormats = ['retail']
 }) {
   // 1. Top Verified Price Drops (highest discount percentage first)
   const topPriceDrops = useMemo(() => {
@@ -76,6 +77,7 @@ export default function CuratedSpotlightHub({
               <PowerFragranceCard
                 key={`drop-${f.id}`}
                 fragrance={f}
+                selectedFormats={selectedFormats}
                 onSelect={onSelectFragrance}
                 isExpanded={expandedCardId === f.id}
                 onToggleExpand={onToggleExpand}
@@ -123,6 +125,7 @@ export default function CuratedSpotlightHub({
               <PowerFragranceCard
                 key={`new-${f.id}`}
                 fragrance={f}
+                selectedFormats={selectedFormats}
                 onSelect={onSelectFragrance}
                 isExpanded={expandedCardId === f.id}
                 onToggleExpand={onToggleExpand}

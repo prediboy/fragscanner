@@ -15,14 +15,15 @@ export default function PowerFragranceCard({
   onSelect, 
   isExpanded, 
   onToggleExpand, 
-  selectedSeller = 'all' 
+  selectedSeller = 'all',
+  selectedFormats = ['retail']
 }) {
   if (!f) return null;
 
   const isSpecificSeller = selectedSeller && selectedSeller !== 'all';
 
   // 1. Extract quotes for the card
-  const { allQuotes, currentSellerQuotes, displayBottleQuote, displayDecantQuote } = useMemo(() => {
+  const { allQuotes, currentSellerQuotes, lowestRetail, lowestTester, lowestPartial, lowestDecant } = useMemo(() => {
     const listAll = [];
     const listCurrent = [];
 
@@ -33,6 +34,7 @@ export default function PowerFragranceCard({
         if (p && !isNaN(p) && p > 0) {
           const isPartialQuote = !!(s.is_partial || (s.size && /partial/i.test(s.size)));
           const isTesterQuote = !isPartialQuote && !!(s.is_tester || (s.size && /tester/i.test(s.size)));
+          const quoteType = isPartialQuote ? 'partial' : (isTesterQuote ? 'tester' : 'retail');
           const quoteObj = {
             seller_id: s.seller_id,
             seller_name: s.seller_name,
@@ -42,6 +44,7 @@ export default function PowerFragranceCard({
             shipping: s.shipping || 'Pan-India Delivery',
             dispatch: s.dispatch || '24-48 hrs',
             isBottle: true,
+            type: quoteType,
             isTester: isTesterQuote,
             isPartial: isPartialQuote
           };
@@ -68,7 +71,8 @@ export default function PowerFragranceCard({
                 whatsapp: d.whatsapp,
                 shipping: d.shipping || 'Pan-India Delivery',
                 dispatch: d.dispatch || '24-48 hrs',
-                isBottle: false
+                isBottle: false,
+                type: 'decant'
               };
               listAll.push(quoteObj);
               if (isSpecificSeller && d.seller_id === selectedSeller) {
@@ -87,7 +91,8 @@ export default function PowerFragranceCard({
               whatsapp: d.whatsapp,
               shipping: d.shipping || 'Pan-India Delivery',
               dispatch: d.dispatch || '24-48 hrs',
-              isBottle: false
+              isBottle: false,
+              type: 'decant'
             };
             listAll.push(quoteObj);
             if (isSpecificSeller && d.seller_id === selectedSeller) {
@@ -98,26 +103,23 @@ export default function PowerFragranceCard({
       }
     }
 
-    // Sort by price ascending (bottles first, then decants)
-    listAll.sort((a, b) => {
-      if (a.isBottle !== b.isBottle) return a.isBottle ? -1 : 1;
-      return a.price - b.price;
-    });
-
-    listCurrent.sort((a, b) => {
-      if (a.isBottle !== b.isBottle) return a.isBottle ? -1 : 1;
-      return a.price - b.price;
-    });
+    // Sort by price ascending
+    listAll.sort((a, b) => a.price - b.price);
+    listCurrent.sort((a, b) => a.price - b.price);
 
     const activeQuotes = isSpecificSeller ? listCurrent : listAll;
-    const bQuote = activeQuotes.find(q => q.isBottle);
-    const dQuote = activeQuotes.find(q => !q.isBottle);
+    const bRetail = activeQuotes.find(q => q.type === 'retail');
+    const bTester = activeQuotes.find(q => q.type === 'tester');
+    const bPartial = activeQuotes.find(q => q.type === 'partial');
+    const bDecant = activeQuotes.find(q => q.type === 'decant');
 
     return {
       allQuotes: listAll,
       currentSellerQuotes: listCurrent,
-      displayBottleQuote: bQuote,
-      displayDecantQuote: dQuote
+      lowestRetail: bRetail,
+      lowestTester: bTester,
+      lowestPartial: bPartial,
+      lowestDecant: bDecant
     };
   }, [f, selectedSeller, isSpecificSeller]);
 
@@ -125,34 +127,32 @@ export default function PowerFragranceCard({
   const relevantQuotes = isSpecificSeller ? currentSellerQuotes : allQuotes;
   if (relevantQuotes.length === 0) return null; // Guard: do not render if selected seller has 0 quotes for this perfume
 
-  const hasBottlePrice = !!displayBottleQuote;
-  const hasDecantPrice = !!displayDecantQuote;
+  // Active formats selected by user in filter rail (defaults to ['retail'])
+  const activeFormats = Array.isArray(selectedFormats) && selectedFormats.length > 0
+    ? selectedFormats
+    : ['retail'];
 
-  const bottlePrice = displayBottleQuote ? displayBottleQuote.price : null;
-  const decantPrice = displayDecantQuote ? displayDecantQuote.price : null;
+  // What format pods should render on the card?
+  let showRetail = activeFormats.includes('retail') && !!lowestRetail;
+  let showTester = activeFormats.includes('tester') && !!lowestTester;
+  let showPartial = activeFormats.includes('partial') && !!lowestPartial;
+  let showDecant = activeFormats.includes('decant') && !!lowestDecant;
 
-  const bottleDisplaySize = displayBottleQuote 
-    ? displayBottleQuote.label.replace(' Retail Bottle', ' Bottle') 
+  // Fallback: If none of the selected formats have an offer in this perfume, show lowest available offer
+  if (!showRetail && !showTester && !showPartial && !showDecant) {
+    if (lowestRetail) showRetail = true;
+    else if (lowestTester) showTester = true;
+    else if (lowestPartial) showPartial = true;
+    else if (lowestDecant) showDecant = true;
+  }
+
+  const bottleDisplaySize = lowestRetail 
+    ? lowestRetail.label.replace(' Retail Bottle', ' Bottle') 
     : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
-
-  const isLowestPartial = !!(displayBottleQuote?.isPartial || (!isSpecificSeller && f.is_partial));
-  const isLowestTester = !isLowestPartial && !!(displayBottleQuote?.isTester || (!isSpecificSeller && f.is_tester));
 
   const displayName = f.brand && !f.name.toLowerCase().includes(f.brand.toLowerCase())
     ? `${f.brand} ${f.name}`
     : f.name;
-
-  // Bottle WhatsApp target & message
-  const bottleWhatsAppUrl = hasBottlePrice ? getWhatsAppUrl(
-    displayBottleQuote.whatsapp || f.community_whatsapp,
-    `Hi ${displayBottleQuote.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${bottlePrice.toLocaleString()} on FragScanner. Is this in stock?`
-  ) : null;
-
-  // Decant WhatsApp target & message
-  const decantWhatsAppUrl = hasDecantPrice ? getWhatsAppUrl(
-    displayDecantQuote.whatsapp || f.community_whatsapp,
-    `Hi ${displayDecantQuote.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${decantPrice.toLocaleString()} (${displayDecantQuote.label}) on FragScanner. What sizes are available?`
-  ) : null;
 
   return (
     <div 
@@ -170,13 +170,13 @@ export default function PowerFragranceCard({
               <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/70 px-2 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-800/80">
                 {f.brand}
               </span>
-              {isLowestPartial && (
+              {lowestPartial && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 flex items-center gap-1" title="Authentic opened partial bottle">
                   <span>🏷️</span>
                   <span>Partial</span>
                 </span>
               )}
-              {isLowestTester && (
+              {lowestTester && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-purple-50 text-purple-900 border border-purple-300 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-700/80 flex items-center gap-1" title="Authentic tester packaging">
                   <span>🧪</span>
                   <span>Tester</span>
@@ -225,20 +225,19 @@ export default function PowerFragranceCard({
           </div>
         </div>
 
-        {/* Option A: Stacked Dual-Action Pods (Bottle vs Decant with dedicated sellers & WhatsApp) */}
+        {/* Filter-Driven Dynamic Pods (Driven directly by Format checkboxes) */}
         <div className="mt-3 space-y-2">
-          {/* Bottle Offer Pod */}
-          {hasBottlePrice && (
+          
+          {/* POD 1: Full Retail Bottle (Rendered when Retail is ticked or active) */}
+          {showRetail && lowestRetail && (
             <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="text-xs">
-                    {isLowestPartial ? '🏷️' : isLowestTester ? '🧪' : '🍾'}
-                  </span>
+                  <span className="text-xs">🍾</span>
                   <span className="font-medium truncate">{bottleDisplaySize}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={displayBottleQuote.seller_name}>{displayBottleQuote.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestRetail.seller_name}>{lowestRetail.seller_name}</strong>
                 </div>
               </div>
 
@@ -250,43 +249,147 @@ export default function PowerFragranceCard({
                     </div>
                   )}
                   <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
-                    ₹{bottlePrice.toLocaleString()}
+                    ₹{lowestRetail.price.toLocaleString()}
                   </div>
                 </div>
 
-                {bottleWhatsAppUrl ? (
+                {getWhatsAppUrl(
+                  lowestRetail.whatsapp || f.community_whatsapp,
+                  `Hi ${lowestRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${lowestRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                ) && (
                   <a
-                    href={bottleWhatsAppUrl}
+                    href={getWhatsAppUrl(
+                      lowestRetail.whatsapp || f.community_whatsapp,
+                      `Hi ${lowestRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${lowestRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                    )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: displayBottleQuote.seller_name,
+                      sellerName: lowestRetail.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: bottlePrice,
-                      format: 'bottle'
+                      price: lowestRetail.price,
+                      format: 'retail'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${displayBottleQuote.seller_name} on WhatsApp`}
+                    title={`Contact ${lowestRetail.seller_name} on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
                   </a>
-                ) : null}
+                )}
               </div>
             </div>
           )}
 
-          {/* Decant Offer Pod */}
-          {hasDecantPrice && (
+          {/* POD 2: Tester Unit Box (Rendered when Tester is ticked) */}
+          {showTester && lowestTester && (
+            <div className="p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/60 flex items-center justify-between gap-2 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-purple-900 dark:text-purple-300">
+                  <span className="text-xs">🧪</span>
+                  <span className="font-medium truncate">{lowestTester.label || 'Tester Unit Box'}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestTester.seller_name}>{lowestTester.seller_name}</strong>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="text-right">
+                  <div className="font-mono text-sm font-extrabold text-purple-700 dark:text-purple-300">
+                    ₹{lowestTester.price.toLocaleString()}
+                  </div>
+                </div>
+
+                {getWhatsAppUrl(
+                  lowestTester.whatsapp || f.community_whatsapp,
+                  `Hi ${lowestTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${lowestTester.price.toLocaleString()} on FragScanner. Is this available?`
+                ) && (
+                  <a
+                    href={getWhatsAppUrl(
+                      lowestTester.whatsapp || f.community_whatsapp,
+                      `Hi ${lowestTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${lowestTester.price.toLocaleString()} on FragScanner. Is this available?`
+                    )}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => logWhatsAppClick({
+                      sellerName: lowestTester.seller_name,
+                      fragranceName: f.name,
+                      brand: f.brand,
+                      price: lowestTester.price,
+                      format: 'tester'
+                    })}
+                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
+                    title={`Contact ${lowestTester.seller_name} on WhatsApp`}
+                  >
+                    <span>WA</span>
+                    <span className="text-[9px]">↗</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* POD 3: Partial Bottle (Rendered when Partial is ticked) */}
+          {showPartial && lowestPartial && (
+            <div className="p-2.5 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 flex items-center justify-between gap-2 hover:border-amber-300 dark:hover:border-amber-700 transition-colors">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-amber-900 dark:text-amber-300">
+                  <span className="text-xs">🏷️</span>
+                  <span className="font-medium truncate">{lowestPartial.label || 'Partial Bottle'}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestPartial.seller_name}>{lowestPartial.seller_name}</strong>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="text-right">
+                  <div className="font-mono text-sm font-extrabold text-amber-700 dark:text-amber-300">
+                    ₹{lowestPartial.price.toLocaleString()}
+                  </div>
+                </div>
+
+                {getWhatsAppUrl(
+                  lowestPartial.whatsapp || f.community_whatsapp,
+                  `Hi ${lowestPartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${lowestPartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                ) && (
+                  <a
+                    href={getWhatsAppUrl(
+                      lowestPartial.whatsapp || f.community_whatsapp,
+                      `Hi ${lowestPartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${lowestPartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                    )}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => logWhatsAppClick({
+                      sellerName: lowestPartial.seller_name,
+                      fragranceName: f.name,
+                      brand: f.brand,
+                      price: lowestPartial.price,
+                      format: 'partial'
+                    })}
+                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
+                    title={`Contact ${lowestPartial.seller_name} on WhatsApp`}
+                  >
+                    <span>WA</span>
+                    <span className="text-[9px]">↗</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* POD 4: Decants Ready (Rendered when Decants is ticked) */}
+          {showDecant && lowestDecant && (
             <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                   <span className="text-xs">💧</span>
-                  <span className="font-medium truncate">{displayDecantQuote.label}</span>
+                  <span className="font-medium truncate">{lowestDecant.label}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={displayDecantQuote.seller_name}>{displayDecantQuote.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestDecant.seller_name}>{lowestDecant.seller_name}</strong>
                 </div>
               </div>
 
@@ -294,39 +397,39 @@ export default function PowerFragranceCard({
                 <div className="text-right">
                   <div className="text-[9px] font-mono text-slate-400">from</div>
                   <div className="font-mono text-sm font-extrabold text-cyan-600 dark:text-cyan-400">
-                    ₹{decantPrice.toLocaleString()}
+                    ₹{lowestDecant.price.toLocaleString()}
                   </div>
                 </div>
 
-                {decantWhatsAppUrl ? (
+                {getWhatsAppUrl(
+                  lowestDecant.whatsapp || f.community_whatsapp,
+                  `Hi ${lowestDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${lowestDecant.price.toLocaleString()} (${lowestDecant.label}) on FragScanner. What sizes are available?`
+                ) && (
                   <a
-                    href={decantWhatsAppUrl}
+                    href={getWhatsAppUrl(
+                      lowestDecant.whatsapp || f.community_whatsapp,
+                      `Hi ${lowestDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${lowestDecant.price.toLocaleString()} (${lowestDecant.label}) on FragScanner. What sizes are available?`
+                    )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: displayDecantQuote.seller_name,
+                      sellerName: lowestDecant.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: decantPrice,
+                      price: lowestDecant.price,
                       format: 'decant'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${displayDecantQuote.seller_name} for decants on WhatsApp`}
+                    title={`Contact ${lowestDecant.seller_name} for decants on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
                   </a>
-                ) : null}
+                )}
               </div>
             </div>
           )}
 
-          {/* Fallback if neither bottle nor decant quote is available */}
-          {!hasBottlePrice && !hasDecantPrice && (
-            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-400 text-center font-mono">
-              Unquoted in community
-            </div>
-          )}
         </div>
       </div>
 
