@@ -1,6 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import curatedData from './data/curated_highlights.json';
-import syncMeta from './data/sync_meta.json';
 import PowerFilterSidebar from './components/PowerFilterSidebar';
 import MobileFilterDrawer from './components/MobileFilterDrawer';
 import MobileBottomDock from './components/MobileBottomDock';
@@ -11,7 +9,7 @@ import ModalErrorBoundary from './components/ModalErrorBoundary';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
-import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts } from './services/inventoryApi.js';
+import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
@@ -149,9 +147,11 @@ export default function App() {
     });
   }, []);
 
-  // Live verified catalog statistics from database
+  // Live verified catalog statistics and sync metadata directly from Supabase
+  const [syncMetadata, setSyncMetadata] = useState(null);
+  const [sellerCounts, setSellerCounts] = useState({});
   const [catalogCounts, setCatalogCounts] = useState(() => ({
-    inStock: curatedData.inStockCount || 965,
+    inStock: 965,
     retail: 921,
     decant: 808,
     decants: 808,
@@ -159,8 +159,8 @@ export default function App() {
     testers: 18,
     partial: 1,
     partials: 1,
-    drops: curatedData.topPriceDrops?.length || 12,
-    newArrivals: curatedData.newArrivals?.length || 12
+    drops: 60,
+    newArrivals: 16
   }));
 
   useEffect(() => {
@@ -169,18 +169,29 @@ export default function App() {
     }).catch(err => {
       console.warn('Could not refresh inventory counts from DB:', err);
     });
+
+    fetchSyncMetadata().then(meta => {
+      if (meta) {
+        setSyncMetadata(meta);
+        if (meta.seller_counts) {
+          setSellerCounts(meta.seller_counts);
+        }
+      }
+    }).catch(err => {
+      console.warn('Could not refresh sync metadata from DB:', err);
+    });
   }, []);
 
-  // Compute live seller inventory count list from curated metadata
+  // Compute live seller inventory count list from Supabase sync metadata
   const sellersWithLiveCounts = useMemo(() => {
     return COMMUNITY_SELLERS.map(s => {
       if (s.id === 'all') return s;
       return {
         ...s,
-        count: (curatedData.sellerCounts && curatedData.sellerCounts[s.id]) || 0
+        count: (sellerCounts && sellerCounts[s.id]) || 0
       };
     });
-  }, []);
+  }, [sellerCounts]);
 
   // Fetch only the requested 24 items page-wise on demand
   useEffect(() => {
@@ -568,8 +579,8 @@ export default function App() {
       {syncStatsOpen && (
         <SyncStatsModal
           onClose={() => setSyncStatsOpen(false)}
-          syncMeta={syncMeta}
-          totalCatalog={curatedData.totalCatalog || 1188}
+          syncMeta={syncMetadata}
+          totalCatalog={syncMetadata?.catalog_total || 1188}
           inStockBottles={catalogCounts.inStock}
           availableDecants={catalogCounts.decants}
         />

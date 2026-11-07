@@ -1708,6 +1708,18 @@ async function runMasterRefresh() {
         community_decants: f.community_decants || [],
         best_bottle_seller: f.best_bottle_seller || null,
         best_decant_seller: f.best_decant_seller || null,
+        is_price_drop: !!f.is_price_drop,
+        previous_price: f.previous_price || null,
+        price_change: f.price_change || null,
+        price_change_percentage: f.price_change_percentage || null,
+        price_change_date: f.price_change_date || null,
+        price_change_time: f.price_change_time || null,
+        previous_price_date: f.previous_price_date || null,
+        price_history: f.price_history || [],
+        is_new_arrival: !!f.is_new_arrival,
+        new_arrival_date: f.new_arrival_date || null,
+        discovered_at: f.discovered_at || (f.new_arrival_date ? new Date(f.new_arrival_date).toISOString() : null),
+        price_updated_at: f.price_updated_at || null,
         updated_at: new Date().toISOString()
       }));
 
@@ -1773,6 +1785,46 @@ async function runMasterRefresh() {
     }
   };
   fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");
+
+  // Upsert sync metadata directly to Supabase sync_metadata table
+  try {
+    const { error: syncMetaErr } = await supabase.from('sync_metadata').upsert([{
+      id: 'latest',
+      last_sync: syncMeta.last_sync,
+      sync_date: syncMeta.sync_date,
+      catalog_total: syncMeta.catalog_total,
+      in_stock_count: syncMeta.in_stock_count,
+      decants_available_count: syncMeta.decants_available_count,
+      dual_available_count: syncMeta.dual_available_count,
+      enriched_new_arrivals_count: syncMeta.enriched_new_arrivals_count,
+      price_drops_count: syncMeta.price_drops_count,
+      new_arrivals_count: syncMeta.new_arrivals_count,
+      active_price_drops: syncMeta.active_price_drops,
+      active_new_arrivals: syncMeta.active_new_arrivals,
+      seller_breakdown: syncMeta.seller_breakdown,
+      seller_counts: {
+        second_theory: stats.second_theory || 0,
+        fragfever: stats.fragfever || 0,
+        apex_aroma: stats.apex_aroma || 0,
+        enigma_perfumes: (stats.enigma_perfumes || 0) + (stats.enigma_perfumes_decants || 0),
+        rp_decants: stats.rp_decants || 0,
+        gryv_scents: (stats.gryv_scents_bottles || 0) + (stats.gryv_scents_decants || 0),
+        sovereign_scents: (stats.sovereign_scents_bottles || 0) + (stats.sovereign_scents_decants || 0),
+        bluewings: (stats.bluewings_bottles || 0) + (stats.bluewings_decants || 0),
+        whiffculture: (stats.whiffculture_bottles || 0) + (stats.whiffculture_decants || 0),
+        aar_fragrances: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances') || (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length,
+        fragrance_heaven: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'fragrance_heaven')).length
+      },
+      updated_at: new Date().toISOString()
+    }], { onConflict: 'id' });
+    if (syncMetaErr) {
+      console.warn("  Warning: Supabase sync_metadata update error:", syncMetaErr.message);
+    } else {
+      console.log("  ✓ Successfully updated sync_metadata in Supabase!");
+    }
+  } catch (metaErr) {
+    console.warn("  Warning: Supabase sync_metadata failed:", metaErr.message);
+  }
 
   console.log("\n=========================================================");
   console.log("✅ MASTER REFRESH COMPLETE!");

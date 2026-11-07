@@ -1,4 +1,5 @@
-import fragrancesData from '../data/fragrances.json';
+// Powered by live database queries
+const fragrancesData = [];
 
 // Benchmark Designer / Niche Targets & their famous clones in our catalog
 const DESIGNER_DNA_MAP = {

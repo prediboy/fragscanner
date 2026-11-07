@@ -1,5 +1,4 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
-import curatedData from '../data/curated_highlights.json';
 
 // In-memory LRU cache to make repeat page visits 0ms instant
 const pageCache = new Map();
@@ -73,8 +72,8 @@ function scoreRelevance(item, tokens) {
 }
 
 /**
- * Fetch a single page of inventory on demand from Supabase.
- * Loads strictly 24 items per page rather than downloading the entire 8MB catalog.
+ * Fetch a single page of inventory on demand directly from Supabase.
+ * Loads strictly 24 items per page with zero reliance on local JSON files.
  */
 export async function fetchInventoryPage({
   page = 1,
@@ -95,77 +94,38 @@ export async function fetchInventoryPage({
     return pageCache.get(cacheKey);
   }
 
-  // Handle dealsOnly tabs (drops and new arrivals) directly from curated data
-  if (dealsOnly === 'drops' || dealsOnly === 'new') {
-    const sourceList = dealsOnly === 'drops' ? (curatedData.topPriceDrops || []) : (curatedData.newArrivals || []);
-    let filtered = sourceList.filter(f => {
-      if (seller && seller !== 'all') {
-        const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === seller && Number(s.price) > 0);
-        const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === seller);
-        if (!inB && !inD) return false;
-      }
-      if (brand && brand !== 'all' && (f.brand || '').toLowerCase() !== brand.toLowerCase()) {
-        return false;
-      }
-      if (maxBudget < 15000 && Number(f.community_price || 999999) > maxBudget) return false;
-      if (tokens.length > 0) {
-        const n = (f.name || '').toLowerCase();
-        const b = (f.brand || '').toLowerCase();
-        const d = (f.dna_inspiration || '').toLowerCase();
-        const dt = (f.dna_type || '').toLowerCase();
-        const full = `${b} ${n} ${d} ${dt}`;
-        if (!tokens.every(t => full.includes(t))) return false;
-      }
-      return true;
-    });
-
-    if (tokens.length > 0) {
-      const scored = filtered.map(item => ({ item, score: scoreRelevance(item, tokens) }));
-      scored.sort((a, b) => b.score - a.score);
-      filtered = scored.map(x => x.item);
-    } else {
-      // Always sort price drops and new arrivals by latest discovered
-      filtered.sort((a, b) => {
-        const timeA = new Date(a.discovered_at || a.price_change_date || a.new_arrival_date || a.price_updated_at || 0).getTime();
-        const timeB = new Date(b.discovered_at || b.price_change_date || b.new_arrival_date || b.price_updated_at || 0).getTime();
-        return timeB - timeA;
-      });
-    }
-
-    const totalCount = filtered.length;
-    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
-    const start = (page - 1) * pageSize;
-    const items = filtered.slice(start, start + pageSize);
-    const result = { items, totalCount, totalPages, page, pageSize };
-    pageCache.set(cacheKey, result);
-    return result;
-  }
-
   try {
     if (!supabase) throw new Error("Supabase client not initialized");
     let query = supabase
       .from('fragrances')
       .select(
-        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration',
+        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, is_new_arrival, new_arrival_date, price_history, discovered_at',
         { count: 'exact' }
       );
 
-    // 1. Format Filtering
-    if (formats.length === 1 && formats[0] === 'retail') {
-      query = query.eq('in_seller_stock', true).gt('community_price', 0);
-    } else if (formats.length === 1 && formats[0] === 'decant') {
-      query = query.eq('has_decants', true).gt('lowest_decant_price', 0);
-    } else if (formats.length === 1 && formats[0] === 'tester') {
-      query = query.contains('community_sellers', JSON.stringify([{ is_tester: true }]));
-    } else if (formats.length === 1 && formats[0] === 'partial') {
-      query = query.contains('community_sellers', JSON.stringify([{ is_partial: true }]));
+    // 0. Deals / New Arrivals Filter
+    if (dealsOnly === 'drops') {
+      query = query.eq('is_price_drop', true);
+    } else if (dealsOnly === 'new') {
+      query = query.eq('is_new_arrival', true);
     } else {
-      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+      // 1. Format Filtering
+      if (formats.length === 1 && formats[0] === 'retail') {
+        query = query.eq('in_seller_stock', true).gt('community_price', 0);
+      } else if (formats.length === 1 && formats[0] === 'decant') {
+        query = query.eq('has_decants', true).gt('lowest_decant_price', 0);
+      } else if (formats.length === 1 && formats[0] === 'tester') {
+        query = query.contains('community_sellers', JSON.stringify([{ is_tester: true }]));
+      } else if (formats.length === 1 && formats[0] === 'partial') {
+        query = query.contains('community_sellers', JSON.stringify([{ is_partial: true }]));
+      } else {
+        query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+      }
     }
 
     // 2. Seller Isolation
     if (seller && seller !== 'all') {
-      query = query.contains('community_sellers', JSON.stringify([{ seller_id: seller }]));
+      query = query.or(`community_sellers.cs.[{"seller_id":"${seller}"}],community_decants.cs.[{"seller_id":"${seller}"}]`);
     }
 
     // 2b. Brand Isolation
@@ -200,7 +160,6 @@ export async function fetchInventoryPage({
       if (sortBy === 'price_desc') {
         scored.sort((a, b) => Number(b.item.community_price || 0) - Number(a.item.community_price || 0));
       } else if (sortBy === 'price_asc') {
-        // When searching, sort by relevance first, then lowest price
         scored.sort((a, b) => b.score !== a.score ? b.score - a.score : (Number(a.item.community_price || 0) - Number(b.item.community_price || 0)));
       } else if (sortBy === 'rating') {
         scored.sort((a, b) => (Number(b.item.rating_value) || 0) - (Number(a.item.rating_value) || 0));
@@ -217,6 +176,8 @@ export async function fetchInventoryPage({
         query = query.order('community_price', { ascending: false, nullsFirst: false });
       } else if (sortBy === 'rating') {
         query = query.order('rating_value', { ascending: false, nullsFirst: false });
+      } else if (dealsOnly === 'drops' || dealsOnly === 'new') {
+        query = query.order('discovered_at', { ascending: false, nullsFirst: false });
       } else {
         query = query.order('community_price', { ascending: true, nullsFirst: false });
       }
@@ -227,7 +188,7 @@ export async function fetchInventoryPage({
 
       const { data, count, error } = await query;
       if (error) {
-        console.warn('Supabase query error, falling back:', error.message);
+        console.warn('Supabase query error:', error.message);
         throw error;
       }
 
@@ -255,9 +216,13 @@ export async function fetchInventoryPage({
     return result;
   } catch (err) {
     console.error('Failed to fetch inventory page from Supabase:', err);
-    // Dynamic import fallback so app stays resilient
-    const { default: fallbackCatalog } = await import('../data/fragrances.json');
-    return filterClientCatalog(fallbackCatalog, { page, pageSize, search, seller, formats, maxBudget, sortBy });
+    return {
+      items: [],
+      totalCount: 0,
+      totalPages: 1,
+      page,
+      pageSize
+    };
   }
 }
 
@@ -302,11 +267,8 @@ export async function fetchCatalogBrands() {
     cachedBrands = list;
     return list;
   } catch (err) {
-    console.warn('Failed to fetch brands from database, using fallback:', err);
-    const fallback = (curatedData.brands || []).slice().sort((a, b) =>
-      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-    );
-    return fallback;
+    console.warn('Failed to fetch brands from database:', err);
+    return [];
   }
 }
 
@@ -325,54 +287,52 @@ export async function fetchInventoryCounts() {
       { count: retail },
       { count: decants },
       { count: testers },
-      { count: partials }
+      { count: partials },
+      { count: drops },
+      { count: newArrivals }
     ] = await Promise.all([
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).or('in_seller_stock.eq.true,has_decants.eq.true'),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('in_seller_stock', true).gt('community_price', 0),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('has_decants', true).gt('lowest_decant_price', 0),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_tester: true }])),
-      supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_partial: true }]))
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_partial: true }])),
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_price_drop', true),
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_new_arrival', true)
     ]);
 
-    const liveTesters = testers || 18;
-    const livePartials = partials || 1;
-    const liveDecants = decants || 808;
-    const liveRetail = retail || 921;
-    const liveInStock = inStock || 965;
-
     cachedCounts = {
-      inStock: liveInStock,
-      retail: liveRetail,
-      decant: liveDecants,
-      decants: liveDecants,
-      tester: liveTesters,
-      testers: liveTesters,
-      partial: livePartials,
-      partials: livePartials,
-      drops: curatedData.topPriceDrops?.length || 12,
-      newArrivals: curatedData.newArrivals?.length || 12
+      inStock: inStock || 0,
+      retail: retail || 0,
+      decant: decants || 0,
+      decants: decants || 0,
+      tester: testers || 0,
+      testers: testers || 0,
+      partial: partials || 0,
+      partials: partials || 0,
+      drops: drops || 0,
+      newArrivals: newArrivals || 0
     };
 
     return cachedCounts;
   } catch (e) {
-    console.warn('Could not fetch live counts from Supabase, using verified defaults:', e);
+    console.warn('Could not fetch live counts from Supabase:', e);
     return {
-      inStock: 965,
-      retail: 921,
-      decant: 808,
-      decants: 808,
-      tester: 18,
-      testers: 18,
-      partial: 1,
-      partials: 1,
-      drops: curatedData.topPriceDrops?.length || 12,
-      newArrivals: curatedData.newArrivals?.length || 12
+      inStock: 0,
+      retail: 0,
+      decant: 0,
+      decants: 0,
+      tester: 0,
+      testers: 0,
+      partial: 0,
+      partials: 0,
+      drops: 0,
+      newArrivals: 0
     };
   }
 }
 
 /**
- * Fetch full fragrance record for the modal view on demand
+ * Fetch full fragrance record for the modal view on demand directly from Supabase
  */
 export async function fetchFragranceDetail(id) {
   try {
@@ -386,71 +346,27 @@ export async function fetchFragranceDetail(id) {
     if (error || !data) throw error;
     return data;
   } catch (e) {
-    const { default: fallbackCatalog } = await import('../data/fragrances.json');
-    return fallbackCatalog.find(f => f.id === id) || null;
+    console.error('Failed to fetch fragrance detail from Supabase:', e);
+    return null;
   }
 }
 
 /**
- * Fallback client filter (only invoked if Supabase network is unavailable)
+ * Fetch sync metadata and seller stats from Supabase
  */
-function filterClientCatalog(catalog, { page, pageSize, search, seller, brand, formats, maxBudget, sortBy }) {
-  const tokens = normalizeQuery(search);
+export async function fetchSyncMetadata() {
+  try {
+    if (!supabase) return null;
+    const { data, error } = await supabase
+      .from('sync_metadata')
+      .select('*')
+      .eq('id', 'latest')
+      .single();
 
-  let filtered = catalog.filter(f => {
-    if (formats && formats.length > 0 && formats.length < 4) {
-      const matchRetail = formats.includes('retail') && f.in_seller_stock && Number(f.community_price) > 0;
-      const matchDecant = formats.includes('decant') && f.has_decants;
-      const matchTester = formats.includes('tester') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_tester);
-      const matchPartial = formats.includes('partial') && Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.is_partial);
-      if (!matchRetail && !matchDecant && !matchTester && !matchPartial) return false;
-    } else {
-      if (!f.in_seller_stock && !f.has_decants) return false;
-    }
-
-    if (seller && seller !== 'all') {
-      const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === seller && Number(s.price) > 0);
-      const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === seller);
-      if (!inB && !inD) return false;
-    }
-
-    if (brand && brand !== 'all' && (f.brand || '').toLowerCase() !== brand.toLowerCase()) {
-      return false;
-    }
-
-    if (maxBudget < 15000 && Number(f.community_price || 999999) > maxBudget) return false;
-
-    if (tokens.length > 0) {
-      const n = (f.name || '').toLowerCase();
-      const b = (f.brand || '').toLowerCase();
-      const d = (f.dna_inspiration || '').toLowerCase();
-      const dt = (f.dna_type || '').toLowerCase();
-      const full = `${b} ${n} ${d} ${dt}`;
-      if (!tokens.every(t => full.includes(t))) return false;
-    }
-
-    return true;
-  });
-
-  if (tokens.length > 0) {
-    const scored = filtered.map(item => ({ item, score: scoreRelevance(item, tokens) }));
-    scored.sort((a, b) => b.score - a.score);
-    filtered = scored.map(x => x.item);
-  } else if (dealsOnly) {
-    // Always sort price drops and new arrivals by latest discovered
-    filtered.sort((a, b) => {
-      const timeA = new Date(a.discovered_at || a.price_change_date || a.new_arrival_date || a.price_updated_at || 0).getTime();
-      const timeB = new Date(b.discovered_at || b.price_change_date || b.new_arrival_date || b.price_updated_at || 0).getTime();
-      return timeB - timeA;
-    });
-  } else {
-    filtered.sort((a, b) => Number(a.community_price || 999999) - Number(b.community_price || 999999));
+    if (error) throw error;
+    return data;
+  } catch (e) {
+    console.warn('Could not fetch sync metadata from Supabase:', e);
+    return null;
   }
-
-  const totalCount = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
-  const start = (page - 1) * pageSize;
-  const items = filtered.slice(start, start + pageSize);
-
-  return { items, totalCount, totalPages, page, pageSize };
 }

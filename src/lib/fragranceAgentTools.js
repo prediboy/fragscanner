@@ -1,4 +1,5 @@
-import fragrancesData from '../data/fragrances.json';
+// Powered by live database queries
+const fragrancesData = [];
 
 /**
  * Tool 1: Search Fragrances by Name, DNA, Notes, or Accords
