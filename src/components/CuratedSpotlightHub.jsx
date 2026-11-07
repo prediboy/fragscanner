@@ -38,45 +38,6 @@ export default function CuratedSpotlightHub({
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
-      {/* Curation Guidance Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-950 border border-slate-700 text-white shadow-md relative overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-mono font-bold uppercase tracking-wider">
-                Live Arbitrage Feed
-              </span>
-              <span className="text-xs text-slate-300 font-mono">
-                Showing Curated Market Highlights
-              </span>
-            </div>
-            <h2 className="text-lg sm:text-xl font-heading font-extrabold text-white tracking-tight">
-              Don't browse blindly. Filter by community seller, packaging, or budget.
-            </h2>
-            <p className="text-xs text-slate-300 max-w-xl">
-              Showing verified price drops and new community stock arrivals below. Use the Power Rail on the left or search above to zero in on any specific perfume.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => onApplyFilter({ dealsOnly: 'drops' })}
-              className="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-            >
-              <TrendingDown className="w-3.5 h-3.5" />
-              <span>All Drops ({catalog.filter(f => f.is_price_drop).length})</span>
-            </button>
-            <button
-              onClick={onShowAll}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-mono text-xs font-semibold transition-all"
-              title="Show all verified in-stock fragrances"
-            >
-              Browse All ({catalog.length})
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* SHELF 1: TODAY'S VERIFIED ARBITRAGE PRICE DROPS */}
       {topPriceDrops.length > 0 && (
         <section className="space-y-3.5">
