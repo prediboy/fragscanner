@@ -132,7 +132,7 @@ export default function MobileFilterDrawer({
                 }`}
               >
                 <span>🧪 Tester Box</span>
-                <span className="text-[10px] text-slate-400">{counts.tester || 240}</span>
+                <span className="text-[10px] text-slate-400">{counts.tester ?? counts.testers ?? 18}</span>
               </button>
 
               <button
@@ -144,7 +144,7 @@ export default function MobileFilterDrawer({
                 }`}
               >
                 <span>🏷️ Partial Bottle</span>
-                <span className="text-[10px] text-slate-400">{counts.partial || 28}</span>
+                <span className="text-[10px] text-slate-400">{counts.partial ?? counts.partials ?? 1}</span>
               </button>
 
               <button

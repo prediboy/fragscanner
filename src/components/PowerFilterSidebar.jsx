@@ -100,7 +100,7 @@ export default function PowerFilterSidebar({
                 <span>Tester Unit</span>
               </span>
             </span>
-            <span className="font-mono text-[10px] text-slate-400">{counts.tester || 240}</span>
+            <span className="font-mono text-[10px] text-slate-400">{counts.tester ?? counts.testers ?? 18}</span>
           </label>
 
           <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer select-none">
@@ -116,7 +116,7 @@ export default function PowerFilterSidebar({
                 <span>Partial Bottle</span>
               </span>
             </span>
-            <span className="font-mono text-[10px] text-slate-400">{counts.partial || 28}</span>
+            <span className="font-mono text-[10px] text-slate-400">{counts.partial ?? counts.partials ?? 1}</span>
           </label>
 
           <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer select-none">

@@ -10,7 +10,7 @@ import ModalErrorBoundary from './components/ModalErrorBoundary';
 import SyncStatsModal from './components/SyncStatsModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
-import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands } from './services/inventoryApi.js';
+import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
@@ -130,17 +130,26 @@ export default function App() {
     });
   }, []);
 
-  // Compute live catalog statistics on verified stock
-  const catalogCounts = useMemo(() => {
-    return {
-      inStock: curatedData.inStockCount || 965,
-      drops: curatedData.topPriceDrops?.length || 12,
-      newArrivals: curatedData.newArrivals?.length || 12,
-      decants: 808,
-      testers: 240,
-      partials: 28,
-      retail: 921
-    };
+  // Live verified catalog statistics from database
+  const [catalogCounts, setCatalogCounts] = useState(() => ({
+    inStock: curatedData.inStockCount || 965,
+    retail: 921,
+    decant: 808,
+    decants: 808,
+    tester: 18,
+    testers: 18,
+    partial: 1,
+    partials: 1,
+    drops: curatedData.topPriceDrops?.length || 12,
+    newArrivals: curatedData.newArrivals?.length || 12
+  }));
+
+  useEffect(() => {
+    fetchInventoryCounts().then(counts => {
+      if (counts) setCatalogCounts(counts);
+    }).catch(err => {
+      console.warn('Could not refresh inventory counts from DB:', err);
+    });
   }, []);
 
   // Compute live seller inventory count list from curated metadata

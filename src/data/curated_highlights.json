@@ -1,6 +1,15 @@
 {
   "totalCatalog": 1188,
   "inStockCount": 965,
+  "counts": {
+    "inStock": 965,
+    "retail": 921,
+    "decants": 808,
+    "testers": 18,
+    "partials": 1,
+    "drops": 12,
+    "newArrivals": 12
+  },
   "topPriceDrops": [
     {
       "id": "armaf-club-de-nuit-intense-man-eau-de-parfum",

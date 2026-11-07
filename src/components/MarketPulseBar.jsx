@@ -217,7 +217,7 @@ export default function MarketPulseBar({
           }`}
         >
           <span>🧪</span>
-          <span>Testers ({counts.testers || 240})</span>
+          <span>Testers ({counts.testers ?? counts.tester ?? 18})</span>
         </button>
 
         {/* Toggle 6: Partials */}
@@ -233,7 +233,7 @@ export default function MarketPulseBar({
           }`}
         >
           <span>🏷️</span>
-          <span>Partials ({counts.partials || 28})</span>
+          <span>Partials ({counts.partials ?? counts.partial ?? 1})</span>
         </button>
       </div>
 
