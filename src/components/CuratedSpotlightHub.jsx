@@ -11,7 +11,8 @@ export default function CuratedSpotlightHub({
   expandedCardId,
   onToggleExpand,
   sellers = [],
-  onShowAll
+  onShowAll,
+  catalogCount = 965
 }) {
   // 1. Top Verified Price Drops (highest discount percentage first)
   const topPriceDrops = useMemo(() => {
@@ -61,9 +62,9 @@ export default function CuratedSpotlightHub({
 
             <button
               onClick={() => onApplyFilter({ dealsOnly: 'drops' })}
-              className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+              className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
-              <span>View all {catalog.filter(f => f.is_price_drop).length} drops</span>
+              <span>View all {priceDrops.length || topPriceDrops.length} drops</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -106,9 +107,9 @@ export default function CuratedSpotlightHub({
 
             <button
               onClick={() => onApplyFilter({ dealsOnly: 'new' })}
-              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
+              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
-              <span>View all {catalog.filter(f => f.is_new_arrival).length} arrivals</span>
+              <span>View all {customNewArrivals.length || newArrivals.length} arrivals</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -131,13 +132,13 @@ export default function CuratedSpotlightHub({
       {/* BOTTOM ACTION: EXPLICIT BROWSE ALL */}
       <div className="pt-6 border-t border-slate-200 dark:border-slate-800 text-center space-y-2">
         <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-          Ready to explore all 965 in-stock fragrances across 11 sellers?
+          Ready to explore all {catalogCount} in-stock fragrances across {sellers.length || 11} sellers?
         </p>
         <button
           onClick={onShowAll}
-          className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-mono text-xs font-bold hover:bg-slate-800 dark:hover:bg-white transition-all shadow-sm"
+          className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-mono text-xs font-bold hover:bg-slate-800 dark:hover:bg-white transition-all shadow-sm cursor-pointer"
         >
-          View Full Verified Catalog (965) →
+          View Full Verified Catalog ({catalogCount}) →
         </button>
       </div>
 

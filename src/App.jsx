@@ -148,7 +148,8 @@ export default function App() {
       seller: filterState.selectedSeller,
       formats: filterState.formats,
       maxBudget: filterState.maxBudget,
-      sortBy: filterState.sortBy
+      sortBy: filterState.sortBy,
+      dealsOnly: filterState.dealsOnly
     }).then(res => {
       if (!isCancelled) {
         setPageItems(res.items);
@@ -325,6 +326,7 @@ export default function App() {
               <CuratedSpotlightHub
                 priceDrops={curatedData.topPriceDrops}
                 newArrivals={curatedData.newArrivals}
+                catalogCount={catalogCounts.inStock || 965}
                 onSelectFragrance={async (selected) => {
                   setActiveFragrance(selected);
                   const detail = await fetchFragranceDetail(selected.id);

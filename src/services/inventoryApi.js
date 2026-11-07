@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
+import curatedData from '../data/curated_highlights.json';
 
 // In-memory LRU cache to make repeat page visits 0ms instant
 const pageCache = new Map();
@@ -14,13 +15,50 @@ export async function fetchInventoryPage({
   seller = 'all',
   formats = ['retail'],
   maxBudget = 15000,
-  sortBy = 'price_asc'
+  sortBy = 'price_asc',
+  dealsOnly = null
 } = {}) {
   const cleanSearch = (search || '').trim().toLowerCase();
-  const cacheKey = `${page}_${pageSize}_${cleanSearch}_${seller}_${formats.sort().join(',')}_${maxBudget}_${sortBy}`;
+  const cacheKey = `${page}_${pageSize}_${cleanSearch}_${seller}_${(formats || []).slice().sort().join(',')}_${maxBudget}_${sortBy}_${dealsOnly || ''}`;
 
   if (pageCache.has(cacheKey)) {
     return pageCache.get(cacheKey);
+  }
+
+  // Handle dealsOnly tabs (drops and new arrivals) directly from curated data
+  if (dealsOnly === 'drops' || dealsOnly === 'new') {
+    const sourceList = dealsOnly === 'drops' ? (curatedData.topPriceDrops || []) : (curatedData.newArrivals || []);
+    let filtered = sourceList.filter(f => {
+      if (seller && seller !== 'all') {
+        const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === seller && Number(s.price) > 0);
+        const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === seller);
+        if (!inB && !inD) return false;
+      }
+      if (maxBudget < 15000 && Number(f.community_price || 999999) > maxBudget) return false;
+      if (cleanSearch) {
+        const n = (f.name || '').toLowerCase();
+        const b = (f.brand || '').toLowerCase();
+        const d = (f.dna_inspiration || '').toLowerCase();
+        if (!n.includes(cleanSearch) && !b.includes(cleanSearch) && !d.includes(cleanSearch)) return false;
+      }
+      return true;
+    });
+
+    if (sortBy === 'price_desc') {
+      filtered.sort((a, b) => Number(b.community_price || 0) - Number(a.community_price || 0));
+    } else if (sortBy === 'rating') {
+      filtered.sort((a, b) => (Number(b.rating_value) || 0) - (Number(a.rating_value) || 0));
+    } else {
+      filtered.sort((a, b) => Number(a.community_price || 999999) - Number(b.community_price || 999999));
+    }
+
+    const totalCount = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+    const start = (page - 1) * pageSize;
+    const items = filtered.slice(start, start + pageSize);
+    const result = { items, totalCount, totalPages, page, pageSize };
+    pageCache.set(cacheKey, result);
+    return result;
   }
 
   try {
@@ -36,6 +74,10 @@ export async function fetchInventoryPage({
       query = query.eq('in_seller_stock', true).gt('community_price', 0);
     } else if (formats.length === 1 && formats[0] === 'decant') {
       query = query.eq('has_decants', true).gt('lowest_decant_price', 0);
+    } else if (formats.length === 1 && formats[0] === 'tester') {
+      query = query.contains('community_sellers', JSON.stringify([{ is_tester: true }]));
+    } else if (formats.length === 1 && formats[0] === 'partial') {
+      query = query.contains('community_sellers', JSON.stringify([{ is_partial: true }]));
     } else {
       query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
     }
