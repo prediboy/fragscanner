@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TrendingDown, Sparkles, Store, ArrowRight } from 'lucide-react';
+import { TrendingDown, Sparkles, ArrowRight } from 'lucide-react';
 import PowerFragranceCard from './PowerFragranceCard';
 
 export default function CuratedSpotlightHub({
@@ -122,44 +122,7 @@ export default function CuratedSpotlightHub({
         </section>
       )}
 
-      {/* SHELF 2: BROWSE BY 11 COMMUNITY SELLERS */}
-      <section className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-              <Store className="w-4 h-4 text-cyan-500" />
-              <span>Browse by Community Seller</span>
-            </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Select any verified seller to inspect their current live sheet inventory and rates
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
-          {sellers.map(s => (
-            <button
-              key={s.id}
-              onClick={() => onApplyFilter({ selectedSeller: s.id })}
-              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-cyan-400 dark:hover:border-cyan-500 text-left transition-all group shadow-2xs hover:shadow-xs"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-heading font-bold text-slate-900 dark:text-slate-100 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 truncate">
-                  {s.name}
-                </span>
-                <span className="font-mono text-[10px] text-slate-400 shrink-0 ml-1">
-                  {s.count} in stock
-                </span>
-              </div>
-              <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-1 truncate">
-                <span>{s.dispatch || 'Fast Dispatch'}</span>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* SHELF 3: FRESH COMMUNITY ARRIVALS */}
+      {/* SHELF 2: FRESH COMMUNITY ARRIVALS */}
       {newArrivals.length > 0 && (
         <section className="space-y-3.5 pt-2 border-t border-slate-200 dark:border-slate-800">
           <div className="flex items-center justify-between">
