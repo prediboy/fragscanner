@@ -81,10 +81,10 @@ export default function MarketPulseBar({
   }
 
   return (
-    <div className="space-y-3.5 mb-6">
+    <div className="space-y-3.5 mb-6 w-full max-w-full min-w-0">
       
       {/* Top Search & Sorting Bar */}
-      <div className="bg-white dark:bg-slate-900/90 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900/90 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 w-full max-w-full min-w-0">
         
         {/* Fast Universal Search Input */}
         <div className="relative w-full sm:max-w-md">
@@ -107,26 +107,25 @@ export default function MarketPulseBar({
         </div>
 
         {/* Right Controls: Sort Dropdown & Matches Count */}
-        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 shrink-0">
-            <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500" />
-            <span className="hidden lg:inline">Sort:</span>
+        <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto text-xs font-mono">
+          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 min-w-0 flex-1 sm:flex-initial">
+            <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
             <select
               value={sortBy}
               onChange={(e) => setFilterState(prev => ({ ...prev, sortBy: e.target.value }))}
-              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-cyan-400 focus:outline-none"
+              className="w-full sm:w-auto bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:border-cyan-400 focus:outline-none truncate"
             >
               {searchQuery.trim() && <option value="relevance">Best Match (Relevance)</option>}
-              <option value="price_asc">Lowest Bottle Rate (₹ ↑)</option>
-              <option value="price_desc">Highest Bottle Rate (₹ ↓)</option>
-              <option value="drop_percent">Deepest Price Drop %</option>
-              <option value="decant_asc">Lowest Decant Rate</option>
+              <option value="price_asc">Lowest Bottle (₹ ↑)</option>
+              <option value="price_desc">Highest Bottle (₹ ↓)</option>
+              <option value="drop_percent">Deepest Drop %</option>
+              <option value="decant_asc">Lowest Decant</option>
               <option value="rating">Fragrantica Rating</option>
               <option value="newest">Newest Arrivals</option>
             </select>
           </div>
 
-          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0 pl-1 border-l border-slate-200 dark:border-slate-800">
+          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0 pl-2 border-l border-slate-200 dark:border-slate-800 whitespace-nowrap">
             {isCuratedActive ? (
               <span className="text-cyan-600 dark:text-cyan-400 font-bold">Curated Deals</span>
             ) : (
@@ -138,7 +137,7 @@ export default function MarketPulseBar({
       </div>
 
       {/* Mutually Exclusive Mode Toggle Bar */}
-      <div className="bg-slate-100 dark:bg-slate-900/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1 overflow-x-auto hide-scrollbar text-xs font-mono shadow-2xs">
+      <div className="bg-slate-100 dark:bg-slate-900/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1 overflow-x-auto hide-scrollbar text-xs font-mono shadow-2xs w-full max-w-full">
         
         {/* Toggle 1: Curated Highlights */}
         <button

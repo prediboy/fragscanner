@@ -43,10 +43,12 @@ export default function App() {
   useEffect(() => {
     try {
       if (isDark) {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('dark', 'theme-night');
+        document.documentElement.classList.remove('theme-fresh');
         localStorage.setItem('theme', 'dark');
       } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove('dark', 'theme-night');
+        document.documentElement.classList.add('theme-fresh');
         localStorage.setItem('theme', 'light');
       }
     } catch (e) {}
@@ -259,11 +261,11 @@ export default function App() {
   }, [filterState]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200">
       
       {/* GLOBAL NAVIGATION HEADER */}
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-2xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
           
           {/* Logo & Platform Title */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={resetAllFilters}>
@@ -337,7 +339,7 @@ export default function App() {
         />
 
         {/* 2-Column Responsive Layout: Power Rail Sidebar + Card Grid */}
-        <div className="flex items-start gap-6">
+        <div className="flex flex-col md:flex-row items-start gap-0 md:gap-6 w-full max-w-full min-w-0">
           
           {/* DESKTOP POWER FILTER RAIL */}
           <PowerFilterSidebar
