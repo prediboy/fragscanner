@@ -2,8 +2,12 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-const SUPABASE_URL = 'https://lvivmkdlaxaetnazmcat.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_8eXJXa7QmS1okuJ3tFwsbg_GyE7RaKC';
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.log("Supabase credentials not set in environment, exiting.");
+  process.exit(0);
+}
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const fragrancesPath = path.join(__dirname, '../src/data/fragrances.json');

@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = 'https://lvivmkdlaxaetnazmcat.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_8eXJXa7QmS1okuJ3tFwsbg_GyE7RaKC';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY)
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
 
 // Persistent anonymous session ID per browser
 function getSessionId() {
@@ -87,6 +89,7 @@ export async function logSessionVisit() {
     if (typeof sessionStorage === 'undefined') return;
     if (sessionStorage.getItem('fragscanner_visit_logged')) return;
 
+    if (!supabase) return;
     sessionStorage.setItem('fragscanner_visit_logged', 'true');
     const sessionId = getSessionId();
     const acq = getAcquisitionInfo();
@@ -126,6 +129,7 @@ export function logWardrobeSelection({
   umbrella = null,
   topRecommendations = []
 }) {
+  if (!supabase) return;
   if (likedPerfumes.length === 0 && dislikedPerfumes.length === 0) {
     return;
   }
@@ -184,6 +188,7 @@ export async function logWhatsAppClick({
   price = null,
   format = 'bottle' // 'bottle' | 'decant'
 }) {
+  if (!supabase) return;
   try {
     const sessionId = getSessionId();
     const acq = getAcquisitionInfo();
@@ -233,6 +238,7 @@ let searchDebounceTimer = null;
  * Debounced Search Logger: captures final search queries 1.5s after user stops typing
  */
 export function logSearchQuery(query, resultsCount = 0) {
+  if (!supabase) return;
   const cleanQ = (query || '').trim();
   if (!cleanQ || cleanQ.length < 2) return;
 

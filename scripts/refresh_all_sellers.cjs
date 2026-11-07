@@ -3,23 +3,52 @@ const fs = require("fs");
 const path = require("path");
 const { enrichAndAddPerfume } = require("./fragrantica_enricher.cjs");
 
-async function fetchUrl(url, timeoutMs = 20000, maxRetries = 3) {
+function getAlternateGoogleSheetUrl(url) {
+  if (!url || !url.includes("docs.google.com/spreadsheets/d/")) return null;
+  if (url.includes("/gviz/tq")) {
+    return url.replace(/\/gviz\/tq\?tqx=out:csv/, "/export?format=csv");
+  } else if (url.includes("/export?format=csv")) {
+    return url.replace(/\/export\?format=csv/, "/gviz/tq?tqx=out:csv");
+  }
+  return null;
+}
+
+async function fetchUrl(url, timeoutMs = 10000, maxRetries = 3) {
+  let targetUrl = url;
+  const altUrl = getAlternateGoogleSheetUrl(url);
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(targetUrl, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "Accept": "text/csv,application/xhtml+xml,text/html;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Cache-Control": "no-cache"
         },
         signal: AbortSignal.timeout(timeoutMs)
       });
-      if (res.status === 429) {
-        console.warn(`  [HTTP 429] Rate limited on ${url}. Backing off attempt ${attempt}...`);
-        await new Promise(r => setTimeout(r, 2500 * attempt));
+
+      if (res.status === 429 || res.status === 403 || res.status === 503) {
+        console.warn(`  [HTTP ${res.status}] Throttled/Blocked on attempt ${attempt} for ${targetUrl}`);
+        if (altUrl && targetUrl !== altUrl) {
+          console.log(`  ↳ Swapping to alternate Google Sheets endpoint: ${altUrl}`);
+          targetUrl = altUrl;
+        }
+        await new Promise(r => setTimeout(r, 2000 * attempt));
         continue;
       }
-      if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
-      return await res.text();
+
+      if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${targetUrl}`);
+      const text = await res.text();
+      if (!text || text.length < 5) throw new Error("Received empty response payload");
+      return text;
     } catch (e) {
+      console.warn(`  ↳ Attempt ${attempt} failed for ${targetUrl}: ${e.message}`);
+      if (altUrl && targetUrl !== altUrl) {
+        console.log(`  ↳ Swapping to alternate Google Sheets endpoint: ${altUrl}`);
+        targetUrl = altUrl;
+      }
       if (attempt === maxRetries) throw e;
       await new Promise(r => setTimeout(r, 1500 * attempt));
     }
@@ -760,6 +789,7 @@ async function runMasterRefresh() {
     } catch (err) {
       console.error(`  ❌ Error syncing ${seller.seller_name}:`, err.message);
     }
+    await new Promise(r => setTimeout(r, 1200));
   }
 
   // ==========================================
@@ -1045,15 +1075,15 @@ async function runMasterRefresh() {
   }
 
   // ==========================================
-  // SOURCE 4: ENIGMA PERFUMES DECANTS (LIQUID EMOTIONS)
+  // SOURCE 4: ENIGMA PERFUMES DECANTS
   // ==========================================
-  console.log("\n--- Syncing Enigma Perfumes Decants (Liquid Emotions) ---");
+  console.log("\n--- Syncing Enigma Perfumes Decants ---");
   try {
     const leCode = await fetchUrl("https://liquidemotions.vercel.app/store.js");
     const leMatch = leCode.match(/const LE_ALL_FRAGRANCES\s*=\s*(\[[\s\S]*?\]);\s*(?:const|let|var|function|\/\*)/);
     if (leMatch) {
       const leItems = eval(leMatch[1]);
-      console.log(`  Fetched ${leItems.length} products from Enigma Perfumes (Liquid Emotions)`);
+      console.log(`  Fetched ${leItems.length} products from Enigma Perfumes`);
       for (const item of leItems) {
         const brand = normalizeBrand(item.house);
         if (!item.name || isDesigner(brand || item.name)) continue;
@@ -1640,8 +1670,12 @@ async function runMasterRefresh() {
   console.log("\n--- Syncing Live Prices & Decants directly to Supabase ---");
   try {
     const { createClient } = require('@supabase/supabase-js');
-    const SUPABASE_URL = 'https://lvivmkdlaxaetnazmcat.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_8eXJXa7QmS1okuJ3tFwsbg_GyE7RaKC';
+    const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      console.log("  ℹ Supabase credentials not set in environment, skipping database upsert.");
+      return;
+    }
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const chunkSize = 100;
@@ -1769,4 +1803,7 @@ async function runMasterRefresh() {
   }
 }
 
-runMasterRefresh();
+runMasterRefresh().catch(err => {
+  console.error("\n❌ Master Refresh Pipeline encountered an unhandled error:", err);
+  process.exit(1);
+});

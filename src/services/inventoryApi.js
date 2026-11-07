@@ -142,6 +142,7 @@ export async function fetchInventoryPage({
   }
 
   try {
+    if (!supabase) throw new Error("Supabase client not initialized");
     let query = supabase
       .from('fragrances')
       .select(
@@ -272,6 +273,7 @@ export async function fetchCatalogBrands() {
   }
 
   try {
+    if (!supabase) throw new Error("Supabase client not initialized");
     const { data, error } = await supabase
       .from('fragrances')
       .select('brand, in_seller_stock, community_price')
@@ -317,6 +319,7 @@ export async function fetchInventoryCounts() {
   if (cachedCounts) return cachedCounts;
 
   try {
+    if (!supabase) throw new Error("Supabase client not initialized");
     const [
       { count: inStock },
       { count: retail },
@@ -373,6 +376,7 @@ export async function fetchInventoryCounts() {
  */
 export async function fetchFragranceDetail(id) {
   try {
+    if (!supabase) throw new Error("Supabase client not initialized");
     const { data, error } = await supabase
       .from('fragrances')
       .select('*')
