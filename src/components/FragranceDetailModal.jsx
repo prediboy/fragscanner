@@ -9,6 +9,7 @@ import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
 export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther, selectedSeller = 'all' }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
+  const [selectedDecantQuotes, setSelectedDecantQuotes] = useState({}); // { [size]: quoteIndex }
 
   if (!fragrance) return null;
 
@@ -490,13 +491,20 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         });
                         if (validQuotes.length === 0) return null;
 
-                        const lowestPrice = Number(sizeData.lowest_price || validQuotes[0]?.price);
-                        if (!lowestPrice || isNaN(lowestPrice) || lowestPrice <= 0) return null;
+                        // Active selected quote (defaults to 0, which is the lowest price)
+                        const selectedIdx = selectedDecantQuotes[size] ?? 0;
+                        const currentQuote = validQuotes[selectedIdx] || validQuotes[0];
+                        const currentPrice = Number(currentQuote.price);
+                        const lowestPrice = Number(validQuotes[0]?.price);
+
+                        const waMsg = `Hi ${currentQuote.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${currentPrice.toLocaleString()} on FragScanner. Is this in stock?`;
+                        const cleanedNum = String(currentQuote.whatsapp || '').replace(/\D/g, '');
+                        const waUrl = cleanedNum ? `https://wa.me/${cleanedNum.startsWith('91') ? cleanedNum : `91${cleanedNum}`}?text=${encodeURIComponent(waMsg)}` : null;
 
                         return (
                           <div
                             key={size}
-                            className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400/60 transition-all flex flex-col justify-between shadow-sm"
+                            className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400/60 transition-all flex flex-col justify-between shadow-sm space-y-3"
                           >
                             <div>
                               <div className="flex items-center justify-between mb-2">
@@ -504,33 +512,76 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                   {size} Decant
                                 </span>
                                 <span className="text-base font-black text-white font-mono">
-                                  ₹{lowestPrice.toLocaleString()}
+                                  ₹{currentPrice.toLocaleString()}
                                 </span>
                               </div>
 
-                              <div className="space-y-1.5 mb-3">
+                              <div className="space-y-1.5">
                                 {validQuotes.map((q, qIdx) => {
-                                  const isWinning = q.price === lowestPrice;
+                                  const isSelected = qIdx === selectedIdx;
+                                  const isWinning = qIdx === 0;
+                                  const rowMsg = `Hi ${q.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${Number(q.price).toLocaleString()} on FragScanner. Is this in stock?`;
+                                  const rowCleaned = String(q.whatsapp || '').replace(/\D/g, '');
+                                  const rowWa = rowCleaned ? `https://wa.me/${rowCleaned.startsWith('91') ? rowCleaned : `91${rowCleaned}`}?text=${encodeURIComponent(rowMsg)}` : null;
+
                                   return (
                                     <div 
                                       key={qIdx}
-                                      className={`flex items-center justify-between text-[11px] p-1.5 rounded-lg border ${
-                                        isWinning 
-                                          ? 'bg-cyan-950/40 border-cyan-500/40 text-cyan-200' 
-                                          : 'bg-slate-950/40 border-slate-800 text-slate-400'
+                                      onClick={() => setSelectedDecantQuotes(prev => ({ ...prev, [size]: qIdx }))}
+                                      className={`flex items-center justify-between text-[11px] p-2 rounded-lg border cursor-pointer transition-all ${
+                                        isSelected 
+                                          ? 'bg-cyan-950/70 border-cyan-400 ring-1 ring-cyan-400 text-cyan-100 shadow-xs' 
+                                          : 'bg-slate-950/40 border-slate-800 hover:border-slate-700 text-slate-300 hover:bg-slate-900/60'
                                       }`}
+                                      title={`Select ${q.seller_name} (₹${Number(q.price).toLocaleString()})`}
                                     >
-                                      <div className="flex items-center gap-1 truncate mr-1">
+                                      <div className="flex items-center gap-1.5 truncate mr-1">
+                                        <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-mono font-bold shrink-0 ${
+                                          isSelected
+                                            ? 'bg-cyan-500 text-slate-950 font-black'
+                                            : 'border border-slate-700 text-slate-400'
+                                        }`}>
+                                          {isSelected ? '✓' : qIdx + 1}
+                                        </span>
                                         <span className="font-semibold truncate">{q.seller_name}</span>
-                                        {isWinning && (
-                                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/30 text-cyan-200 font-bold shrink-0 whitespace-nowrap">
-                                            Best
+                                        {isWinning && !isSelected && (
+                                          <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold shrink-0">
+                                            Lowest
+                                          </span>
+                                        )}
+                                        {isSelected && (
+                                          <span className="text-[8px] px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-200 font-bold shrink-0">
+                                            Selected
                                           </span>
                                         )}
                                       </div>
-                                      <span className="font-mono font-bold shrink-0">
-                                        ₹{Number(q.price).toLocaleString()}
-                                      </span>
+
+                                      <div className="flex items-center gap-1.5 shrink-0">
+                                        <span className="font-mono font-bold">
+                                          ₹{Number(q.price).toLocaleString()}
+                                        </span>
+                                        {rowWa && (
+                                          <a
+                                            href={rowWa}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              logWhatsAppClick({
+                                                sellerName: q.seller_name,
+                                                fragranceName: fragrance.name,
+                                                brand: fragrance.brand,
+                                                price: q.price,
+                                                format: 'decant'
+                                              });
+                                            }}
+                                            className="px-1.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[9px] font-bold"
+                                            title={`Direct WhatsApp order to ${q.seller_name}`}
+                                          >
+                                            WA ↗
+                                          </a>
+                                        )}
+                                      </div>
                                     </div>
                                   );
                                 })}
@@ -538,44 +589,35 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                             </div>
 
                             <div className="pt-2 border-t border-slate-800/80">
-                              {/* Order best quote directly */}
-                              {(() => {
-                                const topQuote = validQuotes[0];
-                                const waMsg = `Hi ${topQuote.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${Number(topQuote.price).toLocaleString()} on FragScanner. Is this in stock?`;
-                                const waUrl = `https://wa.me/91${topQuote.whatsapp}?text=${encodeURIComponent(waMsg)}`;
-
-                                return (
-                                  <div className="flex items-center gap-1.5">
-                                    {topQuote.website && topQuote.website.includes('http') && (
-                                      <a
-                                        href={topQuote.website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-                                        title={`Visit ${topQuote.seller_name} product page`}
-                                      >
-                                        <ExternalLink className="w-3.5 h-3.5" />
-                                      </a>
-                                    )}
-                                    <a
-                                      href={waUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      onClick={() => logWhatsAppClick({
-                                        sellerName: topQuote.seller_name,
-                                        fragranceName: fragrance.name,
-                                        brand: fragrance.brand,
-                                        price: topQuote.price,
-                                        format: 'decant'
-                                      })}
-                                      className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow"
-                                    >
-                                      <span>Buy {size} on WhatsApp</span>
-                                      <ArrowRight className="w-3 h-3" />
-                                    </a>
-                                  </div>
-                                );
-                              })()}
+                              <div className="flex items-center gap-1.5">
+                                {currentQuote.website && currentQuote.website.includes('http') && (
+                                  <a
+                                    href={currentQuote.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+                                    title={`Visit ${currentQuote.seller_name} product page`}
+                                  >
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                  </a>
+                                )}
+                                <a
+                                  href={waUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => logWhatsAppClick({
+                                    sellerName: currentQuote.seller_name,
+                                    fragranceName: fragrance.name,
+                                    brand: fragrance.brand,
+                                    price: currentPrice,
+                                    format: 'decant'
+                                  })}
+                                  className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 active:scale-98 text-white font-bold text-xs transition-colors shadow"
+                                >
+                                  <span>Buy {size} via {currentQuote.seller_name} (₹{currentPrice.toLocaleString()})</span>
+                                  <ArrowRight className="w-3 h-3" />
+                                </a>
+                              </div>
                             </div>
                           </div>
                         );

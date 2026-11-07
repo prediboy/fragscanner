@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Store } from 'lucide-react';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 
@@ -139,6 +139,14 @@ export default function PowerFragranceCard({
     return filtered.length > 0 ? filtered : base;
   }, [allQuotes, currentSellerQuotes, activeFormats, isSpecificSeller]);
 
+  // Quote overrides selected by user from the Compare Rates accordion
+  const [quoteOverrides, setQuoteOverrides] = useState({});
+
+  const activeRetail = quoteOverrides['retail'] || lowestRetail;
+  const activeTester = quoteOverrides['tester'] || lowestTester;
+  const activePartial = quoteOverrides['partial'] || lowestPartial;
+  const activeDecant = quoteOverrides['decant'] || lowestDecant;
+
   // What format pods should render on the card?
   let showRetail = activeFormats.includes('retail') && !!lowestRetail;
   let showTester = activeFormats.includes('tester') && !!lowestTester;
@@ -153,8 +161,8 @@ export default function PowerFragranceCard({
     else if (lowestDecant) showDecant = true;
   }
 
-  const bottleDisplaySize = lowestRetail 
-    ? lowestRetail.label.replace(' Retail Bottle', ' Bottle') 
+  const bottleDisplaySize = activeRetail 
+    ? activeRetail.label.replace(' Retail Bottle', ' Bottle') 
     : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
 
   const displayName = f.brand && !f.name.toLowerCase().includes(f.brand.toLowerCase())
@@ -236,7 +244,7 @@ export default function PowerFragranceCard({
         <div className="mt-3 space-y-2">
           
           {/* POD 1: Full Retail Bottle (Rendered when Retail is ticked or active) */}
-          {showRetail && lowestRetail && (
+          {showRetail && activeRetail && (
             <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
@@ -244,7 +252,7 @@ export default function PowerFragranceCard({
                   <span className="font-medium truncate">{bottleDisplaySize}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestRetail.seller_name}>{lowestRetail.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeRetail.seller_name}>{activeRetail.seller_name}</strong>
                 </div>
               </div>
 
@@ -256,30 +264,30 @@ export default function PowerFragranceCard({
                     </div>
                   )}
                   <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
-                    ₹{lowestRetail.price.toLocaleString()}
+                    ₹{activeRetail.price.toLocaleString()}
                   </div>
                 </div>
 
                 {getWhatsAppUrl(
-                  lowestRetail.whatsapp || f.community_whatsapp,
-                  `Hi ${lowestRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${lowestRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                  activeRetail.whatsapp || f.community_whatsapp,
+                  `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
-                      lowestRetail.whatsapp || f.community_whatsapp,
-                      `Hi ${lowestRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${lowestRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                      activeRetail.whatsapp || f.community_whatsapp,
+                      `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
                     )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: lowestRetail.seller_name,
+                      sellerName: activeRetail.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: lowestRetail.price,
+                      price: activeRetail.price,
                       format: 'retail'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${lowestRetail.seller_name} on WhatsApp`}
+                    title={`Contact ${activeRetail.seller_name} on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
@@ -290,45 +298,45 @@ export default function PowerFragranceCard({
           )}
 
           {/* POD 2: Tester Unit Box (Rendered when Tester is ticked) */}
-          {showTester && lowestTester && (
+          {showTester && activeTester && (
             <div className="p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/60 flex items-center justify-between gap-2 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-purple-900 dark:text-purple-300">
                   <span className="text-xs">🧪</span>
-                  <span className="font-medium truncate">{lowestTester.label || 'Tester Unit Box'}</span>
+                  <span className="font-medium truncate">{activeTester.label || 'Tester Unit Box'}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestTester.seller_name}>{lowestTester.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeTester.seller_name}>{activeTester.seller_name}</strong>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
                 <div className="text-right">
                   <div className="font-mono text-sm font-extrabold text-purple-700 dark:text-purple-300">
-                    ₹{lowestTester.price.toLocaleString()}
+                    ₹{activeTester.price.toLocaleString()}
                   </div>
                 </div>
 
                 {getWhatsAppUrl(
-                  lowestTester.whatsapp || f.community_whatsapp,
-                  `Hi ${lowestTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${lowestTester.price.toLocaleString()} on FragScanner. Is this available?`
+                  activeTester.whatsapp || f.community_whatsapp,
+                  `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragScanner. Is this available?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
-                      lowestTester.whatsapp || f.community_whatsapp,
-                      `Hi ${lowestTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${lowestTester.price.toLocaleString()} on FragScanner. Is this available?`
+                      activeTester.whatsapp || f.community_whatsapp,
+                      `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragScanner. Is this available?`
                     )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: lowestTester.seller_name,
+                      sellerName: activeTester.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: lowestTester.price,
+                      price: activeTester.price,
                       format: 'tester'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${lowestTester.seller_name} on WhatsApp`}
+                    title={`Contact ${activeTester.seller_name} on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
@@ -339,45 +347,45 @@ export default function PowerFragranceCard({
           )}
 
           {/* POD 3: Partial Bottle (Rendered when Partial is ticked) */}
-          {showPartial && lowestPartial && (
+          {showPartial && activePartial && (
             <div className="p-2.5 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 flex items-center justify-between gap-2 hover:border-amber-300 dark:hover:border-amber-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-amber-900 dark:text-amber-300">
                   <span className="text-xs">🏷️</span>
-                  <span className="font-medium truncate">{lowestPartial.label || 'Partial Bottle'}</span>
+                  <span className="font-medium truncate">{activePartial.label || 'Partial Bottle'}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestPartial.seller_name}>{lowestPartial.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activePartial.seller_name}>{activePartial.seller_name}</strong>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
                 <div className="text-right">
                   <div className="font-mono text-sm font-extrabold text-amber-700 dark:text-amber-300">
-                    ₹{lowestPartial.price.toLocaleString()}
+                    ₹{activePartial.price.toLocaleString()}
                   </div>
                 </div>
 
                 {getWhatsAppUrl(
-                  lowestPartial.whatsapp || f.community_whatsapp,
-                  `Hi ${lowestPartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${lowestPartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                  activePartial.whatsapp || f.community_whatsapp,
+                  `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
-                      lowestPartial.whatsapp || f.community_whatsapp,
-                      `Hi ${lowestPartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${lowestPartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                      activePartial.whatsapp || f.community_whatsapp,
+                      `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
                     )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: lowestPartial.seller_name,
+                      sellerName: activePartial.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: lowestPartial.price,
+                      price: activePartial.price,
                       format: 'partial'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${lowestPartial.seller_name} on WhatsApp`}
+                    title={`Contact ${activePartial.seller_name} on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
@@ -388,15 +396,15 @@ export default function PowerFragranceCard({
           )}
 
           {/* POD 4: Decants Ready (Rendered when Decants is ticked) */}
-          {showDecant && lowestDecant && (
+          {showDecant && activeDecant && (
             <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                   <span className="text-xs">💧</span>
-                  <span className="font-medium truncate">{lowestDecant.label}</span>
+                  <span className="font-medium truncate">{activeDecant.label}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={lowestDecant.seller_name}>{lowestDecant.seller_name}</strong>
+                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeDecant.seller_name}>{activeDecant.seller_name}</strong>
                 </div>
               </div>
 
@@ -404,30 +412,30 @@ export default function PowerFragranceCard({
                 <div className="text-right">
                   <div className="text-[9px] font-mono text-slate-400">from</div>
                   <div className="font-mono text-sm font-extrabold text-cyan-600 dark:text-cyan-400">
-                    ₹{lowestDecant.price.toLocaleString()}
+                    ₹{activeDecant.price.toLocaleString()}
                   </div>
                 </div>
 
                 {getWhatsAppUrl(
-                  lowestDecant.whatsapp || f.community_whatsapp,
-                  `Hi ${lowestDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${lowestDecant.price.toLocaleString()} (${lowestDecant.label}) on FragScanner. What sizes are available?`
+                  activeDecant.whatsapp || f.community_whatsapp,
+                  `Hi ${activeDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${activeDecant.price.toLocaleString()} (${activeDecant.label}) on FragScanner. What sizes are available?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
-                      lowestDecant.whatsapp || f.community_whatsapp,
-                      `Hi ${lowestDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${lowestDecant.price.toLocaleString()} (${lowestDecant.label}) on FragScanner. What sizes are available?`
+                      activeDecant.whatsapp || f.community_whatsapp,
+                      `Hi ${activeDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${activeDecant.price.toLocaleString()} (${activeDecant.label}) on FragScanner. What sizes are available?`
                     )}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => logWhatsAppClick({
-                      sellerName: lowestDecant.seller_name,
+                      sellerName: activeDecant.seller_name,
                       fragranceName: f.name,
                       brand: f.brand,
-                      price: lowestDecant.price,
+                      price: activeDecant.price,
                       format: 'decant'
                     })}
                     className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${lowestDecant.seller_name} for decants on WhatsApp`}
+                    title={`Contact ${activeDecant.seller_name} for decants on WhatsApp`}
                   >
                     <span>WA</span>
                     <span className="text-[9px]">↗</span>
@@ -467,7 +475,7 @@ export default function PowerFragranceCard({
       {isExpanded && (
         <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 bg-slate-50 dark:bg-slate-950/80 p-2.5 rounded-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 font-bold">
-            <span>Direct Verified Quotes ({formatQuotes.length}):</span>
+            <span>Direct Quotes ({formatQuotes.length}) — Click to Select:</span>
             <span className="text-cyan-400">Ranked by Price ↑</span>
           </div>
 
@@ -479,26 +487,37 @@ export default function PowerFragranceCard({
             ) : (
               formatQuotes.map((q, qIdx) => {
                 const isSelectedSellerQuote = isSpecificSeller && q.seller_id === selectedSeller;
+                const activeQuoteForType = q.type === 'retail' ? activeRetail
+                  : q.type === 'tester' ? activeTester
+                  : q.type === 'partial' ? activePartial
+                  : activeDecant;
+                const isSelected = activeQuoteForType?.seller_id === q.seller_id && activeQuoteForType?.price === q.price;
+
                 return (
                   <div 
                     key={qIdx}
-                    className={`p-2 rounded-lg ${
-                      isSelectedSellerQuote
-                        ? 'bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-400 dark:border-cyan-600 ring-1 ring-cyan-500/20'
-                        : qIdx === 0
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60'
-                          : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800'
+                    onClick={() => setQuoteOverrides(prev => ({ ...prev, [q.type]: q }))}
+                    className={`p-2 rounded-lg cursor-pointer transition-all ${
+                      isSelected
+                        ? 'bg-cyan-50 dark:bg-cyan-950/70 border border-cyan-400 dark:border-cyan-500 ring-2 ring-cyan-500/30 shadow-xs'
+                        : isSelectedSellerQuote
+                          ? 'bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-400 dark:border-cyan-600 ring-1 ring-cyan-500/20'
+                          : qIdx === 0
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 hover:border-emerald-400'
+                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-cyan-400/50'
                     } flex items-center justify-between text-xs`}
                   >
                     <div className="flex items-center gap-2 min-w-0 pr-1">
                       <span className={`w-4 h-4 rounded-full ${
-                        isSelectedSellerQuote
+                        isSelected
                           ? 'bg-cyan-600 text-white font-black'
-                          : qIdx === 0 
-                            ? 'bg-emerald-600 text-white font-black' 
-                            : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                          : isSelectedSellerQuote
+                            ? 'bg-cyan-600 text-white font-black'
+                            : qIdx === 0 
+                              ? 'bg-emerald-600 text-white font-black' 
+                              : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                       } text-[9px] font-mono flex items-center justify-center shrink-0`}>
-                        {qIdx + 1}
+                        {isSelected ? '✓' : qIdx + 1}
                       </span>
                       <div className="min-w-0">
                         <div className="font-bold text-[11px] text-slate-900 dark:text-white flex items-center gap-1 truncate">
@@ -508,7 +527,7 @@ export default function PowerFragranceCard({
                               Lowest
                             </span>
                           )}
-                          {isSelectedSellerQuote && (
+                          {isSelected && (
                             <span className="text-[8px] font-mono text-cyan-700 dark:text-cyan-300 font-black bg-cyan-100 dark:bg-cyan-950 px-1 rounded shrink-0">
                               Selected
                             </span>
@@ -522,7 +541,7 @@ export default function PowerFragranceCard({
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className={`font-mono text-xs font-bold ${
-                        isSelectedSellerQuote
+                        isSelected || isSelectedSellerQuote
                           ? 'text-cyan-600 dark:text-cyan-400 font-black'
                           : qIdx === 0 
                             ? 'text-emerald-600 dark:text-emerald-400 font-black' 
@@ -537,13 +556,16 @@ export default function PowerFragranceCard({
                           )}`}
                           target="_blank"
                           rel="noreferrer"
-                          onClick={() => logWhatsAppClick({
-                            sellerName: q.seller_name,
-                            fragranceName: f.name,
-                            brand: f.brand,
-                            price: q.price,
-                            format: q.isBottle ? 'bottle' : 'decant'
-                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            logWhatsAppClick({
+                              sellerName: q.seller_name,
+                              fragranceName: f.name,
+                              brand: f.brand,
+                              price: q.price,
+                              format: q.isBottle ? 'bottle' : 'decant'
+                            });
+                          }}
                           className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[9px] font-bold"
                         >
                           Order ↗
