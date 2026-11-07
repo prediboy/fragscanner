@@ -266,7 +266,7 @@ export default function PowerFragranceCard({
                       price: bottlePrice,
                       format: 'bottle'
                     })}
-                    className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 shrink-0"
+                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
                     title={`Contact ${displayBottleQuote.seller_name} on WhatsApp`}
                   >
                     <span>WA</span>
@@ -310,7 +310,7 @@ export default function PowerFragranceCard({
                       price: decantPrice,
                       format: 'decant'
                     })}
-                    className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center gap-1 shrink-0"
+                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
                     title={`Contact ${displayDecantQuote.seller_name} for decants on WhatsApp`}
                   >
                     <span>WA</span>
@@ -335,7 +335,7 @@ export default function PowerFragranceCard({
         <button
           type="button"
           onClick={() => onToggleExpand && onToggleExpand(f.id)}
-          className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer"
+          className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
           title="Compare rates from all community sellers"
         >
           <span>Compare Rates ({allQuotes.length})</span>
@@ -345,7 +345,7 @@ export default function PowerFragranceCard({
         <button
           type="button"
           onClick={() => onSelect && onSelect(f)}
-          className="px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 text-[10px] font-medium text-slate-500 hover:text-cyan-600 dark:text-slate-400 dark:hover:text-cyan-400 transition-colors flex items-center gap-1 cursor-pointer"
+          className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 text-[10px] font-medium text-slate-500 hover:text-cyan-600 dark:text-slate-400 dark:hover:text-cyan-400 transition-colors flex items-center gap-1 cursor-pointer active:scale-98"
           title="View olfactory notes, longevity, and reviews"
         >
           <span>Notes & Details</span>

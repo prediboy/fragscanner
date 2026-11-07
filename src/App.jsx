@@ -3,6 +3,7 @@ import curatedData from './data/curated_highlights.json';
 import syncMeta from './data/sync_meta.json';
 import PowerFilterSidebar from './components/PowerFilterSidebar';
 import MobileFilterDrawer from './components/MobileFilterDrawer';
+import MobileBottomDock from './components/MobileBottomDock';
 import PowerFragranceCard from './components/PowerFragranceCard';
 import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
@@ -63,6 +64,7 @@ export default function App() {
   const [activeFragrance, setActiveFragrance] = useState(null);
   const [syncStatsOpen, setSyncStatsOpen] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState(null);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Search query
   const [searchQuery, setSearchQuery] = useState(() => {
@@ -316,7 +318,7 @@ export default function App() {
       </header>
 
       {/* MAIN PAGE WRAPPER */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7 pb-24 md:pb-8 w-full max-w-full min-w-0">
         
         {/* Search, Lenses & Sorting Bar */}
         <MarketPulseBar
@@ -496,8 +498,25 @@ export default function App() {
 
       </main>
 
-      {/* MOBILE BOTTOM SHEET & FLOATING THUMB CAPSULE */}
+      {/* MOBILE STICKY BOTTOM THUMB DOCK */}
+      <MobileBottomDock
+        filterState={filterState}
+        setFilterState={(updater) => {
+          setFilterState(updater);
+          setShowFullCatalog(false);
+        }}
+        onResetFilters={resetAllFilters}
+        onOpenFilters={() => setIsMobileDrawerOpen(true)}
+        activeFilterCount={activeFiltersCount}
+        resultCount={totalMatching}
+        counts={catalogCounts}
+        isCuratedActive={isUnfiltered}
+      />
+
+      {/* MOBILE BOTTOM SHEET DRAWER */}
       <MobileFilterDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
         filterState={filterState}
         setFilterState={(updater) => {
           setFilterState(updater);
