@@ -177,7 +177,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       )}
                     </div>
                     <p className="text-xs text-slate-300">
-                      Live quotes verified across 11 community sellers for both <strong>Full Bottles & Testers</strong> and <strong>Decants (2ml - 30ml)</strong>:
+                      Live quotes verified across 10 community sellers for both <strong>Full Bottles & Testers</strong> and <strong>Decants (2ml - 30ml)</strong>:
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

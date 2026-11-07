@@ -208,7 +208,7 @@ export default function MyWardrobeMatcher({
             </span>
           </div>
           <p className="text-xs text-slate-300">
-            Check scents you <strong className="text-emerald-400">Like (👍)</strong> and <strong className="text-rose-400">Dislike (👎)</strong> below. The algorithm finds your scent twins and checks live stock across 11 community sellers.
+            Check scents you <strong className="text-emerald-400">Like (👍)</strong> and <strong className="text-rose-400">Dislike (👎)</strong> below. The algorithm finds your scent twins and checks live stock across 10 community sellers.
           </p>
         </div>
 
@@ -1172,7 +1172,7 @@ export default function MyWardrobeMatcher({
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified across 11 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, Liquid Emotions, RP Decants, GRYV Scents, Blue Wings, Whiff Culture, AAR Fragrances & Fragrance Heaven
+                  Verified across 10 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, RP Decants, GRYV Scents, Blue Wings, Whiff Culture, AAR Fragrances & Fragrance Heaven
                 </p>
               </div>
               <button 

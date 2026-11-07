@@ -934,8 +934,8 @@ export default function App() {
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-glacier-border hover:border-glacier-accent text-glacier-textMuted hover:text-glacier-text transition-colors font-mono text-[11px] shadow-2xs"
             >
               <span className="w-2 h-2 rounded-full bg-glacier-success animate-pulse"></span>
-              <span className="hidden md:inline">11 Community Sellers Monitored</span>
-              <span className="md:hidden">11 Sellers</span>
+              <span className="hidden md:inline">10 Community Sellers Monitored</span>
+              <span className="md:hidden">10 Sellers</span>
             </button>
           </div>
 
