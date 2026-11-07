@@ -154,7 +154,7 @@ export async function fetchInventoryPage({
     let query = supabase
       .from('fragrances')
       .select(
-        'id, name, brand, rating_value, rating_count, concentration, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration',
+        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration',
         { count: 'exact' }
       );
 

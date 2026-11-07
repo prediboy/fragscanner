@@ -511,12 +511,16 @@ export default function App() {
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}
       {activeFragrance && (
-        <ModalErrorBoundary onClose={() => setActiveFragrance(null)}>
+        <ModalErrorBoundary resetKey={activeFragrance.id} onClose={() => setActiveFragrance(null)}>
           <FragranceDetailModal
             fragrance={activeFragrance}
             allFragrances={pageItems}
             onClose={() => setActiveFragrance(null)}
-            onSelectOther={(other) => setActiveFragrance(other)}
+            onSelectOther={async (other) => {
+              setActiveFragrance(other);
+              const detail = await fetchFragranceDetail(other.id);
+              if (detail) setActiveFragrance(detail);
+            }}
             selectedSeller={filterState.selectedSeller}
           />
         </ModalErrorBoundary>

@@ -15,6 +15,12 @@ export default class ModalErrorBoundary extends React.Component {
     console.error('ModalErrorBoundary caught error:', error, errorInfo);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
+      this.setState({ hasError: false, error: null });
+    }
+  }
+
   render() {
     if (this.state.hasError) {
       return (

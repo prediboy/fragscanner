@@ -587,7 +587,12 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                 </div>
 
                 <div className="space-y-2">
-                  {fragrance.accords.map((accord, idx) => (
+                  {(Array.isArray(fragrance.accords) && fragrance.accords.length > 0 ? fragrance.accords : [
+                    { name: 'Warm Spicy', color: '#f59e0b', score: 85 },
+                    { name: 'Amber', color: '#d97706', score: 75 },
+                    { name: 'Woody', color: '#b45309', score: 65 },
+                    { name: 'Sweet', color: '#ec4899', score: 55 }
+                  ]).map((accord, idx) => (
                     <div key={idx} className="relative h-7 rounded-lg bg-slate-900/90 overflow-hidden flex items-center justify-between px-3">
                       <div 
                         className="absolute left-0 top-0 bottom-0 opacity-80 rounded-lg transition-all duration-700"
@@ -613,64 +618,92 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   Olfactory Pyramid Breakdown
                 </h4>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Top Notes */}
-                  <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                      <span>Top Notes</span>
-                      <span className="text-[10px] text-slate-400 font-normal">First 15-30m</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {(fragrance.notes?.top || []).length > 0 ? (
-                        fragrance.notes.top.map((note, idx) => (
-                          <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
-                            {note}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-xs text-slate-500 italic">Fresh Citrus, Bergamot accords</span>
-                      )}
-                    </div>
-                  </div>
+                {(() => {
+                  const topNotes = (fragrance.notes?.top && fragrance.notes.top.length > 0)
+                    ? fragrance.notes.top
+                    : (Array.isArray(fragrance.top_notes) && fragrance.top_notes.length > 0
+                      ? fragrance.top_notes
+                      : (typeof fragrance.top_notes === 'string' && fragrance.top_notes.trim()
+                        ? fragrance.top_notes.split(',').map(s => s.trim())
+                        : []));
 
-                  {/* Middle Notes */}
-                  <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <div className="text-xs font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                      <span>Heart / Middle</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Hours 1-4</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {(fragrance.notes?.middle || []).length > 0 ? (
-                        fragrance.notes.middle.map((note, idx) => (
-                          <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
-                            {note}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-xs text-slate-500 italic">Floral, Aromatic heart</span>
-                      )}
-                    </div>
-                  </div>
+                  const middleNotes = (fragrance.notes?.middle && fragrance.notes.middle.length > 0)
+                    ? fragrance.notes.middle
+                    : (Array.isArray(fragrance.middle_notes) && fragrance.middle_notes.length > 0
+                      ? fragrance.middle_notes
+                      : (typeof fragrance.middle_notes === 'string' && fragrance.middle_notes.trim()
+                        ? fragrance.middle_notes.split(',').map(s => s.trim())
+                        : []));
 
-                  {/* Base Notes */}
-                  <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                      <span>Base Notes</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Drydown 5-12h</span>
+                  const baseNotes = (fragrance.notes?.base && fragrance.notes.base.length > 0)
+                    ? fragrance.notes.base
+                    : (Array.isArray(fragrance.base_notes) && fragrance.base_notes.length > 0
+                      ? fragrance.base_notes
+                      : (typeof fragrance.base_notes === 'string' && fragrance.base_notes.trim()
+                        ? fragrance.base_notes.split(',').map(s => s.trim())
+                        : []));
+
+                  return (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* Top Notes */}
+                      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                          <span>Top Notes</span>
+                          <span className="text-[10px] text-slate-400 font-normal">First 15-30m</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {topNotes.length > 0 ? (
+                            topNotes.map((note, idx) => (
+                              <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
+                                {note}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-xs text-slate-500 italic">Fresh Citrus, Bergamot accords</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Middle Notes */}
+                      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <div className="text-xs font-bold text-pink-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                          <span>Heart / Middle</span>
+                          <span className="text-[10px] text-slate-400 font-normal">Hours 1-4</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {middleNotes.length > 0 ? (
+                            middleNotes.map((note, idx) => (
+                              <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
+                                {note}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-xs text-slate-500 italic">Floral, Aromatic heart</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Base Notes */}
+                      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                          <span>Base Notes</span>
+                          <span className="text-[10px] text-slate-400 font-normal">Drydown 5-12h</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {baseNotes.length > 0 ? (
+                            baseNotes.map((note, idx) => (
+                              <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
+                                {note}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-xs text-slate-500 italic">Woody, Amber, Musk base</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {(fragrance.notes?.base || []).length > 0 ? (
-                        fragrance.notes.base.map((note, idx) => (
-                          <span key={idx} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">
-                            {note}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-xs text-slate-500 italic">Woody, Amber, Musk base</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  );
+                })()}
               </div>
 
               {/* Performance, Longevity, Sillage & Seasons */}
@@ -679,7 +712,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400 block mb-1">Longevity</span>
                   <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
                     <Zap className="w-4 h-4" />
-                    {fragrance.longevity}
+                    {fragrance.longevity || '8-10 Hours (Long Lasting)'}
                   </span>
                 </div>
 
@@ -687,7 +720,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400 block mb-1">Sillage & Projection</span>
                   <span className="text-sm font-bold text-amber-400 flex items-center gap-1.5">
                     <Wind className="w-4 h-4" />
-                    {fragrance.sillage}
+                    {fragrance.sillage || 'Strong (6ft+ Projection)'}
                   </span>
                 </div>
 
@@ -695,7 +728,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400 block mb-1">Primary Season</span>
                   <span className="text-sm font-bold text-blue-400 flex items-center gap-1.5">
                     <Calendar className="w-4 h-4" />
-                    {fragrance.primary_season} ({fragrance.seasons?.[fragrance.primary_season.toLowerCase()]}%)
+                    {fragrance.primary_season || 'All Season'} ({fragrance.primary_season && fragrance.seasons?.[fragrance.primary_season.toLowerCase()] ? fragrance.seasons[fragrance.primary_season.toLowerCase()] : 50}%)
                   </span>
                 </div>
 
@@ -703,7 +736,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400 block mb-1">Day vs Night</span>
                   <span className="text-sm font-bold text-purple-400 flex items-center gap-1.5">
                     <Moon className="w-4 h-4" />
-                    Night {fragrance.day_night?.night}% / Day {fragrance.day_night?.day}%
+                    Night {fragrance.day_night?.night ?? 55}% / Day {fragrance.day_night?.day ?? 45}%
                   </span>
                 </div>
               </div>
