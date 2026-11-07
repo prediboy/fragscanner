@@ -17,6 +17,7 @@ export default function MarketPulseBar({
     formats = [],
     maxBudget = 15000,
     selectedSeller = 'all',
+    selectedBrand = 'all',
     dealsOnly = null,
     selectedDna = null,
     selectedVibe = null,
@@ -48,6 +49,13 @@ export default function MarketPulseBar({
       id: 'seller',
       label: `Seller: ${selectedSeller}`,
       onRemove: () => setFilterState(p => ({ ...p, selectedSeller: 'all' }))
+    });
+  }
+  if (selectedBrand && selectedBrand !== 'all') {
+    activeChips.push({
+      id: 'brand',
+      label: `Brand: ${selectedBrand}`,
+      onRemove: () => setFilterState(p => ({ ...p, selectedBrand: 'all' }))
     });
   }
   if (dealsOnly) {

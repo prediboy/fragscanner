@@ -6,12 +6,14 @@ export default function PowerFilterSidebar({
   setFilterState,
   onResetFilters,
   counts = {},
-  sellers = []
+  sellers = [],
+  brands = []
 }) {
   const {
     formats = [],
     maxBudget = 15000,
     selectedSeller = 'all',
+    selectedBrand = 'all',
     dealsOnly = null,
     selectedDna = null,
     selectedVibe = null
@@ -175,6 +177,57 @@ export default function PowerFilterSidebar({
             Any
           </button>
         </div>
+      </div>
+
+      {/* Brand & Fragrance House Selector */}
+      <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block">
+            Brand / House
+          </span>
+          {selectedBrand !== 'all' && (
+            <button
+              onClick={() => setFilterState(prev => ({ ...prev, selectedBrand: 'all' }))}
+              className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {/* Quick Popular Brand Pills */}
+        <div className="flex flex-wrap gap-1 text-[11px] font-mono">
+          {['all', 'Afnan', 'Lattafa', 'Armaf', 'Rasasi', 'French Avenue'].map(bName => {
+            const isSelected = (bName === 'all' && selectedBrand === 'all') || selectedBrand === bName;
+            return (
+              <button
+                key={bName}
+                onClick={() => setFilterState(prev => ({ ...prev, selectedBrand: bName }))}
+                className={`px-2 py-1 rounded-lg transition-all text-[11px] font-medium cursor-pointer ${
+                  isSelected
+                    ? 'bg-cyan-600 text-white font-bold shadow-2xs'
+                    : 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`}
+              >
+                {bName === 'all' ? 'All' : bName}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Full Brand Select Dropdown */}
+        <select
+          value={selectedBrand}
+          onChange={(e) => setFilterState(prev => ({ ...prev, selectedBrand: e.target.value }))}
+          className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-400 focus:outline-none cursor-pointer"
+        >
+          <option value="all">All Brands ({brands.length || 53})</option>
+          {brands.map(b => (
+            <option key={b.name} value={b.name}>
+              {b.name} ({b.count})
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Verified Community Seller Selector */}

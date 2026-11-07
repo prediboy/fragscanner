@@ -81,6 +81,7 @@ export async function fetchInventoryPage({
   pageSize = 24,
   search = '',
   seller = 'all',
+  brand = 'all',
   formats = ['retail'],
   maxBudget = 15000,
   sortBy = 'price_asc',
@@ -88,7 +89,7 @@ export async function fetchInventoryPage({
 } = {}) {
   const tokens = normalizeQuery(search);
   const cleanSearch = tokens.join(' ');
-  const cacheKey = `${page}_${pageSize}_${cleanSearch}_${seller}_${(formats || []).slice().sort().join(',')}_${maxBudget}_${sortBy}_${dealsOnly || ''}`;
+  const cacheKey = `${page}_${pageSize}_${cleanSearch}_${seller}_${brand}_${(formats || []).slice().sort().join(',')}_${maxBudget}_${sortBy}_${dealsOnly || ''}`;
 
   if (pageCache.has(cacheKey)) {
     return pageCache.get(cacheKey);
@@ -102,6 +103,9 @@ export async function fetchInventoryPage({
         const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === seller && Number(s.price) > 0);
         const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === seller);
         if (!inB && !inD) return false;
+      }
+      if (brand && brand !== 'all' && (f.brand || '').toLowerCase() !== brand.toLowerCase()) {
+        return false;
       }
       if (maxBudget < 15000 && Number(f.community_price || 999999) > maxBudget) return false;
       if (tokens.length > 0) {
@@ -170,6 +174,11 @@ export async function fetchInventoryPage({
     // 2. Seller Isolation
     if (seller && seller !== 'all') {
       query = query.contains('community_sellers', JSON.stringify([{ seller_id: seller }]));
+    }
+
+    // 2b. Brand Isolation
+    if (brand && brand !== 'all') {
+      query = query.ilike('brand', brand);
     }
 
     // 3. Max Budget
@@ -282,7 +291,7 @@ export async function fetchFragranceDetail(id) {
 /**
  * Fallback client filter (only invoked if Supabase network is unavailable)
  */
-function filterClientCatalog(catalog, { page, pageSize, search, seller, formats, maxBudget, sortBy }) {
+function filterClientCatalog(catalog, { page, pageSize, search, seller, brand, formats, maxBudget, sortBy }) {
   const tokens = normalizeQuery(search);
 
   let filtered = catalog.filter(f => {
@@ -300,10 +309,14 @@ function filterClientCatalog(catalog, { page, pageSize, search, seller, formats,
       if (!f.in_seller_stock && !f.has_decants) return false;
     }
 
-    if (seller !== 'all') {
+    if (seller && seller !== 'all') {
       const inB = Array.isArray(f.community_sellers) && f.community_sellers.some(s => s.seller_id === seller && Number(s.price) > 0);
       const inD = Array.isArray(f.community_decants) && f.community_decants.some(d => d.seller_id === seller);
       if (!inB && !inD) return false;
+    }
+
+    if (brand && brand !== 'all' && (f.brand || '').toLowerCase() !== brand.toLowerCase()) {
+      return false;
     }
 
     if (maxBudget < 15000 && Number(f.community_price || 999999) > maxBudget) return false;

@@ -2131,5 +2131,219 @@
     "bluewings": 88,
     "aar_fragrances": 631,
     "fragrance_heaven": 543
-  }
+  },
+  "brands": [
+    {
+      "name": "Lattafa",
+      "count": 162
+    },
+    {
+      "name": "Armaf",
+      "count": 106
+    },
+    {
+      "name": "Rasasi",
+      "count": 70
+    },
+    {
+      "name": "Arabiyat Prestige",
+      "count": 50
+    },
+    {
+      "name": "Afnan",
+      "count": 49
+    },
+    {
+      "name": "French Avenue",
+      "count": 47
+    },
+    {
+      "name": "Rayhaan",
+      "count": 37
+    },
+    {
+      "name": "Maison Alhambra",
+      "count": 35
+    },
+    {
+      "name": "Ahmed Al Maghribi",
+      "count": 34
+    },
+    {
+      "name": "Riiffs",
+      "count": 28
+    },
+    {
+      "name": "Naseem",
+      "count": 27
+    },
+    {
+      "name": "Mykonos",
+      "count": 24
+    },
+    {
+      "name": "Khadlaj",
+      "count": 23
+    },
+    {
+      "name": "Ajmal",
+      "count": 19
+    },
+    {
+      "name": "Fragrance World",
+      "count": 17
+    },
+    {
+      "name": "Ibraq",
+      "count": 16
+    },
+    {
+      "name": "Swiss Arabian",
+      "count": 14
+    },
+    {
+      "name": "Arabiyat",
+      "count": 14
+    },
+    {
+      "name": "Albait Aldimashqi",
+      "count": 14
+    },
+    {
+      "name": "Al Haramain",
+      "count": 13
+    },
+    {
+      "name": "Ibrahim Al Qureshi",
+      "count": 12
+    },
+    {
+      "name": "Titan Skinn",
+      "count": 11
+    },
+    {
+      "name": "Paris Corner",
+      "count": 10
+    },
+    {
+      "name": "Assaf",
+      "count": 9
+    },
+    {
+      "name": "Zimaya",
+      "count": 8
+    },
+    {
+      "name": "Nusuk",
+      "count": 8
+    },
+    {
+      "name": "Laverne",
+      "count": 7
+    },
+    {
+      "name": "Maison Asrar",
+      "count": 7
+    },
+    {
+      "name": "Reef",
+      "count": 6
+    },
+    {
+      "name": "Versace",
+      "count": 5
+    },
+    {
+      "name": "Dumont",
+      "count": 5
+    },
+    {
+      "name": "Anfar",
+      "count": 4
+    },
+    {
+      "name": "Dior",
+      "count": 3
+    },
+    {
+      "name": "Al Majed Oud",
+      "count": 3
+    },
+    {
+      "name": "Gissah",
+      "count": 3
+    },
+    {
+      "name": "Rue Broca",
+      "count": 3
+    },
+    {
+      "name": "Ard Al Zaafaran",
+      "count": 2
+    },
+    {
+      "name": "Al Wataniah",
+      "count": 2
+    },
+    {
+      "name": "Lalique",
+      "count": 2
+    },
+    {
+      "name": "Azzaro",
+      "count": 2
+    },
+    {
+      "name": "Issey Miyake",
+      "count": 2
+    },
+    {
+      "name": "Tom Ford",
+      "count": 1
+    },
+    {
+      "name": "Jean Paul Gaultier",
+      "count": 1
+    },
+    {
+      "name": "Chanel",
+      "count": 1
+    },
+    {
+      "name": "Giorgio Armani",
+      "count": 1
+    },
+    {
+      "name": "Creed",
+      "count": 1
+    },
+    {
+      "name": "Yves Saint Laurent",
+      "count": 1
+    },
+    {
+      "name": "Al Rehab",
+      "count": 1
+    },
+    {
+      "name": "Mancera",
+      "count": 1
+    },
+    {
+      "name": "Surrati",
+      "count": 1
+    },
+    {
+      "name": "Alfred Dunhill",
+      "count": 1
+    },
+    {
+      "name": "Rochas",
+      "count": 1
+    },
+    {
+      "name": "Carolina Herrera",
+      "count": 1
+    }
+  ]
 }

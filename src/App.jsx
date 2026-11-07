@@ -88,6 +88,7 @@ export default function App() {
         formats: ['retail'],
         maxBudget: 15000,
         selectedSeller: 'all',
+        selectedBrand: 'all',
         dealsOnly: dealsParam === 'drops' ? 'drops' : null,
         selectedDna: null,
         selectedVibe: null,
@@ -98,6 +99,7 @@ export default function App() {
         formats: ['retail'],
         maxBudget: 15000,
         selectedSeller: 'all',
+        selectedBrand: 'all',
         dealsOnly: null,
         selectedDna: null,
         selectedVibe: null,
@@ -146,6 +148,7 @@ export default function App() {
       pageSize,
       search: searchQuery,
       seller: filterState.selectedSeller,
+      brand: filterState.selectedBrand,
       formats: filterState.formats,
       maxBudget: filterState.maxBudget,
       sortBy: filterState.sortBy,
@@ -192,6 +195,7 @@ export default function App() {
       formats: ['retail'],
       maxBudget: 15000,
       selectedSeller: 'all',
+      selectedBrand: 'all',
       dealsOnly: null,
       selectedDna: null,
       selectedVibe: null,
@@ -205,6 +209,7 @@ export default function App() {
     return !showFullCatalog &&
       !searchQuery.trim() &&
       filterState.selectedSeller === 'all' &&
+      filterState.selectedBrand === 'all' &&
       !filterState.dealsOnly &&
       !filterState.selectedDna &&
       !filterState.selectedVibe &&
@@ -221,6 +226,7 @@ export default function App() {
     }
     if (filterState.maxBudget < 15000) count++;
     if (filterState.selectedSeller !== 'all') count++;
+    if (filterState.selectedBrand && filterState.selectedBrand !== 'all') count++;
     if (filterState.dealsOnly) count++;
     if (filterState.selectedDna) count++;
     if (filterState.selectedVibe) count++;
@@ -318,6 +324,7 @@ export default function App() {
             onResetFilters={resetAllFilters}
             counts={catalogCounts}
             sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
+            brands={curatedData.brands || []}
           />
 
           {/* MAIN FRAGRANCE CONTENT STREAM */}
@@ -474,6 +481,7 @@ export default function App() {
         activeFilterCount={activeFiltersCount}
         counts={catalogCounts}
         sellers={sellersWithLiveCounts.filter(s => s.id !== 'all')}
+        brands={curatedData.brands || []}
       />
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}
