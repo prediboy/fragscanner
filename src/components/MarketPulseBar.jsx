@@ -25,9 +25,10 @@ export default function MarketPulseBar({
 
   // Active filter count excluding default
   const activeChips = [];
-  if (formats.length > 0 && formats.length < 4) {
+  const isDefaultFormat = formats.length === 1 && formats[0] === 'retail';
+  if (!isDefaultFormat && formats.length > 0 && formats.length < 4) {
     formats.forEach(f => {
-      const label = f === 'retail' ? 'Retail Box' : f === 'tester' ? '🧪 Tester' : f === 'partial' ? '🏷️ Partial' : '💧 Decant';
+      const label = f === 'retail' ? 'Retail Bottle' : f === 'tester' ? '🧪 Tester' : f === 'partial' ? '🏷️ Partial' : '💧 Decant';
       activeChips.push({
         id: `fmt-${f}`,
         label,

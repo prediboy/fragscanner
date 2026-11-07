@@ -112,7 +112,7 @@ export default function MobileFilterDrawer({
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>✓ Retail Bottle</span>
+                <span>✓ Full Retail Bottle</span>
                 <span className="text-[10px] text-slate-400">{counts.retail || 921}</span>
               </button>
 

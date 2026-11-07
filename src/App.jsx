@@ -85,7 +85,7 @@ export default function App() {
     try {
       const dealsParam = new URLSearchParams(window.location.search).get('deals');
       return {
-        formats: ['retail', 'decant'],
+        formats: ['retail'],
         maxBudget: 15000,
         selectedSeller: 'all',
         dealsOnly: dealsParam === 'drops' ? 'drops' : null,
@@ -95,7 +95,7 @@ export default function App() {
       };
     } catch {
       return {
-        formats: ['retail', 'decant'],
+        formats: ['retail'],
         maxBudget: 15000,
         selectedSeller: 'all',
         dealsOnly: null,
@@ -335,7 +335,7 @@ export default function App() {
     setShowFullCatalog(false);
     setCurrentPage(1);
     setFilterState({
-      formats: ['retail', 'decant'],
+      formats: ['retail'],
       maxBudget: 15000,
       selectedSeller: 'all',
       dealsOnly: null,
@@ -347,6 +347,7 @@ export default function App() {
 
   // Determine whether we are in the default unfiltered landing state
   const isUnfiltered = useMemo(() => {
+    const isDefaultFormat = (filterState.formats.length === 1 && filterState.formats[0] === 'retail') || filterState.formats.length === 0;
     return !showFullCatalog &&
       !searchQuery.trim() &&
       filterState.selectedSeller === 'all' &&
@@ -354,13 +355,16 @@ export default function App() {
       !filterState.selectedDna &&
       !filterState.selectedVibe &&
       filterState.maxBudget >= 15000 &&
-      (filterState.formats.length >= 2 || filterState.formats.length === 0);
+      isDefaultFormat;
   }, [showFullCatalog, searchQuery, filterState]);
 
   // Active filter count for mobile badge
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (filterState.formats.length > 0 && filterState.formats.length < 4) count += filterState.formats.length;
+    const isDefaultFormat = filterState.formats.length === 1 && filterState.formats[0] === 'retail';
+    if (!isDefaultFormat && filterState.formats.length > 0 && filterState.formats.length < 4) {
+      count += filterState.formats.length;
+    }
     if (filterState.maxBudget < 15000) count++;
     if (filterState.selectedSeller !== 'all') count++;
     if (filterState.dealsOnly) count++;
