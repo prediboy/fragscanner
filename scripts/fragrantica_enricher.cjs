@@ -458,8 +458,8 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     community_price: price,
     best_bottle_seller: sellerObj.seller_name,
     price_updated_at: nowIso,
-    is_new_arrival: true,
-    new_arrival_date: todayDate,
+    is_new_arrival: false,
+    new_arrival_date: null,
     price_history: [
       {
         date: todayDate,
