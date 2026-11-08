@@ -2,8 +2,8 @@ name: Refresh Community Seller Prices (Every 2 Hours)
 
 on:
   schedule:
-    # Runs every 2 hours automatically
-    - cron: '0 */2 * * *'
+    # Runs every 2 hours at minute 17 (off-peak minute avoids GitHub top-of-hour queue drop)
+    - cron: '17 */2 * * *'
   workflow_dispatch: # Allows manual 1-click trigger anytime from GitHub Actions tab
 
 jobs:
@@ -29,8 +29,10 @@ jobs:
 
       - name: Run Master Refresh Pipeline across All 10 Sellers
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || secrets.SUPABASE_ANON_KEY }}
         run: |
           node scripts/scrape_aar_middle_east.cjs || true
           node scripts/refresh_all_sellers.cjs
