@@ -1,6 +1,23 @@
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
+
+// Auto-load .env if environment variables are not set in the shell
+const envPath = path.join(__dirname, "../.env");
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const match = trimmed.match(/^([^=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const val = match[2].trim().replace(/^['"](.*)['"]$/, '$1');
+      if (!process.env[key]) process.env[key] = val;
+    }
+  });
+}
+
 const { enrichAndAddPerfume } = require("./fragrantica_enricher.cjs");
 
 function getAlternateGoogleSheetUrl(url) {
@@ -384,12 +401,11 @@ async function runMasterRefresh() {
     {
       id: "aar_fragrances",
       seller_name: "AAR Fragrances",
-      type: "decant_and_bottle",
-      url: "https://www.aarfragrances.com",
+      type: "bottle",
+      url: "https://www.aarfragrances.com/category/middle-east-collection",
       whatsapp: "9873520545",
       shipping: "Pan-India Shipping",
-      dispatch: "24-48 hrs",
-      decant_sizes: ["10ml"]
+      dispatch: "24-48 hrs"
     },
     {
       id: "fragrance_heaven",
@@ -1364,26 +1380,7 @@ async function runMasterRefresh() {
       }
     }
 
-    if (fs.existsSync(aarDecantsPath)) {
-      const aarD = JSON.parse(fs.readFileSync(aarDecantsPath, "utf-8"));
-      for (const [fid, data] of Object.entries(aarD)) {
-        const target = fragrances.find(f => f.id === fid);
-        if (target && data.price > 0) {
-          addDecantQuote(target, {
-            seller_id: "aar_fragrances",
-            seller_name: "AAR Fragrances",
-            website: data.url,
-            whatsapp: "9873520545",
-            shipping: "Pan-India Shipping",
-            dispatch: "24-48 hrs",
-            sizes: { "10ml": data.price },
-            lowest_price: data.price,
-            in_stock: true,
-            verified: true
-          });
-        }
-      }
-    }
+
 
     if (fs.existsSync(fhBottlesPath)) {
       const fhB = JSON.parse(fs.readFileSync(fhBottlesPath, "utf-8"));
@@ -1668,19 +1665,25 @@ async function runMasterRefresh() {
   // SYNC DIRECTLY TO SUPABASE DATABASE
   // ==========================================
   console.log("\n--- Syncing Live Prices & Decants directly to Supabase ---");
+  let supabase = null;
   try {
     const { createClient } = require('@supabase/supabase-js');
     const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
       console.log("  ℹ Supabase credentials not set in environment, skipping database upsert.");
-      return;
     }
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (err) {
+    console.error("  Warning: Failed to initialize Supabase client:", err.message);
+  }
 
-    const chunkSize = 100;
-    for (let i = 0; i < fragrances.length; i += chunkSize) {
-      const chunk = fragrances.slice(i, i + chunkSize).map(f => ({
+  if (supabase) {
+    try {
+      const chunkSize = 100;
+      for (let i = 0; i < fragrances.length; i += chunkSize) {
+        const chunk = fragrances.slice(i, i + chunkSize).map(f => ({
         id: f.id,
         name: f.name,
         brand: f.brand,
@@ -1729,8 +1732,9 @@ async function runMasterRefresh() {
       }
     }
     console.log("  ✓ Successfully synced all live prices to Supabase!");
-  } catch (err) {
-    console.error("  Warning: Supabase sync failed:", err.message);
+    } catch (err) {
+      console.error("  Warning: Supabase sync failed:", err.message);
+    }
   }
 
   // Save sync_meta.json
@@ -1780,15 +1784,16 @@ async function runMasterRefresh() {
       sovereign_scents: { name: "Sovereign Scents", bottles: stats.sovereign_scents_bottles, decants: stats.sovereign_scents_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
-      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, decants: fragrances.filter(f => (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length, type: "Dual" },
+      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" },
       fragrance_heaven: { name: "Fragrance Heaven", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'fragrance_heaven')).length, type: "Full Bottles" }
     }
   };
   fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");
 
   // Upsert sync metadata directly to Supabase sync_metadata table
-  try {
-    const { error: syncMetaErr } = await supabase.from('sync_metadata').upsert([{
+  if (supabase) {
+    try {
+      const { error: syncMetaErr } = await supabase.from('sync_metadata').upsert([{
       id: 'latest',
       last_sync: syncMeta.last_sync,
       sync_date: syncMeta.sync_date,
@@ -1825,6 +1830,7 @@ async function runMasterRefresh() {
   } catch (metaErr) {
     console.warn("  Warning: Supabase sync_metadata failed:", metaErr.message);
   }
+}
 
   console.log("\n=========================================================");
   console.log("✅ MASTER REFRESH COMPLETE!");

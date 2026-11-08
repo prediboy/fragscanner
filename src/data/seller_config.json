@@ -130,14 +130,11 @@
   {
     "id": "aar_fragrances",
     "seller_name": "AAR Fragrances",
-    "type": "decant_and_bottle",
-    "url": "https://www.aarfragrances.com",
+    "type": "bottle",
+    "url": "https://www.aarfragrances.com/category/middle-east-collection",
     "whatsapp": "9873520545",
     "shipping": "Pan-India Shipping",
-    "dispatch": "24-48 hrs",
-    "decant_sizes": [
-      "10ml"
-    ]
+    "dispatch": "24-48 hrs"
   },
   {
     "id": "fragrance_heaven",

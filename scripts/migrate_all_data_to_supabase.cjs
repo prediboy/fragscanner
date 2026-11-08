@@ -6,6 +6,22 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
+// Auto-load .env if environment variables are not set in the shell
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const match = trimmed.match(/^([^=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const val = match[2].trim().replace(/^['"](.*)['"]$/, '$1');
+      if (!process.env[key]) process.env[key] = val;
+    }
+  });
+}
+
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
@@ -39,8 +55,8 @@ async function runMigration() {
   const highlightsPath = path.join(__dirname, '../src/data/curated_highlights.json');
 
   const fragrances = JSON.parse(fs.readFileSync(fragrancesPath, 'utf-8'));
-  const syncMeta = JSON.parse(fs.readFileSync(syncMetaPath, 'utf-8'));
-  const highlights = JSON.parse(fs.readFileSync(highlightsPath, 'utf-8'));
+  const syncMeta = fs.existsSync(syncMetaPath) ? JSON.parse(fs.readFileSync(syncMetaPath, 'utf-8')) : {};
+  const highlights = fs.existsSync(highlightsPath) ? JSON.parse(fs.readFileSync(highlightsPath, 'utf-8')) : {};
 
   console.log(`\n📦 Uploading ${fragrances.length} fragrances to Supabase with full price action...`);
 

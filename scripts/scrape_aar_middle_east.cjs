@@ -1,0 +1,234 @@
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+
+function fetchUrl(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" } }, (res) => {
+      let data = "";
+      res.on("data", chunk => data += chunk);
+      res.on("end", () => resolve(data));
+    });
+    req.on("error", reject);
+  });
+}
+
+function parsePage(html) {
+  const parts = html.split('<div class="aiz-card-box');
+  const items = [];
+  for (let i = 1; i < parts.length; i++) {
+    const chunk = parts[i];
+    const urlM = chunk.match(/href="(https:\/\/www\.aarfragrances\.com\/product\/[^"]+)"/);
+    const titleM = chunk.match(/class="d-block text-reset">([^<]+)<\/a>/);
+    const priceM = chunk.match(/<span class="fw-700 text-primary">₹([^<]+)<\/span>/);
+    if (urlM && titleM && priceM) {
+      items.push({
+        url: urlM[1],
+        title: titleM[1].trim().replace(/&amp;/g, "&").replace(/&#039;/g, "'"),
+        price: parseFloat(priceM[1].replace(/,/g, ""))
+      });
+    }
+  }
+  return items;
+}
+
+const BRAND_NORMALIZATION = {
+  "lattafa": "Lattafa",
+  "maison alhambra": "Maison Alhambra",
+  "armaf": "Armaf",
+  "french avenue": "French Avenue",
+  "afnan": "Afnan",
+  "zimaya": "Zimaya",
+  "rasasi": "Rasasi",
+  "ajmal": "Ajmal",
+  "ahmed al maghribi": "Ahmed Al Maghribi",
+  "fragrance world": "Fragrance World",
+  "fa paris": "Fragrance World",
+  "paris corner": "Paris Corner",
+  "pendora scents": "Paris Corner",
+  "ministry of oud": "Paris Corner",
+  "emir": "Paris Corner",
+  "khadlaj": "Khadlaj",
+  "arabiyat prestige": "Arabiyat Prestige",
+  "arabiyat": "Arabiyat Prestige",
+  "al haramain": "Al Haramain",
+  "orientica": "Al Haramain",
+  "swiss arabian": "Swiss Arabian",
+  "rayhaan": "Rayhaan",
+  "ibraheem al qurashi": "Ibrahim Al Qureshi",
+  "ibrahim al qureshi": "Ibrahim Al Qureshi",
+  "surrati": "Surrati",
+  "naseem": "Naseem",
+  "riiffs": "Riiffs",
+  "al rehab": "Al Rehab",
+  "laverne": "Laverne",
+  "assaf": "Assaf"
+};
+
+const EXCLUDED_KEYWORDS = [
+  "pack", "set", "twin pack", "attar", "candle", "diffuser", "deodorant",
+  "oil", "concentrated parfum oil", "combipack", "combo", "tester", "sample",
+  "ex nihilo", "nishane", "mancera", "montale", "jean paul gaultier", "jpg",
+  "dior", "chanel", "gucci", "versace", "dolce", "tom ford", "creed", "roja",
+  "kilian", "parfums de marly", "initio", "xerjoff", "sospiro", "amouage", "memo", "byredo", "le labo"
+];
+
+function cleanSlug(url) {
+  const match = url.match(/\/product\/([^\/?#]+)/);
+  if (!match) return "";
+  return match[1].toLowerCase().replace(/-\d+$/, "").replace(/-100ml|-50ml|-150ml|-200ml|-60ml|-80ml|-75ml|-105ml/g, "");
+}
+
+function normalize(str) {
+  return (str || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+const SLUG_ALIASES = {
+  "rasasi-hawas-men": "rasasi-hawas-for-him",
+  "rasasi-hawas-for-men": "rasasi-hawas-for-him",
+  "afnan-9-pm": "afnan-9pm",
+  "afnan-9-am": "afnan-9am",
+  "lattafa-khamrah-qahwa": "lattafa-khamrah-qahwa",
+  "lattafa-khamrah": "lattafa-khamrah",
+  "armaf-club-de-nuit-intense-man": "armaf-club-de-nuit-intense-man-edt",
+  "armaf-cdnim": "armaf-club-de-nuit-intense-man-edt"
+};
+
+async function scrapeAARMIddleEast() {
+  console.log("=== Crawling AAR Fragrances: Middle East Collection (43 Pages) ===");
+  const allScraped = [];
+
+  for (let i = 1; i <= 43; i += 5) {
+    const batch = [];
+    for (let j = i; j < i + 5 && j <= 43; j++) {
+      batch.push(
+        fetchUrl(`https://www.aarfragrances.com/category/middle-east-collection?page=${j}`)
+          .then(html => parsePage(html))
+          .catch(err => {
+            console.warn(`  Failed page ${j}:`, err.message);
+            return [];
+          })
+      );
+    }
+    const results = await Promise.all(batch);
+    results.forEach(res => allScraped.push(...res));
+    process.stdout.write(` [Page ${Math.min(i + 4, 43)}/43] `);
+  }
+  console.log(`\nCrawled total items: ${allScraped.length}`);
+
+  // Load catalog
+  const fragsPath = path.join(__dirname, "../src/data/fragrances.json");
+  const frags = JSON.parse(fs.readFileSync(fragsPath, "utf-8"));
+
+  const matchedBottles = {};
+  let matchCount = 0;
+  let rejectedKeyword = 0;
+  let rejectedBrand = 0;
+
+  for (const item of allScraped) {
+    const titleLower = item.title.toLowerCase();
+
+    // 1. Exclude packs, samples, non-ME
+    if (EXCLUDED_KEYWORDS.some(k => titleLower.includes(k))) {
+      rejectedKeyword++;
+      continue;
+    }
+
+    // 2. Identify Brand
+    let detectedBrand = null;
+    for (const [key, canonical] of Object.entries(BRAND_NORMALIZATION)) {
+      if (titleLower.startsWith(key) || titleLower.includes(` ${key} `) || titleLower.includes(`(${key})`)) {
+        detectedBrand = canonical;
+        break;
+      }
+    }
+
+    if (!detectedBrand) {
+      rejectedBrand++;
+      continue;
+    }
+
+    const rawSlug = cleanSlug(item.url);
+    const resolvedSlug = SLUG_ALIASES[rawSlug] || rawSlug;
+
+    // 3. Match against catalog with high precision
+    let matched = null;
+
+    // Priority A: Direct ID or alias match
+    matched = frags.find(f => f.id.toLowerCase() === resolvedSlug);
+
+    // Priority B: Brand match + slug contains cleaned name
+    if (!matched) {
+      for (const f of frags) {
+        if (f.brand.toLowerCase() !== detectedBrand.toLowerCase()) continue;
+
+        const fNameClean = normalize(f.name);
+        const fBrandClean = normalize(f.brand);
+        const combined = `${fBrandClean}${fNameClean}`;
+
+        // Flanker guards
+        const hasQahwaA = titleLower.includes("qahwa");
+        const hasQahwaB = f.name.toLowerCase().includes("qahwa");
+        if (hasQahwaA !== hasQahwaB) continue;
+
+        const hasIceA = titleLower.includes("ice");
+        const hasIceB = f.name.toLowerCase().includes("ice");
+        if (hasIceA !== hasIceB) continue;
+
+        const hasBlackA = titleLower.includes("black");
+        const hasBlackB = f.name.toLowerCase().includes("black");
+        if (hasBlackA !== hasBlackB) continue;
+
+        const hasFireA = titleLower.includes("fire");
+        const hasFireB = f.name.toLowerCase().includes("fire");
+        if (hasFireA !== hasFireB) continue;
+
+        const hasHerA = titleLower.includes("for her") || titleLower.includes("pour femme");
+        const hasHerB = f.name.toLowerCase().includes("for her") || f.name.toLowerCase().includes("pour femme");
+        if (hasHerA !== hasHerB) continue;
+
+        const slugClean = normalize(resolvedSlug);
+        if (slugClean === combined || (slugClean.startsWith(fBrandClean) && slugClean.endsWith(fNameClean))) {
+          matched = f;
+          break;
+        }
+
+        // Exact name tokens containment
+        const nameTokens = f.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(t => t.length > 2);
+        if (nameTokens.length > 0 && nameTokens.every(t => titleLower.includes(t))) {
+          matched = f;
+          break;
+        }
+      }
+    }
+
+    if (matched && item.price > 0) {
+      matchedBottles[matched.id] = {
+        price: item.price,
+        url: item.url
+      };
+      matchCount++;
+    }
+  }
+
+  console.log(`\n=== Matching Summary ===`);
+  console.log(`Total Scraped: ${allScraped.length}`);
+  console.log(`Rejected by Negative Keywords: ${rejectedKeyword}`);
+  console.log(`Rejected by Non-ME Brand: ${rejectedBrand}`);
+  console.log(`Successfully Matched Middle Eastern Bottles: ${Object.keys(matchedBottles).length}`);
+
+  // Write clean bottles cache
+  const aarBottlesPath = path.join(__dirname, "../src/data/cache_aar_bottles.json");
+  fs.writeFileSync(aarBottlesPath, JSON.stringify(matchedBottles, null, 2), "utf-8");
+  console.log(`✓ Updated ${aarBottlesPath}`);
+
+  // Clear decants cache (user requested: drop decants)
+  const aarDecantsPath = path.join(__dirname, "../src/data/cache_aar_decants.json");
+  fs.writeFileSync(aarDecantsPath, JSON.stringify({}, null, 2), "utf-8");
+  console.log(`✓ Cleared ${aarDecantsPath} (0 decants)`);
+}
+
+scrapeAARMIddleEast().catch(err => {
+  console.error("Scraper failed:", err);
+  process.exit(1);
+});

@@ -1,883 +1,915 @@
 {
-  "jpg-le-male-elixir": {
-    "price": 8699,
-    "url": "https://www.aarfragrances.com/product/jean-paul-gaultier-jpg-le-male-elixir-1-3"
-  },
-  "dior-homme-intense": {
-    "price": 18249,
-    "url": "https://www.aarfragrances.com/product/dior-homme-intense-150ml"
-  },
-  "versace-man-eau-fraiche": {
-    "price": 7299,
-    "url": "https://www.aarfragrances.com/product/versace-man-eau-fraiche-200ml"
-  },
-  "chanel-bleu-de-chanel-edp": {
-    "price": 16699,
-    "url": "https://www.aarfragrances.com/product/bleu-de-chanel-edp-150ml"
-  },
-  "creed-aventus": {
-    "price": 33499,
-    "url": "https://www.aarfragrances.com/product/creed-aventus-3"
-  },
-  "dior-sauvage-elixir": {
-    "price": 12999,
-    "url": "https://www.aarfragrances.com/product/dior-sauvage-elixir-1-1"
-  },
-  "dior-sauvage-edp": {
-    "price": 9999,
-    "url": "https://www.aarfragrances.com/product/dior-sauvage-edt"
-  },
-  "versace-eros-flame": {
-    "price": 6499,
-    "url": "https://www.aarfragrances.com/product/versace-eros-flame-100ml"
-  },
-  "versace-pour-homme": {
-    "price": 5699,
-    "url": "https://www.aarfragrances.com/product/versace-pour-homme-100ml"
-  },
-  "versace-eros-edt": {
-    "price": 8499,
-    "url": "https://www.aarfragrances.com/product/versace-eros-edt-200ml"
-  },
-  "lattafa-khamrah": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-1"
-  },
-  "lattafa-khamrah-qahwa": {
+  "apex-rasasi-hawasog": {
     "price": 3449,
-    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-qahwa"
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-pink"
   },
-  "lattafa-asad": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/lattafa-asad-1"
+  "st-9189": {
+    "price": 7499,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-diamond-aqua"
   },
-  "lattafa-asad-zanzibar": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/lattafa-asad-zanzibar"
+  "maison-alhambra-jean-lowe-fantasme": {
+    "price": 2989,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-fantasme"
   },
-  "lattafa-yara-candy": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/lattafa-yara-candy"
-  },
-  "lattafa-fakhar-gold": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-extrait-gold"
-  },
-  "lattafa-liam-grey": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/lattafa-liam-grey"
-  },
-  "lattafa-vintage-radio": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-vintage-radio"
-  },
-  "lattafa-nebras": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/lattafa-nebras-3"
-  },
-  "lattafa-al-nashama-caprice": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/lattafa-al-nashama-caprice"
-  },
-  "lattafa-eternal-oud": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-eternal-oud"
-  },
-  "lattafa-ameer-al-oudh-intense": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/lattafa-ameer-al-oudh-intense-oud"
-  },
-  "lattafa-ramz-silver": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/lattafa-ramz-silver-2"
-  },
-  "lattafa-qaed-al-fursan": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/lattafa-qaed-al-fursan-1"
-  },
-  "lattafa-ana-abiyedh-rouge": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-rouge"
-  },
-  "afnan-9pm": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/afnan-9pm"
-  },
-  "afnan-9pm-rebel": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/afnan-9-pm-rebel"
-  },
-  "afnan-9am-dive": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/afnan-9-am-dive"
-  },
-  "afnan-supremacy-in-oud": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-in-oud"
-  },
-  "afnan-turathi-blue": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/afnan-turathi-blue"
-  },
-  "afnan-turathi-brown": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/afnan-turathi-brown"
-  },
-  "afnan-rare-carbon": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/afnan-rare-carbon"
-  },
-  "armaf-club-de-nuit-milestone": {
-    "price": 4239,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-milestone-1"
-  },
-  "armaf-club-de-nuit-sillage": {
-    "price": 4549,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-sillage-1"
-  },
-  "armaf-club-de-nuit-untold": {
-    "price": 5349,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-untold-1"
-  },
-  "armaf-club-de-nuit-urban-elixir": {
-    "price": 3429,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-urban-man-elixir-3-3"
-  },
-  "armaf-odyssey-homme": {
-    "price": 2295,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-homme-white-3"
-  },
-  "armaf-odyssey-mandarin-sky": {
-    "price": 2160,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-mandarin-sky-3"
-  },
-  "armaf-tres-nuit": {
-    "price": 2050,
-    "url": "https://www.aarfragrances.com/product/armaf-tres-nuit-100ml"
-  },
-  "titan-skinn-raw": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-raw-4"
-  },
-  "titan-skinn-steele": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-steele-3-3"
-  },
-  "titan-skinn-amalfi-bleu": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-amalfi-bleu"
-  },
-  "titan-skinn-verge": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-verge-3-3"
-  },
-  "titan-skinn-forest-rouge": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-escapade-forest-rouge"
-  },
-  "titan-skinn-celeste": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-celeste-4"
-  },
-  "titan-skinn-nude": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-nude-3-3"
-  },
-  "titan-skinn-sheer": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-sheer-3"
-  },
-  "rasasi-hawas-for-men": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-men"
-  },
-  "rasasi-hawas-ice": {
-    "price": 3289,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-3"
-  },
-  "rasasi-hawas-black": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-black"
-  },
-  "rasasi-shuhrah-pour-homme": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-shuhrah-pour-homme-avenoir"
-  },
-  "rasasi-daarej-pour-homme": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-daarej-pour-homme-verve"
-  },
-  "rasasi-al-wisam-day": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/rasasi-al-wisam-day"
-  },
-  "mykonos-aphrodite": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/mykonos-aphrodite"
-  },
-  "rayhaan-pacific": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/rayhaan-pacific-aura-pour-homme"
-  },
-  "rayhaan-ocean-rush": {
-    "price": 1839,
-    "url": "https://www.aarfragrances.com/product/rayhaan-ocean-rush"
-  },
-  "rayhaan-imperia": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/rayhaan-imperia"
-  },
-  "rayhaan-elixir": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/rayhaan-elixir"
-  },
-  "rayhaan-lion": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/rayhaan-lion"
-  },
-  "lattafa-raghba": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/lattafa-raghba-100ml"
-  },
-  "lattafa-velvet-oud": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/lattafa-velvet-oud"
-  },
-  "lattafa-hayaati": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-1"
-  },
-  "lattafa-ejaazi": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/lattafa-ejaazi-1"
-  },
-  "maison-alhambra-woody-oud": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-woody-oud"
-  },
-  "maison-alhambra-tobacco-touch": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-tobacco-touch"
-  },
-  "afnan-supremacy-in-heaven": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-in-heaven-pour-homme"
-  },
-  "afnan-historic-doria": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/afnan-historic-doria"
-  },
-  "armaf-hunter-intense": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/armaf-hunter-intense"
-  },
-  "titan-skinn-country-road": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-escapade-country-road"
-  },
-  "rasasi-egra": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/rasasi-egra"
-  },
-  "rasasi-sotoor-taa": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-taa"
-  },
-  "rayhaan-terra": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/rayhaan-terra"
-  },
-  "armaf-odyssey-homme-white-edition": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-homme-white-edition"
-  },
-  "lattafa-oud-najdia": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-oud-najdia"
-  },
-  "lattafa-mohra": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/lattafa-mohra-3"
-  },
-  "lattafa-rouat-al-oud": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/lattafa-rouat-al-oud"
-  },
-  "lattafa-ajwaa": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/nusuk-ajwaa"
-  },
-  "afnan-tobacco-rush": {
-    "price": 5249,
-    "url": "https://www.aarfragrances.com/product/afnan-tobacco-rush"
-  },
-  "lattafa-raghba-wood-intense": {
-    "price": 1549,
-    "url": "https://www.aarfragrances.com/product/lattafa-raghba-wood-intense"
-  },
-  "armaf-signature-true": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/armaf-signature-true"
-  },
-  "rasasi-daarej-pour-femme": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-daarej-pour-femme-aurelia"
-  },
-  "armaf-club-de-nuit-intense-woman": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-woman"
-  },
-  "armaf-hunter-for-men": {
-    "price": 2116,
-    "url": "https://www.aarfragrances.com/product/armaf-hunter-100ml"
-  },
-  "lattafa-ajwad-pink-to-pink": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/lattafa-ajwad-pink-to-pink"
-  },
-  "rasasi-taa": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-taa"
-  },
-  "lattafa-shaheen-silver": {
-    "price": 2689,
-    "url": "https://www.aarfragrances.com/product/lattafa-shaheen-silver"
-  },
-  "rasasi-waaw": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-waaw"
-  },
-  "lattafa-opulent-oud": {
-    "price": 1549,
-    "url": "https://www.aarfragrances.com/product/lattafa-opulent-oud"
-  },
-  "armaf-passion": {
-    "price": 5499,
-    "url": "https://www.aarfragrances.com/product/jimmy-choo-rose-passion"
-  },
-  "rasasi-qasamat-rasana": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-rasana"
-  },
-  "armaf-tag-uomo-nero": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/armaf-tag-him-uomo-nero"
-  },
-  "lattafa-ajwad": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/lattafa-ajwad-1"
-  },
-  "armaf-radical-blue": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/armaf-radical-blue"
-  },
-  "lattafa-al-qiam-gold": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-al-qiam-gold"
-  },
-  "lattafa-lail-maleki": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-lail-maleki-3"
-  },
-  "rasasi-shuhrah-pour-femme": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-shuhrah-pour-femme-opulence"
-  },
-  "lattafa-khashabi": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/lattafa-khashabi"
-  },
-  "lattafa-emeer": {
-    "price": 4249,
-    "url": "https://www.aarfragrances.com/product/lattafa-emeer"
-  },
-  "armaf-shades-blue": {
-    "price": 1793,
-    "url": "https://www.aarfragrances.com/product/armaf-shades-blue"
-  },
-  "armaf-derby-club-house-blanche": {
-    "price": 1823,
-    "url": "https://www.aarfragrances.com/product/armaf-derby-club-house-blanche"
-  },
-  "armaf-vanity-femme-essence": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/armaf-vanity-femme-essence"
-  },
-  "lattafa-mayar-natural-intense": {
-    "price": 2419,
-    "url": "https://www.aarfragrances.com/product/lattafa-mayar-natural-intense"
-  },
-  "rasasi-qasamat-morhaf": {
-    "price": 3599,
-    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-morhaf"
-  },
-  "armaf-odyssey-aoud": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-aoud"
-  },
-  "armaf-hunter-killer-for-men": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/armaf-hunter-killer"
-  },
-  "rasasi-oud-al-mubakhar": {
-    "price": 1599,
-    "url": "https://www.aarfragrances.com/product/rasasi-oud-al-mubakhar"
-  },
-  "lattafa-blue-sapphire": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-blue-sapphire"
-  },
-  "lattafa-oud-mood-elixir": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/lattafa-oud-mood-elixir"
-  },
-  "armaf-odyssey-aqua": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-aqua-edition"
-  },
-  "lattafa-fakhar-lattafa-women": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-men"
-  },
-  "lattafa-confidential-private-gold": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-confidential-private-gold"
-  },
-  "armaf-opus-men": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/armaf-opus-homme"
-  },
-  "lattafa-oud-mood": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/lattafa-oud-mood-100ml"
-  },
-  "afnan-pure-musk": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/lattafa-pure-musk-khalis-musk"
-  },
-  "armaf-excellus-men": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/armaf-excellus"
-  },
-  "lattafa-atlas": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/lattafa-atlas"
-  },
-  "lattafa-suqraat": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-suqraat"
-  },
-  "lattafa-aura": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/armaf-aura-1"
-  },
-  "armaf-opus-women": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/armaf-opus-homme"
-  },
-  "afnan-modest-deux": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/afnan-modest-deux"
-  },
-  "armaf-tag-uomo-rosso": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/armaf-tag-him-uomo-rosso"
-  },
-  "afnan-patchouli-on-fire": {
-    "price": 5399,
-    "url": "https://www.aarfragrances.com/product/afnan-patchouli-on-fire"
-  },
-  "lattafa-ansaam-silver": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-ansaam-silver"
-  },
-  "armaf-red-ruby": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/armaf-niche-red-ruby"
-  },
-  "afnan-mukhallat-abiyad": {
-    "price": 1199,
-    "url": "https://www.aarfragrances.com/product/afnan-mukhallat-abiyad"
-  },
-  "afnan-dehn-al-oudh-abiyad": {
-    "price": 1249,
-    "url": "https://www.aarfragrances.com/product/afnan-dehn-al-oudh-abiyad"
-  },
-  "afnan-paris-oud": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/paris-corner-killer-oud-1"
-  },
-  "rasasi-dhanal-oudh-nashwah": {
-    "price": 2479,
-    "url": "https://www.aarfragrances.com/product/rasasi-dhanal-oudh-nashwah"
-  },
-  "lattafa-mohra-silky-rose": {
-    "price": 1919,
-    "url": "https://www.aarfragrances.com/product/lattafa-mohra-silky-rose"
-  },
-  "lattafa-tharwah-gold": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-tharwah-gold"
-  },
-  "lattafa-jasoor": {
-    "price": 2599,
-    "url": "https://www.aarfragrances.com/product/lattafa-jasoor"
-  },
-  "lattafa-yara": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/lattafa-yara-2"
-  },
-  "armaf-excellus-women": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/armaf-excellus"
-  },
-  "rasasi-oudh-al-abiyad": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/rasasi-oudh-al-abiyad"
-  },
-  "armaf-derby-club-house": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/armaf-derby-club-house-2"
-  },
-  "armaf-belle": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/armaf-belle-paris-belvico"
-  },
-  "lattafa-ajayeb-dubai-portrait": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/lattafa-ajayeb-dubai-portrait"
-  },
-  "armaf-hunter-for-women": {
-    "price": 2116,
-    "url": "https://www.aarfragrances.com/product/armaf-hunter-100ml"
-  },
-  "lattafa-mayar": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/lattafa-mayar-for-women"
-  },
-  "lattafa-nasheet": {
-    "price": 2049,
-    "url": "https://www.aarfragrances.com/product/lattafa-nasheet"
-  },
-  "lattafa-al-nashama": {
-    "price": 2349,
-    "url": "https://www.aarfragrances.com/product/lattafa-al-nashama-3"
-  },
-  "rasasi-faqat-lil-rijal": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/rasasi-faqat-lil-rijal"
-  },
-  "armaf-edition-one-women": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/bogart-one-man-show-ruby-edition"
-  },
-  "rasasi-mukhallat-oudh-al-mubakhar": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/rasasi-mukhallat-oudh-al-mubakhar"
-  },
-  "rasasi-attar-al-mohabba-for-her": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/rasasi-attar-al-mohabba"
-  },
-  "rasasi-egra-for-women": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/rasasi-egra"
-  },
-  "armaf-voyage-bleu": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/armaf-voyage-bleu"
-  },
-  "lattafa-24-carat-pure-gold": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/lattafa-24-carat-pure-gold"
-  },
-  "armaf-shades-wood": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/armaf-shades-wood"
-  },
-  "afnan-violet-bouquet": {
-    "price": 3549,
-    "url": "https://www.aarfragrances.com/product/afnan-violet-bouquet"
-  },
-  "rasasi-qasamat-bareeq": {
-    "price": 3599,
-    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-bareeq"
-  },
-  "lattafa-najdia": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/lattafa-najdia-for-men"
-  },
-  "armaf-signature-night": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/armaf-signature-night"
-  },
-  "armaf-tag-her": {
-    "price": 1995,
-    "url": "https://www.aarfragrances.com/product/armaf-tag-her-2"
-  },
-  "armaf-shades": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/armaf-shades-2"
-  },
-  "lattafa-blue-oud": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-oud"
-  },
-  "armaf-legesi": {
-    "price": 2000,
-    "url": "https://www.aarfragrances.com/product/armaf-legesi-homme"
-  },
-  "lattafa-haya": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/lattafa-haya-4"
-  },
-  "lattafa-musamam": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/lattafa-musamam-3"
-  },
-  "lattafa-al-dur-al-maknoon-silver": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-al-dur-al-maknoon-silver"
-  },
-  "armaf-radical-brown": {
-    "price": 1699,
-    "url": "https://www.aarfragrances.com/product/armaf-radical-brown"
-  },
-  "rasasi-hawas-for-her": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-men"
-  },
-  "armaf-magnificent-pour-femme": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/armaf-magnificent-pour-femme"
-  },
-  "rasasi-hatem": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/rasasi-hatem"
-  },
-  "armaf-white-diamond": {
-    "price": 2140,
-    "url": "https://www.aarfragrances.com/product/armaf-niche-white-diamond"
-  },
-  "lattafa-velvet-rose": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/lattafa-velvet-rose"
-  },
-  "armaf-q-intense": {
+  "apex-afnan-stardust": {
     "price": 4299,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-man-uae-edt"
+    "url": "https://www.aarfragrances.com/product/afnan-stardust"
   },
-  "lattafa-musk-mood": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/lattafa-musk-mood"
+  "apex-rayhaan-amazonica": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/rayhaan-amazonica"
   },
-  "lattafa-fakhar-lattafa-men": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-men"
-  },
-  "lattafa-ramz-gold": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/lattafa-ramz-gold"
-  },
-  "lattafa-musamam-white-intense": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/lattafa-musamam-white-intense"
-  },
-  "afnan-historic-olmeda": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/afnan-historic-olmeda"
-  },
-  "armaf-club-de-nuit-woman": {
-    "price": 6749,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-woman-7"
-  },
-  "afnan-supremacy-incense": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-incense"
-  },
-  "lattafa-tharwah-silver": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-tharwah-silver"
-  },
-  "lattafa-adeeb": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/lattafa-adeeb"
-  },
-  "lattafa-opulent-musk": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-opulent-musk"
-  },
-  "rasasi-khaltat-al-khasa-ma-dhan-al-oudh": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/rasasi-khaltat-al-khasa-ma-dhan-al-oudh"
-  },
-  "lattafa-fakhar-lattafa-extrait": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-men"
-  },
-  "armaf-blue-homme": {
-    "price": 2116,
-    "url": "https://www.aarfragrances.com/product/armaf-blue-homme"
-  },
-  "rasasi-dhan-al-oudh-al-nokhba": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/rasasi-dhan-al-oudh-al-nokhba"
-  },
-  "afnan-tribute-blue": {
-    "price": 4399,
-    "url": "https://www.aarfragrances.com/product/afnan-tribute-blue"
-  },
-  "armaf-q-donna": {
-    "price": 2190,
-    "url": "https://www.aarfragrances.com/product/armaf-tag-her-donna-colorata"
-  },
-  "armaf-club-de-nuit-man": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-man"
-  },
-  "lattafa-wajood": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-wajood"
-  },
-  "lattafa-hayaati-gold-elixir": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-gold-elixir"
-  },
-  "lattafa-hayaati-al-maleky": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-al-maleky"
-  },
-  "armaf-sapphire": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-blue-sapphire"
-  },
-  "lattafa-maahir": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/lattafa-maahir-1"
-  },
-  "rasasi-afshan": {
-    "price": 1599,
-    "url": "https://www.aarfragrances.com/product/rasasi-afshan"
-  },
-  "lattafa-ana-abiyedh-leather": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-leather"
-  },
-  "lattafa-najdia-in-gold": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/lattafa-najdia-in-gold"
-  },
-  "afnan-9am": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/afnan-9am"
-  },
-  "afnan-supremacy-noir": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-noir"
-  },
-  "lattafa-al-qiam-silver": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-al-qiam-silver"
+  "apex-lattafa-beyondprecious": {
+    "price": 4149,
+    "url": "https://www.aarfragrances.com/product/lattafa-beyond-precious"
   },
   "rasasi-hawas-for-him": {
     "price": 2949,
     "url": "https://www.aarfragrances.com/product/rasasi-hawas-men"
   },
-  "armaf-el-cielo": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/armaf-el-cielo"
+  "lattafa-atlas": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/lattafa-atlas"
   },
-  "afnan-rare-tiffany": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/afnan-rare-tiffany"
-  },
-  "armaf-victory": {
-    "price": 7099,
-    "url": "https://www.aarfragrances.com/product/paco-rabanne-invictus-victory"
-  },
-  "lattafa-shaheen-gold": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-shaheen-gold"
-  },
-  "armaf-tag-donna-colorata": {
-    "price": 2190,
-    "url": "https://www.aarfragrances.com/product/armaf-tag-her-donna-colorata"
-  },
-  "lattafa-qaed-al-fursan-unlimited": {
-    "price": 2229,
-    "url": "https://www.aarfragrances.com/product/lattafa-qaed-al-fursan-unlimited"
-  },
-  "rayhaan-pacific-aura": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/rayhaan-pacific-aura-pour-homme"
-  },
-  "rayhaan-pacific-aloha": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/rayhaan-pacific-aloha"
-  },
-  "rayhaan-aquatica": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/rayhaan-aquatica"
-  },
-  "rayhaan-wolf": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/rayhaan-wolf-for-men"
+  "surrati-kiswah": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/surrati-kiswah"
   },
   "rayhaan-vantage": {
     "price": 2849,
     "url": "https://www.aarfragrances.com/product/rayhaan-vantage"
   },
-  "rayhaan-corium": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/rayhaan-corium"
+  "st-9133": {
+    "price": 3666,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-kohl-opulence"
   },
-  "rayhaan-obsidian": {
+  "st-9150": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-kohl-luminous"
+  },
+  "apex-khadlaj-muse": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/khadlaj-muse"
+  },
+  "st-9170": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-genuine-man-giovany-reserve"
+  },
+  "apex-frenchavenue-ravineginger": {
+    "price": 4099,
+    "url": "https://www.aarfragrances.com/product/french-avenue-ravine-ginger"
+  },
+  "apex-frenchavenue-jasmere": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/french-avenue-jasmere"
+  },
+  "st-9287": {
+    "price": 4849,
+    "url": "https://www.aarfragrances.com/product/riiffs-momento"
+  },
+  "rasasi-nafaeis-al-shaghaf-pour-homme": {
     "price": 2899,
-    "url": "https://www.aarfragrances.com/product/rayhaan-obsidian"
+    "url": "https://www.aarfragrances.com/product/rasasi-shaghaf-1"
   },
-  "rayhaan-azul": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/rayhaan-azul"
+  "rasasi-hawas-ice-freeze": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-freeze"
   },
-  "rayhaan-dark-leather": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/victor-rolf-spicebomb-dark-leather-edp-miniature"
+  "st-9037": {
+    "price": 3849,
+    "url": "https://www.aarfragrances.com/product/khadlaj-karus-gold-absolu"
   },
-  "rayhaan-cordova": {
+  "apex-arabiyatprestige-mahdaldhahab": {
+    "price": 3616,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-mahd-al-dhahab"
+  },
+  "st-9186": {
+    "price": 5449,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-cuban-tobacco"
+  },
+  "apex-lattafa-givemegourmandchocooverdose": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-choco-overdose"
+  },
+  "lattafa-ajwad-pink-to-pink": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/lattafa-ajwad-pink-to-pink"
+  },
+  "st-9195": {
     "price": 2199,
-    "url": "https://www.aarfragrances.com/product/rayhaan-cordova"
+    "url": "https://www.aarfragrances.com/product/khadlaj-island-3"
   },
-  "rayhaan-tonquin-giza": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/rayhaan-tonquin-giza"
+  "st-9038": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-sky"
+  },
+  "apex-ahmedalmaghribi-opalinewave": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-opaline-wave"
+  },
+  "st-9058": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marwa"
+  },
+  "riiffs-freeze-in-flames": {
+    "price": 4399,
+    "url": "https://www.aarfragrances.com/product/riiffs-freeze-in-flames"
+  },
+  "st-9043": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ghaf"
+  },
+  "st-9039": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/khadlaj-panache-angel-dust"
+  },
+  "french-avenue-marmara": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/french-avenue-marmara"
+  },
+  "apex-riiffs-aswaar": {
+    "price": 4499,
+    "url": "https://www.aarfragrances.com/product/riiffs-aswaar"
+  },
+  "st-9218": {
+    "price": 4069,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-eternal-vanille"
+  },
+  "apex-rayhaan-cedrusblanc": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/rayhaan-cedrus-blanc"
+  },
+  "apex-rayhaan-navasol": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/rayhaan-nava-sol"
+  },
+  "apex-fragranceworld-venti": {
+    "price": 2099,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-venti-absolu"
+  },
+  "apex-rasasi-fayiz": {
+    "price": 4949,
+    "url": "https://www.aarfragrances.com/product/rasasi-fayiz"
+  },
+  "apex-rasasi-fawar": {
+    "price": 4949,
+    "url": "https://www.aarfragrances.com/product/rasasi-fawar"
+  },
+  "rasasi-daarej-pour-femme": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/rasasi-daarej-pour-femme-aurelia"
+  },
+  "rasasi-daarej-pour-homme": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/rasasi-daarej-for-men"
+  },
+  "apex-rasasi-hawasnautilus": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-nautilus"
+  },
+  "apex-lattafa-opulentdubai": {
+    "price": 2199,
+    "url": "https://www.aarfragrances.com/product/lattafa-opulent-dubai"
+  },
+  "armaf-odyssey-mandarin-sky-elixir": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-mandarin-sky-elixir"
+  },
+  "apex-lattafa-fahad": {
+    "price": 3049,
+    "url": "https://www.aarfragrances.com/product/lattafa-fahad"
   },
   "armaf-odyssey-limoni": {
     "price": 2499,
     "url": "https://www.aarfragrances.com/product/armaf-odyssey-limoni"
   },
-  "lattafa-eclaire": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/lattafa-eclaire-4"
+  "armaf-odyssey-aqua": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-aqua-edition"
   },
-  "lattafa-teriaq": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/lattafa-teriaq-1"
+  "apex-naseem-eclipse": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/naseem-eclipse"
+  },
+  "rasasi-shuhrah-pour-femme": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/rasasi-shuhrah-femme"
+  },
+  "armaf-club-de-nuit-intense-overdose": {
+    "price": 4399,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-overdose"
+  },
+  "rasasi-shuhrah-pour-homme-avenoir": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/rasasi-shuhrah-pour-homme-avenoir"
+  },
+  "rasasi-hawas-for-her": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-for-her"
+  },
+  "st-9246": {
+    "price": 3849,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-reina"
+  },
+  "apex-naseem-aqua": {
+    "price": 1199,
+    "url": "https://www.aarfragrances.com/product/naseem-nadeen-aqua-parfum"
+  },
+  "st-9282": {
+    "price": 3489,
+    "url": "https://www.aarfragrances.com/product/riiffs-seasons-rise"
+  },
+  "st-9278": {
+    "price": 3489,
+    "url": "https://www.aarfragrances.com/product/riiffs-seasons-drift"
+  },
+  "apex-arabiyatprestige-noir": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ashaa-oud-noir"
+  },
+  "st-9151": {
+    "price": 3949,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-bois-blanc"
+  },
+  "st-9283": {
+    "price": 3299,
+    "url": "https://www.aarfragrances.com/product/riiffs-zenith"
+  },
+  "st-9154": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ramad-earthy"
+  },
+  "st-9152": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-swar-damour"
+  },
+  "st-9036": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-aristo"
+  },
+  "apex-arabiyatprestige-revoltuprising": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-revolt-uprising"
+  },
+  "st-9199": {
+    "price": 4799,
+    "url": "https://www.aarfragrances.com/product/khadlaj-musk-pure-musk-blend"
+  },
+  "st-9197": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/khadlaj-ria-3"
+  },
+  "st-9198": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/khadlaj-icon"
+  },
+  "apex-naseem-sweettreatsinbed": {
+    "price": 1489,
+    "url": "https://www.aarfragrances.com/product/naseem-sweet-treats-in-bed"
+  },
+  "apex-naseem-theicebetweenus": {
+    "price": 1489,
+    "url": "https://www.aarfragrances.com/product/naseem-the-ice-between-us"
+  },
+  "apex-naseem-wrappedincashmere": {
+    "price": 1489,
+    "url": "https://www.aarfragrances.com/product/naseem-wrapped-in-cashmere-for-women"
+  },
+  "rayhaan-azul": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/rayhaan-azul"
+  },
+  "rayhaan-pacific-aloha": {
+    "price": 2299,
+    "url": "https://www.aarfragrances.com/product/rayhaan-pacific-aloha"
+  },
+  "apex-frenchavenue-zenithdeep": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-deep"
+  },
+  "apex-frenchavenue-aromatixnaughtydates": {
+    "price": 4649,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-naughty-dates"
+  },
+  "apex-frenchavenue-zenithsantal": {
+    "price": 3849,
+    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-santal"
+  },
+  "french-avenue-liquid-brun": {
+    "price": 4499,
+    "url": "https://www.aarfragrances.com/product/french-avenue-liquid-brun-limited-edition"
+  },
+  "apex-swissarabian-patchouli01": {
+    "price": 4849,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-patchouli-01"
+  },
+  "apex-ajmal-cyanoud": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/ajmal-cyan-oud"
+  },
+  "st-9173": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-midori"
+  },
+  "rayhaan-pacific": {
+    "price": 1649,
+    "url": "https://www.aarfragrances.com/product/rayhaan-pacific-for-him"
+  },
+  "rayhaan-tonquin-giza": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/rayhaan-tonquin-giza"
+  },
+  "rayhaan-wolf": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/rayhaan-wolf-for-men"
+  },
+  "lattafa-khamrah-waha": {
+    "price": 3649,
+    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-waha"
+  },
+  "st-9188": {
+    "price": 6649,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-dominican-tobacco-extrait"
+  },
+  "st-9190": {
+    "price": 6999,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-emerald-soul-diamond"
+  },
+  "st-9193": {
+    "price": 6149,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-balas-rose"
+  },
+  "st-9126": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/armaf-old-money"
+  },
+  "st-9127": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/armaf-spartacus"
+  },
+  "rayhaan-nocturno-elixir": {
+    "price": 2398,
+    "url": "https://www.aarfragrances.com/product/rayhaan-nocturno-elixir"
+  },
+  "apex-naseem-naseemwhiteeclat": {
+    "price": 1299,
+    "url": "https://www.aarfragrances.com/product/naseem-white-eclat-parfum"
+  },
+  "apex-lattafa-givemegourmandvanillafreak": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-vanilla-freak"
+  },
+  "apex-frenchavenue-zenithvanilla": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-vanilla"
+  },
+  "french-avenue-obsidian": {
+    "price": 4799,
+    "url": "https://www.aarfragrances.com/product/french-avenue-obsidian"
+  },
+  "french-avenue-zenith-tobacco": {
+    "price": 3699,
+    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-tobacco"
+  },
+  "french-avenue-zenith-blue": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-blue"
+  },
+  "french-avenue-firestorm": {
+    "price": 4149,
+    "url": "https://www.aarfragrances.com/product/french-avenue-firestorm"
+  },
+  "french-avenue-nectare-extradose": {
+    "price": 4149,
+    "url": "https://www.aarfragrances.com/product/french-avenue-nectare-extradose"
+  },
+  "french-avenue-thunder": {
+    "price": 3649,
+    "url": "https://www.aarfragrances.com/product/french-avenue-thunder"
+  },
+  "apex-frenchavenue-safaribreeze": {
+    "price": 4299,
+    "url": "https://www.aarfragrances.com/product/french-avenue-safari-breeze"
   },
   "lattafa-angham": {
     "price": 3129,
     "url": "https://www.aarfragrances.com/product/lattafa-angham-3"
   },
-  "lattafa-her-confession": {
-    "price": 3549,
-    "url": "https://www.aarfragrances.com/product/lattafa-his-confession"
+  "rasasi-khaltat-al-khasa-ma-dhan-al-oudh": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/rasasi-khaltat-al-khasa-ma-dhan-al-oudh"
   },
-  "zimaya-sharaf-blend": {
+  "st-9134": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/arabiyat-la-di-da-for-him"
+  },
+  "st-9136": {
+    "price": 3049,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-la-di-da-for-her"
+  },
+  "st-9153": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-mouda"
+  },
+  "st-9286": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/riiffs-fareed"
+  },
+  "apex-frenchavenue-amberempire": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/french-avenue-amber-empire"
+  },
+  "french-avenue-aromatix-frostbite": {
+    "price": 4449,
+    "url": "https://www.aarfragrances.com/product/french-avenue-frostbite"
+  },
+  "st-9124": {
+    "price": 1469,
+    "url": "https://www.aarfragrances.com/product/armaf-soul"
+  },
+  "st-9060": {
+    "price": 3779,
+    "url": "https://www.aarfragrances.com/product/afnan-9-pm-night-out"
+  },
+  "st-9142": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-fahad-gaze"
+  },
+  "st-9094": {
+    "price": 1199,
+    "url": "https://www.aarfragrances.com/product/ajmal-wave"
+  },
+  "apex-riiffs-costadeamalfi": {
+    "price": 3059,
+    "url": "https://www.aarfragrances.com/product/riiffs-costa-de-amalfi"
+  },
+  "st-9147": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/arabiyat-qissat-al-najah-kiamichi"
+  },
+  "st-9284": {
+    "price": 3899,
+    "url": "https://www.aarfragrances.com/product/riiffs-tahira"
+  },
+  "apex-swissarabian-essenceofcasablanca": {
+    "price": 4999,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-essence-of-casablanca"
+  },
+  "st-9265": {
+    "price": 4849,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-opulence-of-dubai-extrait-de-parfum"
+  },
+  "st-9042": {
+    "price": 5849,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-incense-01"
+  },
+  "st-9274": {
+    "price": 4449,
+    "url": "https://www.aarfragrances.com/product/riiffs-freeze-3"
+  },
+  "apex-lattafa-givemegourmandmallowmadness": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-mallow-madness"
+  },
+  "apex-lattafa-givemegourmandcookiecrave": {
+    "price": 3689,
+    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-cookie-crave"
+  },
+  "apex-lattafa-givemegourmandwhippedpleasure": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-whipped-pleasure"
+  },
+  "french-avenue-atlantis-extrait": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/french-avenue-atlantis"
+  },
+  "armaf-club-de-nuit-intense-man": {
+    "price": 4299,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-man-uae-edt"
+  },
+  "rayhaan-terra": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/rayhaan-terra"
+  },
+  "lattafa-fakhar-platin": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-platin"
+  },
+  "st-9192": {
+    "price": 7799,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-black-diamond-incense"
+  },
+  "st-9064": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/afnan-lynked-freedom"
+  },
+  "st-9155": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ramad-3"
+  },
+  "st-9289": {
+    "price": 4799,
+    "url": "https://www.aarfragrances.com/product/riiffs-r-surge-spectra"
+  },
+  "st-9001": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/lattafa-musamam-black-intense"
+  },
+  "st-9140": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-brave"
+  },
+  "st-9139": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-hero"
+  },
+  "st-9161": {
+    "price": 1349,
+    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-5"
+  },
+  "apex-khadlaj-titan": {
     "price": 2449,
-    "url": "https://www.aarfragrances.com/product/zimaya-sharaf-blend"
+    "url": "https://www.aarfragrances.com/product/khadlaj-titan"
   },
-  "titan-skinn-tales-rio": {
-    "price": 749,
-    "url": "https://www.aarfragrances.com/product/titan-skinn-tales-rio"
+  "st-9245": {
+    "price": 3699,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-diva"
+  },
+  "st-9201": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-snow"
+  },
+  "apex-rayhaan-kiss": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/rayhaan-kiss"
+  },
+  "st-9291": {
+    "price": 2239,
+    "url": "https://www.aarfragrances.com/product/zimaya-mazaaj-infused"
+  },
+  "armaf-club-de-nuit-woman": {
+    "price": 3649,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-women-3"
+  },
+  "armaf-club-de-nuit-sillage": {
+    "price": 4549,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-sillage-1"
+  },
+  "apex-armaf-dunescape": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/armaf-dunescape-dubai"
+  },
+  "armaf-club-de-nuit-urban-man-elixir": {
+    "price": 3429,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-urban-man-elixir-3-3"
+  },
+  "apex-ajmal-aurumaurumelixir": {
+    "price": 4599,
+    "url": "https://www.aarfragrances.com/product/ajmal-aurum-elixir"
+  },
+  "apex-frenchavenue-scarlet": {
+    "price": 3649,
+    "url": "https://www.aarfragrances.com/product/french-avenue-veneno-scarlet"
+  },
+  "apex-frenchavenue-bianco": {
+    "price": 3949,
+    "url": "https://www.aarfragrances.com/product/french-avenue-veneno-bianco"
+  },
+  "lattafa-yara-elixir": {
+    "price": 2529,
+    "url": "https://www.aarfragrances.com/product/lattafa-yara-elixir"
+  },
+  "st-9267": {
+    "price": 4849,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-enigma-of-taif"
+  },
+  "rasasi-oudh-al-abiyad": {
+    "price": 1449,
+    "url": "https://www.aarfragrances.com/product/rasasi-oudh-al-abiyad"
+  },
+  "french-avenue-royal-blend": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/french-avenue-royal-blend-vintage"
+  },
+  "french-avenue-aromatix-magnetiq": {
+    "price": 4399,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-magnetiq"
+  },
+  "apex-frenchavenue-aromatixforbiddenfruit": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-forbidden-fruit"
+  },
+  "apex-frenchavenue-aromatixteasme": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-teas-me"
+  },
+  "french-avenue-aromatix-sun-kissed": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-sun-kissed"
+  },
+  "st-9249": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-viper"
+  },
+  "st-9250": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-atlantis"
+  },
+  "rayhaan-obsidian": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/rayhaan-obsidian"
+  },
+  "st-9187": {
+    "price": 7499,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-tobacco-collection-arabian-tobacco"
+  },
+  "st-9130": {
+    "price": 2549,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-toffee-coffee"
+  },
+  "armaf-belle": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/armaf-belle-paris-belvico"
+  },
+  "st-9255": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/rayhaan-jungle-vibe"
+  },
+  "armaf-odyssey-aoud": {
+    "price": 2549,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-aoud"
+  },
+  "rayhaan-italia": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/rayhaan-italia"
+  },
+  "khadlaj-zayaan-gold": {
+    "price": 2449,
+    "url": "https://www.aarfragrances.com/product/khadlaj-zayaan-gold"
+  },
+  "rayhaan-aquatica": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/rayhaan-aquatica"
+  },
+  "st-9258": {
+    "price": 2649,
+    "url": "https://www.aarfragrances.com/product/rayhaan-tropical-vibe"
+  },
+  "french-avenue-vulcan-sable": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/french-avenue-vulcan-sable"
+  },
+  "st-9264": {
+    "price": 4799,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-soul-of-bali"
+  },
+  "swiss-arabian-shaghaf-oud": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-shaghaf-oud-2"
+  },
+  "st-9194": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/khadlaj-island-dreams"
+  },
+  "st-9203": {
+    "price": 2599,
+    "url": "https://www.aarfragrances.com/product/khadlaj-azure-velvet"
+  },
+  "apex-rayhaan-divine": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/rayhaan-divine"
+  },
+  "rayhaan-nocturno": {
+    "price": 2599,
+    "url": "https://www.aarfragrances.com/product/rayhaan-nocturno"
+  },
+  "st-9145": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-swar-seduire"
+  },
+  "arabiyat-prestige-raees": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-raees-3"
+  },
+  "lattafa-asad": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/lattafa-asad-1"
+  },
+  "lattafa-eclaire": {
+    "price": 2549,
+    "url": "https://www.aarfragrances.com/product/lattafa-eclaire-4"
+  },
+  "st-9059": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-kaaf-noir"
+  },
+  "rasasi-shuhrah-pour-homme": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/rasasi-shuhrah-for-men"
+  },
+  "apex-armaf-ombredor": {
+    "price": 4749,
+    "url": "https://www.aarfragrances.com/product/armaf-ombre-dor"
+  },
+  "st-9176": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-sedley"
+  },
+  "lattafa-nebras-elixir": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/lattafa-nebras-elixir"
+  },
+  "st-9213": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/lattafa-fire-on-ice"
+  },
+  "afnan-violet-bouquet": {
+    "price": 3549,
+    "url": "https://www.aarfragrances.com/product/afnan-violet-bouquet"
+  },
+  "apex-riiffs-priveblue": {
+    "price": 2789,
+    "url": "https://www.aarfragrances.com/product/riiffs-prive-blue"
+  },
+  "st-9285": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/riiffs-fleurie-emerald"
+  },
+  "st-9276": {
+    "price": 3329,
+    "url": "https://www.aarfragrances.com/product/riiffs-fleurie-violette"
+  },
+  "st-9200": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-shadow"
+  },
+  "st-9205": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/khadlaj-mocha-latte"
+  },
+  "st-9129": {
+    "price": 2539,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-revolution-ultra-edition"
+  },
+  "apex-armaf-odysseyeaudemontagne": {
+    "price": 2589,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-eau-de-montagne"
+  },
+  "french-avenue-irida-extrait": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/french-avenue-irida-extrait"
+  },
+  "apex-rayhaan-valhalla": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/rayhaan-x-legion-valhalla"
+  },
+  "apex-armaf-odysseymarshmallow": {
+    "price": 2589,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-marshmallow"
+  },
+  "st-9034": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-dynasty"
+  },
+  "st-9221": {
+    "price": 2649,
+    "url": "https://www.aarfragrances.com/product/lattafa-the-kingdom-3"
+  },
+  "lattafa-musamam-white-intense": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/lattafa-musamam-white-intense"
+  },
+  "lattafa-ana-abiyedh": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-3"
+  },
+  "afnan-historic-doria": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/afnan-historic-doria"
+  },
+  "st-9148": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-lutfah-light-in-the-heart"
+  },
+  "st-9138": {
+    "price": 3616,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-sheikh"
+  },
+  "apex-arabiyatprestige-nayeloud": {
+    "price": 2849,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-nayel-oud"
+  },
+  "st-9236": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/paris-corner-khair-fusion"
+  },
+  "st-9109": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-winsome"
+  },
+  "st-9061": {
+    "price": 3299,
+    "url": "https://www.aarfragrances.com/product/afnan-9-pm-elixir"
+  },
+  "st-9244": {
+    "price": 3039,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-malibu"
+  },
+  "st-9026": {
+    "price": 3699,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-kobra"
+  },
+  "apex-alhambra-jeanlowevibe": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-vibe"
+  },
+  "apex-arabiyatprestige-ariz": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/arabiyat-aariz-intense"
+  },
+  "st-9144": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-aariz-labsolu"
+  },
+  "st-9141": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hypnotic-vanilla"
+  },
+  "apex-arabiyatprestige-alnoor": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-al-noor"
+  },
+  "st-9157": {
+    "price": 3299,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-uhud"
+  },
+  "st-9135": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-safa"
+  },
+  "st-9178": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-urban-man-paradise"
+  },
+  "french-avenue-aromatix-platine-blanc": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-platine-blanc"
+  },
+  "french-avenue-aromatix-xandal": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-xandal"
+  },
+  "st-9179": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/fragrance-world-aqua-pura-3-3"
+  },
+  "apex-pariscorner-marshmallowblush": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/paris-corner-marshmallow"
+  },
+  "french-avenue-vulcan-feu": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/french-avenue-vulcan-feu"
+  },
+  "st-9243": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-tropical"
+  },
+  "maison-alhambra-your-touch-santal": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-your-touch-santal"
+  },
+  "st-9259": {
+    "price": 2449,
+    "url": "https://www.aarfragrances.com/product/rayhaan-tiger"
+  },
+  "st-9032": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/lattafa-atheeri"
+  },
+  "apex-khadlaj-caflatte": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/khadlaj-caffe-latte"
+  },
+  "afnan-cherry-bouquet": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/afnan-cherry-bouquet-edp-80ml"
+  },
+  "apex-rayhaan-crimson": {
+    "price": 2649,
+    "url": "https://www.aarfragrances.com/product/rayhaan-crimson"
+  },
+  "st-9091": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/ajmal-aurum-summer"
+  },
+  "apex-ajmal-raindrops": {
+    "price": 1549,
+    "url": "https://www.aarfragrances.com/product/ajmal-raindrops"
+  },
+  "apex-ajmal-aristocrat": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/ajmal-aristocrat-3-3-3-3"
   },
   "afnan-historic-sahara": {
     "price": 2949,
@@ -891,949 +923,705 @@
     "price": 2799,
     "url": "https://www.aarfragrances.com/product/afnan-turathi-electric"
   },
-  "afnan-supremacy-gala": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-gala"
-  },
-  "rasasi-blue-lady": {
-    "price": 1199,
-    "url": "https://www.aarfragrances.com/product/rasasi-blue-lady"
-  },
-  "rasasi-chastity-men": {
-    "price": 1499,
-    "url": "https://www.aarfragrances.com/product/rasasi-chastity-1-1"
-  },
-  "rasasi-tasmeem-men": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/rasasi-tasmeem"
-  },
-  "rasasi-arba-wardat": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/rasasi-arba-wardat"
-  },
-  "rasasi-entebaa-men": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/rasasi-entebaa"
-  },
-  "lattafa-khalis-musk": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/lattafa-pure-musk-khalis-musk"
-  },
-  "armaf-niche-oud": {
-    "price": 2422,
-    "url": "https://www.aarfragrances.com/product/armaf-niche-oud"
-  },
-  "rayhaan-nocturno": {
+  "apex-zimaya-tiramisucoco": {
     "price": 2599,
-    "url": "https://www.aarfragrances.com/product/rayhaan-nocturno"
+    "url": "https://www.aarfragrances.com/product/zimaya-tiramisu-coco"
   },
-  "rayhaan-nocturno-elixir": {
-    "price": 2398,
-    "url": "https://www.aarfragrances.com/product/rayhaan-nocturno-elixir"
+  "st-9290": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/zimaya-tiramisu-caramel"
   },
-  "rayhaan-italia": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/rayhaan-italia"
-  },
-  "titan-skinn-velvet": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/zimaya-fatima-velvet-love"
-  },
-  "mykonos-california-blue": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/mykonos-california-blue"
-  },
-  "mykonos-inception": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/mykonos-inception-3"
-  },
-  "mykonos-slow-living": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/mykonos-slow-living-edp-50ml"
-  },
-  "afnan-zimaya-sharaf-blend": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/zimaya-sharaf-blend"
-  },
-  "afnan-cherry-bouquet": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/afnan-cherry-bouquet-edp-80ml"
-  },
-  "rasasi-sotoor-waaw": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-waaw"
-  },
-  "armaf-odyssey-mega": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-mega-3"
-  },
-  "french-avenue-liquid-brun": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/french-avenue-liquid-brun-3"
-  },
-  "french-avenue-liquid-brun-150ml": {
+  "armaf-club-de-nuit-lionheart-man": {
     "price": 4499,
-    "url": "https://www.aarfragrances.com/product/french-avenue-liquid-brun-limited-edition"
-  },
-  "french-avenue-royal-blend": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/french-avenue-royal-blend-3"
-  },
-  "french-avenue-royal-blend-bourbon": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/french-avenue-royal-blend-bourbon"
-  },
-  "french-avenue-spectre-ghost": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/french-avenue-spectre-ghost"
-  },
-  "french-avenue-after-effect": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-after-effect"
-  },
-  "french-avenue-zenith-blue": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-blue"
-  },
-  "french-avenue-atlantis-extrait": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/french-avenue-atlantis"
-  },
-  "french-avenue-marmara": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-marmara"
-  },
-  "french-avenue-sea-breeze": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-summer-breeze-official-pack-10mlx3-sea-breeze-riviera-sunset-chasing-waves"
-  },
-  "french-avenue-firestorm": {
-    "price": 4149,
-    "url": "https://www.aarfragrances.com/product/french-avenue-firestorm"
-  },
-  "french-avenue-azzure-aoud": {
-    "price": 3389,
-    "url": "https://www.aarfragrances.com/product/french-avenue-azzure-aoud"
-  },
-  "french-avenue-aether-extrait": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aether-extrait"
-  },
-  "french-avenue-royal-blend-nero": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-royal-blend-nero"
-  },
-  "french-avenue-vulcan-feu": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/french-avenue-vulcan-feu"
-  },
-  "french-avenue-irida-extrait": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/french-avenue-irida-extrait"
-  },
-  "french-avenue-aromatix-magnetiq": {
-    "price": 4399,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-magnetiq"
-  },
-  "french-avenue-thunder": {
-    "price": 3649,
-    "url": "https://www.aarfragrances.com/product/french-avenue-thunder"
-  },
-  "french-avenue-aromatix-xandal": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-xandal"
-  },
-  "french-avenue-aromatix-platine-blanc": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-platine-blanc"
-  },
-  "french-avenue-aromatix-carnal-desire": {
-    "price": 4249,
-    "url": "https://www.aarfragrances.com/product/french-avenue-carnal-desire-aromatix"
-  },
-  "french-avenue-aromatix-sun-kissed": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-sun-kissed"
-  },
-  "french-avenue-nectare-extradose": {
-    "price": 4149,
-    "url": "https://www.aarfragrances.com/product/french-avenue-nectare-extradose"
-  },
-  "french-avenue-zenith-tobacco": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-tobacco"
-  },
-  "french-avenue-obsidian": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/french-avenue-obsidian"
-  },
-  "french-avenue-vulcan-sable": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/french-avenue-vulcan-sable"
-  },
-  "st-9001": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/lattafa-musamam-black-intense"
-  },
-  "st-9002": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/paris-corner-rifaaqat-1"
-  },
-  "st-9005": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/mykonos-conquer"
-  },
-  "st-9006": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/mykonos-glitch-3"
-  },
-  "st-9008": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/mykonos-monaco-royale"
-  },
-  "st-9010": {
-    "price": 2189,
-    "url": "https://www.aarfragrances.com/product/mykonos-pink-beach"
-  },
-  "st-9011": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/mykonos-pink-drops"
-  },
-  "st-9012": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/mykonos-reflection-100ml"
-  },
-  "st-9015": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/mykonos-imperium"
-  },
-  "st-9019": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/mykonos-utopia"
-  },
-  "st-9021": {
-    "price": 4049,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-not-only-intense-1"
-  },
-  "st-9022": {
-    "price": 3949,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-sapphire"
-  },
-  "st-9023": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-venom"
-  },
-  "st-9024": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/rasasi-fattan-for-men"
-  },
-  "st-9025": {
-    "price": 3289,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-3"
-  },
-  "st-9026": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-kobra"
-  },
-  "st-9027": {
-    "price": 7299,
-    "url": "https://www.aarfragrances.com/product/al-majed-oud-noir-parfum"
-  },
-  "st-9028": {
-    "price": 7299,
-    "url": "https://www.aarfragrances.com/product/al-majed-oud-cuir"
-  },
-  "st-9030": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/lattafa-atlas-canyon"
-  },
-  "st-9031": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/lattafa-atlas-glacial-valley"
-  },
-  "st-9032": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/lattafa-atheeri"
-  },
-  "st-9034": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/lattafa-dynasty"
-  },
-  "st-9036": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-aristo"
-  },
-  "st-9037": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/khadlaj-karus-gold-absolu"
-  },
-  "st-9038": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-sky"
-  },
-  "st-9039": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/khadlaj-panache-angel-dust"
-  },
-  "st-9040": {
-    "price": 4849,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-enigma-of-taif"
-  },
-  "st-9042": {
-    "price": 5849,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-incense-01"
-  },
-  "st-9043": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ghaf"
-  },
-  "st-9044": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/paris-corner-rifaaqat-adorn"
-  },
-  "st-9051": {
-    "price": 549,
-    "url": "https://www.aarfragrances.com/product/olga-247-all-day-champion"
-  },
-  "st-9056": {
-    "price": 4749,
-    "url": "https://www.aarfragrances.com/product/reef-33"
-  },
-  "st-9058": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marwa"
-  },
-  "st-9059": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-kaaf-3"
-  },
-  "st-9061": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/afnan-9-pm-elixir"
-  },
-  "st-9063": {
-    "price": 4099,
-    "url": "https://www.aarfragrances.com/product/afnan-delicious-bouquet"
-  },
-  "st-9064": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/afnan-lynked-freedom"
-  },
-  "st-9067": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/ard-al-zaafaran-al-dirgham-limited-edition"
-  },
-  "st-9068": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/ard-al-zaafaran-al-dirgham-special-edition"
-  },
-  "st-9071": {
-    "price": 4399,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ignite-oud"
-  },
-  "st-9072": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-oud"
-  },
-  "st-9073": {
-    "price": 4949,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-marj-3"
-  },
-  "st-9075": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-aqua-oud"
-  },
-  "st-9077": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-leather"
-  },
-  "st-9078": {
-    "price": 3599,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-rawdha-3"
-  },
-  "st-9080": {
-    "price": 4299,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-bombay-oud"
-  },
-  "st-9081": {
-    "price": 2349,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-zeleny"
-  },
-  "st-9082": {
-    "price": 3599,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-summer-oud"
-  },
-  "st-9083": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-rose-noir"
-  },
-  "st-9084": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-frost-ice"
-  },
-  "st-9085": {
-    "price": 9999,
-    "url": "https://www.aarfragrances.com/product/gucci-flora-gorgeous-gardenia-3-3-3-3-3-3"
-  },
-  "st-9086": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-kaaf-noir"
-  },
-  "st-9087": {
-    "price": 2248,
-    "url": "https://www.aarfragrances.com/product/ajmal-kuro"
-  },
-  "st-9088": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/ajmal-wisal-dhahab"
-  },
-  "st-9089": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/ajmal-wisal-layl"
-  },
-  "st-9090": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/ajmal-aurum-winter"
-  },
-  "st-9091": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/ajmal-aurum-summer"
-  },
-  "st-9092": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/ajmal-wisal-dhahab"
-  },
-  "st-9094": {
-    "price": 1199,
-    "url": "https://www.aarfragrances.com/product/ajmal-wave"
-  },
-  "st-9096": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/ajmal-shiro"
-  },
-  "st-9098": {
-    "price": 10499,
-    "url": "https://www.aarfragrances.com/product/ajmal-amir-two"
-  },
-  "st-9099": {
-    "price": 10899,
-    "url": "https://www.aarfragrances.com/product/ajmal-amir-one-edp"
-  },
-  "st-9100": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/ajmal-blu"
-  },
-  "st-9106": {
-    "price": 1549,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-salvo-1"
-  },
-  "st-9108": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-noir"
-  },
-  "st-9109": {
-    "price": 2349,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-winsome"
-  },
-  "st-9111": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-no-2-men"
-  },
-  "st-9113": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-florenza"
-  },
-  "st-9115": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/alhambra-toscano-leather"
-  },
-  "st-9116": {
-    "price": 2249,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-opulence-leather"
-  },
-  "st-9117": {
-    "price": 1549,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-salvo-intense"
-  },
-  "st-9118": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-azure"
-  },
-  "st-9119": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-yeah-1"
-  },
-  "st-9120": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-glacier-le-noir"
-  },
-  "st-9122": {
-    "price": 5999,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-oud"
-  },
-  "st-9123": {
-    "price": 7799,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-man-limited-edition"
-  },
-  "st-9124": {
-    "price": 1469,
-    "url": "https://www.aarfragrances.com/product/armaf-soul"
-  },
-  "st-9125": {
-    "price": 2889,
-    "url": "https://www.aarfragrances.com/product/armaf-magnificent-pour-homme"
-  },
-  "st-9126": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/armaf-old-money"
-  },
-  "st-9127": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/armaf-spartacus"
-  },
-  "st-9128": {
-    "price": 3429,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-urban-man-elixir-3-3"
-  },
-  "st-9129": {
-    "price": 2539,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-revolution-ultra-edition"
-  },
-  "st-9130": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-toffee-coffee"
-  },
-  "st-9131": {
-    "price": 5610,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-iconic-3-3"
-  },
-  "st-9133": {
-    "price": 3666,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-kohl-opulence"
-  },
-  "st-9134": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-la-di-da-for-her"
-  },
-  "st-9135": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-safa"
-  },
-  "st-9136": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-la-di-da-for-her"
-  },
-  "st-9137": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/arabiyat-hypnotic-amber"
-  },
-  "st-9138": {
-    "price": 3616,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-sheikh"
-  },
-  "st-9139": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-hero"
-  },
-  "st-9140": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-brave"
-  },
-  "st-9141": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hypnotic-vanilla"
-  },
-  "st-9142": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-fahad-gaze"
-  },
-  "st-9145": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-swar-seduire"
-  },
-  "st-9147": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-qissat-al-najah-kiamichi"
-  },
-  "st-9150": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-kohl-luminous"
-  },
-  "st-9151": {
-    "price": 3949,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-bois-blanc"
-  },
-  "st-9153": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-mouda"
-  },
-  "st-9154": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ramad-earthy"
-  },
-  "st-9155": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ramad-3"
-  },
-  "st-9156": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ramad-oriental"
-  },
-  "st-9157": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-uhud"
-  },
-  "st-9159": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/mykonos-glitch-3"
-  },
-  "st-9161": {
-    "price": 1349,
-    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-5"
-  },
-  "st-9162": {
-    "price": 1349,
-    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-midnight-edition-by-my-perfumes-3"
-  },
-  "st-9163": {
-    "price": 1399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-aswad-by-my-perfumes"
-  },
-  "st-9164": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/dumont-nitro-red-3"
-  },
-  "st-9166": {
-    "price": 2799,
-    "url": "https://www.aarfragrances.com/product/dumont-nitro-blue"
-  },
-  "st-9167": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/dumont-nitro-red-intensely-extrait"
-  },
-  "st-9168": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-oud"
-  },
-  "st-9173": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-midori"
-  },
-  "st-9174": {
-    "price": 699,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-proud-of-you-absolute"
-  },
-  "st-9176": {
-    "price": 1799,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-sedley"
-  },
-  "st-9177": {
-    "price": 1849,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-suits"
-  },
-  "st-9178": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-urban-man-paradise"
-  },
-  "st-9179": {
-    "price": 1999,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-aqua-pura-3-3"
-  },
-  "st-9180": {
-    "price": 1099,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-barakkat-rouge-540-3"
-  },
-  "st-9181": {
-    "price": 11999,
-    "url": "https://www.aarfragrances.com/product/gissah-imperial-valley"
-  },
-  "st-9184": {
-    "price": 9899,
-    "url": "https://www.aarfragrances.com/product/french-tobacco-ibraheem-al-qurashi"
-  },
-  "st-9185": {
-    "price": 4999,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-spanish-tobacco"
-  },
-  "st-9186": {
-    "price": 5449,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-cuban-tobacco"
-  },
-  "st-9187": {
-    "price": 7499,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-tobacco-collection-arabian-tobacco"
-  },
-  "st-9188": {
-    "price": 6649,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-dominican-tobacco-extrait"
-  },
-  "st-9189": {
-    "price": 7499,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-diamond-aqua"
-  },
-  "st-9190": {
-    "price": 6999,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-emerald-soul-diamond"
-  },
-  "st-9191": {
-    "price": 7799,
-    "url": "https://www.aarfragrances.com/product/ibraheem-alqurashi-cullinan-diamond-iris"
-  },
-  "st-9192": {
-    "price": 7799,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-black-diamond-incense"
-  },
-  "st-9193": {
-    "price": 6149,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-balas-rose"
-  },
-  "st-9194": {
-    "price": 2349,
-    "url": "https://www.aarfragrances.com/product/khadlaj-island-dreams"
-  },
-  "st-9195": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/khadlaj-island-3"
-  },
-  "st-9196": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/khadlaj-cream-velvet"
-  },
-  "st-9197": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/khadlaj-ria-3"
-  },
-  "st-9198": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/khadlaj-icon"
-  },
-  "st-9199": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/khadlaj-musk-pure-musk-blend"
-  },
-  "st-9200": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-shadow"
-  },
-  "st-9201": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/khadlaj-shiyaaka-snow"
-  },
-  "st-9203": {
-    "price": 2599,
-    "url": "https://www.aarfragrances.com/product/khadlaj-azure-velvet"
-  },
-  "st-9205": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/khadlaj-mocha-latte"
-  },
-  "st-9206": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/khadlaj-island-vanilla-dunes"
-  },
-  "st-9207": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/khadlaj-karus-secret-musk"
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-lionheart-man"
   },
   "st-9208": {
     "price": 2199,
     "url": "https://www.aarfragrances.com/product/khadlaj-cloud-candy"
   },
-  "st-9209": {
-    "price": 3139,
-    "url": "https://www.aarfragrances.com/product/lattafa-angham-second-song"
-  },
-  "st-9210": {
+  "st-9196": {
     "price": 2499,
-    "url": "https://www.aarfragrances.com/product/lattafa-asad-bourbon"
+    "url": "https://www.aarfragrances.com/product/khadlaj-cream-velvet"
   },
-  "st-9211": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/lattafa-asad-elixir"
+  "st-9073": {
+    "price": 4299,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-marj-bakhoor"
   },
-  "st-9213": {
-    "price": 3249,
-    "url": "https://www.aarfragrances.com/product/lattafa-fire-on-ice"
-  },
-  "st-9215": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-leather"
-  },
-  "st-9216": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-men"
-  },
-  "st-9218": {
-    "price": 4069,
-    "url": "https://www.aarfragrances.com/product/lattafa-pride-eternal-vanille"
-  },
-  "st-9219": {
-    "price": 3549,
-    "url": "https://www.aarfragrances.com/product/lattafa-his-confession"
-  },
-  "st-9220": {
-    "price": 3549,
-    "url": "https://www.aarfragrances.com/product/lattafa-his-confession"
-  },
-  "st-9221": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/lattafa-the-kingdom-3"
-  },
-  "st-9223": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/lattafa-teriaq-intense"
-  },
-  "st-9224": {
+  "rayhaan-cordova": {
     "price": 2199,
-    "url": "https://www.aarfragrances.com/product/lattafa-ameer-al-oudh-intense-oud"
+    "url": "https://www.aarfragrances.com/product/rayhaan-cordova"
   },
-  "st-9226": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/lattafa-afeef"
+  "rayhaan-corium": {
+    "price": 2149,
+    "url": "https://www.aarfragrances.com/product/rayhaan-corium"
   },
-  "st-9228": {
-    "price": 4099,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-vision"
+  "french-avenue-royal-blend-bourbon": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/french-avenue-royal-blend-bourbon"
   },
-  "st-9229": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-vanilla-aura"
+  "lattafa-jasoor": {
+    "price": 2599,
+    "url": "https://www.aarfragrances.com/product/lattafa-jasoor"
   },
-  "st-9230": {
-    "price": 3239,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-vanilla-seduction"
+  "lattafa-qaed-al-fursan": {
+    "price": 2149,
+    "url": "https://www.aarfragrances.com/product/lattafa-qaed-al-fursan-1"
   },
-  "st-9231": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-vanilla-voyage-3"
+  "lattafa-najdia": {
+    "price": 2299,
+    "url": "https://www.aarfragrances.com/product/lattafa-najdia-for-men"
   },
-  "st-9232": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/nusuk-ateeq"
+  "french-avenue-aromatix-carnal-desire": {
+    "price": 4249,
+    "url": "https://www.aarfragrances.com/product/french-avenue-carnal-desire-aromatix"
   },
-  "st-9233": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/nusuk-mahab"
+  "rayhaan-ocean-rush": {
+    "price": 1979,
+    "url": "https://www.aarfragrances.com/product/rayhaan-ocean-rush"
   },
-  "st-9234": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/nusuk-al-mukhtalif-signature"
+  "rayhaan-imperia": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/rayhaan-imperia"
   },
-  "st-9235": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/nusuk-al-mukhtalif-signature"
+  "armaf-le-femme": {
+    "price": 2049,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-femme-1"
   },
-  "st-9236": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/paris-corner-khair-pistachio"
-  },
-  "st-9238": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/paris-corner-khair-confection"
-  },
-  "st-9240": {
-    "price": 1499,
-    "url": "https://www.aarfragrances.com/product/charuto-mysterious-tobacco"
-  },
-  "st-9241": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/rue-broca-theoreme-matrix"
-  },
-  "st-9242": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/rue-broca-theoreme-matrix"
-  },
-  "st-9243": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-tropical"
-  },
-  "st-9244": {
-    "price": 3039,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-malibu"
-  },
-  "st-9245": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-diva"
-  },
-  "st-9246": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-reina"
-  },
-  "st-9247": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-chrome"
-  },
-  "st-9248": {
+  "afnan-supremacy-gala": {
     "price": 3449,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-for-him-lava-gold"
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-gala"
   },
-  "st-9249": {
+  "st-9063": {
+    "price": 4099,
+    "url": "https://www.aarfragrances.com/product/afnan-delicious-bouquet"
+  },
+  "afnan-supremacy-in-heaven": {
+    "price": 3749,
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-in-heaven-pour-homme"
+  },
+  "french-avenue-after-effect": {
     "price": 3199,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-viper"
+    "url": "https://www.aarfragrances.com/product/french-avenue-after-effect"
   },
-  "st-9250": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-atlantis"
+  "swiss-arabian-casablanca": {
+    "price": 4499,
+    "url": "https://www.aarfragrances.com/product/swiss-arabian-casablanca"
   },
-  "st-9251": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-london"
+  "armaf-odyssey-mega": {
+    "price": 2449,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-mega-3"
+  },
+  "apex-armaf-odysseycandee": {
+    "price": 3357,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-candee"
+  },
+  "apex-armaf-odysseyspectra": {
+    "price": 3357,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-spectra"
+  },
+  "lattafa-khamrah-dukhan": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-dukhan"
+  },
+  "armaf-odyssey-mandarin-sky": {
+    "price": 2160,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-mandarin-sky-3"
+  },
+  "armaf-odyssey-homme-white-edition": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-homme-white-edition"
+  },
+  "apex-alharamain-amberoud": {
+    "price": 7499,
+    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-bleu-edition-3"
+  },
+  "apex-ahmedalmaghribi-ahl": {
+    "price": 4699,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ahl"
+  },
+  "apex-alharamain-aquadubai": {
+    "price": 5399,
+    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-aqua-dubai-3"
+  },
+  "apex-ahmedalmaghribi-binameer": {
+    "price": 5899,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-bin-amir"
+  },
+  "st-9185": {
+    "price": 4999,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-spanish-tobacco"
+  },
+  "st-9184": {
+    "price": 9899,
+    "url": "https://www.aarfragrances.com/product/french-tobacco-ibraheem-al-qurashi"
+  },
+  "st-9191": {
+    "price": 7799,
+    "url": "https://www.aarfragrances.com/product/ibraheem-alqurashi-cullinan-diamond-iris"
+  },
+  "apex-zimaya-fatima": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/zimaya-fatima-velvet-love"
+  },
+  "french-avenue-azzure-aoud": {
+    "price": 3389,
+    "url": "https://www.aarfragrances.com/product/french-avenue-azzure-aoud"
+  },
+  "maison-alhambra-jorge-di-profumo-aqua": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-jorge-di-profumo-aqua"
+  },
+  "st-9092": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/ajmal-wisal-women"
+  },
+  "st-9090": {
+    "price": 3299,
+    "url": "https://www.aarfragrances.com/product/ajmal-aurum-winter"
+  },
+  "st-9089": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/ajmal-wisal-layl"
+  },
+  "lattafa-ajayeb-dubai-portrait": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/lattafa-ajayeb-dubai-portrait"
+  },
+  "lattafa-her-confession": {
+    "price": 3459,
+    "url": "https://www.aarfragrances.com/product/lattafa-her-confession"
+  },
+  "lattafa-al-nashama-caprice": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/lattafa-al-nashama-caprice"
+  },
+  "lattafa-liam-grey": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/lattafa-liam-grey"
   },
   "st-9253": {
     "price": 2899,
     "url": "https://www.aarfragrances.com/product/rasasi-hawas-elixir"
   },
-  "st-9254": {
+  "apex-ahmedalmaghribi-muskandroses": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-musk-roses"
+  },
+  "lattafa-mayar-natural-intense": {
+    "price": 2419,
+    "url": "https://www.aarfragrances.com/product/lattafa-mayar-natural-intense"
+  },
+  "lattafa-haya": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/lattafa-haya-4"
+  },
+  "lattafa-mohra-silky-rose": {
+    "price": 1919,
+    "url": "https://www.aarfragrances.com/product/lattafa-mohra-silky-rose"
+  },
+  "lattafa-al-nashama": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/lattafa-al-nashama-3"
+  },
+  "lattafa-khalis-musk": {
+    "price": 1449,
+    "url": "https://www.aarfragrances.com/product/lattafa-pure-musk-khalis-musk"
+  },
+  "lattafa-his-confession": {
+    "price": 3549,
+    "url": "https://www.aarfragrances.com/product/lattafa-his-confession"
+  },
+  "rasasi-hawas-fire": {
     "price": 4099,
     "url": "https://www.aarfragrances.com/product/rasasi-hawas-fire"
   },
-  "st-9255": {
+  "lattafa-lail-maleki": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-lail-maleki-3"
+  },
+  "lattafa-ansaam-silver": {
+    "price": 2849,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-ansaam-silver"
+  },
+  "paris-corner-emir-youre-drugged": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/paris-corner-emir-youre-drugged"
+  },
+  "afnan-supremacy-noir": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-noir"
+  },
+  "lattafa-tharwah-silver": {
+    "price": 2699,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-tharwah-silver"
+  },
+  "lattafa-teriaq": {
+    "price": 3849,
+    "url": "https://www.aarfragrances.com/product/lattafa-teriaq-intense"
+  },
+  "afnan-9pm-rebel": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/afnan-9-pm-rebel"
+  },
+  "apex-pariscorner-moscowmule": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/paris-corner-mawj-moscow-mule"
+  },
+  "st-9084": {
+    "price": 2299,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-frost-ice"
+  },
+  "st-9098": {
+    "price": 10499,
+    "url": "https://www.aarfragrances.com/product/ajmal-amir-two"
+  },
+  "lattafa-bade-e-al-oud": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-badee-al-oud-noble-blush"
+  },
+  "st-9226": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/lattafa-afeef"
+  },
+  "lattafa-emeer": {
+    "price": 4249,
+    "url": "https://www.aarfragrances.com/product/lattafa-emeer"
+  },
+  "st-9113": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-florenza"
+  },
+  "lattafa-yara-candy": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-yara-candy"
+  },
+  "lattafa-vintage-radio": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-vintage-radio"
+  },
+  "st-9116": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-opulence-leather"
+  },
+  "apex-alharamain-detournoirintense": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/al-haramain-detour-noir-intense"
+  },
+  "apex-alharamain-dubainight": {
+    "price": 7999,
+    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-dubai-night-3"
+  },
+  "rasasi-hawas-black": {
+    "price": 3699,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-black"
+  },
+  "rasasi-la-yuqawam-jasmine-wisp": {
+    "price": 6699,
+    "url": "https://www.aarfragrances.com/product/rasasi-layuqawam-jasmine-wisp"
+  },
+  "afnan-tribute-blue": {
+    "price": 4399,
+    "url": "https://www.aarfragrances.com/product/afnan-tribute-blue"
+  },
+  "st-9002": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/paris-corner-rifaaqat-1"
+  },
+  "apex-riffs-priveplatinum": {
+    "price": 2789,
+    "url": "https://www.aarfragrances.com/product/riiffs-prive-platinum"
+  },
+  "apex-riiffs-privenoir": {
     "price": 2449,
-    "url": "https://www.aarfragrances.com/product/rayhaan-jungle-vibe"
+    "url": "https://www.aarfragrances.com/product/riiffs-prive-noir"
   },
-  "st-9256": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/rayhaan-terra"
+  "afnan-rare-tiffany": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/afnan-rare-tiffany"
   },
-  "st-9257": {
+  "maison-alhambra-kismet-magic": {
+    "price": 2149,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-kismet-magic"
+  },
+  "apex-lattafa-pisa": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/lattafa-pisa"
+  },
+  "lattafa-oud-mood": {
     "price": 2449,
-    "url": "https://www.aarfragrances.com/product/rayhaan-elixir"
+    "url": "https://www.aarfragrances.com/product/lattafa-oud-mood-100ml"
   },
-  "st-9258": {
+  "paris-corner-north-stag-quatre-iv": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/paris-corner-north-stag-expressions-iv-quatre"
+  },
+  "apex-ahmedalmaghribi-azureroyal": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-azure-royal"
+  },
+  "zimaya-sharaf-blend": {
+    "price": 2449,
+    "url": "https://www.aarfragrances.com/product/zimaya-sharaf-blend"
+  },
+  "maison-alhambra-jean-lowe-immortal": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-immortal"
+  },
+  "lattafa-wajood": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-wajood"
+  },
+  "lattafa-al-qiam-gold": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-al-qiam-gold"
+  },
+  "apex-ahmedalmaghribi-laathani": {
+    "price": 5899,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-laathani"
+  },
+  "lattafa-blue-sapphire": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-blue-sapphire"
+  },
+  "st-9071": {
+    "price": 4399,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ignite-oud"
+  },
+  "st-9069": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-blue"
+  },
+  "apex-ahmedalmaghribi-bluoud": {
     "price": 2649,
-    "url": "https://www.aarfragrances.com/product/rayhaan-tropical-vibe"
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-blu-oud"
   },
-  "st-9259": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/rayhaan-tiger"
+  "armaf-tag-uomo-nero": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/armaf-tag-him-uomo-nero"
   },
-  "st-9264": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-soul-of-bali"
+  "armaf-tag-uomo-rosso": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/armaf-tag-him-uomo-rosso"
   },
-  "st-9265": {
-    "price": 4849,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-opulence-of-dubai-extrait-de-parfum"
+  "armaf-q-donna": {
+    "price": 2190,
+    "url": "https://www.aarfragrances.com/product/armaf-tag-her-donna-colorata"
   },
-  "st-9267": {
-    "price": 4849,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-enigma-of-taif"
+  "st-9080": {
+    "price": 4299,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-bombay-oud"
+  },
+  "lattafa-tharwah-gold": {
+    "price": 3349,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-tharwah-gold"
+  },
+  "apex-alharamain-detournoirexclusif": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/al-haramain-detour-noir-exclusif"
+  },
+  "st-9168": {
+    "price": 4199,
+    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-oud"
+  },
+  "armaf-club-de-nuit-untold": {
+    "price": 5349,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-untold-1"
+  },
+  "maison-alhambra-jean-lowe-noir": {
+    "price": 3249,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-noir"
+  },
+  "lattafa-shaheen-gold": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-shaheen-gold"
+  },
+  "lattafa-asad-zanzibar": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/lattafa-asad-zanzibar"
+  },
+  "lattafa-khashabi": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/lattafa-khashabi"
+  },
+  "lattafa-ameer-al-oud": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/lattafa-ameer-al-1"
+  },
+  "lattafa-24-carat-pure-gold": {
+    "price": 2549,
+    "url": "https://www.aarfragrances.com/product/lattafa-24-carat-pure-gold"
+  },
+  "lattafa-mohra": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/lattafa-mohra-3"
+  },
+  "st-9137": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/arabiyat-hypnotic-amber"
+  },
+  "apex-arabiyatprestige-hypnoticoud": {
+    "price": 3399,
+    "url": "https://www.aarfragrances.com/product/arabiyat-hypnotic-oud"
+  },
+  "afnan-supremacy-not-only-intense": {
+    "price": 4049,
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-not-only-intense-1"
+  },
+  "lattafa-mayar": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-mayar-for-women"
+  },
+  "lattafa-confidential-private-gold": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-confidential-private-gold"
+  },
+  "armaf-club-de-nuit-oud": {
+    "price": 5999,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-oud"
   },
   "st-9272": {
     "price": 4599,
     "url": "https://www.aarfragrances.com/product/swiss-arabian-shaghaf-oud-azraq"
   },
-  "st-9274": {
-    "price": 4449,
-    "url": "https://www.aarfragrances.com/product/riiffs-freeze-3"
+  "maison-alhambra-dark-door-intense": {
+    "price": 1739,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-dark-door-intense-for-men-edp-100ml"
   },
-  "st-9275": {
-    "price": 3689,
-    "url": "https://www.aarfragrances.com/product/riiffs-golden-elixir-reserve"
+  "maison-alhambra-the-tux": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/alhambra-the-tux"
   },
-  "st-9276": {
-    "price": 3329,
-    "url": "https://www.aarfragrances.com/product/riiffs-fleurie-violette"
+  "lattafa-khamrah-qahwa": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-qahwa"
+  },
+  "st-9077": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-leather"
+  },
+  "lattafa-qaa-ed": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-qaaed-100ml"
+  },
+  "lattafa-badee-al-oud-sublime": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/lattafa-badee-al-oud-sublime"
+  },
+  "lattafa-hayaati": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-1"
+  },
+  "lattafa-yara-moi": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/lattafa-yara-moi"
+  },
+  "lattafa-nasheet": {
+    "price": 2049,
+    "url": "https://www.aarfragrances.com/product/lattafa-nasheet"
+  },
+  "lattafa-qaed-al-fursan-unlimited": {
+    "price": 2229,
+    "url": "https://www.aarfragrances.com/product/lattafa-qaed-al-fursan-unlimited"
+  },
+  "rasasi-dhanal-oudh-nashwah": {
+    "price": 2479,
+    "url": "https://www.aarfragrances.com/product/rasasi-dhanal-oudh-nashwah"
+  },
+  "lattafa-badee-al-oud-oud-for-glory": {
+    "price": 2899,
+    "url": "https://www.aarfragrances.com/product/lattafa-oud-for-glory"
+  },
+  "rasasi-hawas-ice": {
+    "price": 3289,
+    "url": "https://www.aarfragrances.com/product/rasasi-hawas-ice-3"
+  },
+  "lattafa-fakhar-gold": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-extrait-gold"
+  },
+  "lattafa-yara-pink": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/lattafa-yara-tous-for-women"
+  },
+  "st-9099": {
+    "price": 10899,
+    "url": "https://www.aarfragrances.com/product/ajmal-amir-one-edp"
+  },
+  "maison-alhambra-avant": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-alhambra-avant"
+  },
+  "armaf-hunter-for-men": {
+    "price": 2116,
+    "url": "https://www.aarfragrances.com/product/armaf-hunter-100ml"
+  },
+  "lattafa-hayaati-al-maleky": {
+    "price": 1849,
+    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-al-maleky"
+  },
+  "lattafa-opulent-musk": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-opulent-musk"
+  },
+  "lattafa-nebras": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/lattafa-nebras-3"
+  },
+  "st-9087": {
+    "price": 2248,
+    "url": "https://www.aarfragrances.com/product/ajmal-kuro"
+  },
+  "st-9096": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/ajmal-shiro"
+  },
+  "armaf-club-de-nuit-milestone": {
+    "price": 4239,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-milestone-1"
+  },
+  "apex-alrehab-frenchcoffee": {
+    "price": 1649,
+    "url": "https://www.aarfragrances.com/product/al-rehab-french-coffee"
+  },
+  "st-9111": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-no-2-men"
+  },
+  "lattafa-maahir-legacy": {
+    "price": 2849,
+    "url": "https://www.aarfragrances.com/product/lattafa-maahir-legacy"
+  },
+  "rasasi-sotoor-waaw": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-waaw"
+  },
+  "st-9106": {
+    "price": 1549,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-salvo-1"
+  },
+  "st-9101": {
+    "price": 2299,
+    "url": "https://www.aarfragrances.com/product/alhambra-alpine-homme-sport"
+  },
+  "maison-alhambra-rose-petals": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/alhambra-rose-petals"
+  },
+  "maison-alhambra-fabulo-intense": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/alhambra-fabulo-intense"
+  },
+  "st-9115": {
+    "price": 2199,
+    "url": "https://www.aarfragrances.com/product/alhambra-toscano-leather"
+  },
+  "afnan-historic-olmeda": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/afnan-historic-olmeda"
+  },
+  "maison-alhambra-bright-peach": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/alhambra-bright-peach"
+  },
+  "maison-alhambra-tobacco-touch": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/maison-alhambra-tobacco-touch"
+  },
+  "lattafa-eternal-oud": {
+    "price": 3299,
+    "url": "https://www.aarfragrances.com/product/lattafa-pride-eternal-oud"
+  },
+  "maison-alhambra-porto-neroli": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/alhambra-porto-neroli"
+  },
+  "lattafa-hayaati-gold-elixir": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-hayaati-gold-elixir"
+  },
+  "afnan-modest-une": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/afnan-modest-une"
+  },
+  "afnan-rare-carbon": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/afnan-rare-carbon"
+  },
+  "afnan-tobacco-rush": {
+    "price": 5249,
+    "url": "https://www.aarfragrances.com/product/afnan-tobacco-rush"
+  },
+  "afnan-9am-dive": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/afnan-9-am-dive"
+  },
+  "lattafa-al-qiam-silver": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/lattafa-al-qiam-silver"
+  },
+  "lattafa-shaheen-silver": {
+    "price": 2689,
+    "url": "https://www.aarfragrances.com/product/lattafa-shaheen-silver"
+  },
+  "lattafa-ajwad": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/lattafa-ajwad-1"
+  },
+  "lattafa-yara": {
+    "price": 2649,
+    "url": "https://www.aarfragrances.com/product/lattafa-yara-2"
+  },
+  "st-9100": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/ajmal-blu"
+  },
+  "st-9088": {
+    "price": 2799,
+    "url": "https://www.aarfragrances.com/product/ajmal-wisal-dhahab"
+  },
+  "lattafa-suqraat": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-suqraat"
+  },
+  "lattafa-musamam": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/lattafa-musamam-3"
+  },
+  "lattafa-khamrah": {
+    "price": 3499,
+    "url": "https://www.aarfragrances.com/product/lattafa-khamrah-1"
+  },
+  "apex-alharamain-laventureintensetester": {
+    "price": 4999,
+    "url": "https://www.aarfragrances.com/product/al-haramain-laventure-intense"
+  },
+  "afnan-turathi-brown": {
+    "price": 3049,
+    "url": "https://www.aarfragrances.com/product/afnan-turathi-brown"
+  },
+  "lattafa-velvet-rose": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-velvet-rose"
+  },
+  "lattafa-ra-ed-oud": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/lattafa-raed-oud"
+  },
+  "lattafa-ra-ed-luxe": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/lattafa-raed-luxe"
+  },
+  "rasasi-la-yuqawam-ambergris-showers": {
+    "price": 6399,
+    "url": "https://www.aarfragrances.com/product/rasasi-layuqawam-ambergris-showers"
+  },
+  "al-haramain-amber-oud-tobacco": {
+    "price": 4949,
+    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-tobacco"
+  },
+  "st-9279": {
+    "price": 2789,
+    "url": "https://www.aarfragrances.com/product/riiffs-goodness-oud"
   },
   "st-9277": {
     "price": 1979,
@@ -1843,696 +1631,332 @@
     "price": 2199,
     "url": "https://www.aarfragrances.com/product/riiffs-imperial-blue"
   },
-  "st-9283": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/riiffs-zenith"
+  "lattafa-rouat-al-oud": {
+    "price": 1449,
+    "url": "https://www.aarfragrances.com/product/lattafa-rouat-al-oud"
   },
-  "st-9284": {
-    "price": 3899,
-    "url": "https://www.aarfragrances.com/product/riiffs-tahira"
+  "rasasi-sotoor-taa": {
+    "price": 2949,
+    "url": "https://www.aarfragrances.com/product/rasasi-sotoor-taa"
   },
-  "st-9285": {
+  "rasasi-nafaeis-al-shaghaf-pour-femme": {
     "price": 2999,
-    "url": "https://www.aarfragrances.com/product/riiffs-fleurie-emerald"
+    "url": "https://www.aarfragrances.com/product/rasasi-shaghaf-femme"
   },
-  "st-9286": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/riiffs-fareed"
+  "lattafa-fakhar-lattafa-women": {
+    "price": 2349,
+    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-women"
   },
-  "st-9287": {
-    "price": 4849,
-    "url": "https://www.aarfragrances.com/product/riiffs-momento"
+  "lattafa-najdia-in-gold": {
+    "price": 1849,
+    "url": "https://www.aarfragrances.com/product/lattafa-najdia-in-gold"
   },
-  "st-9288": {
-    "price": 3059,
-    "url": "https://www.aarfragrances.com/product/riiffs-inspiro-men"
-  },
-  "st-9289": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/riiffs-r-surge-spectra"
-  },
-  "st-9290": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/zimaya-tiramisu-caramel"
-  },
-  "st-9291": {
-    "price": 2239,
-    "url": "https://www.aarfragrances.com/product/zimaya-mazaaj-infused"
-  },
-  "st-9292": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/zimaya-sharaf-blend"
-  },
-  "apex-afnan-stardust": {
-    "price": 4299,
-    "url": "https://www.aarfragrances.com/product/afnan-stardust"
-  },
-  "apex-afnan-supremacyheaven": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/afnan-supremacy-in-heaven-pour-homme"
-  },
-  "apex-ahmedalmaghribi-ahl": {
-    "price": 4699,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-ahl"
-  },
-  "apex-ahmedalmaghribi-azureroyal": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-azure-royal"
-  },
-  "apex-ahmedalmaghribi-bluoud": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-blu-oud"
-  },
-  "apex-ahmedalmaghribi-brulee": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/parisbelle-tonka-brulee"
-  },
-  "apex-ahmedalmaghribi-muzn": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-muzn"
-  },
-  "apex-ahmedalmaghribi-tifftiff": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-tiff-tiff"
-  },
-  "apex-ahmedalmaghribi-opalinewave": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-opaline-wave"
-  },
-  "apex-ajmal-aristocrat": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/ajmal-aristocrat-3-3-3-3"
-  },
-  "apex-ajmal-aurumaurumelixir": {
-    "price": 4599,
-    "url": "https://www.aarfragrances.com/product/ajmal-aurum-elixir"
-  },
-  "apex-ajmal-blue": {
-    "price": 3199,
-    "url": "https://www.aarfragrances.com/product/versace-blue-jeans"
-  },
-  "apex-ajmal-cyanoud": {
-    "price": 1899,
-    "url": "https://www.aarfragrances.com/product/ajmal-cyan-oud"
-  },
-  "apex-alharamain-aquadubai": {
-    "price": 5399,
-    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-aqua-dubai-3"
-  },
-  "apex-alharamain-dubainight": {
-    "price": 7999,
-    "url": "https://www.aarfragrances.com/product/al-haramain-amber-oud-dubai-night-3"
-  },
-  "apex-anfar-artisanblu": {
-    "price": 4499,
-    "url": "https://www.aarfragrances.com/product/anfar-1950-artisan-blu"
-  },
-  "apex-anfar-midnightfrostintense": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/anfar-london-midnight-frost-intense"
-  },
-  "apex-anfar-midnightfrosttangerine": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/anfar-london-midnight-frost-tangerine"
-  },
-  "apex-anfar-summerindubai": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/anfar-summer-in-dubai"
-  },
-  "apex-arabiyat-lamsatharir": {
-    "price": 1549,
-    "url": "https://www.aarfragrances.com/product/arabiyat-lamsat-harir-4"
-  },
-  "apex-arabiyat-oudallaylaswad": {
-    "price": 1399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-aswad-by-my-perfumes"
-  },
-  "apex-arabiyat-oudallaylmidnightedition": {
-    "price": 1349,
-    "url": "https://www.aarfragrances.com/product/arabiyat-oud-al-layl-midnight-edition-by-my-perfumes-3"
-  },
-  "apex-arabiyatprestige-marasiforher": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marasi-for-her"
-  },
-  "apex-arabiyatprestige-marasiforhim": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marasi-for-her"
-  },
-  "apex-arabiyatprestige-noir": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-ashaa-oud-noir"
-  },
-  "apex-arabiyatprestige-alnoor": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-al-noor"
-  },
-  "apex-arabiyatprestige-hypnoticoud": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-hypnotic-oud"
-  },
-  "apex-arabiyatprestige-mahdaldhahab": {
-    "price": 3616,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-mahd-al-dhahab"
-  },
-  "apex-arabiyatprestige-nayeloud": {
-    "price": 2849,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-nayel-oud"
-  },
-  "apex-arabiyatprestige-revoltuprising": {
-    "price": 3799,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-revolt-uprising"
-  },
-  "apex-armaf-dunescape": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/armaf-dunescape-dubai"
-  },
-  "apex-armaf-odysseycandee": {
-    "price": 3357,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-candee"
-  },
-  "apex-armaf-odysseytoffeecoffee": {
-    "price": 2549,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-toffee-coffee"
-  },
-  "apex-armaf-odysseyspectra": {
-    "price": 3357,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-spectra"
-  },
-  "apex-armaf-odysseymarshmallow": {
-    "price": 2589,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-marshmallow"
-  },
-  "apex-armaf-odysseyeaudemontagne": {
-    "price": 2589,
-    "url": "https://www.aarfragrances.com/product/armaf-odyssey-eau-de-montagne"
-  },
-  "apex-fragranceworld-proudofyouformen": {
-    "price": 699,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-proud-of-you-absolute"
-  },
-  "apex-fragranceworld-venti": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/fragrance-world-venti-absolu"
-  },
-  "apex-frenchavenue-jasmere": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/french-avenue-jasmere"
-  },
-  "apex-frenchavenue-amberempire": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/french-avenue-amber-empire"
-  },
-  "apex-frenchavenue-aromatixforbiddenfruit": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-forbidden-fruit"
-  },
-  "apex-frenchavenue-aromatixteasme": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-teas-me"
-  },
-  "apex-frenchavenue-aromatixnaughtydates": {
-    "price": 4649,
-    "url": "https://www.aarfragrances.com/product/french-avenue-aromatix-x-naughty-dates"
-  },
-  "apex-frenchavenue-bianco": {
-    "price": 3949,
-    "url": "https://www.aarfragrances.com/product/french-avenue-veneno-bianco"
-  },
-  "apex-frenchavenue-ravineginger": {
-    "price": 4099,
-    "url": "https://www.aarfragrances.com/product/french-avenue-ravine-ginger"
-  },
-  "apex-frenchavenue-safaribreeze": {
-    "price": 4299,
-    "url": "https://www.aarfragrances.com/product/french-avenue-safari-breeze"
-  },
-  "apex-frenchavenue-scarlet": {
-    "price": 3649,
-    "url": "https://www.aarfragrances.com/product/french-avenue-veneno-scarlet"
-  },
-  "apex-frenchavenue-zenithdeep": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-deep"
-  },
-  "apex-frenchavenue-zenithvanilla": {
-    "price": 3749,
-    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-vanilla"
-  },
-  "apex-frenchavenue-zenithsantal": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/french-avenue-zenith-santal"
-  },
-  "apex-ibraq-blackdiamondincense": {
-    "price": 7799,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-black-diamond-incense"
-  },
-  "apex-ibraq-bluediamondaqua": {
-    "price": 7499,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-diamond-aqua"
-  },
-  "apex-ibraq-braziliantobacco": {
-    "price": 4699,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-brazilian-tobacco"
-  },
-  "apex-ibraq-blueberrymusk": {
-    "price": 1949,
-    "url": "https://www.aarfragrances.com/product/arabiyat-blueberry-musk"
-  },
-  "apex-ibraq-cullinandiamondiris": {
-    "price": 7799,
-    "url": "https://www.aarfragrances.com/product/ibraheem-alqurashi-cullinan-diamond-iris"
-  },
-  "apex-ibraq-cubantobacco": {
-    "price": 5449,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-cuban-tobacco"
-  },
-  "apex-ibraq-darklavender": {
-    "price": 3649,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-dark-lavender"
-  },
-  "apex-ibraq-dominicantobacco": {
-    "price": 6649,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-dominican-tobacco-extrait"
-  },
-  "apex-ibraq-frenchtobacco": {
-    "price": 9899,
-    "url": "https://www.aarfragrances.com/product/french-tobacco-ibraheem-al-qurashi"
-  },
-  "apex-ibraq-mexicantobacco": {
-    "price": 4399,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-tobacco-collection-mexican-tobacco"
-  },
-  "apex-ibraq-muskkashmir": {
-    "price": 3849,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-musk-kashmir"
-  },
-  "apex-ibraq-spanishtobacco": {
-    "price": 4999,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-spanish-tobacco"
-  },
-  "apex-ibraq-whiteregentdiamond": {
-    "price": 6299,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-white-regent-diamond"
-  },
-  "apex-khadlaj-muse": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/khadlaj-muse"
-  },
-  "apex-khadlaj-puremusk": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/khadlaj-musk-pure-musk-blend"
-  },
-  "apex-khadlaj-titan": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/khadlaj-titan"
-  },
-  "apex-lattafa-beyondprecious": {
-    "price": 4149,
-    "url": "https://www.aarfragrances.com/product/lattafa-beyond-precious"
-  },
-  "apex-lattafa-givemegourmandchocooverdose": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-choco-overdose"
-  },
-  "apex-lattafa-givemegourmandcookiecrave": {
-    "price": 3689,
-    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-cookie-crave"
-  },
-  "apex-lattafa-givemegourmandmallowmadness": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-mallow-madness"
-  },
-  "apex-lattafa-givemegourmandvanillafreak": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-vanilla-freak"
-  },
-  "apex-lattafa-givemegourmandwhippedpleasure": {
-    "price": 3349,
-    "url": "https://www.aarfragrances.com/product/lattafa-give-me-gourmand-whipped-pleasure"
-  },
-  "apex-lattafa-hisconfessionformen": {
-    "price": 3549,
-    "url": "https://www.aarfragrances.com/product/lattafa-his-confession"
-  },
-  "apex-lattafa-opulentdubai": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/lattafa-opulent-dubai"
-  },
-  "apex-lattafa-pisa": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/lattafa-pisa"
-  },
-  "apex-lattafa-ramzlattafagold": {
+  "lattafa-ramz-gold": {
     "price": 1749,
     "url": "https://www.aarfragrances.com/product/lattafa-ramz-gold"
   },
-  "apex-maisonasrar-farisalarab": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-faris-al-arab"
+  "afnan-turathi-blue": {
+    "price": 3149,
+    "url": "https://www.aarfragrances.com/product/afnan-turathi-blue"
   },
-  "apex-maisonasrar-muharib": {
-    "price": 4299,
-    "url": "https://www.aarfragrances.com/product/maison-asrar-muharib"
+  "armaf-tres-nuit": {
+    "price": 2099,
+    "url": "https://www.aarfragrances.com/product/armaf-tres-nuit-100ml"
   },
-  "apex-mykonos-cafedrops": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/mykonos-cafe-drops"
+  "rasasi-qasamat-rasana": {
+    "price": 3799,
+    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-rasana"
   },
-  "apex-naseem-aqua": {
-    "price": 1199,
-    "url": "https://www.aarfragrances.com/product/naseem-nadeen-aqua-parfum"
-  },
-  "apex-naseem-asmira": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/naseem-asmira"
-  },
-  "apex-naseem-aura": {
-    "price": 1449,
-    "url": "https://www.aarfragrances.com/product/naseem-aura"
-  },
-  "apex-naseem-candlelightindecember": {
-    "price": 1489,
-    "url": "https://www.aarfragrances.com/product/naseem-candle-light-in-december"
-  },
-  "apex-naseem-eclipse": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/naseem-eclipse"
-  },
-  "apex-naseem-leen": {
-    "price": 2349,
-    "url": "https://www.aarfragrances.com/product/naseem-leen"
-  },
-  "apex-naseem-lostinwoods": {
-    "price": 2129,
-    "url": "https://www.aarfragrances.com/product/naseem-lost-in-the-woods-for-men-and-women-aqua-parfum-75ml"
-  },
-  "apex-naseem-naseemwhiteeclat": {
-    "price": 1299,
-    "url": "https://www.aarfragrances.com/product/naseem-white-eclat-parfum"
-  },
-  "apex-naseem-oceanenigma": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/naseem-ocean-enigma"
-  },
-  "apex-naseem-oud": {
-    "price": 1199,
-    "url": "https://www.aarfragrances.com/product/naseem-oud-aqua-parfum-for-men-and-women-80ml"
-  },
-  "apex-naseem-parisoud": {
-    "price": 2299,
-    "url": "https://www.aarfragrances.com/product/paris-corner-killer-oud-1"
-  },
-  "apex-naseem-purpleblue": {
-    "price": 2199,
-    "url": "https://www.aarfragrances.com/product/naseem-purple-blue-aqua-parfum-for-men-and-women-75ml"
-  },
-  "apex-naseem-sublimeoud": {
-    "price": 1749,
-    "url": "https://www.aarfragrances.com/product/naseem-sublime-oud"
-  },
-  "apex-naseem-sweettreatsinbed": {
-    "price": 1489,
-    "url": "https://www.aarfragrances.com/product/naseem-sweet-treats-in-bed"
-  },
-  "apex-naseem-theicebetweenus": {
-    "price": 1489,
-    "url": "https://www.aarfragrances.com/product/naseem-the-ice-between-us"
-  },
-  "apex-naseem-twinparadise": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/naseem-twin-paradise"
-  },
-  "apex-naseem-wrappedincashmere": {
-    "price": 1489,
-    "url": "https://www.aarfragrances.com/product/naseem-wrapped-in-cashmere-for-women"
-  },
-  "apex-nusuk-raheeq": {
-    "price": 3699,
-    "url": "https://www.aarfragrances.com/product/nusuk-raheeq"
-  },
-  "apex-nusuk-saher": {
-    "price": 4799,
-    "url": "https://www.aarfragrances.com/product/nusuk-saher"
-  },
-  "apex-nusuk-sama": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/nusuk-sama"
-  },
-  "apex-pariscorner-moscowmule": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/paris-corner-mawj-moscow-mule"
-  },
-  "apex-rasasi-fayiz": {
-    "price": 4949,
-    "url": "https://www.aarfragrances.com/product/rasasi-fayiz"
-  },
-  "apex-rasasi-fawar": {
-    "price": 4949,
-    "url": "https://www.aarfragrances.com/product/rasasi-fawar"
-  },
-  "apex-rasasi-hawasgolddigger": {
+  "rasasi-qasamat-bareeq": {
     "price": 3599,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-gold-digger"
+    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-bareeq"
   },
-  "apex-rasasi-hawasboa": {
-    "price": 4749,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-boa"
-  },
-  "apex-rasasi-hawaslamer": {
-    "price": 3299,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-la-mer"
-  },
-  "apex-rasasi-hawasnautilus": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-nautilus"
-  },
-  "apex-rasasi-hawasthunder": {
-    "price": 3899,
-    "url": "https://www.aarfragrances.com/product/rasasi-hawas-thunder"
-  },
-  "apex-rayhaan-amazonica": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/rayhaan-amazonica"
-  },
-  "apex-rayhaan-cedrusblanc": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rayhaan-cedrus-blanc"
-  },
-  "apex-rayhaan-crimson": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/rayhaan-crimson"
-  },
-  "apex-rayhaan-divine": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/rayhaan-divine"
-  },
-  "apex-rayhaan-navasol": {
-    "price": 2949,
-    "url": "https://www.aarfragrances.com/product/rayhaan-nava-sol"
-  },
-  "apex-rayhaan-kiss": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/rayhaan-kiss"
-  },
-  "apex-rayhaan-valhalla": {
-    "price": 2749,
-    "url": "https://www.aarfragrances.com/product/rayhaan-x-legion-valhalla"
-  },
-  "apex-riiffs-desertdesahara": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/riiffs-desert-de-sahara"
-  },
-  "apex-riiffs-costadeamalfi": {
-    "price": 3059,
-    "url": "https://www.aarfragrances.com/product/riiffs-costa-de-amalfi"
-  },
-  "apex-riiffs-aswaar": {
-    "price": 4499,
-    "url": "https://www.aarfragrances.com/product/riiffs-aswaar"
-  },
-  "apex-riiffs-seasonsdrift": {
-    "price": 3489,
-    "url": "https://www.aarfragrances.com/product/riiffs-seasons-drift"
-  },
-  "apex-riiffs-seasonsrise": {
-    "price": 3489,
-    "url": "https://www.aarfragrances.com/product/riiffs-seasons-rise"
-  },
-  "apex-swissarabian-essenceofcasablanca": {
-    "price": 4999,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-essence-of-casablanca"
-  },
-  "apex-swissarabian-patchouli01": {
-    "price": 4849,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-patchouli-01"
-  },
-  "apex-zimaya-fatima": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/zimaya-fatima-velvet-love"
-  },
-  "apex-zimaya-tiramisucoco": {
-    "price": 2599,
-    "url": "https://www.aarfragrances.com/product/zimaya-tiramisu-coco"
-  },
-  "apex-frenchavenue-cocoamorado": {
-    "price": 3779,
-    "url": "https://www.aarfragrances.com/product/french-avenue-cocoa-morado"
-  },
-  "apex-lattafa-thekingdom": {
-    "price": 2649,
-    "url": "https://www.aarfragrances.com/product/lattafa-the-kingdom-3"
-  },
-  "apex-lattafa-fahad": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/lattafa-fahad"
-  },
-  "apex-albaitaldimashqi-ysly": {
-    "price": 5499,
-    "url": "https://www.aarfragrances.com/product/ysl-kouros-silver"
-  },
-  "apex-albaitaldimashqi-yslmyslf": {
-    "price": 9999,
-    "url": "https://www.aarfragrances.com/product/ysl-myslf-3"
-  },
-  "apex-albaitaldimashqi-sauvageelixir": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/albait-aldimashqi-sauvage-elixir"
-  },
-  "apex-albaitaldimashqi-acquadigio": {
-    "price": 2149,
-    "url": "https://www.aarfragrances.com/product/albait-aldimashqi-acqua-di-gio-profumo"
-  },
-  "apex-albaitaldimashqi-themostwanted": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/albait-aldimashqi-the-most-wanted-parfum-for-men-edp-75ml"
-  },
-  "apex-albaitaldimashqi-eros": {
-    "price": 2099,
-    "url": "https://www.aarfragrances.com/product/albait-aldimashqi-eros-for-men-edp-75ml"
-  },
-  "apex-albaitaldimashqi-spicebombextreme": {
-    "price": 2189,
-    "url": "https://www.aarfragrances.com/product/albait-aldimashqi-spicebomb-extreme"
-  },
-  "apex-ajmal-raindrops": {
+  "lattafa-opulent-oud": {
     "price": 1549,
-    "url": "https://www.aarfragrances.com/product/ajmal-raindrops"
+    "url": "https://www.aarfragrances.com/product/lattafa-opulent-oud"
   },
-  "apex-arabiyat-prestigearisto": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-aristo"
-  },
-  "apex-arabiyat-prestigeextradosehomme": {
-    "price": 3999,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-extradose-homme"
-  },
-  "apex-arabiyat-prestigemarasi": {
-    "price": 3399,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marasi-for-her"
-  },
-  "apex-arabiyat-prestigeladida": {
-    "price": 3049,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-la-di-da-for-her"
-  },
-  "apex-arabiyat-prestigehypnoticvanilla": {
-    "price": 3099,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hypnotic-vanilla"
-  },
-  "apex-arabiyat-prestigemarwa": {
-    "price": 3449,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-marwa"
-  },
-  "apex-arabiyat-hamdanthesheikh": {
-    "price": 3616,
-    "url": "https://www.aarfragrances.com/product/arabiyat-prestige-hamdan-the-sheikh"
-  },
-  "apex-ibraheemalqurashi-blueoud": {
-    "price": 4199,
-    "url": "https://www.aarfragrances.com/product/ibraheem-al-qurashi-blue-oud"
-  },
-  "apex-alwataniah-kayaanclassic": {
-    "price": 2699,
-    "url": "https://www.aarfragrances.com/product/al-wataniah-kayaan-classic"
-  },
-  "apex-alharamain-detournoirintense": {
-    "price": 2899,
-    "url": "https://www.aarfragrances.com/product/al-haramain-detour-noir-intense"
-  },
-  "apex-alharamain-detournoirexclusif": {
-    "price": 2999,
-    "url": "https://www.aarfragrances.com/product/al-haramain-detour-noir-exclusif"
-  },
-  "apex-alrehab-frenchcoffee": {
-    "price": 1649,
-    "url": "https://www.aarfragrances.com/product/al-rehab-french-coffee"
-  },
-  "apex-reef-33": {
-    "price": 4749,
-    "url": "https://www.aarfragrances.com/product/reef-33"
-  },
-  "apex-khadlaj-caffelatte": {
-    "price": 2399,
-    "url": "https://www.aarfragrances.com/product/khadlaj-caffe-latte"
-  },
-  "apex-ahmedalmaghribi-oudlavender": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-oud-lavender"
-  },
-  "apex-ahmedalmaghribi-laathani": {
-    "price": 5199,
-    "url": "https://www.aarfragrances.com/product/ahmed-al-maghribi-laathani"
-  },
-  "apex-riiffs-privenoir": {
-    "price": 2449,
-    "url": "https://www.aarfragrances.com/product/riiffs-prive-noir"
-  },
-  "apex-riffs-priveplatinum": {
-    "price": 2789,
-    "url": "https://www.aarfragrances.com/product/riiffs-prive-platinum"
-  },
-  "apex-riiffs-priveblue": {
-    "price": 2789,
-    "url": "https://www.aarfragrances.com/product/riiffs-prive-blue"
-  },
-  "apex-alhambra-jeanlowevibe": {
-    "price": 2499,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-vibe"
-  },
-  "apex-alharamain-madinah": {
-    "price": 839,
-    "url": "https://www.aarfragrances.com/product/al-haramain-madinah-pure-attar-15ml"
-  },
-  "apex-lalique-encrenoire": {
-    "price": 3899,
-    "url": "https://www.aarfragrances.com/product/lalique-encre-noire-100ml"
-  },
-  "al-haramain-amber-oud-tobacco": {
-    "price": 6499,
-    "url": "https://www.aarfragrances.com/product/buy-al-haramain-amber-oud-tobacco-edition"
-  },
-  "paris-corner-north-stag-quatre-iv": {
-    "price": 3499,
-    "url": "https://www.aarfragrances.com/product/paris-corner-north-stag-expressions-iv-quatre"
-  },
-  "maison-alhambra-jean-lowe-immortal": {
-    "price": 3149,
-    "url": "https://www.aarfragrances.com/product/maison-alhambra-jean-lowe-immortal"
-  },
-  "maison-alhambra-the-tux": {
+  "lattafa-ejaazi": {
     "price": 1999,
-    "url": "https://www.aarfragrances.com/product/alhambra-the-tux"
+    "url": "https://www.aarfragrances.com/product/lattafa-ejaazi-1"
   },
-  "swiss-arabian-casablanca": {
-    "price": 4499,
-    "url": "https://www.aarfragrances.com/product/swiss-arabian-casablanca"
+  "armaf-bucephalus-no-x": {
+    "price": 3485,
+    "url": "https://www.aarfragrances.com/product/armaf-niche-bucephalus-x-10"
   },
-  "dumont-nitro-white": {
+  "afnan-supremacy-in-oud": {
+    "price": 3999,
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-in-oud"
+  },
+  "lattafa-sheikh-al-shuyukh-luxe-edition": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/lattafa-sheikh-shuyukh-luxe-edition"
+  },
+  "lattafa-badee-al-oud-amethyst": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/lattafa-badee-al-oud-amethyst"
+  },
+  "armaf-tres-jour-pour-femme": {
+    "price": 1849,
+    "url": "https://www.aarfragrances.com/product/armaf-tres-jour"
+  },
+  "lattafa-ramz-silver": {
+    "price": 2449,
+    "url": "https://www.aarfragrances.com/product/lattafa-ramz-silver-2"
+  },
+  "rasasi-fattan-pour-femme": {
+    "price": 1549,
+    "url": "https://www.aarfragrances.com/product/rasasi-fattan-femme"
+  },
+  "armaf-signature-true": {
+    "price": 2249,
+    "url": "https://www.aarfragrances.com/product/armaf-signature-true"
+  },
+  "rasasi-dhan-al-oudh-al-nokhba": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/rasasi-dhan-al-oudh-al-nokhba"
+  },
+  "rasasi-qasamat-morhaf": {
+    "price": 3599,
+    "url": "https://www.aarfragrances.com/product/rasasi-qasamat-morhaf"
+  },
+  "armaf-red-ruby": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/armaf-niche-red-ruby"
+  },
+  "rasasi-chastity-men": {
+    "price": 1499,
+    "url": "https://www.aarfragrances.com/product/rasasi-chastity-1-1"
+  },
+  "lattafa-maahir-black-edition": {
+    "price": 2499,
+    "url": "https://www.aarfragrances.com/product/lattafa-maahir-black"
+  },
+  "st-9125": {
+    "price": 2299,
+    "url": "https://www.aarfragrances.com/product/armaf-excellus"
+  },
+  "rasasi-mukhallat-oudh-al-mubakhar": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/rasasi-mukhallat-oudh-al-mubakhar"
+  },
+  "rasasi-egra": {
+    "price": 2099,
+    "url": "https://www.aarfragrances.com/product/rasasi-egra"
+  },
+  "rasasi-faqat-lil-rijal": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/rasasi-faqat-lil-rijal"
+  },
+  "armaf-magnificent-pour-femme": {
+    "price": 2149,
+    "url": "https://www.aarfragrances.com/product/armaf-magnificent-pour-femme"
+  },
+  "armaf-derby-club-house-blanche": {
+    "price": 1823,
+    "url": "https://www.aarfragrances.com/product/armaf-derby-club-house-blanche"
+  },
+  "armaf-club-de-nuit-intense-woman": {
+    "price": 3099,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-intense-woman"
+  },
+  "armaf-odyssey-homme": {
+    "price": 2295,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-homme-white-3"
+  },
+  "lattafa-musk-mood": {
+    "price": 2099,
+    "url": "https://www.aarfragrances.com/product/lattafa-musk-mood"
+  },
+  "rasasi-hatem": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/rasasi-hatem"
+  },
+  "lattafa-fakhar-lattafa-men": {
+    "price": 2749,
+    "url": "https://www.aarfragrances.com/product/lattafa-fakhar-men"
+  },
+  "lattafa-ameer-al-oudh-intense": {
+    "price": 2199,
+    "url": "https://www.aarfragrances.com/product/lattafa-ameer-al-oudh-intense-oud"
+  },
+  "afnan-9pm": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/afnan-9pm"
+  },
+  "lattafa-adeeb": {
+    "price": 1849,
+    "url": "https://www.aarfragrances.com/product/lattafa-adeeb"
+  },
+  "lattafa-maahir": {
     "price": 2799,
-    "url": "https://www.aarfragrances.com/product/dumont-nitro-white"
+    "url": "https://www.aarfragrances.com/product/lattafa-maahir-1"
   },
-  "armaf-precieux-i": {
-    "price": 4899,
-    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-precieux-3"
+  "rasasi-rumz-al-rasasi-9325-pour-lui": {
+    "price": 2999,
+    "url": "https://www.aarfragrances.com/product/rasasi-zebra"
+  },
+  "rasasi-tasmeem-men": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/rasasi-tasmeem"
+  },
+  "lattafa-ana-abiyedh-rouge": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-rouge"
+  },
+  "rasasi-la-yuqawam": {
+    "price": 6299,
+    "url": "https://www.aarfragrances.com/product/rasasi-layuqawam-2"
+  },
+  "rasasi-la-yuqawam-tobacco-blaze": {
+    "price": 6699,
+    "url": "https://www.aarfragrances.com/product/rasasi-layuqawam-tobacco-blaze"
+  },
+  "lattafa-khalta-lattafa": {
+    "price": 1499,
+    "url": "https://www.aarfragrances.com/product/lattafa-khaltaat-al-arabia-royal-delight"
+  },
+  "lattafa-oud-mood-elixir": {
+    "price": 2099,
+    "url": "https://www.aarfragrances.com/product/lattafa-oud-mood-elixir"
+  },
+  "lattafa-oud-najdia": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-oud-najdia"
+  },
+  "rasasi-al-wisam-day": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/rasasi-al-wisam-day"
+  },
+  "rasasi-oud-al-mubakhar": {
+    "price": 1599,
+    "url": "https://www.aarfragrances.com/product/rasasi-oud-al-mubakhar"
+  },
+  "rasasi-fattan-pour-homme": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/rasasi-fattan-for-men"
+  },
+  "rasasi-entebaa-pour-homme": {
+    "price": 3049,
+    "url": "https://www.aarfragrances.com/product/rasasi-entebaa"
+  },
+  "rasasi-afshan": {
+    "price": 1599,
+    "url": "https://www.aarfragrances.com/product/rasasi-afshan"
+  },
+  "armaf-voyage-bleu": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/armaf-voyage-bleu"
+  },
+  "armaf-ventana": {
+    "price": 2116,
+    "url": "https://www.aarfragrances.com/product/armaf-ventana-3"
+  },
+  "armaf-tag-him": {
+    "price": 1955,
+    "url": "https://www.aarfragrances.com/product/armaf-tag-him-1"
+  },
+  "armaf-shades-blue": {
+    "price": 1793,
+    "url": "https://www.aarfragrances.com/product/armaf-shades-blue"
+  },
+  "armaf-shades-wood": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/armaf-shades-wood"
+  },
+  "armaf-shades": {
+    "price": 1999,
+    "url": "https://www.aarfragrances.com/product/armaf-shades-2"
+  },
+  "armaf-radical-brown": {
+    "price": 1699,
+    "url": "https://www.aarfragrances.com/product/armaf-radical-brown"
+  },
+  "armaf-radical-blue": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/armaf-radical-blue"
+  },
+  "armaf-odyssey-femme-white-edition": {
+    "price": 2049,
+    "url": "https://www.aarfragrances.com/product/armaf-odyssey-femme-white"
+  },
+  "armaf-white-diamond": {
+    "price": 2140,
+    "url": "https://www.aarfragrances.com/product/armaf-niche-white-diamond"
+  },
+  "armaf-legesi": {
+    "price": 2000,
+    "url": "https://www.aarfragrances.com/product/armaf-legesi-homme"
+  },
+  "armaf-le-parfait-pour-homme": {
+    "price": 1800,
+    "url": "https://www.aarfragrances.com/product/armaf-le-parfait"
+  },
+  "armaf-hunter-intense": {
+    "price": 2199,
+    "url": "https://www.aarfragrances.com/product/armaf-hunter-intense"
+  },
+  "armaf-el-cielo": {
+    "price": 1449,
+    "url": "https://www.aarfragrances.com/product/armaf-el-cielo"
+  },
+  "armaf-derby-club-house": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/armaf-derby-club-house-2"
+  },
+  "armaf-niche-oud": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/armaf-niche-oud"
+  },
+  "armaf-club-de-nuit-man": {
+    "price": 3199,
+    "url": "https://www.aarfragrances.com/product/armaf-club-de-nuit-man"
+  },
+  "armaf-vanity-femme-essence": {
+    "price": 1899,
+    "url": "https://www.aarfragrances.com/product/armaf-vanity-femme-essence"
+  },
+  "lattafa-ana-abiyedh-leather": {
+    "price": 1949,
+    "url": "https://www.aarfragrances.com/product/lattafa-ana-abiyedh-leather"
+  },
+  "rasasi-royale-blue": {
+    "price": 1549,
+    "url": "https://www.aarfragrances.com/product/rasasi-royale-blue"
+  },
+  "armaf-blue-homme": {
+    "price": 2116,
+    "url": "https://www.aarfragrances.com/product/armaf-blue-homme"
+  },
+  "lattafa-al-dur-al-maknoon-silver": {
+    "price": 1799,
+    "url": "https://www.aarfragrances.com/product/lattafa-al-dur-al-maknoon-silver"
+  },
+  "afnan-supremacy-incense": {
+    "price": 3449,
+    "url": "https://www.aarfragrances.com/product/afnan-supremacy-incense"
+  },
+  "lattafa-sha-ari": {
+    "price": 1699,
+    "url": "https://www.aarfragrances.com/product/lattafa-shaari"
+  },
+  "armaf-signature-night": {
+    "price": 1749,
+    "url": "https://www.aarfragrances.com/product/armaf-signature-night"
+  },
+  "lattafa-velvet-oud": {
+    "price": 2399,
+    "url": "https://www.aarfragrances.com/product/lattafa-velvet-oud"
+  },
+  "lattafa-raghba": {
+    "price": 2199,
+    "url": "https://www.aarfragrances.com/product/lattafa-raghba-100ml"
+  },
+  "lattafa-raghba-wood-intense": {
+    "price": 1549,
+    "url": "https://www.aarfragrances.com/product/lattafa-raghba-wood-intense"
+  },
+  "armaf-tag-her": {
+    "price": 1995,
+    "url": "https://www.aarfragrances.com/product/armaf-tag-her-2"
   }
 }

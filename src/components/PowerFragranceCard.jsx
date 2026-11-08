@@ -63,11 +63,19 @@ export default function PowerFragranceCard({
           for (const [sz, val] of Object.entries(d.sizes)) {
             const p = Number(val);
             if (p && !isNaN(p) && p > 0) {
+              const mlMatch = sz.match(/(\d+)\s*ml/i);
+              const ml = mlMatch ? parseInt(mlMatch[1], 10) : null;
+              const pricePerMl = ml ? Math.round(p / ml) : null;
+              const isTargetRange = ml && ml >= 8 && ml <= 12;
+
               const quoteObj = {
                 seller_id: d.seller_id,
                 seller_name: d.seller_name,
                 label: `${sz} Decant`,
                 price: p,
+                ml,
+                pricePerMl,
+                isTargetRange,
                 whatsapp: d.whatsapp,
                 shipping: d.shipping || 'Pan-India Delivery',
                 dispatch: d.dispatch || '24-48 hrs',
@@ -83,11 +91,18 @@ export default function PowerFragranceCard({
         } else {
           const p = Number(d.lowest_price || d.price_10ml || d.price_5ml || d.price);
           if (p && !isNaN(p) && p > 0) {
+            const ml = d.price_10ml ? 10 : (d.price_5ml ? 5 : null);
+            const pricePerMl = ml ? Math.round(p / ml) : null;
+            const isTargetRange = ml && ml >= 8 && ml <= 12;
+
             const quoteObj = {
               seller_id: d.seller_id,
               seller_name: d.seller_name,
               label: d.price_10ml ? '10ml Decant' : (d.price_5ml ? '5ml Decant' : 'Decant'),
               price: p,
+              ml,
+              pricePerMl,
+              isTargetRange,
               whatsapp: d.whatsapp,
               shipping: d.shipping || 'Pan-India Delivery',
               dispatch: d.dispatch || '24-48 hrs',
@@ -111,7 +126,22 @@ export default function PowerFragranceCard({
     const bRetail = activeQuotes.find(q => q.type === 'retail');
     const bTester = activeQuotes.find(q => q.type === 'tester');
     const bPartial = activeQuotes.find(q => q.type === 'partial');
-    const bDecant = activeQuotes.find(q => q.type === 'decant');
+
+    // Priority 1: Best price per ml in 8-12ml sweet-spot
+    const targetRangeDecants = activeQuotes.filter(q => q.type === 'decant' && q.isTargetRange && q.pricePerMl);
+    let bDecant = null;
+    if (targetRangeDecants.length > 0) {
+      targetRangeDecants.sort((a, b) => a.pricePerMl - b.pricePerMl);
+      bDecant = targetRangeDecants[0];
+    } else {
+      const allDecantsWithRate = activeQuotes.filter(q => q.type === 'decant' && q.pricePerMl);
+      if (allDecantsWithRate.length > 0) {
+        allDecantsWithRate.sort((a, b) => a.pricePerMl - b.pricePerMl);
+        bDecant = allDecantsWithRate[0];
+      } else {
+        bDecant = activeQuotes.find(q => q.type === 'decant');
+      }
+    }
 
     return {
       allQuotes: listAll,
@@ -136,7 +166,15 @@ export default function PowerFragranceCard({
   const formatQuotes = useMemo(() => {
     const base = isSpecificSeller ? currentSellerQuotes : allQuotes;
     const filtered = base.filter(q => activeFormats.includes(q.type));
-    return filtered.length > 0 ? filtered : base;
+    const quotes = (filtered.length > 0 ? filtered : base).slice();
+
+    // For decants, sort by price per ml (lowest rate first)
+    if (activeFormats.length === 1 && activeFormats[0] === 'decant') {
+      quotes.sort((a, b) => (a.pricePerMl || a.price) - (b.pricePerMl || b.price));
+    } else {
+      quotes.sort((a, b) => a.price - b.price);
+    }
+    return quotes;
   }, [allQuotes, currentSellerQuotes, activeFormats, isSpecificSeller]);
 
   // Quote overrides selected by user from the Compare Rates accordion
@@ -146,6 +184,79 @@ export default function PowerFragranceCard({
   const activeTester = quoteOverrides['tester'] || lowestTester;
   const activePartial = quoteOverrides['partial'] || lowestPartial;
   const activeDecant = quoteOverrides['decant'] || lowestDecant;
+
+  // Available decant sizes for the active decant seller
+  const availableSizes = useMemo(() => {
+    if (!activeDecant || !Array.isArray(f.community_decants)) return [];
+    const sellerEntry = f.community_decants.find(d => d.seller_id === activeDecant.seller_id) || f.community_decants[0];
+    if (!sellerEntry) return [];
+
+    const list = [];
+    if (sellerEntry.sizes && typeof sellerEntry.sizes === 'object') {
+      for (const [sz, val] of Object.entries(sellerEntry.sizes)) {
+        const p = Number(val);
+        if (!p || isNaN(p) || p <= 0) continue;
+        const match = sz.match(/(\d+)\s*ml/i);
+        const ml = match ? parseInt(match[1], 10) : null;
+        const perMl = ml ? Math.round(p / ml) : null;
+        const isTarget = ml && ml >= 8 && ml <= 12;
+
+        const quoteObj = {
+          seller_id: sellerEntry.seller_id,
+          seller_name: sellerEntry.seller_name,
+          label: `${sz} Decant`,
+          price: p,
+          ml,
+          pricePerMl: perMl,
+          isTargetRange: isTarget,
+          whatsapp: sellerEntry.whatsapp,
+          shipping: sellerEntry.shipping || 'Pan-India Delivery',
+          dispatch: sellerEntry.dispatch || '24-48 hrs',
+          isBottle: false,
+          type: 'decant'
+        };
+
+        list.push({
+          size: sz,
+          ml: ml || 0,
+          price: p,
+          perMl,
+          isTargetRange: isTarget,
+          quote: quoteObj
+        });
+      }
+    } else {
+      const p = Number(sellerEntry.lowest_price || sellerEntry.price_10ml || sellerEntry.price_5ml || sellerEntry.price);
+      if (p && !isNaN(p) && p > 0) {
+        const ml = sellerEntry.price_10ml ? 10 : (sellerEntry.price_5ml ? 5 : null);
+        const perMl = ml ? Math.round(p / ml) : null;
+        list.push({
+          size: ml ? `${ml}ml` : 'Decant',
+          ml: ml || 0,
+          price: p,
+          perMl,
+          isTargetRange: ml && ml >= 8 && ml <= 12,
+          quote: {
+            seller_id: sellerEntry.seller_id,
+            seller_name: sellerEntry.seller_name,
+            label: ml ? `${ml}ml Decant` : 'Decant',
+            price: p,
+            ml,
+            pricePerMl: perMl,
+            isTargetRange: ml && ml >= 8 && ml <= 12,
+            whatsapp: sellerEntry.whatsapp,
+            shipping: sellerEntry.shipping || 'Pan-India Delivery',
+            dispatch: sellerEntry.dispatch || '24-48 hrs',
+            isBottle: false,
+            type: 'decant'
+          }
+        });
+      }
+    }
+
+    list.sort((a, b) => a.ml - b.ml);
+    return list;
+  }, [activeDecant?.seller_id, f.community_decants]);
 
   // What format pods should render on the card?
   let showRetail = activeFormats.includes('retail') && !!lowestRetail;
@@ -180,11 +291,17 @@ export default function PowerFragranceCard({
           className="cursor-pointer space-y-2 group"
           title="Click to view full notes, longevity & reviews"
         >
-          <div className="flex items-center justify-between gap-1.5 flex-wrap">
-            <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
               <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/70 px-2 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-800/80">
                 {f.brand}
               </span>
+              {activeFormats.length === 1 && activeFormats[0] === 'decant' && activeDecant?.pricePerMl && (
+                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-cyan-50 text-cyan-900 border border-cyan-300 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-700/80 flex items-center gap-1" title="Lowest decant rate in 8-12ml travel size">
+                  <span>💧</span>
+                  <span>Lowest: ₹{activeDecant.pricePerMl}/ml</span>
+                </span>
+              )}
               {lowestPartial && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 flex items-center gap-1" title="Authentic opened partial bottle">
                   <span>🏷️</span>
@@ -217,7 +334,7 @@ export default function PowerFragranceCard({
               )}
             </div>
 
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/50 text-amber-800 dark:text-amber-300 font-mono text-[11px] font-bold shrink-0">
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/50 text-amber-800 dark:text-amber-300 font-mono text-[11px] font-bold shrink-0 self-start">
               <Star className="w-3 h-3 fill-amber-500 text-amber-500 dark:fill-amber-400 dark:text-amber-400" />
               <span>{(Number(f.rating_value) || 4.2).toFixed(1)}</span>
             </div>
@@ -397,51 +514,109 @@ export default function PowerFragranceCard({
 
           {/* POD 4: Decants Ready (Rendered when Decants is ticked) */}
           {showDecant && activeDecant && (
-            <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="text-xs">💧</span>
-                  <span className="font-medium truncate">{activeDecant.label}</span>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeDecant.seller_name}>{activeDecant.seller_name}</strong>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="text-right">
-                  <div className="text-[9px] font-mono text-slate-400">from</div>
-                  <div className="font-mono text-sm font-extrabold text-cyan-600 dark:text-cyan-400">
-                    ₹{activeDecant.price.toLocaleString()}
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-cyan-400/30 dark:border-cyan-500/30 shadow-xs hover:border-cyan-400 transition-all space-y-2.5">
+              
+              {/* Main Decant Info Row */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs">💧</span>
+                    <span className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate">
+                      {activeDecant.ml ? `${activeDecant.ml}ml Decant` : activeDecant.label}
+                    </span>
+                    {activeDecant.isTargetRange && (
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 dark:bg-cyan-950/80 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-700/60 shrink-0">
+                        8–12ml Sweet-Spot
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-1">
+                    via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeDecant.seller_name}>{activeDecant.seller_name}</strong>
+                    <span className="mx-1 text-slate-400">•</span>
+                    <span>{activeDecant.dispatch}</span>
                   </div>
                 </div>
 
-                {getWhatsAppUrl(
-                  activeDecant.whatsapp || f.community_whatsapp,
-                  `Hi ${activeDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${activeDecant.price.toLocaleString()} (${activeDecant.label}) on FragScanner. What sizes are available?`
-                ) && (
-                  <a
-                    href={getWhatsAppUrl(
-                      activeDecant.whatsapp || f.community_whatsapp,
-                      `Hi ${activeDecant.seller_name || 'there'}, saw your decant rates for ${displayName} starting at ₹${activeDecant.price.toLocaleString()} (${activeDecant.label}) on FragScanner. What sizes are available?`
+                {/* Hero Rate & Total Badge */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="text-right">
+                    {activeDecant.pricePerMl ? (
+                      <div className="flex flex-col items-end">
+                        <div className="font-mono text-base font-black text-cyan-600 dark:text-cyan-400 tracking-tight leading-none">
+                          ₹{activeDecant.pricePerMl}<span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 font-sans">/ml</span>
+                        </div>
+                        <div className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-200/70 dark:bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700/80 mt-1">
+                          ₹{activeDecant.price.toLocaleString()} total
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="font-mono text-base font-extrabold text-cyan-600 dark:text-cyan-400">
+                        ₹{activeDecant.price.toLocaleString()}
+                      </div>
                     )}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => logWhatsAppClick({
-                      sellerName: activeDecant.seller_name,
-                      fragranceName: f.name,
-                      brand: f.brand,
-                      price: activeDecant.price,
-                      format: 'decant'
-                    })}
-                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${activeDecant.seller_name} for decants on WhatsApp`}
-                  >
-                    <span>WA</span>
-                    <span className="text-[9px]">↗</span>
-                  </a>
-                )}
+                  </div>
+
+                  {getWhatsAppUrl(
+                    activeDecant.whatsapp || f.community_whatsapp,
+                    `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragScanner. Is this available?`
+                  ) && (
+                    <a
+                      href={getWhatsAppUrl(
+                        activeDecant.whatsapp || f.community_whatsapp,
+                        `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragScanner. Is this available?`
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => logWhatsAppClick({
+                        sellerName: activeDecant.seller_name,
+                        fragranceName: f.name,
+                        brand: f.brand,
+                        price: activeDecant.price,
+                        format: 'decant'
+                      })}
+                      className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
+                      title={`Order ${activeDecant.label} from ${activeDecant.seller_name} on WhatsApp`}
+                    >
+                      <span>WA</span>
+                      <span className="text-[9px]">↗</span>
+                    </a>
+                  )}
+                </div>
               </div>
+
+              {/* Quick Size Switcher Chips (When seller offers multiple sizes) */}
+              {availableSizes.length > 1 && (
+                <div className="pt-2 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center gap-1.5 flex-wrap py-0.5">
+                  <span className="text-[9px] font-mono uppercase text-slate-400 dark:text-slate-500 font-bold shrink-0">Sizes:</span>
+                  {availableSizes.map((s, sIdx) => {
+                    const isActive = (activeDecant.ml && activeDecant.ml === s.ml) || activeDecant.label.startsWith(s.size);
+                    return (
+                      <button
+                        key={sIdx}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setQuoteOverrides(prev => ({ ...prev, decant: s.quote }));
+                        }}
+                        className={`px-2 py-0.5 rounded-md text-[10px] font-mono transition-all shrink-0 flex items-center gap-1 cursor-pointer active:scale-95 ${
+                          isActive
+                            ? 'bg-cyan-500 text-slate-950 font-black shadow-xs ring-1 ring-cyan-400'
+                            : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
+                        }`}
+                        title={`${s.size} Decant for ₹${s.price} (${s.perMl ? `₹${s.perMl}/ml` : ''})`}
+                      >
+                        <span>{s.size}</span>
+                        <span className={isActive ? 'text-slate-950 font-extrabold' : 'text-slate-400'}>
+                          ₹{s.price}
+                        </span>
+                        {s.isTargetRange && !isActive && (
+                          <span className="text-[8px] text-cyan-500 font-black" title="Sweet-spot rate">★</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -476,7 +651,9 @@ export default function PowerFragranceCard({
         <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 bg-slate-50 dark:bg-slate-950/80 p-2.5 rounded-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 font-bold">
             <span>Direct Quotes ({formatQuotes.length}) — Click to Select:</span>
-            <span className="text-cyan-400">Ranked by Price ↑</span>
+            <span className="text-cyan-500 dark:text-cyan-400 font-bold">
+              {activeFormats.length === 1 && activeFormats[0] === 'decant' ? 'Ranked by Rate (₹/ml) ↑' : 'Ranked by Price ↑'}
+            </span>
           </div>
 
           <div className="space-y-1 max-h-56 overflow-y-auto pr-0.5">
@@ -491,7 +668,7 @@ export default function PowerFragranceCard({
                   : q.type === 'tester' ? activeTester
                   : q.type === 'partial' ? activePartial
                   : activeDecant;
-                const isSelected = activeQuoteForType?.seller_id === q.seller_id && activeQuoteForType?.price === q.price;
+                const isSelected = activeQuoteForType?.seller_id === q.seller_id && activeQuoteForType?.price === q.price && (!activeQuoteForType?.label || activeQuoteForType?.label === q.label);
 
                 return (
                   <div 
@@ -524,12 +701,17 @@ export default function PowerFragranceCard({
                           <span className="truncate">{q.seller_name}</span>
                           {qIdx === 0 && (
                             <span className="text-[8px] font-mono text-emerald-700 dark:text-emerald-300 font-black bg-emerald-100 dark:bg-emerald-950 px-1 rounded shrink-0">
-                              Lowest
+                              {q.type === 'decant' ? (q.isTargetRange ? 'Lowest (8–12ml)' : 'Lowest Rate') : 'Lowest'}
                             </span>
                           )}
                           {isSelected && (
                             <span className="text-[8px] font-mono text-cyan-700 dark:text-cyan-300 font-black bg-cyan-100 dark:bg-cyan-950 px-1 rounded shrink-0">
                               Selected
+                            </span>
+                          )}
+                          {!isSelected && qIdx !== 0 && q.isTargetRange && q.type === 'decant' && (
+                            <span className="text-[8px] font-mono text-cyan-700 dark:text-cyan-300 font-bold bg-cyan-100 dark:bg-cyan-950 px-1 rounded shrink-0">
+                              8–12ml
                             </span>
                           )}
                         </div>
@@ -540,15 +722,34 @@ export default function PowerFragranceCard({
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className={`font-mono text-xs font-bold ${
-                        isSelected || isSelectedSellerQuote
-                          ? 'text-cyan-600 dark:text-cyan-400 font-black'
-                          : qIdx === 0 
-                            ? 'text-emerald-600 dark:text-emerald-400 font-black' 
-                            : 'text-slate-800 dark:text-slate-200'
-                      }`}>
-                        ₹{q.price.toLocaleString()}
-                      </span>
+                      <div className="text-right">
+                        {q.pricePerMl ? (
+                          <div className="flex flex-col items-end">
+                            <span className={`font-mono text-xs font-black ${
+                              isSelected || isSelectedSellerQuote
+                                ? 'text-cyan-600 dark:text-cyan-400 font-black'
+                                : qIdx === 0 
+                                  ? 'text-emerald-600 dark:text-emerald-400 font-black' 
+                                  : 'text-slate-800 dark:text-slate-200'
+                            }`}>
+                              ₹{q.pricePerMl}<span className="text-[9px] font-normal text-slate-400 font-sans">/ml</span>
+                            </span>
+                            <span className="text-[8px] font-mono text-slate-400">
+                              ₹{q.price.toLocaleString()} total
+                            </span>
+                          </div>
+                        ) : (
+                          <span className={`font-mono text-xs font-bold ${
+                            isSelected || isSelectedSellerQuote
+                              ? 'text-cyan-600 dark:text-cyan-400 font-black'
+                              : qIdx === 0 
+                                ? 'text-emerald-600 dark:text-emerald-400 font-black' 
+                                : 'text-slate-800 dark:text-slate-200'
+                          }`}>
+                            ₹{q.price.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
                       {q.whatsapp ? (
                         <a
                           href={`https://wa.me/${String(q.whatsapp).replace(/\D/g, '').startsWith('91') ? String(q.whatsapp).replace(/\D/g, '') : `91${String(q.whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(

@@ -37,6 +37,81 @@ const TYPO_MAP = {
   hawaas: 'hawas'
 };
 
+/**
+ * Compute the best decant quote in the 8-12ml sweet-spot range (lowest price per ml)
+ * Falls back to lowest rate among any available sizes if 8-12ml is not present.
+ */
+export function getBestDecantRate(f) {
+  if (!f || !Array.isArray(f.community_decants)) return null;
+  let best8to12 = null;
+  let overallBestRate = null;
+
+  for (const d of f.community_decants) {
+    if (d.sizes && typeof d.sizes === 'object') {
+      for (const [sz, price] of Object.entries(d.sizes)) {
+        const p = Number(price);
+        if (!p || isNaN(p) || p <= 0) continue;
+        const match = sz.match(/(\d+)\s*ml/i);
+        const ml = match ? parseInt(match[1], 10) : null;
+        if (!ml || ml <= 0) continue;
+        const perMl = Math.round(p / ml);
+        const quote = {
+          seller: d.seller_name,
+          seller_id: d.seller_id,
+          size: sz,
+          price: p,
+          ml,
+          perMl,
+          whatsapp: d.whatsapp,
+          shipping: d.shipping,
+          dispatch: d.dispatch,
+          isTargetRange: ml >= 8 && ml <= 12
+        };
+
+        if (!overallBestRate || perMl < overallBestRate.perMl) {
+          overallBestRate = quote;
+        }
+
+        if (ml >= 8 && ml <= 12) {
+          if (!best8to12 || perMl < best8to12.perMl) {
+            best8to12 = quote;
+          }
+        }
+      }
+    } else {
+      const p = Number(d.lowest_price || d.price_10ml || d.price_5ml || d.price);
+      if (p && !isNaN(p) && p > 0) {
+        const ml = d.price_10ml ? 10 : (d.price_5ml ? 5 : null);
+        if (ml) {
+          const perMl = Math.round(p / ml);
+          const quote = {
+            seller: d.seller_name,
+            seller_id: d.seller_id,
+            size: `${ml}ml`,
+            price: p,
+            ml,
+            perMl,
+            whatsapp: d.whatsapp,
+            shipping: d.shipping,
+            dispatch: d.dispatch,
+            isTargetRange: ml >= 8 && ml <= 12
+          };
+          if (!overallBestRate || perMl < overallBestRate.perMl) {
+            overallBestRate = quote;
+          }
+          if (ml >= 8 && ml <= 12) {
+            if (!best8to12 || perMl < best8to12.perMl) {
+              best8to12 = quote;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return best8to12 || overallBestRate;
+}
+
 export function normalizeQuery(raw) {
   let q = (raw || '').trim().toLowerCase();
   for (const [abbr, expansion] of Object.entries(ACRONYMS)) {
@@ -125,7 +200,13 @@ export async function fetchInventoryPage({
 
     // 2. Seller Isolation
     if (seller && seller !== 'all') {
-      query = query.or(`community_sellers.cs.[{"seller_id":"${seller}"}],community_decants.cs.[{"seller_id":"${seller}"}]`);
+      if (formats.length === 1 && formats[0] === 'decant') {
+        query = query.filter('community_decants', 'cs', JSON.stringify([{ seller_id: seller }]));
+      } else if (formats.length === 1 && (formats[0] === 'retail' || formats[0] === 'tester' || formats[0] === 'partial')) {
+        query = query.filter('community_sellers', 'cs', JSON.stringify([{ seller_id: seller }]));
+      } else {
+        query = query.or(`community_sellers.cs.[{"seller_id":"${seller}"}],community_decants.cs.[{"seller_id":"${seller}"}]`);
+      }
     }
 
     // 2b. Brand Isolation
@@ -133,8 +214,10 @@ export async function fetchInventoryPage({
       query = query.ilike('brand', brand);
     }
 
-    // 3. Max Budget
-    if (maxBudget < 15000) {
+    const isDecantOnly = formats.length === 1 && formats[0] === 'decant';
+
+    // 3. Max Budget (Only applies to full bottle price if not in decant-only mode)
+    if (!isDecantOnly && maxBudget < 15000) {
       query = query.lte('community_price', maxBudget);
     }
 
@@ -158,9 +241,17 @@ export async function fetchInventoryPage({
       const scored = items.map(item => ({ item, score: scoreRelevance(item, tokens) }));
 
       if (sortBy === 'price_desc') {
-        scored.sort((a, b) => Number(b.item.community_price || 0) - Number(a.item.community_price || 0));
+        if (isDecantOnly) {
+          scored.sort((a, b) => (getBestDecantRate(b.item)?.perMl || 0) - (getBestDecantRate(a.item)?.perMl || 0));
+        } else {
+          scored.sort((a, b) => Number(b.item.community_price || 0) - Number(a.item.community_price || 0));
+        }
       } else if (sortBy === 'price_asc') {
-        scored.sort((a, b) => b.score !== a.score ? b.score - a.score : (Number(a.item.community_price || 0) - Number(b.item.community_price || 0)));
+        if (isDecantOnly) {
+          scored.sort((a, b) => b.score !== a.score ? b.score - a.score : ((getBestDecantRate(a.item)?.perMl || 99999) - (getBestDecantRate(b.item)?.perMl || 99999)));
+        } else {
+          scored.sort((a, b) => b.score !== a.score ? b.score - a.score : (Number(a.item.community_price || 0) - Number(b.item.community_price || 0)));
+        }
       } else if (sortBy === 'rating') {
         scored.sort((a, b) => (Number(b.item.rating_value) || 0) - (Number(a.item.rating_value) || 0));
       } else {
@@ -171,29 +262,49 @@ export async function fetchInventoryPage({
       const from = (page - 1) * pageSize;
       items = scored.slice(from, from + pageSize).map(x => x.item);
     } else {
-      // For general catalog browsing, sort and paginate directly in Postgres
-      if (sortBy === 'price_desc') {
-        query = query.order('community_price', { ascending: false, nullsFirst: false });
-      } else if (sortBy === 'rating') {
-        query = query.order('rating_value', { ascending: false, nullsFirst: false });
-      } else if (dealsOnly === 'drops' || dealsOnly === 'new') {
-        query = query.order('discovered_at', { ascending: false, nullsFirst: false });
+      if (isDecantOnly && (sortBy === 'price_asc' || sortBy === 'price_desc')) {
+        // For decants, sort by price per ml (lowest rate first)
+        const { data, error } = await query;
+        if (error) {
+          console.warn('Supabase decants query error:', error.message);
+          throw error;
+        }
+
+        let list = data || [];
+        if (sortBy === 'price_asc') {
+          list.sort((a, b) => (getBestDecantRate(a)?.perMl || 99999) - (getBestDecantRate(b)?.perMl || 99999));
+        } else {
+          list.sort((a, b) => (getBestDecantRate(b)?.perMl || 0) - (getBestDecantRate(a)?.perMl || 0));
+        }
+
+        totalCount = list.length;
+        const from = (page - 1) * pageSize;
+        items = list.slice(from, from + pageSize);
       } else {
-        query = query.order('community_price', { ascending: true, nullsFirst: false });
+        // For general catalog browsing, sort and paginate directly in Postgres
+        if (sortBy === 'price_desc') {
+          query = query.order('community_price', { ascending: false, nullsFirst: false });
+        } else if (sortBy === 'rating') {
+          query = query.order('rating_value', { ascending: false, nullsFirst: false });
+        } else if (dealsOnly === 'drops' || dealsOnly === 'new') {
+          query = query.order('discovered_at', { ascending: false, nullsFirst: false });
+        } else {
+          query = query.order('community_price', { ascending: true, nullsFirst: false });
+        }
+
+        const from = (page - 1) * pageSize;
+        const to = from + pageSize - 1;
+        query = query.range(from, to);
+
+        const { data, count, error } = await query;
+        if (error) {
+          console.warn('Supabase query error:', error.message);
+          throw error;
+        }
+
+        items = data || [];
+        totalCount = count || items.length;
       }
-
-      const from = (page - 1) * pageSize;
-      const to = from + pageSize - 1;
-      query = query.range(from, to);
-
-      const { data, count, error } = await query;
-      if (error) {
-        console.warn('Supabase query error:', error.message);
-        throw error;
-      }
-
-      items = data || [];
-      totalCount = count || items.length;
     }
 
     const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));

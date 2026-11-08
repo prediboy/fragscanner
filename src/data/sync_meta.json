@@ -293,7 +293,7 @@
     "sovereign_scents": {
       "name": "Sovereign Scents",
       "bottles": 28,
-      "decants": 608,
+      "decants": 610,
       "type": "Dual"
     },
     "bluewings": {
@@ -310,9 +310,8 @@
     },
     "aar_fragrances": {
       "name": "AAR Fragrances",
-      "bottles": 616,
-      "decants": 604,
-      "type": "Dual"
+      "bottles": 489,
+      "type": "Full Bottles"
     },
     "fragrance_heaven": {
       "name": "Fragrance Heaven",

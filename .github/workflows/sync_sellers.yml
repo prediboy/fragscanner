@@ -32,6 +32,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
+          node scripts/scrape_aar_middle_east.cjs || true
           node scripts/refresh_all_sellers.cjs
 
       - name: Commit and Push Fresh Prices
