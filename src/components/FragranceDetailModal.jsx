@@ -11,9 +11,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
   const [selectedDecantQuotes, setSelectedDecantQuotes] = useState({}); // { [size]: quoteIndex }
 
-  if (!fragrance) return null;
-
-  const recommendations = getFragranceRecommendations(fragrance, allFragrances, 8) || { flankers: [], dnaTwins: [], topMatches: [] };
+  const recommendations = fragrance ? (getFragranceRecommendations(fragrance, allFragrances, 8) || { flankers: [], dnaTwins: [], topMatches: [] }) : { flankers: [], dnaTwins: [], topMatches: [] };
 
   const getBrandBadgeColor = (brand) => {
     switch ((brand || '').toLowerCase()) {
@@ -36,6 +34,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
     : fName;
 
   const effectiveDecantComparison = useMemo(() => {
+    if (!fragrance) return null;
     // 1. If fragrance already has an object with sizes, check if it has keys
     if (
       fragrance.decant_comparison &&
@@ -83,7 +82,9 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
       return Object.keys(comparison).length > 0 ? comparison : null;
     }
     return null;
-  }, [fragrance.decant_comparison, fragrance.community_decants]);
+  }, [fragrance?.decant_comparison, fragrance?.community_decants]);
+
+  if (!fragrance) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">

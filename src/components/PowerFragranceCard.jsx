@@ -18,14 +18,23 @@ export default function PowerFragranceCard({
   selectedSeller = 'all',
   selectedFormats = ['retail']
 }) {
-  if (!f) return null;
-
   const isSpecificSeller = selectedSeller && selectedSeller !== 'all';
 
   // 1. Extract quotes for the card
   const { allQuotes, currentSellerQuotes, lowestRetail, lowestTester, lowestPartial, lowestDecant } = useMemo(() => {
     const listAll = [];
     const listCurrent = [];
+
+    if (!f) {
+      return {
+        allQuotes: listAll,
+        currentSellerQuotes: listCurrent,
+        lowestRetail: null,
+        lowestTester: null,
+        lowestPartial: null,
+        lowestDecant: null
+      };
+    }
 
     // Process bottle quotes
     if (Array.isArray(f.community_sellers)) {
@@ -155,7 +164,6 @@ export default function PowerFragranceCard({
 
   // Determine active quotes based on seller filter
   const relevantQuotes = isSpecificSeller ? currentSellerQuotes : allQuotes;
-  if (relevantQuotes.length === 0) return null; // Guard: do not render if selected seller has 0 quotes for this perfume
 
   // Active formats selected by user in filter rail (defaults to ['retail'])
   const activeFormats = Array.isArray(selectedFormats) && selectedFormats.length > 0
@@ -187,7 +195,7 @@ export default function PowerFragranceCard({
 
   // Available decant sizes for the active decant seller
   const availableSizes = useMemo(() => {
-    if (!activeDecant || !Array.isArray(f.community_decants)) return [];
+    if (!activeDecant || !f || !Array.isArray(f.community_decants)) return [];
     const sellerEntry = f.community_decants.find(d => d.seller_id === activeDecant.seller_id) || f.community_decants[0];
     if (!sellerEntry) return [];
 
@@ -274,11 +282,13 @@ export default function PowerFragranceCard({
 
   const bottleDisplaySize = activeRetail 
     ? activeRetail.label.replace(' Retail Bottle', ' Bottle') 
-    : (f.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
+    : (f?.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
 
-  const displayName = f.brand && !f.name.toLowerCase().includes(f.brand.toLowerCase())
+  const displayName = f?.brand && !f?.name?.toLowerCase().includes(f.brand.toLowerCase())
     ? `${f.brand} ${f.name}`
-    : f.name;
+    : (f?.name || '');
+
+  if (!f || relevantQuotes.length === 0) return null;
 
   return (
     <div 
