@@ -164,7 +164,10 @@ function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
   // 2. Fluid Ounce extraction (e.g., 3.4 oz, 3.4 fl oz)
   const ozMatch = name.match(/\b(\d+(?:\.\d+)?)\s*(?:fl\.?\s*oz\.?|oz\.?)\b/i);
 
-  // 3. Modifier flags
+  // 3. Recognized standard perfume bottle sizes (e.g. "SNOI 150", "Gold 60", "Iconic 105")
+  const stdMatch = name.match(/\b(30|50|60|75|80|90|100|105|120|125|150|200|250)\b/);
+
+  // 4. Modifier flags
   const isMini = /\b(mini|sample|travel|pocket|roller|roll\s*on|vial)\b/i.test(full);
   const isTester = /\btester\b/i.test(full);
   const isPartial = /\bpartial\b/i.test(full);
@@ -177,6 +180,9 @@ function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
     hasExplicitVolume = true;
   } else if (ozMatch) {
     volume = Math.round(parseFloat(ozMatch[1]) * 29.5735);
+    hasExplicitVolume = true;
+  } else if (stdMatch) {
+    volume = parseInt(stdMatch[1], 10);
     hasExplicitVolume = true;
   } else if (/tobacco jam\s*60\b/i.test(name)) {
     volume = 60;
@@ -210,11 +216,9 @@ function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
     }
   }
 
-  // Human-readable size label:
-  // If ml is mentioned on the bottle, explicitly include it (e.g. "100ml Retail Bottle", "50ml Retail Bottle").
-  // Else, if not mentioned, it's fine without ml (e.g. "Retail Bottle", "Tester").
+  // Human-readable size label with exact ML:
   let label = "";
-  if (hasExplicitVolume && volume) {
+  if (volume) {
     if (isMini || volume <= 20) {
       label = `${volume}ml Mini`;
     } else if (isPartial) {
@@ -225,15 +229,7 @@ function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
       label = `${volume}ml Retail Bottle`;
     }
   } else {
-    if (isMini) {
-      label = `Mini Bottle`;
-    } else if (isPartial) {
-      label = `Partial Bottle`;
-    } else if (isTester) {
-      label = `Tester Bottle`;
-    } else {
-      label = `Retail Bottle`;
-    }
+    label = isPartial ? 'Partial Bottle' : (isTester ? 'Tester Bottle' : 'Retail Bottle');
   }
 
   return { volume: volume || 100, label, isMini, isTester, isPartial, hasExplicitVolume };
