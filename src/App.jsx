@@ -25,8 +25,7 @@ const COMMUNITY_SELLERS = [
   { id: 'rp_decants', name: 'RP Decants' },
   { id: 'gryv_scents', name: 'GRYV Scents' },
   { id: 'bluewings', name: 'Blue Wings' },
-  { id: 'aar_fragrances', name: 'AAR Fragrances' },
-  { id: 'fragrance_heaven', name: 'Fragrance Heaven' }
+  { id: 'aar_fragrances', name: 'AAR Fragrances' }
 ];
 
 export default function App() {
@@ -319,7 +318,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono hidden sm:block">
-                11 Community Sellers • Pan-India Verified Rates
+                10 Community Sellers • Pan-India Verified Rates
               </p>
             </div>
           </div>
@@ -334,7 +333,7 @@ export default function App() {
               title="View live catalog sync status"
             >
               <Database className="w-3.5 h-3.5 text-cyan-500" />
-              <span className="hidden md:inline">11 Sellers Synced</span>
+              <span className="hidden md:inline">10 Sellers Synced</span>
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
             </button>
 

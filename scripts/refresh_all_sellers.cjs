@@ -408,15 +408,6 @@ async function runMasterRefresh() {
       dispatch: "24-48 hrs"
     },
     {
-      id: "fragrance_heaven",
-      seller_name: "Fragrance Heaven",
-      type: "bottle",
-      url: "https://www.fragranceheaven.in",
-      whatsapp: "7838191410",
-      shipping: "Pan-India Shipping",
-      dispatch: "24-48 hrs"
-    },
-    {
       id: "sovereign_scents",
       seller_name: "Sovereign Scents",
       type: "decant_and_bottle",
@@ -1382,30 +1373,9 @@ async function runMasterRefresh() {
 
 
 
-    if (fs.existsSync(fhBottlesPath)) {
-      const fhB = JSON.parse(fs.readFileSync(fhBottlesPath, "utf-8"));
-      for (const [fid, data] of Object.entries(fhB)) {
-        const target = fragrances.find(f => f.id === fid);
-        if (target && data.price > 0) {
-          const meta = extractBottleMetadata(target.brand, (data.url || fid).replace(/[-_]/g, " "), target.bottle_size);
-          addBottleQuote(target, {
-            seller_id: "fragrance_heaven",
-            seller_name: "Fragrance Heaven",
-            price: data.price,
-            size: meta.label,
-            volume_ml: meta.volume,
-            whatsapp: "7838191410",
-            shipping: "Pan-India Shipping",
-            dispatch: "24-48 hrs",
-            product_url: data.url,
-            verified: true
-          });
-        }
-      }
-    }
-    console.log("  ✓ Successfully merged verified AAR & Fragrance Heaven quotes");
+    console.log("  ✓ Successfully merged verified AAR quotes");
   } catch (err) {
-    console.error("  ❌ Error loading AAR / FH cache:", err.message);
+    console.error("  ❌ Error loading AAR cache:", err.message);
   }
 
   // Graceful fallback: If any seller has 0 quotes due to network/rate-limits, restore previous quotes
@@ -1419,7 +1389,6 @@ async function runMasterRefresh() {
     { id: "bluewings", name: "Blue Wings" },
     { id: "whiffculture", name: "Whiff Culture" },
     { id: "aar_fragrances", name: "AAR Fragrances" },
-    { id: "fragrance_heaven", name: "Fragrance Heaven" },
     { id: "sovereign_scents", name: "Sovereign Scents" }
   ];
 
@@ -1773,7 +1742,7 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 11,
+    sellers_active: 10,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
@@ -1784,8 +1753,7 @@ async function runMasterRefresh() {
       sovereign_scents: { name: "Sovereign Scents", bottles: stats.sovereign_scents_bottles, decants: stats.sovereign_scents_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
-      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" },
-      fragrance_heaven: { name: "Fragrance Heaven", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'fragrance_heaven')).length, type: "Full Bottles" }
+      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" }
     }
   };
   fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");
@@ -1817,8 +1785,7 @@ async function runMasterRefresh() {
         sovereign_scents: (stats.sovereign_scents_bottles || 0) + (stats.sovereign_scents_decants || 0),
         bluewings: (stats.bluewings_bottles || 0) + (stats.bluewings_decants || 0),
         whiffculture: (stats.whiffculture_bottles || 0) + (stats.whiffculture_decants || 0),
-        aar_fragrances: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances') || (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length,
-        fragrance_heaven: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'fragrance_heaven')).length
+        aar_fragrances: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances') || (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length
       },
       updated_at: new Date().toISOString()
     }], { onConflict: 'id' });

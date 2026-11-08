@@ -30,7 +30,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Synced across all 11 verified community resources & Supabase
+                Synced across all 10 verified community resources & Supabase
               </p>
             </div>
           </div>

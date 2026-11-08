@@ -19,8 +19,7 @@ const COMMUNITY_SELLERS = [
   { id: 'gryv_scents', name: 'GRYV Scents', tag: '🍾 & 🧪' },
   { id: 'bluewings', name: 'Blue Wings', tag: '🍾 & 🧪' },
   { id: 'whiffculture', name: 'Whiff Culture', tag: '🍾 & 🧪' },
-  { id: 'aar_fragrances', name: 'AAR Fragrances', tag: '🍾 & 🧪' },
-  { id: 'fragrance_heaven', name: 'Fragrance Heaven', tag: '🍾 Bottles' }
+  { id: 'aar_fragrances', name: 'AAR Fragrances', tag: '🍾 Bottles' }
 ];
 
 const CORE_FEATURED_BRANDS = [
@@ -1173,7 +1172,7 @@ export default function MyWardrobeMatcher({
                   Live Community Scent Twins
                 </h4>
                 <p className="text-[11px] text-emerald-400 font-semibold">
-                  Verified across 11 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, Sovereign Scents, RP Decants, GRYV Scents, Blue Wings, Whiff Culture, AAR Fragrances & Fragrance Heaven
+                  Verified across 10 Sellers: Second Theory, FragFever, Apex Aroma, Enigma Perfumes, Sovereign Scents, RP Decants, GRYV Scents, Blue Wings, Whiff Culture & AAR Fragrances
                 </p>
               </div>
               <button 

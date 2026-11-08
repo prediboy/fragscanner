@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci --omit=dev
 
-      - name: Run Master Refresh Pipeline across All 11 Sellers
+      - name: Run Master Refresh Pipeline across All 10 Sellers
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -42,7 +42,7 @@ jobs:
           git add src/data/fragrances.json src/data/seller_config.json src/data/sync_meta.json src/data/cache_*.json
           if ! git diff --staged --quiet; then
             echo "Changes detected, committing and pushing..."
-            git commit -m "chore(sync): automated 2-hour price refresh across all 11 community sellers"
+            git commit -m "chore(sync): automated 2-hour price refresh across all 10 community sellers"
             git pull --rebase origin main || true
             git push origin main
           else

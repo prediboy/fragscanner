@@ -78,10 +78,10 @@ export default function MobileFilterDrawer({
               <h4 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Refine Catalog</span>
                 <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800 font-bold">
-                  11 Sellers
+                  10 Sellers
                 </span>
               </h4>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">11 Community Sellers • Real-Time Database</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">10 Community Sellers • Real-Time Database</p>
             </div>
             
             <div className="flex items-center gap-2">
@@ -313,7 +313,7 @@ export default function MobileFilterDrawer({
               onChange={(e) => setFilterState(prev => ({ ...prev, selectedSeller: e.target.value }))}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-200 font-mono"
             >
-              <option value="all">All 11 Community Sellers</option>
+              <option value="all">All 10 Community Sellers</option>
               {sellers.map(s => (
                 <option key={s.id} value={s.id}>{s.name}</option>
               ))}

@@ -1,14 +1,26 @@
 {
-  "last_sync": "2026-11-08T03:47:18.505Z",
+  "last_sync": "2026-11-08T10:00:38.524Z",
   "sync_date": "2026-11-08",
   "catalog_total": 1189,
-  "in_stock_count": 921,
-  "decants_available_count": 808,
-  "dual_available_count": 763,
+  "in_stock_count": 823,
+  "decants_available_count": 595,
+  "dual_available_count": 548,
   "enriched_new_arrivals_count": 0,
-  "price_drops_count": 7,
+  "price_drops_count": 23,
   "new_arrivals_count": 16,
   "active_price_drops": [
+    {
+      "id": "lattafa-yara-moi",
+      "name": "Yara Moi",
+      "brand": "Lattafa",
+      "current_price": 2249,
+      "previous_price": 2450,
+      "drop_amount": 201,
+      "drop_percentage": 8,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
     {
       "id": "armaf-club-de-nuit-intense-man",
       "name": "Club de Nuit Intense Man",
@@ -22,6 +34,138 @@
       "drop_time": "10:01:33"
     },
     {
+      "id": "rasasi-la-yuqawam",
+      "name": "La Yuqawam Pour Homme",
+      "brand": "Rasasi",
+      "current_price": 6299,
+      "previous_price": 6349,
+      "drop_amount": 50,
+      "drop_percentage": 1,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "rasasi-daarej-pour-homme",
+      "name": "Daarej Pour Homme",
+      "brand": "Rasasi",
+      "current_price": 1749,
+      "previous_price": 1899,
+      "drop_amount": 150,
+      "drop_percentage": 8,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "rayhaan-pacific",
+      "name": "Pacific",
+      "brand": "Rayhaan",
+      "current_price": 1649,
+      "previous_price": 1849,
+      "drop_amount": 200,
+      "drop_percentage": 11,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "lattafa-fakhar-lattafa-women",
+      "name": "Fakhar Lattafa Women",
+      "brand": "Lattafa",
+      "current_price": 2349,
+      "previous_price": 2749,
+      "drop_amount": 400,
+      "drop_percentage": 15,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "lattafa-qaa-ed",
+      "name": "Qaa'Ed",
+      "brand": "Lattafa",
+      "current_price": 1999,
+      "previous_price": 2199,
+      "drop_amount": 200,
+      "drop_percentage": 9,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "armaf-derby-club-house",
+      "name": "Derby Club House",
+      "brand": "Armaf",
+      "current_price": 1799,
+      "previous_price": 1800,
+      "drop_amount": 1,
+      "drop_percentage": 0,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "rasasi-la-yuqawam-tobacco-blaze",
+      "name": "La Yuqawam Tobacco Blaze",
+      "brand": "Rasasi",
+      "current_price": 6699,
+      "previous_price": 6850,
+      "drop_amount": 151,
+      "drop_percentage": 2,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "lattafa-maahir-black-edition",
+      "name": "Maahir Black Edition",
+      "brand": "Lattafa",
+      "current_price": 2499,
+      "previous_price": 2750,
+      "drop_amount": 251,
+      "drop_percentage": 9,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "armaf-le-parfait-pour-homme",
+      "name": "Le Parfait Pour Homme",
+      "brand": "Armaf",
+      "current_price": 1800,
+      "previous_price": 2040,
+      "drop_amount": 240,
+      "drop_percentage": 12,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "armaf-tres-jour-pour-femme",
+      "name": "Tres Jour Pour Femme",
+      "brand": "Armaf",
+      "current_price": 1849,
+      "previous_price": 1951,
+      "drop_amount": 102,
+      "drop_percentage": 5,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "armaf-niche-oud",
+      "name": "Niche Oud",
+      "brand": "Armaf",
+      "current_price": 2399,
+      "previous_price": 2422,
+      "drop_amount": 23,
+      "drop_percentage": 1,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
       "id": "st-9069",
       "name": "Blue By Ahmed",
       "brand": "Ahmed Al Maghribi",
@@ -32,6 +176,18 @@
       "seller": "Sovereign Scents",
       "drop_date": "2026-11-07",
       "drop_time": "10:01:33"
+    },
+    {
+      "id": "apex-ahmedalmaghribi-muskandroses",
+      "name": "Musk & Roses",
+      "brand": "Ahmed Al Maghribi",
+      "current_price": 3149,
+      "previous_price": 3300,
+      "drop_amount": 151,
+      "drop_percentage": 5,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
     },
     {
       "id": "apex-ahmedalmaghribi-oudandroses",
@@ -82,6 +238,42 @@
       "drop_time": "10:01:33"
     },
     {
+      "id": "maison-alhambra-jean-lowe-immortal",
+      "name": "Jean Lowe Immortal",
+      "brand": "Maison Alhambra",
+      "current_price": 2999,
+      "previous_price": 3149,
+      "drop_amount": 150,
+      "drop_percentage": 5,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "maison-alhambra-dark-door-intense",
+      "name": "Dark Door Intense",
+      "brand": "Maison Alhambra",
+      "current_price": 1739,
+      "previous_price": 1900,
+      "drop_amount": 161,
+      "drop_percentage": 8,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
+      "id": "lattafa-yara-elixir",
+      "name": "Yara Elixir",
+      "brand": "Lattafa",
+      "current_price": 2529,
+      "previous_price": 2669,
+      "drop_amount": 140,
+      "drop_percentage": 5,
+      "seller": "AAR Fragrances",
+      "drop_date": "2026-11-08",
+      "drop_time": "09:05:28"
+    },
+    {
       "id": "armaf-club-de-nuit-intense-man-eau-de-parfum",
       "name": "Club de Nuit Intense Man Eau de Parfum",
       "brand": "Armaf",
@@ -103,7 +295,7 @@
       "seller": "Whiff Culture",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "lattafa-nebras-elixir",
@@ -113,7 +305,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "laverne-heritage-bakhur-150ml",
@@ -123,7 +315,7 @@
       "seller": "FragFever",
       "size": "150ml Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "maison-alhambra-maison-alhambra-daring-blue-for-life",
@@ -133,7 +325,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-05",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "arabiyat-prestige-raees",
@@ -143,7 +335,7 @@
       "seller": "FragFever",
       "size": "180ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "nusuk-mukhtalif-extrait",
@@ -153,7 +345,7 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "arabiyat-prestige-noire-absolu",
@@ -163,7 +355,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "azzaro-the-most-wanted-parfum",
@@ -173,7 +365,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "azzaro-wanted-by-night",
@@ -183,7 +375,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "alfred-dunhill-indian-sandalwood",
@@ -193,7 +385,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "rochas-moustache-eau-de-parfum",
@@ -203,7 +395,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Retail Bottle",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "carolina-herrera-bad-boy-cobalt-eau-de-parfum-lectrique",
@@ -213,7 +405,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-intense",
@@ -223,7 +415,7 @@
       "seller": "Enigma Perfumes",
       "size": "125ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "lalique-encre-noire-l-extr-me",
@@ -233,7 +425,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "issey-miyake-l-eau-d-issey-pour-homme-sport",
@@ -243,7 +435,7 @@
       "seller": "Enigma Perfumes",
       "size": "100ml Tester",
       "added_date": "2026-11-06",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     },
     {
       "id": "rasasi-shuhrah-pour-homme-avenoir",
@@ -253,10 +445,10 @@
       "seller": "FragFever",
       "size": "Retail Bottle",
       "added_date": "2026-11-07",
-      "added_timestamp": "2026-11-08T03:47:09.767Z"
+      "added_timestamp": "2026-11-08T10:00:31.025Z"
     }
   ],
-  "sellers_active": 11,
+  "sellers_active": 10,
   "seller_breakdown": {
     "second_theory": {
       "name": "Second Theory",
@@ -311,11 +503,6 @@
     "aar_fragrances": {
       "name": "AAR Fragrances",
       "bottles": 489,
-      "type": "Full Bottles"
-    },
-    "fragrance_heaven": {
-      "name": "Fragrance Heaven",
-      "bottles": 543,
       "type": "Full Bottles"
     }
   }
