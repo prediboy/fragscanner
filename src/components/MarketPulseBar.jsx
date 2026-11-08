@@ -11,7 +11,8 @@ export default function MarketPulseBar({
   quickFilterTab,
   setQuickFilterTab,
   counts = {},
-  isCuratedActive = false
+  isCuratedActive = false,
+  onShowAll
 }) {
   const {
     formats = [],
@@ -24,16 +25,18 @@ export default function MarketPulseBar({
     sortBy = 'price_asc'
   } = filterState;
 
-  // Active filter count excluding default
+  // Active filter chips (Full Retail Bottle shown by default)
   const activeChips = [];
-  const isDefaultFormat = formats.length === 1 && formats[0] === 'retail';
-  if (!isDefaultFormat && formats.length > 0 && formats.length < 4) {
+  if (formats.length > 0 && formats.length < 4) {
     formats.forEach(f => {
-      const label = f === 'retail' ? 'Retail Bottle' : f === 'tester' ? '🧪 Tester' : f === 'partial' ? '🏷️ Partial' : '💧 Decant';
+      const label = f === 'retail' ? '🍾 Full Retail Bottle' : f === 'tester' ? '🧪 Tester Unit' : f === 'partial' ? '🏷️ Partial Bottle' : '💧 Decants In Stock';
       activeChips.push({
         id: `fmt-${f}`,
         label,
-        onRemove: () => setFilterState(p => ({ ...p, formats: p.formats.filter(x => x !== f) }))
+        onRemove: () => setFilterState(p => {
+          const next = p.formats.filter(x => x !== f);
+          return { ...p, formats: next.length > 0 ? next : ['retail', 'tester', 'partial', 'decant'] };
+        })
       });
     });
   }
@@ -135,6 +138,23 @@ export default function MarketPulseBar({
         >
           <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
           <span>Curated Highlights</span>
+        </button>
+
+        {/* Toggle 2: Full Retail Bottles */}
+        <button
+          onClick={() => {
+            if (setQuickFilterTab) setQuickFilterTab('retail');
+            setFilterState(prev => ({ ...prev, formats: ['retail'], dealsOnly: null }));
+            if (onShowAll) onShowAll();
+          }}
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            formats.length === 1 && formats.includes('retail') && !dealsOnly && !isCuratedActive
+              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <span>🍾</span>
+          <span>Full Retail Bottles ({counts.retail || 921})</span>
         </button>
 
         {/* Toggle 2: Price Drops */}

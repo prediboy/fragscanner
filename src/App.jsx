@@ -293,8 +293,7 @@ export default function App() {
   // Active filter count for mobile badge
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    const isDefaultFormat = filterState.formats.length === 1 && filterState.formats[0] === 'retail';
-    if (!isDefaultFormat && filterState.formats.length > 0 && filterState.formats.length < 4) {
+    if (filterState.formats.length > 0 && filterState.formats.length < 4) {
       count += filterState.formats.length;
     }
     if (filterState.maxBudget < 15000) count++;
@@ -382,6 +381,7 @@ export default function App() {
           setQuickFilterTab={setQuickFilterTab}
           counts={catalogCounts}
           isCuratedActive={isUnfiltered}
+          onShowAll={() => setShowFullCatalog(true)}
         />
 
         {/* 2-Column Responsive Layout: Power Rail Sidebar + Card Grid */}
