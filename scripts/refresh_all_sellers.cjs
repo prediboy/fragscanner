@@ -248,8 +248,40 @@ async function runMasterRefresh() {
   const sellerConfigPath = path.join(__dirname, "../data/seller_config.json");
   const syncMetaPath = path.join(__dirname, "../data/sync_meta.json");
 
-  let fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
-  console.log(`Loaded ${fragrances.length} catalog fragrances.`);
+  // Initialize Supabase client
+  let supabase = null;
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  } catch (err) {
+    console.warn("  Supabase init warning:", err.message);
+  }
+
+  // Load catalog directly from Supabase (fallback to local if present)
+  let fragrances = [];
+  if (supabase) {
+    let page = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('fragrances')
+        .select('*')
+        .range(page * 1000, (page + 1) * 1000 - 1);
+      if (error || !data || data.length === 0) break;
+      fragrances.push(...data);
+      if (data.length < 1000) break;
+      page++;
+    }
+    console.log(`Loaded ${fragrances.length} catalog fragrances live from Supabase.`);
+  }
+
+  if (fragrances.length === 0 && fs.existsSync(fragrancesPath)) {
+    fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
+    console.log(`Loaded ${fragrances.length} catalog fragrances from local fallback.`);
+  }
 
   // Backup existing quotes & price snapshots to capture price history with dates
   const existingQuotes = {};
@@ -1625,26 +1657,10 @@ async function runMasterRefresh() {
     return true;
   });
 
-  // Save updated fragrances.json
-  fs.writeFileSync(fragrancesPath, JSON.stringify(fragrances, null, 2), "utf-8");
-
   // ==========================================
   // SYNC DIRECTLY TO SUPABASE DATABASE
   // ==========================================
   console.log("\n--- Syncing Live Prices & Decants directly to Supabase ---");
-  let supabase = null;
-  try {
-    const { createClient } = require('@supabase/supabase-js');
-    const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } else {
-      console.log("  ℹ Supabase credentials not set in environment, skipping database upsert.");
-    }
-  } catch (err) {
-    console.error("  Warning: Failed to initialize Supabase client:", err.message);
-  }
 
   if (supabase) {
     try {
@@ -1754,7 +1770,9 @@ async function runMasterRefresh() {
       aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" }
     }
   };
-  fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");
+  try {
+    fs.writeFileSync(syncMetaPath, JSON.stringify(syncMeta, null, 2), "utf-8");
+  } catch(e) {}
 
   // Upsert sync metadata directly to Supabase sync_metadata table
   if (supabase) {

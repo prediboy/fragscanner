@@ -2,6 +2,22 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
+// Auto-load .env if environment variables are not set in the shell
+const envPath = path.join(__dirname, "../.env");
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const match = trimmed.match(/^([^=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const val = match[2].trim().replace(/^['"](.*)['"]$/, '$1');
+      if (!process.env[key]) process.env[key] = val;
+    }
+  });
+}
+
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, { headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" } }, (res) => {
@@ -116,9 +132,34 @@ async function scrapeAARMIddleEast() {
   }
   console.log(`\nCrawled total items: ${allScraped.length}`);
 
-  // Load catalog
-  const fragsPath = path.join(__dirname, "../data/fragrances.json");
-  const frags = JSON.parse(fs.readFileSync(fragsPath, "utf-8"));
+  // Load catalog directly from Supabase
+  let frags = [];
+  try {
+    const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      const { createClient } = require('@supabase/supabase-js');
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      let page = 0;
+      while (true) {
+        const { data, error } = await supabase.from('fragrances').select('id, name, brand, bottle_size').range(page * 1000, (page + 1) * 1000 - 1);
+        if (error || !data || data.length === 0) break;
+        frags.push(...data);
+        if (data.length < 1000) break;
+        page++;
+      }
+      console.log(`Loaded ${frags.length} catalog items live from Supabase.`);
+    }
+  } catch (e) {
+    console.warn("Could not load from Supabase:", e.message);
+  }
+
+  if (frags.length === 0) {
+    const fragsPath = path.join(__dirname, "../data/fragrances.json");
+    if (fs.existsSync(fragsPath)) {
+      frags = JSON.parse(fs.readFileSync(fragsPath, "utf-8"));
+    }
+  }
 
   const matchedBottles = {};
   let matchCount = 0;

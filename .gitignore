@@ -18,3 +18,10 @@ __pycache__/
 .env.local
 .DS_Store
 Thumbs.db
+
+# Data caches (all catalog data is served 100% via Supabase database)
+data/fragrances.json
+data/cache_*.json
+data/sync_meta.json
+*.csv
+*.xlsx
