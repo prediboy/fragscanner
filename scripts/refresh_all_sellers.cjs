@@ -482,14 +482,13 @@ async function runMasterRefresh() {
       }
 
       if (Array.isArray(f.aliases)) {
+        const nBase = nClean.replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
         return f.aliases.some(a => {
           const aClean = cleanStr(a);
           if (aClean === nClean) return true;
-          // Allow size / bottle variations without partial word corruption (e.g. SNOI 100ml matching SNOI)
-          if (aClean.length >= 4 && (nClean.startsWith(aClean) || aClean.startsWith(nClean))) {
-            const remainder = nClean.replace(aClean, "");
-            return remainder.length === 0 || /^(100|150|200|50|75|30|edp|edt|extrait|retail|bottle|ml)*$/.test(remainder);
-          }
+          const aBase = aClean.replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
+          if (aBase.length >= 2 && nBase === aBase) return true;
+          if (aClean.length >= 3 && (nClean.startsWith(aClean) || aClean.startsWith(nClean))) return true;
           return false;
         });
       }

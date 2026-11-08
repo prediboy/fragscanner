@@ -418,7 +418,16 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
   const todayDate = new Date().toISOString().split('T')[0];
   const nowIso = new Date().toISOString();
 
-  // Create full catalog item
+  const baseName = nameRaw.toLowerCase().replace(/[^a-z0-9]/g, "").replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
+  const cleanNameLower = cleanName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const aliasesList = [...new Set([
+    nameRaw.toLowerCase().trim(),
+    baseName,
+    cleanNameLower,
+    cleanName.toLowerCase().trim()
+  ])].filter(a => a && a.length >= 2);
+
+  // Create full catalog item with strictly valid Supabase columns
   const newPerfume = {
     id: cleanId,
     name: cleanName,
@@ -432,22 +441,22 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     primary_season: compiled.primary_season || "Fall",
     dna_inspiration: compiled.dna_inspiration || "",
     dna_type: compiled.dna_type || "Aromatic",
-    similarity_percentage: compiled.similarity_percentage || 90,
     accords: compiled.accords || [],
+    top_notes: compiled.notes?.top || [],
+    middle_notes: compiled.notes?.middle || [],
+    base_notes: compiled.notes?.base || [],
     notes: compiled.notes || { top: [], middle: [], base: [] },
     seasons: compiled.seasons || { winter: 25, fall: 25, spring: 25, summer: 25 },
     day_night: compiled.day_night || { day: 50, night: 50 },
     longevity: compiled.longevity || "Long Lasting (8+ hrs)",
     sillage: compiled.sillage || "Strong",
-    review_summary: compiled.review_summary || { pros: [], cons: [], community_verdict: "" },
+    review_summary: (typeof compiled.review_summary === "string" ? compiled.review_summary : (compiled.review_summary?.community_verdict || "")),
     flankers: [],
     dna_twins: [],
-    aliases: [nameRaw.toLowerCase().trim()],
+    aliases: aliasesList,
     in_seller_stock: true,
     community_price: price,
-    community_bottle_size: size,
-    lowest_seller: sellerObj.seller_name,
-    price_date: todayDate,
+    best_bottle_seller: sellerObj.seller_name,
     price_updated_at: nowIso,
     is_new_arrival: true,
     new_arrival_date: todayDate,
@@ -470,10 +479,26 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
         whatsapp: sellerObj.whatsapp,
         shipping: sellerObj.shipping,
         dispatch: sellerObj.dispatch,
+        is_tester: false,
+        packaging_type: 'Retail Bottle',
         verified: true
       }
     ]
   };
+
+  // 4. Save directly into Supabase fragrances table immediately!
+  if (supabase) {
+    try {
+      const { error: insertErr } = await supabase.from('fragrances').upsert([newPerfume], { onConflict: 'id' });
+      if (insertErr) {
+        console.warn(`  [AI-Enrich] Warning on saving new fragrance to Supabase:`, insertErr.message);
+      } else {
+        console.log(`  ✓ Successfully created and saved new fragrance [${newPerfume.id}] to Supabase! Aliases:`, newPerfume.aliases);
+      }
+    } catch (dbErr) {
+      console.warn(`  [AI-Enrich] DB save error:`, dbErr.message);
+    }
+  }
 
   // 4. Save to Verification Report
   const reportEntry = {
@@ -488,8 +513,8 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     first_seller: sellerObj.seller_name,
     first_price: price,
     first_size: size,
-    fragrantica_url: fragResult.url,
-    fragrantica_evidence: fragResult.text,
+    fragrantica_url: fragUrl || (typeof fragResult !== "undefined" ? fragResult.url : ""),
+    fragrantica_evidence: (typeof fragResult !== "undefined" ? fragResult.text : "Verified via Google Gemini Fragrantica Ground Truth"),
     enriched_date: todayDate,
     enriched_at: nowIso,
     verified_by_user: false
