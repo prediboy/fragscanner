@@ -142,8 +142,11 @@ async function scrapeAARMIddleEast() {
       const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       let page = 0;
       while (true) {
-        const { data, error } = await supabase.from('fragrances').select('id, name, brand, bottle_size').range(page * 1000, (page + 1) * 1000 - 1);
-        if (error || !data || data.length === 0) break;
+        const { data, error } = await supabase.from('fragrances').select('id, name, brand, aliases').range(page * 1000, (page + 1) * 1000 - 1);
+        if (error || !data || data.length === 0) {
+          if (error) console.warn("Supabase query error:", error.message);
+          break;
+        }
         frags.push(...data);
         if (data.length < 1000) break;
         page++;
@@ -195,8 +198,21 @@ async function scrapeAARMIddleEast() {
     // 3. Match against catalog with high precision
     let matched = null;
 
-    // Priority A: Direct ID or alias match
+    // Priority A: Direct ID match
     matched = frags.find(f => f.id.toLowerCase() === resolvedSlug);
+
+    // Priority A2: Database alias match
+    if (!matched) {
+      const slugClean = normalize(resolvedSlug);
+      const titleClean = normalize(titleLower);
+      matched = frags.find(f => {
+        if (!f.aliases || !Array.isArray(f.aliases)) return false;
+        return f.aliases.some(a => {
+          const aClean = normalize(a);
+          return aClean && aClean.length >= 3 && (slugClean === aClean || titleClean.includes(aClean));
+        });
+      });
+    }
 
     // Priority B: Brand match + slug contains cleaned name
     if (!matched) {
