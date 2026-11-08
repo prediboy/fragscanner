@@ -487,7 +487,15 @@ async function runMasterRefresh() {
     'arabiyatprestige:oudallaylaswad': 'oudallaylaswad',
     'ibraheemalqurashi:blueoud': 'blueoud',
     'ajmal:evokegold': 'evokegoldforhim',
-    'ahmedalmaghribi:ighraa': 'ighra'
+    'ahmedalmaghribi:ighraa': 'ighra',
+    'alharamain:goldedition': 'amberoudgoldedition',
+    'alharamain:goldedition60ml': 'amberoudgoldedition',
+    'alharamain:amberoudgold': 'amberoudgoldedition',
+    'rasasi:shuhrahpourhomme': 'shuhrahpourhomme',
+    'rasasi:shuhrahpourhommeavenoir': 'shuhrahpourhomme',
+    'rasasi:shuhrah': 'shuhrahpourhomme',
+    'ahmedalmaghribi:muskandroses': 'muskroses',
+    'ahmedalmaghribi:oudandroses': 'oudroses'
   };
 
   const FLANKER_DISTINCT_TOKENS = [
