@@ -393,12 +393,21 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     try {
       const { data: existing } = await supabase
         .from("fragrances")
-        .select("id, name, brand, community_sellers")
+        .select("id, name, brand, aliases, community_sellers")
         .eq("id", cleanId)
         .maybeSingle();
 
       if (existing) {
         console.log(`   ✓ Perfume already exists in database as "${existing.id}"! Attaching seller quote instead of duplicating.`);
+        // Append raw name to aliases in database so it learns permanently
+        const cleanAlias = nameRaw.toLowerCase().trim();
+        const curAliases = existing.aliases || [];
+        if (!curAliases.includes(cleanAlias)) {
+          const newAliases = [...curAliases, cleanAlias];
+          existing.aliases = newAliases;
+          await supabase.from("fragrances").update({ aliases: newAliases }).eq("id", existing.id);
+          console.log(`   ✓ Auto-learned alias: "${cleanAlias}" saved to database for [${existing.id}]`);
+        }
         return existing;
       }
     } catch (e) {
@@ -433,6 +442,7 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     review_summary: compiled.review_summary || { pros: [], cons: [], community_verdict: "" },
     flankers: [],
     dna_twins: [],
+    aliases: [nameRaw.toLowerCase().trim()],
     in_seller_stock: true,
     community_price: price,
     community_bottle_size: size,

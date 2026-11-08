@@ -454,156 +454,19 @@ async function runMasterRefresh() {
   ];
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
 
-  const EXPLICIT_ALIASES = {
-    'afnan:900pm': '9pm',
-    'afnan:9pm': '9pm',
-    'afnan:snoi': 'supremacynotonlyintense',
-    'afnan:snoi100ml': 'supremacynotonlyintense',
-    'afnan:snoi150ml': 'supremacynotonlyintense',
-    'afnan:sno': 'supremacynotonlyintense',
-    'afnan:supremacynotonlyintense100ml': 'supremacynotonlyintense',
-    'afnan:supremacynotonlyintense150ml': 'supremacynotonlyintense',
-    'armaf:cdnsillage': 'clubdenuitsillage',
-    'armaf:milestone': 'clubdenuitmilestone',
-    'armaf:cdniconic': 'clubdenuitblueiconic',
-    'armaf:cdniconicextrait': 'clubdenuitblueiconic',
-    'armaf:cdnim': 'clubdenuitintenseman',
-    'armaf:cdnimedt': 'clubdenuitintenseman',
-    'armaf:cdnimlimitededition': 'clubdenuitintensemanlimitededition',
-    'rasasi:hawas': 'hawasforhim',
-    'rasasi:hawasforhim': 'hawasforhim',
-    'rasasi:hawasice': 'hawasiceforhim',
-    'reef:reef33': 'reef33',
-    'reef:reef33100ml': 'reef33',
-    'reef:reef33white': 'reef33white',
-    'reef:reef33white100ml': 'reef33white',
-    'reef33:reef33': 'reef33',
-    'lattafa:badeealoudblackexposed': 'badeealoudoudforglory',
-    'lattafa:badeealoudhonorandglory': 'badeealoudhonorglory',
-    'lattafa:badeealoudhonorglory': 'badeealoudhonorglory',
-    'lattafa:qaedalfursanblack': 'qaedalfursan',
-    'arabiyat:oudallayl': 'oudallayl',
-    'arabiyatprestige:oudallayl': 'oudallayl',
-    'arabiyatprestige:oudallaylaswad': 'oudallaylaswad',
-    'ibraheemalqurashi:blueoud': 'blueoud',
-    'ajmal:evokegold': 'evokegoldforhim',
-    'ahmedalmaghribi:ighraa': 'ighra',
-    'alharamain:goldedition': 'amberoudgoldedition',
-    'alharamain:goldedition60ml': 'amberoudgoldedition',
-    'alharamain:amberoudgold': 'amberoudgoldedition',
-    'rasasi:shuhrahpourhomme': 'shuhrahpourhomme',
-    'rasasi:shuhrahpourhommeavenoir': 'shuhrahpourhomme',
-    'rasasi:shuhrah': 'shuhrahpourhomme',
-    'ahmedalmaghribi:muskandroses': 'muskroses',
-    'ahmedalmaghribi:oudandroses': 'oudroses'
-  };
-
   const FLANKER_DISTINCT_TOKENS = [
     'freeze', 'dukhan', 'waha', 'platin', 'flames', 'elixir', 'collector',
     'nightout', 'rebel', 'sapphire', 'kobra', 'tropical', 'dive', 'sahara', 'atlantis',
     'noir', 'incense', 'silver', 'heaven'
   ];
 
-  // Helper: Find best fragrance match in catalog
+  // Helper: Find best fragrance match in catalog (100% database-driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "") {
     if (isDesigner(brandRaw) || isDesigner(nameRaw)) return null;
     const brand = normalizeBrand(brandRaw);
     let bClean = cleanStr(brand);
     let nClean = cleanStr(nameRaw);
     if (!nClean || nClean.length < 2) return null;
-
-    // Check alias
-    const aliasKey = `${bClean}:${nClean}`;
-    if (EXPLICIT_ALIASES[aliasKey]) {
-      nClean = EXPLICIT_ALIASES[aliasKey];
-    }
-
-    // Community Shorthand Expansion
-    if (bClean === "armaf") {
-      if (nClean.includes("hunter")) {
-        nClean = "hunterintense";
-      } else if (nClean.includes("soul")) {
-        nClean = "soul";
-      } else if (nClean.includes("cdnoud") || nClean.includes("collectorspride") || (nClean.includes("oud") && nClean.includes("clubdenuit"))) {
-        nClean = "clubdenuitoud";
-      } else if (nClean.includes("lionheart")) {
-        nClean = "clubdenuitlionheartman";
-      } else if (nClean.includes("precieux")) {
-        nClean = "clubdenuitprecieux1";
-      } else if (nClean.includes("urban") && nClean.includes("elixir")) {
-        nClean = "clubdenuiturbanmanelixir";
-      } else if (nClean.includes("iconic")) {
-        nClean = "clubdenuitblueiconic";
-      } else if (nClean.includes("sillage")) {
-        nClean = "clubdenuitsillage";
-      } else if (nClean.includes("milestone")) {
-        nClean = "clubdenuitmilestone";
-      } else if (nClean.includes("untold")) {
-        nClean = "clubdenuituntold";
-      } else if (nClean.includes("overdose")) {
-        nClean = "clubdenuitintenseoverdose";
-      } else if (/\b(limited\s*edition|le)\b/i.test(nameRaw) || nClean.includes("limitededition") || nClean.includes("limited")) {
-        nClean = "clubdenuitintensemanlimitededitionparfum";
-      } else if (nClean.includes("pureparfum") || nClean.includes("pp") || (nClean.includes("intense") && nClean.includes("150ml"))) {
-        nClean = "clubdenuitintensemanparfum";
-      } else if (nClean.includes("edp") || (nClean.includes("intense") && (nClean.includes("200ml") || nClean.includes("250ml")))) {
-        nClean = "clubdenuitintensemaneaudeparfum";
-      } else if (nClean.includes("woman") || nClean.includes("women")) {
-        if (nClean.includes("intense") || nClean.includes("cdni")) {
-          nClean = "clubdenuitintensewoman";
-        } else {
-          nClean = "clubdenuitwoman";
-        }
-      } else if (nClean.includes("manedttransparent") || nClean === "clubdenuitman" || nClean === "cdnman") {
-        nClean = "clubdenuitman";
-      } else if (nClean.startsWith("cdnim") || nClean.startsWith("cdni") || nClean.includes("intenseman") || nClean.includes("intense")) {
-        nClean = "clubdenuitintenseman";
-      } else if (nClean.startsWith("cdn")) {
-        nClean = nClean.replace(/^cdn/, "clubdenuit");
-      }
-    }
-    if (bClean === "afnan") {
-      if (nClean.includes("snoi") || nClean.includes("notonlyintense") || nClean.includes("notonly")) {
-        nClean = "supremacynotonlyintense";
-      } else if (nClean.includes("collectorsedition") || (nClean.includes("supremacy") && nClean.includes("collector"))) {
-        nClean = "supremacycollectorsedition";
-      } else if (nClean.includes("inheaven") || (nClean.includes("supremacy") && nClean.includes("heaven"))) {
-        nClean = "supremacyinheaven";
-      } else if (nClean.includes("inoud") || (nClean.includes("supremacy") && nClean.includes("oud"))) {
-        nClean = "supremacyinoud";
-      } else if (nClean.includes("silver") || (nClean.includes("supremacy") && nClean.includes("silver"))) {
-        nClean = "supremacysilver";
-      }
-    }
-    if (bClean.includes("reef")) {
-      if (nClean.includes("white")) {
-        nClean = "reef33white";
-      } else if (nClean.includes("33")) {
-        nClean = "reef33";
-      }
-    }
-    if (bClean === "ajmal" && nClean.includes("evokegold")) {
-      nClean = "evokegoldedition";
-    }
-    if (bClean.includes("alhambra") || bClean.includes("lattafa") || bClean.includes("asdaaf")) {
-      if (nClean.includes("brightpeach")) nClean = "brightpeach";
-      if (nClean.includes("rosepetals")) nClean = "rosepetals";
-      if (nClean.includes("larougebaroque") || nClean.includes("baroquerouge")) nClean = "baroquerouge540";
-      if (nClean.includes("darkdoorintense")) nClean = "darkdoorintense";
-      if (nClean.includes("fantasme")) nClean = "jeanlowefantasme";
-      if (nClean.includes("maitre") || nClean.includes("matiere")) nClean = "jeanlowemaitre";
-      if (nClean.includes("jorgediprofumo")) nClean = "jorgediprofumoaqua";
-      if (nClean.includes("miadolcezza")) nClean = "miadolcezza";
-      if (nClean.includes("yourtouchwomen") || nClean.includes("yourtouchw")) nClean = "yourtouchwomen";
-      if (nClean.includes("yourtouchsantal")) nClean = "yourtouchsantal";
-      if (nClean.includes("yourtouchmen") || nClean.includes("yourtouchm") || nClean === "yourtouch") nClean = "yourtouch";
-      if (nClean.includes("portoneroli")) nClean = "portoneroli";
-      if (nClean.includes("fabulointense")) nClean = "fabulointense";
-      if (nClean.includes("delilah")) nClean = "delilah";
-      if (nClean.includes("khamrahwaha") || nClean.includes("waha")) nClean = "khamrahwaha";
-      if (nClean.includes("yaraelixir")) nClean = "yaraelixir";
-      if (nClean.includes("roseprive") || nClean.includes("priverose") || nClean.includes("ameeratalarab")) nClean = "ameeratalarabpriverose";
-    }
 
     // 0. Match by registered canonical aliases
     let match = fragrances.find(f => {
@@ -1721,6 +1584,7 @@ async function runMasterRefresh() {
         middle_notes: f.middle_notes || [],
         base_notes: f.base_notes || [],
         accords: f.accords || [],
+        aliases: f.aliases || [],
         in_seller_stock: !!f.in_seller_stock,
         community_price: f.community_price || null,
         has_decants: !!f.has_decants,
