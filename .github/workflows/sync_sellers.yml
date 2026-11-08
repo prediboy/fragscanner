@@ -1,10 +1,10 @@
-name: Refresh Community Seller Prices (Every 2 Hours)
+name: Refresh Community Seller Prices (Hourly Auto-Sync)
 
 on:
   schedule:
-    # Runs every 2 hours at minute 17 (off-peak minute avoids GitHub top-of-hour queue drop)
-    - cron: '17 */2 * * *'
-  workflow_dispatch: # Allows manual 1-click trigger anytime from GitHub Actions tab
+    # Runs hourly at minute 25 (hourly schedule prevents 6-8hr gaps when GitHub delays or drops cron events)
+    - cron: '25 * * * *'
+  workflow_dispatch: # Allows manual or external webhook 1-click trigger anytime
 
 jobs:
   refresh:
