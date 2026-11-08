@@ -150,7 +150,7 @@ export default function MarketPulseBar({
           }`}
         >
           <TrendingDown className="w-3.5 h-3.5 text-emerald-500" />
-          <span>Price Drops ({counts.drops || 12})</span>
+          <span>Price Drops ({counts.drops ?? 23})</span>
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
@@ -167,7 +167,7 @@ export default function MarketPulseBar({
           }`}
         >
           <span>✨</span>
-          <span>New Arrivals ({counts.newArrivals || 12})</span>
+          <span>New Arrivals ({counts.newArrivals ?? 17})</span>
         </button>
 
         {/* Toggle 4: Decants Ready */}

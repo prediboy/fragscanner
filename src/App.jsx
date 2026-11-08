@@ -158,8 +158,8 @@ export default function App() {
     testers: 18,
     partial: 1,
     partials: 1,
-    drops: 60,
-    newArrivals: 16
+    drops: 23,
+    newArrivals: 17
   }));
 
   useEffect(() => {
@@ -182,11 +182,21 @@ export default function App() {
 
     // Load spotlight drops and new arrivals directly from Supabase for the spotlight hub
     fetchInventoryPage({ dealsOnly: 'drops', page: 1, pageSize: 12 })
-      .then(res => setSpotlightDrops(res.items || []))
+      .then(res => {
+        setSpotlightDrops(res.items || []);
+        if (res.totalCount) {
+          setCatalogCounts(prev => ({ ...prev, drops: res.totalCount }));
+        }
+      })
       .catch(e => console.warn('Spotlight drops error:', e));
 
     fetchInventoryPage({ dealsOnly: 'new', page: 1, pageSize: 12 })
-      .then(res => setSpotlightNew(res.items || []))
+      .then(res => {
+        setSpotlightNew(res.items || []);
+        if (res.totalCount) {
+          setCatalogCounts(prev => ({ ...prev, newArrivals: res.totalCount }));
+        }
+      })
       .catch(e => console.warn('Spotlight new arrivals error:', e));
   }, []);
 
@@ -396,6 +406,8 @@ export default function App() {
               <CuratedSpotlightHub
                 priceDrops={spotlightDrops}
                 newArrivals={spotlightNew}
+                totalDropsCount={catalogCounts.drops || 23}
+                totalNewArrivalsCount={catalogCounts.newArrivals || 17}
                 catalogCount={catalogCounts.inStock || 965}
                 selectedFormats={filterState.formats}
                 onSelectFragrance={async (selected) => {

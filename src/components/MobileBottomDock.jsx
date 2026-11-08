@@ -59,7 +59,7 @@ export default function MobileBottomDock({
             <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           </div>
           <span className="text-[10px] font-mono font-medium mt-0.5">
-            Drops ({counts.drops || 12})
+            Drops ({counts.drops ?? 23})
           </span>
         </button>
 

@@ -6,6 +6,8 @@ export default function CuratedSpotlightHub({
   catalog = [],
   priceDrops = [],
   newArrivals: customNewArrivals = [],
+  totalDropsCount,
+  totalNewArrivalsCount,
   onSelectFragrance,
   onApplyFilter,
   expandedCardId,
@@ -73,7 +75,7 @@ export default function CuratedSpotlightHub({
               onClick={() => onApplyFilter({ dealsOnly: 'drops' })}
               className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
             >
-              <span>View all {priceDrops.length || topPriceDrops.length} drops</span>
+              <span>View all {totalDropsCount ?? (priceDrops.length || topPriceDrops.length)} drops</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -118,10 +120,10 @@ export default function CuratedSpotlightHub({
             </div>
 
             <button
-              onClick={() => onApplyFilter({ dealsOnly: 'new' })}
+              onClick={() => onApplyFilter({dealsOnly: 'new' })}
               className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
             >
-              <span>View all {customNewArrivals.length || newArrivals.length} arrivals</span>
+              <span>View all {totalNewArrivalsCount ?? (customNewArrivals.length || newArrivals.length)} arrivals</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

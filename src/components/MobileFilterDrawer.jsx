@@ -336,7 +336,7 @@ export default function MobileFilterDrawer({
                 }`}
               >
                 <TrendingDown className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Price Drops ({counts.drops || 12})</span>
+                <span>Price Drops ({counts.drops ?? 23})</span>
               </button>
 
               <button
@@ -349,7 +349,7 @@ export default function MobileFilterDrawer({
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>New In ({counts.newArrivals || 12})</span>
+                <span>New In ({counts.newArrivals ?? 17})</span>
               </button>
             </div>
           </div>
