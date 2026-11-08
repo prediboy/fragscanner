@@ -237,6 +237,9 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
   const fragResult = await searchWeb(`site:fragrantica.com ${brandRaw} ${nameRaw}`);
   if (fragResult.url) {
     console.log(`   ↳ Found Fragrantica listing: ${fragResult.url}`);
+  } else {
+    console.log(`   ⚠️ No authentic Fragrantica listing found for "${brandRaw} ${nameRaw}". Skipping catalog creation to preserve Fragrantica as primary source of truth.`);
+    return null;
   }
 
   // 2. Fetch community dupe discussions

@@ -457,6 +457,12 @@ async function runMasterRefresh() {
   const EXPLICIT_ALIASES = {
     'afnan:900pm': '9pm',
     'afnan:9pm': '9pm',
+    'afnan:snoi': 'supremacynotonlyintense',
+    'afnan:snoi100ml': 'supremacynotonlyintense',
+    'afnan:snoi150ml': 'supremacynotonlyintense',
+    'afnan:sno': 'supremacynotonlyintense',
+    'afnan:supremacynotonlyintense100ml': 'supremacynotonlyintense',
+    'afnan:supremacynotonlyintense150ml': 'supremacynotonlyintense',
     'armaf:cdnsillage': 'clubdenuitsillage',
     'armaf:milestone': 'clubdenuitmilestone',
     'armaf:cdniconic': 'clubdenuitblueiconic',
@@ -467,7 +473,11 @@ async function runMasterRefresh() {
     'rasasi:hawas': 'hawasforhim',
     'rasasi:hawasforhim': 'hawasforhim',
     'rasasi:hawasice': 'hawasiceforhim',
-    'reef33:reef33': '33black200ml',
+    'reef:reef33': 'reef33',
+    'reef:reef33100ml': 'reef33',
+    'reef:reef33white': 'reef33white',
+    'reef:reef33white100ml': 'reef33white',
+    'reef33:reef33': 'reef33',
     'lattafa:badeealoudblackexposed': 'badeealoudoudforglory',
     'lattafa:badeealoudhonorandglory': 'badeealoudhonorglory',
     'lattafa:badeealoudhonorglory': 'badeealoudhonorglory',
@@ -544,8 +554,25 @@ async function runMasterRefresh() {
         nClean = nClean.replace(/^cdn/, "clubdenuit");
       }
     }
-    if (bClean.includes("reef") && nClean.includes("33")) {
-      nClean = "33black200ml";
+    if (bClean === "afnan") {
+      if (nClean.includes("snoi") || nClean.includes("notonlyintense") || nClean.includes("notonly")) {
+        nClean = "supremacynotonlyintense";
+      } else if (nClean.includes("collectorsedition") || (nClean.includes("supremacy") && nClean.includes("collector"))) {
+        nClean = "supremacycollectorsedition";
+      } else if (nClean.includes("inheaven") || (nClean.includes("supremacy") && nClean.includes("heaven"))) {
+        nClean = "supremacyinheaven";
+      } else if (nClean.includes("inoud") || (nClean.includes("supremacy") && nClean.includes("oud"))) {
+        nClean = "supremacyinoud";
+      } else if (nClean.includes("silver") || (nClean.includes("supremacy") && nClean.includes("silver"))) {
+        nClean = "supremacysilver";
+      }
+    }
+    if (bClean.includes("reef")) {
+      if (nClean.includes("white")) {
+        nClean = "reef33white";
+      } else if (nClean.includes("33")) {
+        nClean = "reef33";
+      }
     }
     if (bClean === "ajmal" && nClean.includes("evokegold")) {
       nClean = "evokegoldedition";
