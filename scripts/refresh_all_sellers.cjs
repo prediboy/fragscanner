@@ -244,9 +244,9 @@ async function runMasterRefresh() {
   console.log("🚀 MASTER REFRESH: ALL 6 COMMUNITY SELLERS & RESOURCES");
   console.log("=========================================================");
 
-  const fragrancesPath = path.join(__dirname, "../src/data/fragrances.json");
-  const sellerConfigPath = path.join(__dirname, "../src/data/seller_config.json");
-  const syncMetaPath = path.join(__dirname, "../src/data/sync_meta.json");
+  const fragrancesPath = path.join(__dirname, "../data/fragrances.json");
+  const sellerConfigPath = path.join(__dirname, "../data/seller_config.json");
+  const syncMetaPath = path.join(__dirname, "../data/sync_meta.json");
 
   let fragrances = JSON.parse(fs.readFileSync(fragrancesPath, "utf-8"));
   console.log(`Loaded ${fragrances.length} catalog fragrances.`);
@@ -1341,13 +1341,11 @@ async function runMasterRefresh() {
   }
 
   // ==========================================
-  // SOURCE 6 & 7: AAR FRAGRANCES & FRAGRANCE HEAVEN
+  // SOURCE 6: AAR FRAGRANCES (Authentic Middle Eastern Retail Bottles)
   // ==========================================
-  console.log("\n--- Syncing AAR Fragrances & Fragrance Heaven ---");
+  console.log("\n--- Syncing AAR Fragrances ---");
   try {
-    const aarBottlesPath = path.join(__dirname, "../src/data/cache_aar_bottles.json");
-    const aarDecantsPath = path.join(__dirname, "../src/data/cache_aar_decants.json");
-    const fhBottlesPath = path.join(__dirname, "../src/data/cache_fh_bottles.json");
+    const aarBottlesPath = path.join(__dirname, "../data/cache_aar_bottles.json");
 
     if (fs.existsSync(aarBottlesPath)) {
       const aarB = JSON.parse(fs.readFileSync(aarBottlesPath, "utf-8"));

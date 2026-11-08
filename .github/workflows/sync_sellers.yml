@@ -39,7 +39,7 @@ jobs:
         run: |
           git config --global user.name "FragScanner Price Bot"
           git config --global user.email "price-bot@fragscanner.app"
-          git add src/data/fragrances.json src/data/seller_config.json src/data/sync_meta.json src/data/cache_*.json
+          git add data/fragrances.json data/seller_config.json data/sync_meta.json data/cache_*.json
           if ! git diff --staged --quiet; then
             echo "Changes detected, committing and pushing..."
             git commit -m "chore(sync): automated 2-hour price refresh across all 10 community sellers"

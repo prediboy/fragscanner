@@ -78,7 +78,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
             <div className="flex items-center justify-between text-xs font-bold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <Store className="w-4 h-4 text-amber-400" />
-                <span>6 Verified Sellers Breakdown</span>
+                <span>10 Verified Sellers Breakdown</span>
               </span>
               <span className="text-slate-400 font-normal">Updated: {formattedDate}</span>
             </div>
@@ -128,7 +128,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
               <span className="text-[11px] text-slate-400">GitHub Actions + Supabase</span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Every 2 hours, fresh price lists from all 11 sellers are fetched and upserted into Supabase. Website visitors always see live inventory without needing page redeployments.
+              Every 2 hours, fresh price lists from all 10 verified sellers are fetched and upserted into Supabase. Website visitors always see live inventory without needing page redeployments.
             </p>
           </div>
 

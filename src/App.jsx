@@ -15,7 +15,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 11 Verified Sellers' },
+  { id: 'all', name: 'All 10 Verified Sellers' },
   { id: 'enigma_perfumes', name: 'Enigma Perfumes' },
   { id: 'sovereign_scents', name: 'Sovereign Scents' },
   { id: 'fragfever', name: 'FragFever' },

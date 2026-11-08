@@ -117,7 +117,7 @@ async function scrapeAARMIddleEast() {
   console.log(`\nCrawled total items: ${allScraped.length}`);
 
   // Load catalog
-  const fragsPath = path.join(__dirname, "../src/data/fragrances.json");
+  const fragsPath = path.join(__dirname, "../data/fragrances.json");
   const frags = JSON.parse(fs.readFileSync(fragsPath, "utf-8"));
 
   const matchedBottles = {};
@@ -218,14 +218,9 @@ async function scrapeAARMIddleEast() {
   console.log(`Successfully Matched Middle Eastern Bottles: ${Object.keys(matchedBottles).length}`);
 
   // Write clean bottles cache
-  const aarBottlesPath = path.join(__dirname, "../src/data/cache_aar_bottles.json");
+  const aarBottlesPath = path.join(__dirname, "../data/cache_aar_bottles.json");
   fs.writeFileSync(aarBottlesPath, JSON.stringify(matchedBottles, null, 2), "utf-8");
   console.log(`✓ Updated ${aarBottlesPath}`);
-
-  // Clear decants cache (user requested: drop decants)
-  const aarDecantsPath = path.join(__dirname, "../src/data/cache_aar_decants.json");
-  fs.writeFileSync(aarDecantsPath, JSON.stringify({}, null, 2), "utf-8");
-  console.log(`✓ Cleared ${aarDecantsPath} (0 decants)`);
 }
 
 scrapeAARMIddleEast().catch(err => {
