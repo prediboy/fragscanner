@@ -513,30 +513,35 @@ async function runMasterRefresh() {
       return incomingConc !== fragConc;
     }
 
-    // 0. Priority 0: Exact Base Name Match (with strict Concentration Guard)
+    // 0. Priority 0: Exact Registered Canonical Database Aliases (exact title saved in Supabase)
     let match = brandFrags.find(f => {
+      if (!Array.isArray(f.aliases)) return false;
+      const fbClean = cleanStr(f.brand);
+      return f.aliases.some(a => {
+        const aClean = cleanStr(a);
+        if (aClean === nClean || aClean === fullClean) return true;
+        if (aClean.startsWith(fbClean) && aClean.slice(fbClean.length) === nClean) return true;
+        if (aClean.startsWith(bClean) && aClean.slice(bClean.length) === nClean) return true;
+        return false;
+      });
+    });
+    if (match) return match;
+
+    // 1. Priority 1: Exact Base Name Match (with strict Concentration Guard)
+    match = brandFrags.find(f => {
       if (concentrationMismatch(f)) return false;
       const fBase = getBaseName(f.name);
       return (fBase === nBase || fBase === fullBase) && fBase.length >= 2;
     });
     if (match) return match;
 
-    // 1. Priority 1: Registered Canonical Database Aliases (learned & saved in Supabase)
+    // 2. Priority 2: Base alias match (with strict Concentration Guard)
     match = brandFrags.find(f => {
       if (concentrationMismatch(f)) return false;
       if (!Array.isArray(f.aliases)) return false;
-      const fbClean = cleanStr(f.brand);
       return f.aliases.some(a => {
-        const aClean = cleanStr(a);
         const aBase = getBaseName(a);
-        // Direct match against raw name or full title
-        if (aClean === nClean || aClean === fullClean) return true;
-        // Base name match against raw name or full title
-        if (aBase.length >= 2 && (aBase === nBase || aBase === fullBase)) return true;
-        // If alias in DB was saved with brand prefix: e.g. "arabiyat oud al layl"
-        if (aClean.startsWith(fbClean) && aClean.slice(fbClean.length) === nClean) return true;
-        if (aClean.startsWith(bClean) && aClean.slice(bClean.length) === nClean) return true;
-        return false;
+        return aBase.length >= 2 && (aBase === nBase || aBase === fullBase);
       });
     });
     if (match) return match;
