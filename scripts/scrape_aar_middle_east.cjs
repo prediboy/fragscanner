@@ -201,15 +201,20 @@ async function scrapeAARMIddleEast() {
     // Priority A: Direct ID match
     matched = frags.find(f => f.id.toLowerCase() === resolvedSlug);
 
-    // Priority A2: Database alias match
+    // Priority A2: Database alias match (strictly scoped to detected brand)
     if (!matched) {
       const slugClean = normalize(resolvedSlug);
       const titleClean = normalize(titleLower);
       matched = frags.find(f => {
+        if (f.brand.toLowerCase() !== detectedBrand.toLowerCase()) return false;
         if (!f.aliases || !Array.isArray(f.aliases)) return false;
         return f.aliases.some(a => {
           const aClean = normalize(a);
-          return aClean && aClean.length >= 3 && (slugClean === aClean || titleClean.includes(aClean));
+          if (!aClean || aClean.length < 3) return false;
+          return slugClean === aClean ||
+                 titleClean === aClean ||
+                 titleClean === normalize(`${f.brand} ${a}`) ||
+                 slugClean === normalize(`${f.brand} ${a}`);
         });
       });
     }
@@ -225,7 +230,7 @@ async function scrapeAARMIddleEast() {
         const slugClean = normalize(resolvedSlug);
         const titleClean = normalize(titleLower);
 
-        if (slugClean === combined || titleClean === combined || (slugClean.startsWith(fBrandClean) && slugClean.endsWith(fNameClean))) {
+        if (slugClean === combined || titleClean === combined || slugClean === fNameClean || titleClean === fNameClean) {
           matched = f;
           break;
         }
