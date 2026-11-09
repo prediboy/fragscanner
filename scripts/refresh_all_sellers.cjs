@@ -461,6 +461,29 @@ async function runMasterRefresh() {
       .replace(/[^a-z0-9]/g, '');
   }
 
+  function getExplicitConcentration(str) {
+    const s = (str || '').toLowerCase();
+    if (/\b(extrait(\s*de\s*parfum)?|elixir)\b/i.test(s)) return 'Extrait';
+    if (/\b(eau\s*de\s*parfum|edp)\b/i.test(s)) return 'EDP';
+    if (/\b(pure\s*parfum|parfum|\bpp\b)\b/i.test(s)) return 'Parfum';
+    if (/\b(eau\s*de\s*toilette|edt)\b/i.test(s)) return 'EDT';
+    if (/\b(cologne|edc)\b/i.test(s)) return 'Cologne';
+    return null;
+  }
+
+  function getFragranceConcentration(frag) {
+    const c = (frag.concentration || '').toLowerCase();
+    const id = (frag.id || '').toLowerCase();
+    const name = (frag.name || '').toLowerCase();
+    const text = `${c} ${id} ${name}`;
+    if (/\b(extrait(\s*de\s*parfum)?|elixir)\b/i.test(text)) return 'Extrait';
+    if (/\b(eau\s*de\s*parfum|edp)\b/i.test(text)) return 'EDP';
+    if (/\b(pure\s*parfum|parfum|\bpp\b)\b/i.test(text)) return 'Parfum';
+    if (/\b(eau\s*de\s*toilette|edt)\b/i.test(text)) return 'EDT';
+    if (/\b(cologne|edc)\b/i.test(text)) return 'Cologne';
+    return null;
+  }
+
   // Helper: Find best fragrance match in catalog (100% database & alias driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "") {
     if (isDesigner(brandRaw) || isDesigner(nameRaw)) return null;
@@ -482,8 +505,17 @@ async function runMasterRefresh() {
 
     if (brandFrags.length === 0) return null;
 
-    // 0. Priority 0: Exact Base Name Match (e.g. "Encre Noire" -> "Encre Noire EDT", concentrations stripped)
+    const incomingConc = getExplicitConcentration(nameRaw);
+    function concentrationMismatch(frag) {
+      if (!incomingConc) return false;
+      const fragConc = getFragranceConcentration(frag);
+      if (!fragConc) return false;
+      return incomingConc !== fragConc;
+    }
+
+    // 0. Priority 0: Exact Base Name Match (with strict Concentration Guard)
     let match = brandFrags.find(f => {
+      if (concentrationMismatch(f)) return false;
       const fBase = getBaseName(f.name);
       return (fBase === nBase || fBase === fullBase) && fBase.length >= 2;
     });
@@ -491,6 +523,7 @@ async function runMasterRefresh() {
 
     // 1. Priority 1: Registered Canonical Database Aliases (learned & saved in Supabase)
     match = brandFrags.find(f => {
+      if (concentrationMismatch(f)) return false;
       if (!Array.isArray(f.aliases)) return false;
       const fbClean = cleanStr(f.brand);
       return f.aliases.some(a => {
@@ -510,6 +543,7 @@ async function runMasterRefresh() {
 
     // 2. Priority 2: Exact brand + clean name match
     match = brandFrags.find(f => {
+      if (concentrationMismatch(f)) return false;
       const fnClean = cleanStr(f.name);
       return fnClean === nClean || fnClean === fullClean;
     });
