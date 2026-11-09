@@ -271,6 +271,15 @@ async function queryFragranceWithAI(brandRaw, nameRaw) {
           text: `You are an expert on perfumes, clone houses, and the Fragrantica database.
 Analyze this seller perfume listing string: "${brandRaw} ${nameRaw}"
 Expand any community acronyms (e.g. SNOI -> Supremacy Not Only Intense, CDNIM -> Club de Nuit Intense Man, etc.).
+
+CRITICAL FLANKER & EDITION RULES:
+- NEVER drop, omit, or strip distinct flanker words, edition names, or subtitles from the canonical name.
+- For example:
+  - If input is "Rasasi Shuhrah Pour Homme Avenoir", canonical_name MUST be "Shuhrah Pour Homme Avenoir" or "Shuhrah Avenoir". NEVER collapse it to "Shuhrah Pour Homme".
+  - If input is "Lalique Encre Noire À L'Extrême", canonical_name MUST be "Encre Noire À L'Extrême". NEVER collapse it to "Encre Noire".
+  - If input is "Armaf Club de Nuit Overdose", canonical_name MUST be "Club de Nuit Overdose".
+- If it is a new release or flanker not yet indexed on Fragrantica, preserve the full official name including the flanker subtitle.
+
 Return a valid JSON object with:
 - "canonical_name": official perfume name
 - "brand": official brand name
@@ -382,6 +391,24 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
     cleanName = cleanName.slice(brandClean.length).trim();
   }
 
+  const ENRICHER_FLANKER_TOKENS = [
+    'avenoir', 'opulence', 'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector',
+    'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum', 'ice', 'fire',
+    'black', 'white', 'gold', 'silver', 'rouge', 'noir', 'qahwa', 'zanzibar', 'rebel', 'dive',
+    'freeze', 'seqoia', 'bourbon', 'exclusif', 'tous', 'moi', 'candy'
+  ];
+
+  // 1. Guard against AI dropping flanker tokens:
+  const rawClean = nameRaw.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const compiledClean = cleanName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  for (const token of ENRICHER_FLANKER_TOKENS) {
+    if (rawClean.includes(token) && !compiledClean.includes(token)) {
+      console.warn(`   ⚠️ AI dropped flanker token "${token}". Restoring full name "${nameRaw.trim()}".`);
+      cleanName = nameRaw.trim();
+      break;
+    }
+  }
+
   // Generate clean ID
   const cleanId = (brandClean + " " + cleanName)
     .toLowerCase()
@@ -398,17 +425,31 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
         .maybeSingle();
 
       if (existing) {
-        console.log(`   ✓ Perfume already exists in database as "${existing.id}"! Attaching seller quote instead of duplicating.`);
-        // Append raw name to aliases in database so it learns permanently
-        const cleanAlias = nameRaw.toLowerCase().trim();
-        const curAliases = existing.aliases || [];
-        if (!curAliases.includes(cleanAlias)) {
-          const newAliases = [...curAliases, cleanAlias];
-          existing.aliases = newAliases;
-          await supabase.from("fragrances").update({ aliases: newAliases }).eq("id", existing.id);
-          console.log(`   ✓ Auto-learned alias: "${cleanAlias}" saved to database for [${existing.id}]`);
+        // Strict Flanker Guard: Do not attach if raw name has a flanker token that existing perfume lacks!
+        const existingClean = (existing.id + " " + existing.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+        let flankerMismatch = false;
+        for (const token of ENRICHER_FLANKER_TOKENS) {
+          if (rawClean.includes(token) !== existingClean.includes(token)) {
+            flankerMismatch = true;
+            break;
+          }
         }
-        return existing;
+
+        if (!flankerMismatch) {
+          console.log(`   ✓ Perfume already exists in database as "${existing.id}"! Attaching seller quote instead of duplicating.`);
+          // Append raw name to aliases in database so it learns permanently
+          const cleanAlias = nameRaw.toLowerCase().trim();
+          const curAliases = existing.aliases || [];
+          if (!curAliases.includes(cleanAlias)) {
+            const newAliases = [...curAliases, cleanAlias];
+            existing.aliases = newAliases;
+            await supabase.from("fragrances").update({ aliases: newAliases }).eq("id", existing.id);
+            console.log(`   ✓ Auto-learned alias: "${cleanAlias}" saved to database for [${existing.id}]`);
+          }
+          return existing;
+        } else {
+          console.log(`   ↳ Flanker mismatch detected between incoming "${nameRaw}" and existing "${existing.id}". Creating separate fragrance.`);
+        }
       }
     } catch (e) {
       // ignore
