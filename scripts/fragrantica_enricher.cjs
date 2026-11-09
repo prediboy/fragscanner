@@ -1,4 +1,22 @@
 const { createClient } = require('@supabase/supabase-js');
+const fs = require('fs');
+const path = require('path');
+
+// Auto-load .env if environment variables are not set in the shell
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const match = trimmed.match(/^([^=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const val = match[2].trim().replace(/^['"](.*)['"]$/, '$1');
+      if (!process.env[key]) process.env[key] = val;
+    }
+  });
+}
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
@@ -7,9 +25,7 @@ const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY)
   : null;
 
 /**
- * Perform a web search to fetch Fragrantica listing snippets
- * Prioritizes official Google Custom Search API when configured,
- * with fallback to DuckDuckGo.
+ * Perform a web search to fetch Fragrantica listing snippets (fallback when needed)
  */
 async function searchWeb(query) {
   const googleApiKey = process.env.GOOGLE_SEARCH_API_KEY;
@@ -23,19 +39,16 @@ async function searchWeb(query) {
       if (res.ok) {
         const data = await res.json();
         const items = data.items || [];
-        const fragItem = items.find(i => i.link && i.link.includes("fragrantica.com/perfume/")) || items[0];
-        const fragranticaUrl = (fragItem && fragItem.link && fragItem.link.includes("fragrantica.com/perfume/")) ? fragItem.link : "";
-        const snippets = items.slice(0, 3).map(i => `${i.title || ""}\n${i.snippet || ""}`).filter(Boolean);
+        const fragItem = items.find(i => i.link && i.link.includes('fragrantica.com/perfume/')) || items[0];
+        const fragranticaUrl = (fragItem && fragItem.link && fragItem.link.includes('fragrantica.com/perfume/')) ? fragItem.link : '';
+        const snippets = items.slice(0, 3).map(i => `${i.title || ''}\n${i.snippet || ''}`).filter(Boolean);
         return {
-          text: snippets.join("\n"),
+          text: snippets.join('\n'),
           url: fragranticaUrl
         };
-      } else {
-        const errJson = await res.json().catch(() => ({}));
-        console.warn(`  [Google Search] Status ${res.status}: ${errJson.error?.message || "Error"}`);
       }
     } catch (gErr) {
-      console.warn("  [Google Search] Request error:", gErr.message);
+      console.warn('  [Google Search] Request error:', gErr.message);
     }
   }
 
@@ -44,33 +57,29 @@ async function searchWeb(query) {
     const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
       },
       signal: AbortSignal.timeout(8000)
     });
-    if (!res.ok) return { text: "", url: "" };
+    if (!res.ok) return { text: '', url: '' };
     const html = await res.text();
     
-    // Extract first direct Fragrantica link
     const urls = [...html.matchAll(/uddg=([^&"]+)/g)]
       .map(m => decodeURIComponent(m[1]))
-      .filter(u => u.includes("fragrantica.com/perfume/"));
+      .filter(u => u.includes('fragrantica.com/perfume/'));
     
-    const fragranticaUrl = urls.length > 0 ? urls[0] : "";
-
-    // Extract search snippets
+    const fragranticaUrl = urls.length > 0 ? urls[0] : '';
     const snippets = [...html.matchAll(/class="result__snippet[^>]*>([\s\S]*?)<\/a>/g)]
-      .map(m => m[1].replace(/<[^>]+>/g, "").trim())
+      .map(m => m[1].replace(/<[^>]+>/g, '').trim())
       .filter(Boolean);
 
     return {
-      text: snippets.slice(0, 3).join("\n"),
+      text: snippets.slice(0, 3).join('\n'),
       url: fragranticaUrl
     };
   } catch (err) {
-    console.error("  Warning: Search failed:", err.message);
-    return { text: "", url: "" };
+    return { text: '', url: '' };
   }
 }
 
@@ -96,7 +105,7 @@ function parseFragranticaSlug(url) {
 }
 
 /**
- * Extract olfactory notes pyramid from Fragrantica snippet text
+ * Extract olfactory notes pyramid from text
  */
 function extractNotes(text) {
   const notes = { top: [], middle: [], base: [] };
@@ -108,7 +117,7 @@ function extractNotes(text) {
     return raw
       .replace(/&#x27;/g, "'")
       .split(/,|and/)
-      .map(s => s.trim().replace(/^and\s+/i, ""))
+      .map(s => s.trim().replace(/^and\s+/i, ''))
       .filter(s => s.length >= 2 && s.length <= 30 && !/notes|perfume/i.test(s));
   }
 
@@ -116,37 +125,11 @@ function extractNotes(text) {
   if (midMatch) notes.middle = cleanNotesList(midMatch[1]);
   if (baseMatch) notes.base = cleanNotesList(baseMatch[1]);
 
-  if (notes.top.length === 0) notes.top = ["Bergamot", "Fresh Accords", "Citrus"];
-  if (notes.middle.length === 0) notes.middle = ["Aromatic Notes", "Warm Spices"];
-  if (notes.base.length === 0) notes.base = ["Cedarwood", "Amber", "Musk"];
+  if (notes.top.length === 0) notes.top = ['Bergamot', 'Fresh Accords', 'Citrus'];
+  if (notes.middle.length === 0) notes.middle = ['Aromatic Notes', 'Warm Spices'];
+  if (notes.base.length === 0) notes.base = ['Cedarwood', 'Amber', 'Musk'];
 
   return notes;
-}
-
-/**
- * Extract luxury inspiration or dupe target from community discussions
- */
-function extractCloneInspiration(fragText, dupeText) {
-  const combined = `${fragText}\n${dupeText}`;
-  const patterns = [
-    /reminds\s+me\s+of\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n|by\s+[A-Z]|and\s+has)/i,
-    /clone\s+of\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n)/i,
-    /inspired\s+by\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n)/i,
-    /alternative\s+to\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n)/i,
-    /dupe\s+(?:of|for)\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n)/i,
-    /similar\s+to\s+([A-Z0-9][A-Za-z0-9\s'’\-]+?)(?:\.|\,|\;|\(|\n)/i
-  ];
-
-  for (const p of patterns) {
-    const match = combined.match(p);
-    if (match && match[1]) {
-      const candidate = match[1].trim();
-      if (candidate.length >= 3 && candidate.length <= 40 && !/fragrantica|perfume|cologne|reddit|review/i.test(candidate)) {
-        return candidate;
-      }
-    }
-  }
-  return "Original Creation";
 }
 
 /**
@@ -154,17 +137,17 @@ function extractCloneInspiration(fragText, dupeText) {
  */
 function extractAccords(text) {
   const ACCORD_PALETTE = [
-    { name: "Citrus", color: "#f59e0b" },
-    { name: "Aromatic", color: "#10b981" },
-    { name: "Woody", color: "#78350f" },
-    { name: "Warm Spicy", color: "#d97706" },
-    { name: "Fresh Spicy", color: "#06b6d4" },
-    { name: "Amber", color: "#b45309" },
-    { name: "Vanilla", color: "#fbbf24" },
-    { name: "Sweet", color: "#ec4899" },
-    { name: "Fruity", color: "#f43f5e" },
-    { name: "Powdery", color: "#c084fc" },
-    { name: "Musky", color: "#64748b" }
+    { name: 'Citrus', color: '#f59e0b' },
+    { name: 'Aromatic', color: '#10b981' },
+    { name: 'Woody', color: '#78350f' },
+    { name: 'Warm Spicy', color: '#d97706' },
+    { name: 'Fresh Spicy', color: '#06b6d4' },
+    { name: 'Amber', color: '#b45309' },
+    { name: 'Vanilla', color: '#fbbf24' },
+    { name: 'Sweet', color: '#ec4899' },
+    { name: 'Fruity', color: '#f43f5e' },
+    { name: 'Powdery', color: '#c084fc' },
+    { name: 'Musky', color: '#64748b' }
   ];
 
   const matched = [];
@@ -181,69 +164,19 @@ function extractAccords(text) {
 
   if (matched.length === 0) {
     matched.push(
-      { name: "Aromatic", score: 90, color: "#10b981" },
-      { name: "Woody", score: 80, color: "#78350f" },
-      { name: "Warm Spicy", score: 70, color: "#d97706" }
+      { name: 'Aromatic', score: 90, color: '#10b981' },
+      { name: 'Woody', score: 80, color: '#78350f' },
+      { name: 'Warm Spicy', score: 70, color: '#d97706' }
     );
   }
   return matched.slice(0, 5);
 }
 
 /**
- * Compile verified fragrance evidence from Fragrantica web search
- * (100% deterministic, zero LLM API key dependencies)
- */
-async function compileFragranceData(brandRaw, nameRaw, fragEvidence, dupeEvidence, fragUrl) {
-  const slugInfo = parseFragranticaSlug(fragUrl);
-  const brand = slugInfo?.brand || brandRaw.trim();
-  const name = slugInfo?.name || nameRaw.trim();
-
-  const notes = extractNotes(fragEvidence);
-  const inspiration = extractCloneInspiration(fragEvidence, dupeEvidence);
-  const accords = extractAccords(fragEvidence);
-
-  // Gender extraction
-  let gender = "Unisex";
-  if (/for men and women|unisex/i.test(fragEvidence)) gender = "Unisex";
-  else if (/for men/i.test(fragEvidence)) gender = "Men";
-  else if (/for women/i.test(fragEvidence)) gender = "Women";
-
-  // Year extraction
-  const yearMatch = fragEvidence.match(/\blaunched\s+in\s+(\d{4})\b/i);
-  const release_year = yearMatch ? parseInt(yearMatch[1], 10) : new Date().getFullYear();
-
-  return {
-    name,
-    brand,
-    collection: "Classic Collection",
-    rating_value: 4.3,
-    rating_count: 420,
-    gender,
-    release_year,
-    concentration: "Eau de Parfum",
-    primary_season: "Fall",
-    dna_inspiration: inspiration,
-    dna_type: accords.map(a => a.name).slice(0, 3).join(" "),
-    similarity_percentage: inspiration && inspiration !== "Original Creation" ? 92 : 85,
-    accords,
-    notes,
-    seasons: { winter: 30, fall: 35, spring: 20, summer: 15 },
-    day_night: { day: 50, night: 50 },
-    longevity: "Long Lasting (8+ hrs)",
-    sillage: "Strong",
-    review_summary: {
-      pros: ["High quality blend", "Impressive performance for price"],
-      cons: ["Rich profile best in cool weather"],
-      community_verdict: `A standout Middle Eastern release from ${brand}.`,
-      top_reviewer_quotes: ["Smooth, versatile and well-performing community favorite."]
-    }
-  };
-}
-
-/**
  * Log enrichment report directly into Supabase table 'enriched_perfumes'
  */
 async function recordEnrichmentReport(reportEntry) {
+  if (!supabase) return;
   try {
     const { error } = await supabase.from('enriched_perfumes').upsert(reportEntry, { onConflict: 'id' });
     if (error) {
@@ -252,324 +185,414 @@ async function recordEnrichmentReport(reportEntry) {
       console.log(`  ✓ Logged enrichment report to Supabase table 'enriched_perfumes'!`);
     }
   } catch (err) {
-    console.error("  Warning: Supabase report sync error:", err.message);
+    console.error('  Warning: Supabase report sync error:', err.message);
   }
 }
 
 /**
- * Query fragrance details via Google Gemini AI with Fragrantica ground truth
+ * Candidate-Context Evaluator (LLM-as-a-Judge)
+ * Evaluates an uncataloged seller listing against existing catalog candidates for that brand.
  */
-async function queryFragranceWithAI(brandRaw, nameRaw) {
+async function evaluateListingWithLLM(brandRaw, nameRaw, candidates = []) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return null;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${key}`;
+    const candidateSummary = candidates.map(c => ({
+      id: c.id,
+      name: c.name,
+      aliases: (c.aliases || []).slice(0, 6)
+    }));
+
+    const systemInstruction = `You are an expert perfume archivist, clone-house specialist, and catalog evaluator.
+A community seller has listed a perfume: "${brandRaw} ${nameRaw}".
+
+Here are the existing perfumes currently in our catalog for brand "${brandRaw}":
+${JSON.stringify(candidateSummary, null, 2)}
+
+Your task is to judge this listing using domain expertise and return a JSON object with this EXACT schema:
+{
+  "verdict": "MATCH_EXISTING" | "NEW_FLANKER" | "UNRESOLVED",
+  "reason": "Brief 1-sentence explanation of your verdict",
+  "matched_id": "Exact id from candidates if MATCH_EXISTING, else null",
+  "learned_alias": "Clean lowercase string of this seller listing to permanently remember as an alias for that perfume if MATCH_EXISTING, else null",
+  "new_fragrance": {
+    "canonical_name": "Full official perfume name including distinct flanker/edition subtitle (e.g. 'Shuhrah Pour Homme Avenoir', 'Encre Noire À L\\'Extrême')",
+    "brand": "Official brand name",
+    "fragrantica_url": "Authentic Fragrantica URL if indexed, or null if too new",
+    "notes": {
+      "top": ["Top note 1", "Top note 2"],
+      "middle": ["Mid note 1", "Mid note 2"],
+      "base": ["Base note 1", "Base note 2"]
+    },
+    "accords": ["Accord 1", "Accord 2", "Accord 3"],
+    "clone_inspiration": "Luxury perfume it clones/inspires (e.g. 'Creed Aventus', 'Nishane Hacivat', 'Xerjoff Naxos') or 'Original Creation'",
+    "gender": "Men" | "Women" | "Unisex",
+    "release_year": 2024,
+    "rating_value": 4.3,
+    "rating_count": 350,
+    "primary_season": "Fall" | "Winter" | "Spring" | "Summer"
+  } // only populate new_fragrance if verdict is NEW_FLANKER, else set to null
+}
+
+CRITICAL DOMAIN RULES:
+1. MATCH_EXISTING:
+   - Use MATCH_EXISTING if the seller listing refers to a perfume that is ALREADY IN THE CANDIDATE LIST, differing only by:
+     - Community acronyms / abbreviations (e.g., 'SNOI' -> Supremacy Not Only Intense, 'CDNIM' -> Club de Nuit Intense Man, 'ADG' -> Acqua di Gio).
+     - Production batch indicators (e.g., '2024 Batch', 'Vintage Batch', 'New Cap').
+     - Concentration or packaging descriptors (e.g., 'EDP', 'Parfum', 'Tester', 'BNIB', '100ml', 'Spray').
+     - Minor spelling mistakes or transliterations (e.g., 'Hawas Men' -> 'Hawas for Him').
+   - In this case, specify 'matched_id' and 'learned_alias' (the clean seller name so future scrapes match instantly).
+
+2. NEW_FLANKER:
+   - Use NEW_FLANKER if the seller listing is a DISTINCT FLANKER, separate edition, or new perfume release from this brand that does NOT exist in the candidate list.
+   - For example:
+     - 'Rasasi Shuhrah Pour Homme Avenoir' is a distinct edition from 'Rasasi Shuhrah Pour Homme'. NEVER collapse it into the 2015 original!
+     - 'Lalique Encre Noire À L'Extrême' is a distinct flanker from 'Encre Noire'. NEVER collapse it into 'Encre Noire'!
+     - 'Armaf Club de Nuit Overdose' is a distinct release, not 'Club de Nuit Intense Man'.
+     - 'Lattafa Khamrah Qahwa' is a distinct flanker from 'Lattafa Khamrah'.
+   - When NEW_FLANKER is chosen, preserve the full canonical name and provide authentic notes, accords, clone inspiration, and gender.
+
+3. UNRESOLVED:
+   - Use UNRESOLVED if the listing is junk, empty bottles, non-fragrance accessories ('Gift Bag Only', 'Cap Only', 'Box Only'), or cannot be reliably identified as a legitimate perfume.
+   - We must NEVER pollute the database with junk entries.`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${key}`;
     const payload = {
-      contents: [{
-        parts: [{
-          text: `You are an expert on perfumes, clone houses, and the Fragrantica database.
-Analyze this seller perfume listing string: "${brandRaw} ${nameRaw}"
-Expand any community acronyms (e.g. SNOI -> Supremacy Not Only Intense, CDNIM -> Club de Nuit Intense Man, etc.).
-
-CRITICAL FLANKER & EDITION RULES:
-- NEVER drop, omit, or strip distinct flanker words, edition names, or subtitles from the canonical name.
-- For example:
-  - If input is "Rasasi Shuhrah Pour Homme Avenoir", canonical_name MUST be "Shuhrah Pour Homme Avenoir" or "Shuhrah Avenoir". NEVER collapse it to "Shuhrah Pour Homme".
-  - If input is "Lalique Encre Noire À L'Extrême", canonical_name MUST be "Encre Noire À L'Extrême". NEVER collapse it to "Encre Noire".
-  - If input is "Armaf Club de Nuit Overdose", canonical_name MUST be "Club de Nuit Overdose".
-- If it is a new release or flanker not yet indexed on Fragrantica, preserve the full official name including the flanker subtitle.
-
-Return a valid JSON object with:
-- "canonical_name": official perfume name
-- "brand": official brand name
-- "fragrantica_url": authentic Fragrantica URL (must be valid https://www.fragrantica.com/perfume/...)
-- "notes": { "top": [...], "middle": [...], "base": [...] }
-- "accords": [array of accord names like "Citrus", "Woody", "Fruity", "Amber", "Musky"]
-- "clone_inspiration": what luxury perfume does it clone or take inspiration from? (e.g. "Creed Aventus", "Nishane Hacivat", or "Original Creation")
-- "gender": "Men", "Women", or "Unisex"
-- "release_year": launch year as number
-- "rating_value": approximate Fragrantica rating (e.g. 4.3)
-- "rating_count": approximate rating count (e.g. 450)
-- "primary_season": "Fall", "Winter", "Spring", or "Summer"`
-        }]
-      }],
-      generationConfig: { responseMimeType: "application/json" }
+      contents: [{ parts: [{ text: systemInstruction }] }],
+      generationConfig: { responseMimeType: 'application/json' }
     };
 
     const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(10000)
+      signal: AbortSignal.timeout(12000)
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(`  [AI-Judge] Status ${res.status} from Gemini`);
+      return null;
+    }
+
     const data = await res.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) return null;
 
     const parsed = JSON.parse(text);
-    if (!parsed.fragrantica_url || !parsed.fragrantica_url.includes("fragrantica.com/perfume/")) {
-      return null;
-    }
     return parsed;
   } catch (err) {
-    console.warn("  [AI-Enrich] Gemini query notice:", err.message);
+    console.warn('  [AI-Judge] Gemini query notice:', err.message);
     return null;
   }
 }
 
 /**
- * Main enrichment handler
+ * Main enrichment and quote-attachment handler with LLM-as-a-Judge architecture
  */
-async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj) {
-  console.log(`\n🔍 [AI-Enrich] Uncataloged Perfume Detected: "${brandRaw} ${nameRaw}"`);
-  console.log(`   ↳ Querying live Fragrantica index via Google Gemini...`);
+async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, candidates = []) {
+  console.log(`\n🔍 [AI-Enrich] Uncataloged Listing Detected: "${brandRaw} ${nameRaw}" (₹${price}, ${size})`);
 
-  let compiled = null;
-  let fragUrl = "";
+  // 1. Fetch brand candidates if not passed in
+  let brandCandidates = candidates || [];
+  if (brandCandidates.length === 0 && supabase) {
+    try {
+      const { data } = await supabase
+        .from('fragrances')
+        .select('id, name, brand, aliases, community_sellers, price_history, community_price')
+        .ilike('brand', `%${brandRaw.trim()}%`);
+      brandCandidates = data || [];
+    } catch (e) {
+      // fallback
+    }
+  }
 
-  // 1. Primary: Query Gemini AI for Fragrantica ground truth
-  const aiResult = await queryFragranceWithAI(brandRaw, nameRaw);
-  if (aiResult && aiResult.fragrantica_url) {
-    fragUrl = aiResult.fragrantica_url;
-    console.log(`   ↳ Found verified Fragrantica page: ${fragUrl}`);
-    console.log(`   ↳ Resolved Canonical Name: "${aiResult.brand} - ${aiResult.canonical_name}"`);
-    console.log(`   ↳ DNA Inspiration: "${aiResult.clone_inspiration}"`);
+  console.log(`   ↳ Evaluating against ${brandCandidates.length} existing catalog entries for "${brandRaw}" via LLM Judge...`);
 
-    const accordsList = (aiResult.accords || ["Aromatic", "Woody"]).slice(0, 5).map((a, idx) => ({
-      name: a,
-      score: Math.max(95 - idx * 8, 50),
-      color: "#10b981"
-    }));
+  // 2. Candidate-Context Evaluation via Gemini
+  const decision = await evaluateListingWithLLM(brandRaw, nameRaw, brandCandidates);
 
-    compiled = {
-      name: aiResult.canonical_name,
-      brand: aiResult.brand,
-      collection: "Classic Collection",
-      rating_value: aiResult.rating_value || 4.3,
-      rating_count: aiResult.rating_count || 400,
-      gender: aiResult.gender || "Unisex",
-      release_year: aiResult.release_year || new Date().getFullYear(),
-      concentration: "Eau de Parfum",
-      primary_season: aiResult.primary_season || "Fall",
-      dna_inspiration: aiResult.clone_inspiration || "",
-      dna_type: (aiResult.accords || []).slice(0, 3).join(" ") || "Aromatic Woody",
-      similarity_percentage: aiResult.clone_inspiration && aiResult.clone_inspiration !== "Original Creation" ? 92 : 85,
-      accords: accordsList,
-      notes: aiResult.notes || { top: [], middle: [], base: [] },
-      seasons: { winter: 25, fall: 35, spring: 25, summer: 15 },
-      day_night: { day: 50, night: 50 },
-      longevity: "Long Lasting (8+ hrs)",
-      sillage: "Strong",
-      review_summary: {
-        pros: ["High quality blend", "Impressive performance for price"],
-        cons: ["Rich profile best in cool weather"],
-        community_verdict: `A standout release from ${aiResult.brand}.`,
-        top_reviewer_quotes: ["Smooth, versatile and well-performing community favorite."]
+  if (decision) {
+    console.log(`   ↳ Verdict: [${decision.verdict}] — ${decision.reason}`);
+
+    // ==========================================
+    // CASE 1: MATCH_EXISTING
+    // ==========================================
+    if (decision.verdict === 'MATCH_EXISTING' && decision.matched_id) {
+      let matchedFrag = brandCandidates.find(c => c.id === decision.matched_id);
+
+      if (!matchedFrag && supabase) {
+        const { data } = await supabase
+          .from('fragrances')
+          .select('id, name, brand, aliases, community_sellers, price_history, community_price')
+          .eq('id', decision.matched_id)
+          .maybeSingle();
+        matchedFrag = data;
       }
-    };
-  } else {
-    // 2. Fallback: Search web for Fragrantica listing snippet
-    console.log(`   ↳ Querying web search fallback...`);
-    const fragResult = await searchWeb(`site:fragrantica.com ${brandRaw} ${nameRaw}`);
-    if (fragResult.url) {
-      fragUrl = fragResult.url;
-      console.log(`   ↳ Found Fragrantica listing: ${fragResult.url}`);
-      const dupeResult = await searchWeb(`${brandRaw} ${nameRaw} clone of OR "reminds me of" OR inspired by fragrantica reddit`);
-      compiled = await compileFragranceData(brandRaw, nameRaw, fragResult.text, dupeResult.text, fragResult.url);
-    } else {
-      console.log(`   ⚠️ No authentic Fragrantica listing found for "${brandRaw} ${nameRaw}". Skipping catalog creation to preserve Fragrantica as primary source of truth.`);
+
+      if (matchedFrag) {
+        console.log(`   ✓ Matched to existing perfume: [${matchedFrag.id}] (${matchedFrag.name})`);
+
+        // A. Save learned alias to Supabase so future syncs match directly
+        const cleanAlias = (decision.learned_alias || nameRaw).toLowerCase().trim();
+        const curAliases = matchedFrag.aliases || [];
+        if (cleanAlias && cleanAlias.length >= 2 && !curAliases.includes(cleanAlias)) {
+          const newAliases = [...curAliases, cleanAlias];
+          matchedFrag.aliases = newAliases;
+          if (supabase) {
+            await supabase.from('fragrances').update({ aliases: newAliases }).eq('id', matchedFrag.id);
+            console.log(`   ✓ Saved learned alias "${cleanAlias}" to Supabase for [${matchedFrag.id}]`);
+          }
+        }
+
+        // B. Attach seller quote to existing perfume
+        const vol = parseInt(size, 10) || 100;
+        const isTester = /tester/i.test(size || '') || /tester/i.test(nameRaw);
+        const pkgType = isTester ? 'Tester' : 'Retail Bottle';
+        const label = size || (isTester ? `${vol}ml Tester` : `${vol}ml Retail Bottle`);
+
+        const quote = {
+          seller_id: sellerObj.id,
+          seller_name: sellerObj.seller_name,
+          price,
+          size: label,
+          volume_ml: vol,
+          whatsapp: sellerObj.whatsapp,
+          shipping: sellerObj.shipping,
+          dispatch: sellerObj.dispatch,
+          is_tester: isTester,
+          packaging_type: pkgType,
+          verified: true
+        };
+
+        const sellers = matchedFrag.community_sellers || [];
+        const existingIdx = sellers.findIndex(s => s.seller_id === quote.seller_id && s.size === quote.size);
+        if (existingIdx >= 0) {
+          if (price < sellers[existingIdx].price) {
+            sellers[existingIdx] = quote;
+          }
+        } else {
+          sellers.push(quote);
+        }
+        matchedFrag.community_sellers = sellers;
+
+        // Update lowest price if applicable
+        if (!matchedFrag.community_price || price < matchedFrag.community_price) {
+          matchedFrag.community_price = price;
+          matchedFrag.best_bottle_seller = sellerObj.seller_name;
+        }
+
+        // Update price history
+        const todayDate = new Date().toISOString().split('T')[0];
+        const history = matchedFrag.price_history || [];
+        if (!history.some(h => h.seller_id === sellerObj.id && h.date === todayDate && h.size === label)) {
+          history.push({
+            date: todayDate,
+            price,
+            size: label,
+            seller: sellerObj.seller_name,
+            seller_id: sellerObj.id
+          });
+          matchedFrag.price_history = history;
+        }
+
+        if (supabase) {
+          await supabase.from('fragrances').update({
+            community_sellers: matchedFrag.community_sellers,
+            community_price: matchedFrag.community_price,
+            best_bottle_seller: matchedFrag.best_bottle_seller,
+            price_history: matchedFrag.price_history,
+            price_updated_at: new Date().toISOString(),
+            in_seller_stock: true
+          }).eq('id', matchedFrag.id);
+          console.log(`   ✓ Successfully attached seller quote (₹${price}) to [${matchedFrag.id}] in Supabase!`);
+        }
+
+        return matchedFrag;
+      }
+    }
+
+    // ==========================================
+    // CASE 2: NEW_FLANKER
+    // ==========================================
+    if (decision.verdict === 'NEW_FLANKER' && decision.new_fragrance) {
+      const nf = decision.new_fragrance;
+      const brandClean = (nf.brand || brandRaw).trim();
+      let canonicalName = (nf.canonical_name || nameRaw).trim();
+
+      // Ensure brand prefix doesn't duplicate in name
+      if (canonicalName.toLowerCase().startsWith(brandClean.toLowerCase() + ' ')) {
+        canonicalName = canonicalName.slice(brandClean.length).trim();
+      }
+
+      const cleanId = (brandClean + ' ' + canonicalName)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+
+      console.log(`   ✨ Creating NEW Flanker Catalog Entry: "${brandClean} - ${canonicalName}" [${cleanId}]`);
+
+      // Check if it already exists by cleanId
+      if (supabase) {
+        const { data: existingEntry } = await supabase
+          .from('fragrances')
+          .select('id, name, brand, aliases, community_sellers')
+          .eq('id', cleanId)
+          .maybeSingle();
+
+        if (existingEntry) {
+          console.log(`   ✓ New flanker already exists in Supabase as [${cleanId}]. Attaching quote.`);
+          return existingEntry;
+        }
+      }
+
+      const accordsList = (nf.accords || ['Aromatic', 'Woody']).slice(0, 5).map((a, idx) => ({
+        name: a,
+        score: Math.max(95 - idx * 8, 50),
+        color: '#10b981'
+      }));
+
+      const todayDate = new Date().toISOString().split('T')[0];
+      const nowIso = new Date().toISOString();
+
+      const aliasesList = [...new Set([
+        nameRaw.toLowerCase().trim(),
+        canonicalName.toLowerCase().trim(),
+        `${brandClean.toLowerCase()} ${canonicalName.toLowerCase()}`
+      ])].filter(a => a && a.length >= 2);
+
+      const vol = parseInt(size, 10) || 100;
+      const isTester = /tester/i.test(size || '') || /tester/i.test(nameRaw);
+      const pkgType = isTester ? 'Tester' : 'Retail Bottle';
+      const label = size || (isTester ? `${vol}ml Tester` : `${vol}ml Retail Bottle`);
+
+      const newPerfume = {
+        id: cleanId,
+        name: canonicalName,
+        brand: brandClean,
+        collection: 'Classic Collection',
+        rating_value: nf.rating_value || 4.3,
+        rating_count: nf.rating_count || 350,
+        gender: nf.gender || 'Unisex',
+        release_year: nf.release_year || new Date().getFullYear(),
+        concentration: 'Eau de Parfum',
+        primary_season: nf.primary_season || 'Fall',
+        dna_inspiration: nf.clone_inspiration || 'Original Creation',
+        dna_type: (nf.accords || []).slice(0, 3).join(' ') || 'Aromatic',
+        similarity_percentage: nf.clone_inspiration && nf.clone_inspiration !== 'Original Creation' ? 92 : 85,
+        accords: accordsList,
+        top_notes: nf.notes?.top || [],
+        middle_notes: nf.notes?.middle || [],
+        base_notes: nf.notes?.base || [],
+        notes: nf.notes || { top: [], middle: [], base: [] },
+        seasons: { winter: 25, fall: 25, spring: 25, summer: 25 },
+        day_night: { day: 50, night: 50 },
+        longevity: 'Long Lasting (8+ hrs)',
+        sillage: 'Strong',
+        review_summary: `A standout release from ${brandClean}.`,
+        flankers: [],
+        dna_twins: [],
+        aliases: aliasesList,
+        in_seller_stock: true,
+        community_price: price,
+        best_bottle_seller: sellerObj.seller_name,
+        price_updated_at: nowIso,
+        discovered_at: nowIso,
+        is_new_arrival: true,
+        new_arrival_date: todayDate,
+        price_history: [
+          {
+            date: todayDate,
+            price,
+            size: label,
+            seller: sellerObj.seller_name,
+            seller_id: sellerObj.id
+          }
+        ],
+        community_sellers: [
+          {
+            seller_id: sellerObj.id,
+            seller_name: sellerObj.seller_name,
+            price,
+            size: label,
+            volume_ml: vol,
+            whatsapp: sellerObj.whatsapp,
+            shipping: sellerObj.shipping,
+            dispatch: sellerObj.dispatch,
+            is_tester: isTester,
+            packaging_type: pkgType,
+            verified: true
+          }
+        ]
+      };
+
+      if (supabase) {
+        try {
+          const { error: insertErr } = await supabase.from('fragrances').upsert([newPerfume], { onConflict: 'id' });
+          if (insertErr) {
+            console.warn(`  [AI-Enrich] Warning on saving new fragrance to Supabase:`, insertErr.message);
+          } else {
+            console.log(`  ✓ Successfully created and saved new fragrance [${newPerfume.id}] to Supabase! Aliases:`, newPerfume.aliases);
+          }
+        } catch (dbErr) {
+          console.warn(`  [AI-Enrich] DB save error:`, dbErr.message);
+        }
+      }
+
+      // Log to verification report
+      const reportEntry = {
+        id: cleanId,
+        name: newPerfume.name,
+        brand: newPerfume.brand,
+        dna_inspiration: newPerfume.dna_inspiration,
+        similarity_percentage: newPerfume.similarity_percentage,
+        dna_type: newPerfume.dna_type,
+        notes: newPerfume.notes,
+        accords: newPerfume.accords,
+        first_seller: sellerObj.seller_name,
+        first_price: price,
+        first_size: label,
+        fragrantica_url: nf.fragrantica_url || '',
+        fragrantica_evidence: `Verified via LLM Candidate-Context Evaluation (${decision.reason})`,
+        enriched_date: todayDate,
+        enriched_at: nowIso,
+        verified_by_user: false
+      };
+      await recordEnrichmentReport(reportEntry);
+
+      return newPerfume;
+    }
+
+    // ==========================================
+    // CASE 3: UNRESOLVED
+    // ==========================================
+    if (decision.verdict === 'UNRESOLVED') {
+      console.log(`   ⚠️ [AI-Judge] Listing "${brandRaw} ${nameRaw}" marked UNRESOLVED: ${decision.reason}. Skipping catalog creation to keep database clean.`);
       return null;
     }
   }
 
-  const brandClean = (compiled.brand || brandRaw).trim();
-  let cleanName = (compiled.name || nameRaw).trim();
-  if (cleanName.toLowerCase().startsWith(brandClean.toLowerCase() + " ")) {
-    cleanName = cleanName.slice(brandClean.length).trim();
+  // ==========================================
+  // FALLBACK: When LLM is unavailable
+  // ==========================================
+  console.log(`   ↳ LLM Judge unavailable or inconclusive. Checking Fragrantica web search fallback...`);
+  const fragResult = await searchWeb(`site:fragrantica.com ${brandRaw} ${nameRaw}`);
+  if (!fragResult.url) {
+    console.log(`   ⚠️ No authentic Fragrantica page found for "${brandRaw} ${nameRaw}". Skipping to prevent catalog pollution.`);
+    return null;
   }
 
-  const ENRICHER_FLANKER_TOKENS = [
-    'avenoir', 'opulence', 'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector',
-    'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum', 'ice', 'fire',
-    'black', 'white', 'gold', 'silver', 'rouge', 'noir', 'qahwa', 'zanzibar', 'rebel', 'dive',
-    'freeze', 'seqoia', 'bourbon', 'exclusif', 'tous', 'moi', 'candy'
-  ];
+  const slugInfo = parseFragranticaSlug(fragResult.url);
+  const brand = slugInfo?.brand || brandRaw.trim();
+  const name = slugInfo?.name || nameRaw.trim();
+  const cleanId = (brand + ' ' + name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-  // 1. Guard against AI dropping flanker tokens:
-  const rawClean = nameRaw.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const compiledClean = cleanName.toLowerCase().replace(/[^a-z0-9]/g, "");
-  for (const token of ENRICHER_FLANKER_TOKENS) {
-    if (rawClean.includes(token) && !compiledClean.includes(token)) {
-      console.warn(`   ⚠️ AI dropped flanker token "${token}". Restoring full name "${nameRaw.trim()}".`);
-      cleanName = nameRaw.trim();
-      break;
-    }
-  }
-
-  // Generate clean ID
-  const cleanId = (brandClean + " " + cleanName)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-
-  // Check if this canonical perfume ALREADY exists in Supabase!
-  if (supabase) {
-    try {
-      const { data: existing } = await supabase
-        .from("fragrances")
-        .select("id, name, brand, aliases, community_sellers")
-        .eq("id", cleanId)
-        .maybeSingle();
-
-      if (existing) {
-        // Strict Flanker Guard: Do not attach if raw name has a flanker token that existing perfume lacks!
-        const existingClean = (existing.id + " " + existing.name).toLowerCase().replace(/[^a-z0-9]/g, "");
-        let flankerMismatch = false;
-        for (const token of ENRICHER_FLANKER_TOKENS) {
-          if (rawClean.includes(token) !== existingClean.includes(token)) {
-            flankerMismatch = true;
-            break;
-          }
-        }
-
-        if (!flankerMismatch) {
-          console.log(`   ✓ Perfume already exists in database as "${existing.id}"! Attaching seller quote instead of duplicating.`);
-          // Append raw name to aliases in database so it learns permanently
-          const cleanAlias = nameRaw.toLowerCase().trim();
-          const curAliases = existing.aliases || [];
-          if (!curAliases.includes(cleanAlias)) {
-            const newAliases = [...curAliases, cleanAlias];
-            existing.aliases = newAliases;
-            await supabase.from("fragrances").update({ aliases: newAliases }).eq("id", existing.id);
-            console.log(`   ✓ Auto-learned alias: "${cleanAlias}" saved to database for [${existing.id}]`);
-          }
-          return existing;
-        } else {
-          console.log(`   ↳ Flanker mismatch detected between incoming "${nameRaw}" and existing "${existing.id}". Creating separate fragrance.`);
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-  }
-
-  const todayDate = new Date().toISOString().split('T')[0];
-  const nowIso = new Date().toISOString();
-
-  const baseName = nameRaw.toLowerCase().replace(/[^a-z0-9]/g, "").replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
-  const cleanNameLower = cleanName.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const aliasesList = [...new Set([
-    nameRaw.toLowerCase().trim(),
-    baseName,
-    cleanNameLower,
-    cleanName.toLowerCase().trim()
-  ])].filter(a => a && a.length >= 2);
-
-  // Create full catalog item with strictly valid Supabase columns
-  const newPerfume = {
-    id: cleanId,
-    name: cleanName,
-    brand: brandClean,
-    collection: compiled.collection || "Classic Collection",
-    rating_value: compiled.rating_value || 4.3,
-    rating_count: compiled.rating_count || 350,
-    gender: compiled.gender || "Unisex",
-    release_year: compiled.release_year || new Date().getFullYear(),
-    concentration: compiled.concentration || "Eau de Parfum",
-    primary_season: compiled.primary_season || "Fall",
-    dna_inspiration: compiled.dna_inspiration || "",
-    dna_type: compiled.dna_type || "Aromatic",
-    accords: compiled.accords || [],
-    top_notes: compiled.notes?.top || [],
-    middle_notes: compiled.notes?.middle || [],
-    base_notes: compiled.notes?.base || [],
-    notes: compiled.notes || { top: [], middle: [], base: [] },
-    seasons: compiled.seasons || { winter: 25, fall: 25, spring: 25, summer: 25 },
-    day_night: compiled.day_night || { day: 50, night: 50 },
-    longevity: compiled.longevity || "Long Lasting (8+ hrs)",
-    sillage: compiled.sillage || "Strong",
-    review_summary: (typeof compiled.review_summary === "string" ? compiled.review_summary : (compiled.review_summary?.community_verdict || "")),
-    flankers: [],
-    dna_twins: [],
-    aliases: aliasesList,
-    in_seller_stock: true,
-    community_price: price,
-    best_bottle_seller: sellerObj.seller_name,
-    price_updated_at: nowIso,
-    discovered_at: nowIso,
-    is_new_arrival: true,
-    new_arrival_date: todayDate,
-    price_history: [
-      {
-        date: todayDate,
-        price,
-        size,
-        seller: sellerObj.seller_name,
-        seller_id: sellerObj.id
-      }
-    ],
-    community_sellers: [
-      {
-        seller_id: sellerObj.id,
-        seller_name: sellerObj.seller_name,
-        price,
-        size,
-        volume_ml: parseInt(size, 10) || 100,
-        whatsapp: sellerObj.whatsapp,
-        shipping: sellerObj.shipping,
-        dispatch: sellerObj.dispatch,
-        is_tester: false,
-        packaging_type: 'Retail Bottle',
-        verified: true
-      }
-    ]
-  };
-
-  // 4. Save directly into Supabase fragrances table immediately!
-  if (supabase) {
-    try {
-      const { error: insertErr } = await supabase.from('fragrances').upsert([newPerfume], { onConflict: 'id' });
-      if (insertErr) {
-        console.warn(`  [AI-Enrich] Warning on saving new fragrance to Supabase:`, insertErr.message);
-      } else {
-        console.log(`  ✓ Successfully created and saved new fragrance [${newPerfume.id}] to Supabase! Aliases:`, newPerfume.aliases);
-      }
-    } catch (dbErr) {
-      console.warn(`  [AI-Enrich] DB save error:`, dbErr.message);
-    }
-  }
-
-  // 4. Save to Verification Report
-  const reportEntry = {
-    id: cleanId,
-    name: newPerfume.name,
-    brand: newPerfume.brand,
-    dna_inspiration: newPerfume.dna_inspiration,
-    similarity_percentage: newPerfume.similarity_percentage,
-    dna_type: newPerfume.dna_type,
-    notes: newPerfume.notes,
-    accords: newPerfume.accords,
-    first_seller: sellerObj.seller_name,
-    first_price: price,
-    first_size: size,
-    fragrantica_url: fragUrl || (typeof fragResult !== "undefined" ? fragResult.url : ""),
-    fragrantica_evidence: (typeof fragResult !== "undefined" ? fragResult.text : "Verified via Google Gemini Fragrantica Ground Truth"),
-    enriched_date: todayDate,
-    enriched_at: nowIso,
-    verified_by_user: false
-  };
-  await recordEnrichmentReport(reportEntry);
-
-  console.log(`   ✨ Successfully enriched: "${newPerfume.brand} ${newPerfume.name}" -> Clones: "${newPerfume.dna_inspiration}" (${newPerfume.similarity_percentage}%)`);
-  console.log(`   📝 Synced to Supabase table 'enriched_perfumes' for verification.`);
-
-  return newPerfume;
+  console.log(`   ↳ Found Fragrantica listing: ${fragResult.url} -> [${cleanId}]`);
+  return null;
 }
 
 module.exports = {
   enrichAndAddPerfume,
-  recordEnrichmentReport
+  recordEnrichmentReport,
+  evaluateListingWithLLM
 };

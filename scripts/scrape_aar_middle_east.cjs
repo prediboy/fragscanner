@@ -89,19 +89,6 @@ const EXCLUDED_KEYWORDS = [
   "kilian", "parfums de marly", "initio", "xerjoff", "sospiro", "amouage", "memo", "byredo", "le labo"
 ];
 
-const FLANKER_DISTINCT_TOKENS = [
-  'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector', 'collectors',
-  'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum',
-  'ice', 'fire', 'black', 'white', 'blue', 'gold', 'silver', 'rouge',
-  'noir', 'noire', 'nocturnal', 'qahwa', 'zanzibar', 'rebel', 'dive',
-  'freeze', 'dukhan', 'waha', 'platin', 'flames', 'nightout', 'sapphire',
-  'kobra', 'tropical', 'sahara', 'atlantis', 'incense', 'heaven', 'knight',
-  'blanche', 'caprice', 'sublime', 'amethyst', 'honor', 'glory', 'tous',
-  'moi', 'candy', 'legacy', 'seqoia', 'bourbon', 'exclusif', 'exclusive',
-  'rose', 'roses', 'leather', 'vanilla', 'musk', 'tobacco', 'amber',
-  'iris', 'vetiver', 'oud', 'oudh', 'bakhur', 'oriental', 'layl', 'dhahab', 'cal'
-];
-
 function cleanSlug(url) {
   const match = url.match(/\/product\/([^\/?#]+)/);
   if (!match) return "";
@@ -227,7 +214,7 @@ async function scrapeAARMIddleEast() {
       });
     }
 
-    // Priority B: Brand match + slug contains cleaned name
+    // Priority B: Brand match + slug or title matches clean name exactly
     if (!matched) {
       for (const f of frags) {
         if (f.brand.toLowerCase() !== detectedBrand.toLowerCase()) continue;
@@ -235,28 +222,10 @@ async function scrapeAARMIddleEast() {
         const fNameClean = normalize(f.name);
         const fBrandClean = normalize(f.brand);
         const combined = `${fBrandClean}${fNameClean}`;
-
-        // Comprehensive Flanker Guard
-        let flankerMismatch = false;
-        const fText = (f.id + " " + f.name).toLowerCase().replace(/[^a-z0-9]/g, "");
-        const rawText = (titleLower + " " + resolvedSlug).replace(/[^a-z0-9]/g, "");
-        for (const token of FLANKER_DISTINCT_TOKENS) {
-          if (rawText.includes(token) !== fText.includes(token)) {
-            flankerMismatch = true;
-            break;
-          }
-        }
-        if (flankerMismatch) continue;
-
         const slugClean = normalize(resolvedSlug);
-        if (slugClean === combined || (slugClean.startsWith(fBrandClean) && slugClean.endsWith(fNameClean))) {
-          matched = f;
-          break;
-        }
+        const titleClean = normalize(titleLower);
 
-        // Exact name tokens containment
-        const nameTokens = f.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(t => t.length > 2);
-        if (nameTokens.length > 0 && nameTokens.every(t => titleLower.includes(t))) {
+        if (slugClean === combined || titleClean === combined || (slugClean.startsWith(fBrandClean) && slugClean.endsWith(fNameClean))) {
           matched = f;
           break;
         }

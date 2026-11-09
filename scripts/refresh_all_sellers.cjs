@@ -450,19 +450,6 @@ async function runMasterRefresh() {
   ];
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
 
-  const FLANKER_DISTINCT_TOKENS = [
-    'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector', 'collectors',
-    'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum',
-    'ice', 'fire', 'black', 'white', 'blue', 'gold', 'silver', 'rouge',
-    'noir', 'noire', 'nocturnal', 'qahwa', 'zanzibar', 'rebel', 'dive',
-    'freeze', 'dukhan', 'waha', 'platin', 'flames', 'nightout', 'sapphire',
-    'kobra', 'tropical', 'sahara', 'atlantis', 'incense', 'heaven', 'knight',
-    'blanche', 'caprice', 'sublime', 'amethyst', 'honor', 'glory', 'tous',
-    'moi', 'candy', 'legacy', 'seqoia', 'bourbon', 'exclusif', 'exclusive',
-    'rose', 'roses', 'leather', 'vanilla', 'musk', 'tobacco', 'amber',
-    'iris', 'vetiver', 'oud', 'oudh', 'bakhur', 'oriental', 'layl', 'dhahab', 'cal'
-  ];
-
   function getBaseName(s) {
     return (s || '')
       .normalize('NFD')
@@ -473,7 +460,7 @@ async function runMasterRefresh() {
       .replace(/[^a-z0-9]/g, '');
   }
 
-  // Helper: Find best fragrance match in catalog (100% database-driven)
+  // Helper: Find best fragrance match in catalog (100% database & alias driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "") {
     if (isDesigner(brandRaw) || isDesigner(nameRaw)) return null;
     const brand = normalizeBrand(brandRaw);
@@ -497,16 +484,9 @@ async function runMasterRefresh() {
     });
     if (match) return match;
 
-    // 1. Priority 1: Registered Canonical Aliases
+    // 1. Priority 1: Registered Canonical Database Aliases (learned & saved in Supabase)
     match = brandFrags.find(f => {
       if (!Array.isArray(f.aliases)) return false;
-      const fnClean = cleanStr(f.name);
-
-      // Guard against flanker token collisions even in aliases
-      for (const token of FLANKER_DISTINCT_TOKENS) {
-        if (nClean.includes(token) !== fnClean.includes(token)) return false;
-      }
-
       return f.aliases.some(a => {
         const aClean = cleanStr(a);
         const aBase = getBaseName(a);
@@ -521,32 +501,7 @@ async function runMasterRefresh() {
     match = brandFrags.find(f => cleanStr(f.name) === nClean);
     if (match) return match;
 
-    // 3. Priority 3: Prefix / Suffix match with STRICT Flanker Guard
-    match = brandFrags.find(f => {
-      const fnClean = cleanStr(f.name);
-
-      // Prevent flanker token collision
-      for (const token of FLANKER_DISTINCT_TOKENS) {
-        if (nClean.includes(token) !== fnClean.includes(token)) return false;
-      }
-
-      return nClean.length >= 4 && (fnClean.startsWith(nClean) || fnClean.endsWith(nClean) || nClean.startsWith(fnClean));
-    });
-    if (match) return match;
-
-    // 4. Priority 4: Substring match within same brand (with strict flanker protection)
-    match = brandFrags.find(f => {
-      const fnClean = cleanStr(f.name);
-
-      for (const token of FLANKER_DISTINCT_TOKENS) {
-        if (nClean.includes(token) !== fnClean.includes(token)) return false;
-      }
-
-      return (nClean.length >= 5 && fnClean.includes(nClean)) || (fnClean.length >= 5 && nClean.includes(fnClean));
-    });
-    if (match) return match;
-
-    // 5. Fallback: match by unique inspiration
+    // 3. Priority 3: Exact clone inspiration match (if unique)
     if (inspoRaw && inspoRaw.length >= 4) {
       const iClean = cleanStr(inspoRaw);
       match = fragrances.find(f => {
@@ -575,19 +530,6 @@ async function runMasterRefresh() {
     const nonPerfumeRegex = /\b(deo|deodorant|body[\s_-]*spray|body[\s_-]*mist|hair[\s_-]*mist|shower[\s_-]*gel|lotion|roll[\s_-]*on|after[\s_-]*shave)\b/i;
     if (nonPerfumeRegex.test(url) || nonPerfumeRegex.test(size)) {
       return;
-    }
-
-    // Strict Flanker Mismatch Guard:
-    // If quote URL, raw title, or size contains a flanker token that is NOT part of frag.id or frag.name, reject it!
-    const fragIdNorm = frag.id.toLowerCase().replace(/[-_]/g, '');
-    const fragNameNorm = frag.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const quoteText = ((sellerObj.raw_title || '') + ' ' + (sellerObj.size || '') + ' ' + url).toLowerCase().replace(/[^a-z0-9]/g, '');
-    for (const token of FLANKER_DISTINCT_TOKENS) {
-      const inQuote = quoteText.includes(token);
-      const inFrag = fragIdNorm.includes(token) || fragNameNorm.includes(token);
-      if (inQuote !== inFrag) {
-        return;
-      }
     }
 
     const isPartial = !!(sellerObj.is_partial || (sellerObj.size && /partial|\b\d+\/\d+\s*ml\b/i.test(sellerObj.size)) || (sellerObj.product_url && /partial/i.test(sellerObj.product_url)));
@@ -705,7 +647,12 @@ async function runMasterRefresh() {
           });
           stats[seller.id]++;
         } else if (!isDesigner(brandRaw) && !isDesigner(nameRaw) && price >= 800 && enrichedCount < MAX_AUTO_ENRICH_PER_SYNC) {
-          const alreadyExists = fragrances.some(f => cleanStr(f.brand) === cleanStr(brandRaw) && cleanStr(f.name) === cleanStr(nameRaw));
+          const brandFrags = fragrances.filter(f => {
+            const fbClean = cleanStr(f.brand);
+            const bClean = cleanStr(normalizeBrand(brandRaw));
+            return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
+          });
+          const alreadyExists = brandFrags.some(f => cleanStr(f.name) === cleanStr(nameRaw));
           if (!alreadyExists) {
             const fullNameForMeta = sizeRaw ? `${nameRaw} ${sizeRaw}` : nameRaw;
             const meta = extractBottleMetadata(brandRaw, fullNameForMeta);
@@ -717,12 +664,14 @@ async function runMasterRefresh() {
                   whatsapp: seller.whatsapp,
                   shipping: seller.shipping,
                   dispatch: seller.dispatch
-                });
-                if (newEntry && !fragrances.some(f => f.id === newEntry.id)) {
-                  fragrances.push(newEntry);
-                  newlyEnrichedList.push(newEntry);
+                }, brandFrags);
+                if (newEntry) {
+                  if (!fragrances.some(f => f.id === newEntry.id)) {
+                    fragrances.push(newEntry);
+                    newlyEnrichedList.push(newEntry);
+                    enrichedCount++;
+                  }
                   stats[seller.id]++;
-                  enrichedCount++;
                 }
               } catch (err) {
                 console.log(`    ↳ Auto-enrichment skipped for "${brandRaw} ${nameRaw}":`, err.message);
