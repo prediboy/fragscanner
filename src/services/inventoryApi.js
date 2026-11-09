@@ -174,11 +174,12 @@ export async function fetchInventoryPage({
     let query = supabase
       .from('fragrances')
       .select(
-        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, is_new_arrival, new_arrival_date, price_history, discovered_at',
+        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, price_updated_at, is_new_arrival, new_arrival_date, price_history, discovered_at',
         { count: 'exact' }
       );
 
     const hasSearch = tokens.length > 0;
+    const isDecantOnly = !hasSearch && formats.length === 1 && formats[0] === 'decant';
 
     // 0. When search is active, the search is completely independent of the filters applied (searches entire catalog)
     if (!hasSearch) {
@@ -217,8 +218,6 @@ export async function fetchInventoryPage({
       if (brand && brand !== 'all') {
         query = query.ilike('brand', brand);
       }
-
-      const isDecantOnly = formats.length === 1 && formats[0] === 'decant';
 
       // 3. Max Budget (Only applies to full bottle price if not in decant-only mode)
       if (!isDecantOnly && maxBudget < 15000) {
