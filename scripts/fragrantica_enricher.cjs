@@ -367,23 +367,32 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
           'men', 'women', 'man', 'woman', 'for him', 'for her'
         ]);
 
-        const cleanAlias = (decision.learned_alias || nameRaw).toLowerCase().trim();
-        const curAliases = matchedFrag.aliases || [];
-        const isSafeAlias = cleanAlias &&
-                            cleanAlias.length >= 3 &&
-                            !/^\d+$/.test(cleanAlias) &&
-                            !BANNED_GENERIC_ALIASES.has(cleanAlias) &&
-                            !curAliases.includes(cleanAlias);
+        const rawTitle = nameRaw.toLowerCase().trim();
+        const fullTitle = `${brandRaw} ${nameRaw}`.toLowerCase().trim();
+        const llmAlias = (decision.learned_alias || '').toLowerCase().trim().replace(/^armf\b/i, 'armaf');
 
-        if (isSafeAlias) {
-          const newAliases = [...curAliases, cleanAlias];
+        const candidateAliases = [rawTitle, fullTitle, llmAlias].filter(Boolean);
+        const curAliases = matchedFrag.aliases || [];
+        const addedAliases = [];
+
+        for (const candidate of candidateAliases) {
+          const isSafe = candidate.length >= 3 &&
+                         !/^\d+$/.test(candidate) &&
+                         !BANNED_GENERIC_ALIASES.has(candidate) &&
+                         !curAliases.includes(candidate) &&
+                         !addedAliases.includes(candidate);
+          if (isSafe) {
+            addedAliases.push(candidate);
+          }
+        }
+
+        if (addedAliases.length > 0) {
+          const newAliases = [...curAliases, ...addedAliases];
           matchedFrag.aliases = newAliases;
           if (supabase) {
             await supabase.from('fragrances').update({ aliases: newAliases }).eq('id', matchedFrag.id);
-            console.log(`   ✓ Saved safe learned alias "${cleanAlias}" to Supabase for [${matchedFrag.id}]`);
+            console.log(`   ✓ Saved safe learned aliases ${JSON.stringify(addedAliases)} to Supabase for [${matchedFrag.id}]`);
           }
-        } else if (cleanAlias && !curAliases.includes(cleanAlias)) {
-          console.log(`   🛡 Blocked generic alias "${cleanAlias}" from saving to database to prevent cross-contamination.`);
         }
 
         // B. Attach seller quote to existing perfume

@@ -455,6 +455,7 @@ async function runMasterRefresh() {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()
+      .replace(/\([^)]*\)/g, ' ')
       .replace(/\b(eau\s*de\s*(parfum|toilette|cologne)|extrait\s*de\s*parfum|edp|edt|cologne|extrait|parfum|bnib|tester|retail|bottle|spray)\b/gi, '')
       .replace(/\d+(ml)?$/i, '')
       .replace(/[^a-z0-9]/g, '');
