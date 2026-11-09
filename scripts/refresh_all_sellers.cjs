@@ -673,6 +673,8 @@ async function runMasterRefresh() {
                   }
                   stats[seller.id]++;
                 }
+                // Pace API requests to stay smoothly within Gemini RPM quotas
+                await new Promise(r => setTimeout(r, 2200));
               } catch (err) {
                 console.log(`    ↳ Auto-enrichment skipped for "${brandRaw} ${nameRaw}":`, err.message);
               }

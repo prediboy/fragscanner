@@ -193,7 +193,7 @@ async function recordEnrichmentReport(reportEntry) {
  * Candidate-Context Evaluator (LLM-as-a-Judge)
  * Evaluates an uncataloged seller listing against existing catalog candidates for that brand.
  */
-async function evaluateListingWithLLM(brandRaw, nameRaw, candidates = []) {
+async function evaluateListingWithLLM(brandRaw, nameRaw, candidates = [], maxRetries = 3) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return null;
 
@@ -263,24 +263,45 @@ CRITICAL DOMAIN RULES:
       generationConfig: { responseMimeType: 'application/json' }
     };
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(12000)
-    });
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(15000)
+        });
 
-    if (!res.ok) {
-      console.warn(`  [AI-Judge] Status ${res.status} from Gemini`);
-      return null;
+        if (res.status === 429) {
+          const waitSec = attempt * 3;
+          console.warn(`  [AI-Judge] Rate limit (429) on "${brandRaw} ${nameRaw}". Backing off ${waitSec}s (Attempt ${attempt}/${maxRetries})...`);
+          await new Promise(r => setTimeout(r, waitSec * 1000));
+          continue;
+        }
+
+        if (!res.ok) {
+          console.warn(`  [AI-Judge] Status ${res.status} from Gemini (Attempt ${attempt}/${maxRetries})`);
+          if (attempt < maxRetries) {
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
+          }
+          return null;
+        }
+
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) return null;
+
+        const parsed = JSON.parse(text);
+        return parsed;
+      } catch (err) {
+        console.warn(`  [AI-Judge] Attempt ${attempt} notice:`, err.message);
+        if (attempt < maxRetries) {
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
     }
-
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return null;
-
-    const parsed = JSON.parse(text);
-    return parsed;
+    return null;
   } catch (err) {
     console.warn('  [AI-Judge] Gemini query notice:', err.message);
     return null;
@@ -596,7 +617,8 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
   // FALLBACK: When LLM is unavailable
   // ==========================================
   console.log(`   ↳ LLM Judge unavailable or inconclusive. Checking Fragrantica web search fallback...`);
-  const fragResult = await searchWeb(`site:fragrantica.com ${brandRaw} ${nameRaw}`);
+  const cleanSearchName = nameRaw.replace(/\b(\d+ml|retail|bottle|tester|edp|edt|extrait|parfum|bnib|spray)\b/gi, '').replace(/\s+/g, ' ').trim();
+  const fragResult = await searchWeb(`site:fragrantica.com ${brandRaw} ${cleanSearchName}`);
   if (!fragResult.url) {
     console.log(`   ⚠️ No authentic Fragrantica page found for "${brandRaw} ${nameRaw}". Skipping to prevent catalog pollution.`);
     return null;
