@@ -467,6 +467,10 @@ async function runMasterRefresh() {
     let bClean = cleanStr(brand);
     let nClean = cleanStr(nameRaw);
     let nBase = getBaseName(nameRaw);
+    const fullName = brandRaw + ' ' + nameRaw;
+    const fullClean = cleanStr(fullName);
+    const fullBase = getBaseName(fullName);
+
     if (!nClean || nClean.length < 2) return null;
 
     // Filter candidate list strictly to the matching brand
@@ -480,25 +484,34 @@ async function runMasterRefresh() {
     // 0. Priority 0: Exact Base Name Match (e.g. "Encre Noire" -> "Encre Noire EDT", concentrations stripped)
     let match = brandFrags.find(f => {
       const fBase = getBaseName(f.name);
-      return fBase === nBase && fBase.length >= 2;
+      return (fBase === nBase || fBase === fullBase) && fBase.length >= 2;
     });
     if (match) return match;
 
     // 1. Priority 1: Registered Canonical Database Aliases (learned & saved in Supabase)
     match = brandFrags.find(f => {
       if (!Array.isArray(f.aliases)) return false;
+      const fbClean = cleanStr(f.brand);
       return f.aliases.some(a => {
         const aClean = cleanStr(a);
         const aBase = getBaseName(a);
-        if (aClean === nClean) return true;
-        if (aBase.length >= 2 && aBase === nBase) return true;
+        // Direct match against raw name or full title
+        if (aClean === nClean || aClean === fullClean) return true;
+        // Base name match against raw name or full title
+        if (aBase.length >= 2 && (aBase === nBase || aBase === fullBase)) return true;
+        // If alias in DB was saved with brand prefix: e.g. "arabiyat oud al layl"
+        if (aClean.startsWith(fbClean) && aClean.slice(fbClean.length) === nClean) return true;
+        if (aClean.startsWith(bClean) && aClean.slice(bClean.length) === nClean) return true;
         return false;
       });
     });
     if (match) return match;
 
     // 2. Priority 2: Exact brand + clean name match
-    match = brandFrags.find(f => cleanStr(f.name) === nClean);
+    match = brandFrags.find(f => {
+      const fnClean = cleanStr(f.name);
+      return fnClean === nClean || fnClean === fullClean;
+    });
     if (match) return match;
 
     // 3. Priority 3: Exact clone inspiration match (if unique)
@@ -666,7 +679,12 @@ async function runMasterRefresh() {
                   dispatch: seller.dispatch
                 }, brandFrags);
                 if (newEntry) {
-                  if (!fragrances.some(f => f.id === newEntry.id)) {
+                  const inMem = fragrances.find(f => f.id === newEntry.id);
+                  if (inMem) {
+                    inMem.aliases = newEntry.aliases || inMem.aliases;
+                    inMem.community_sellers = newEntry.community_sellers || inMem.community_sellers;
+                    inMem.community_price = newEntry.community_price || inMem.community_price;
+                  } else {
                     fragrances.push(newEntry);
                     newlyEnrichedList.push(newEntry);
                     enrichedCount++;
