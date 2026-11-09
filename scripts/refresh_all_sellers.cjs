@@ -451,10 +451,27 @@ async function runMasterRefresh() {
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
 
   const FLANKER_DISTINCT_TOKENS = [
-    'freeze', 'dukhan', 'waha', 'platin', 'flames', 'elixir', 'collector',
-    'nightout', 'rebel', 'sapphire', 'kobra', 'tropical', 'dive', 'sahara', 'atlantis',
-    'noir', 'incense', 'silver', 'heaven'
+    'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector', 'collectors',
+    'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum',
+    'ice', 'fire', 'black', 'white', 'blue', 'gold', 'silver', 'rouge',
+    'noir', 'noire', 'nocturnal', 'qahwa', 'zanzibar', 'rebel', 'dive',
+    'freeze', 'dukhan', 'waha', 'platin', 'flames', 'nightout', 'sapphire',
+    'kobra', 'tropical', 'sahara', 'atlantis', 'incense', 'heaven', 'knight',
+    'blanche', 'caprice', 'sublime', 'amethyst', 'honor', 'glory', 'tous',
+    'moi', 'candy', 'legacy', 'seqoia', 'bourbon', 'exclusif', 'exclusive',
+    'rose', 'roses', 'leather', 'vanilla', 'musk', 'tobacco', 'amber',
+    'iris', 'vetiver', 'oud', 'oudh', 'bakhur', 'oriental', 'layl', 'dhahab', 'cal'
   ];
+
+  function getBaseName(s) {
+    return (s || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\b(eau\s*de\s*(parfum|toilette|cologne)|extrait\s*de\s*parfum|edp|edt|cologne|extrait|parfum|bnib|tester|retail|bottle|spray)\b/gi, '')
+      .replace(/\d+(ml)?$/i, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
 
   // Helper: Find best fragrance match in catalog (100% database-driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "") {
@@ -462,81 +479,74 @@ async function runMasterRefresh() {
     const brand = normalizeBrand(brandRaw);
     let bClean = cleanStr(brand);
     let nClean = cleanStr(nameRaw);
+    let nBase = getBaseName(nameRaw);
     if (!nClean || nClean.length < 2) return null;
 
-    // 0. Match by registered canonical aliases
-    let match = fragrances.find(f => {
+    // Filter candidate list strictly to the matching brand
+    const brandFrags = fragrances.filter(f => {
       const fbClean = cleanStr(f.brand);
-      const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
-      if (!sameBrand) return false;
+      return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
+    });
 
-      // Prevent flanker token collision even in alias matching
+    if (brandFrags.length === 0) return null;
+
+    // 0. Priority 0: Exact Base Name Match (e.g. "Encre Noire" -> "Encre Noire EDT", concentrations stripped)
+    let match = brandFrags.find(f => {
+      const fBase = getBaseName(f.name);
+      return fBase === nBase && fBase.length >= 2;
+    });
+    if (match) return match;
+
+    // 1. Priority 1: Registered Canonical Aliases
+    match = brandFrags.find(f => {
+      if (!Array.isArray(f.aliases)) return false;
+      const fnClean = cleanStr(f.name);
+
+      // Guard against flanker token collisions even in aliases
       for (const token of FLANKER_DISTINCT_TOKENS) {
-        const inIncoming = nClean.includes(token);
-        const inCatalog = cleanStr(f.name).includes(token);
-        if (inIncoming !== inCatalog) return false;
+        if (nClean.includes(token) !== fnClean.includes(token)) return false;
       }
 
-      if (Array.isArray(f.aliases)) {
-        const nBase = nClean.replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
-        return f.aliases.some(a => {
-          const aClean = cleanStr(a);
-          if (aClean === nClean) return true;
-          const aBase = aClean.replace(/\d+(ml)?$/, "").replace(/(retail|bottle|tester|edp|edt|extrait|bnib|parfum)+$/, "").replace(/\d+(ml)?$/, "");
-          if (aBase.length >= 2 && nBase === aBase) return true;
-          if (aClean.length >= 3 && (nClean.startsWith(aClean) || aClean.startsWith(nClean))) return true;
-          return false;
-        });
-      }
-      return false;
+      return f.aliases.some(a => {
+        const aClean = cleanStr(a);
+        const aBase = getBaseName(a);
+        if (aClean === nClean) return true;
+        if (aBase.length >= 2 && aBase === nBase) return true;
+        return false;
+      });
     });
     if (match) return match;
 
-    // 1. Exact brand + name match
-    match = fragrances.find(f => {
-      const fbClean = cleanStr(f.brand);
-      const fnClean = cleanStr(f.name);
-      return fbClean === bClean && fnClean === nClean;
-    });
+    // 2. Priority 2: Exact brand + clean name match
+    match = brandFrags.find(f => cleanStr(f.name) === nClean);
     if (match) return match;
 
-    // 2. Strict prefix / suffix match within brand
-    match = fragrances.find(f => {
-      const fbClean = cleanStr(f.brand);
+    // 3. Priority 3: Prefix / Suffix match with STRICT Flanker Guard
+    match = brandFrags.find(f => {
       const fnClean = cleanStr(f.name);
-      const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
-      if (!sameBrand) return false;
 
       // Prevent flanker token collision
       for (const token of FLANKER_DISTINCT_TOKENS) {
-        const inIncoming = nClean.includes(token);
-        const inCatalog = fnClean.includes(token);
-        if (inIncoming !== inCatalog) return false;
+        if (nClean.includes(token) !== fnClean.includes(token)) return false;
       }
 
-      return fnClean === nClean || (nClean.length >= 4 && (fnClean.startsWith(nClean) || fnClean.endsWith(nClean)));
+      return nClean.length >= 4 && (fnClean.startsWith(nClean) || fnClean.endsWith(nClean) || nClean.startsWith(fnClean));
     });
     if (match) return match;
 
-    // 3. Substring match within same brand (with strict flanker protection)
-    match = fragrances.find(f => {
-      const fbClean = cleanStr(f.brand);
+    // 4. Priority 4: Substring match within same brand (with strict flanker protection)
+    match = brandFrags.find(f => {
       const fnClean = cleanStr(f.name);
-      const sameBrand = fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
-      if (!sameBrand) return false;
 
-      // Strict flanker protection
       for (const token of FLANKER_DISTINCT_TOKENS) {
-        const inIncoming = nClean.includes(token);
-        const inCatalog = fnClean.includes(token);
-        if (inIncoming !== inCatalog) return false;
+        if (nClean.includes(token) !== fnClean.includes(token)) return false;
       }
 
-      return (nClean.length >= 4 && fnClean.includes(nClean)) || (fnClean.length >= 4 && nClean.includes(fnClean));
+      return (nClean.length >= 5 && fnClean.includes(nClean)) || (fnClean.length >= 5 && nClean.includes(fnClean));
     });
     if (match) return match;
 
-    // 4. Fallback: match by unique inspiration
+    // 5. Fallback: match by unique inspiration
     if (inspoRaw && inspoRaw.length >= 4) {
       const iClean = cleanStr(inspoRaw);
       match = fragrances.find(f => {
@@ -568,11 +578,14 @@ async function runMasterRefresh() {
     }
 
     // Strict Flanker Mismatch Guard:
-    // If quote URL or title contains a flanker token that is NOT part of frag.id or frag.name, reject it!
+    // If quote URL, raw title, or size contains a flanker token that is NOT part of frag.id or frag.name, reject it!
     const fragIdNorm = frag.id.toLowerCase().replace(/[-_]/g, '');
     const fragNameNorm = frag.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const quoteText = ((sellerObj.raw_title || '') + ' ' + (sellerObj.size || '') + ' ' + url).toLowerCase().replace(/[^a-z0-9]/g, '');
     for (const token of FLANKER_DISTINCT_TOKENS) {
-      if (url.includes(token) && !fragIdNorm.includes(token) && !fragNameNorm.includes(token)) {
+      const inQuote = quoteText.includes(token);
+      const inFrag = fragIdNorm.includes(token) || fragNameNorm.includes(token);
+      if (inQuote !== inFrag) {
         return;
       }
     }
@@ -679,6 +692,7 @@ async function runMasterRefresh() {
           addBottleQuote(matched, {
             seller_id: seller.id,
             seller_name: seller.seller_name,
+            raw_title: nameRaw,
             price,
             size: label,
             is_tester: isTester,
@@ -815,6 +829,7 @@ async function runMasterRefresh() {
             addBottleQuote(matched, {
               seller_id: gryvSeller.id,
               seller_name: gryvSeller.seller_name,
+              raw_title: nameRaw,
               price,
               size: meta.label,
               volume_ml: meta.volume,
@@ -923,6 +938,7 @@ async function runMasterRefresh() {
             addBottleQuote(matched, {
               seller_id: sovSeller.id,
               seller_name: sovSeller.seller_name,
+              raw_title: nameRaw,
               price,
               size: isPartial ? `${sizeRaw || meta.label} (Partial)` : meta.label,
               volume_ml: meta.volume,
@@ -1125,6 +1141,7 @@ async function runMasterRefresh() {
             addBottleQuote(matched, {
               seller_id: "bluewings",
               seller_name: "Blue Wings Fragrances",
+              raw_title: rawName,
               price: Number(p.price),
               size: meta.label,
               volume_ml: meta.volume,
@@ -1229,6 +1246,7 @@ async function runMasterRefresh() {
           addBottleQuote(matched, {
             seller_id: "whiffculture",
             seller_name: "Whiff Culture",
+            raw_title: p.title,
             price: vPrice,
             size: meta.label,
             volume_ml: meta.volume,

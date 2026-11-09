@@ -89,6 +89,19 @@ const EXCLUDED_KEYWORDS = [
   "kilian", "parfums de marly", "initio", "xerjoff", "sospiro", "amouage", "memo", "byredo", "le labo"
 ];
 
+const FLANKER_DISTINCT_TOKENS = [
+  'extreme', 'alextreme', 'lextreme', 'sport', 'intense', 'elixir', 'collector', 'collectors',
+  'overdose', 'iconic', 'sillage', 'milestone', 'untold', 'pureparfum',
+  'ice', 'fire', 'black', 'white', 'blue', 'gold', 'silver', 'rouge',
+  'noir', 'noire', 'nocturnal', 'qahwa', 'zanzibar', 'rebel', 'dive',
+  'freeze', 'dukhan', 'waha', 'platin', 'flames', 'nightout', 'sapphire',
+  'kobra', 'tropical', 'sahara', 'atlantis', 'incense', 'heaven', 'knight',
+  'blanche', 'caprice', 'sublime', 'amethyst', 'honor', 'glory', 'tous',
+  'moi', 'candy', 'legacy', 'seqoia', 'bourbon', 'exclusif', 'exclusive',
+  'rose', 'roses', 'leather', 'vanilla', 'musk', 'tobacco', 'amber',
+  'iris', 'vetiver', 'oud', 'oudh', 'bakhur', 'oriental', 'layl', 'dhahab', 'cal'
+];
+
 function cleanSlug(url) {
   const match = url.match(/\/product\/([^\/?#]+)/);
   if (!match) return "";
@@ -223,26 +236,17 @@ async function scrapeAARMIddleEast() {
         const fBrandClean = normalize(f.brand);
         const combined = `${fBrandClean}${fNameClean}`;
 
-        // Flanker guards
-        const hasQahwaA = titleLower.includes("qahwa");
-        const hasQahwaB = f.name.toLowerCase().includes("qahwa");
-        if (hasQahwaA !== hasQahwaB) continue;
-
-        const hasIceA = titleLower.includes("ice");
-        const hasIceB = f.name.toLowerCase().includes("ice");
-        if (hasIceA !== hasIceB) continue;
-
-        const hasBlackA = titleLower.includes("black");
-        const hasBlackB = f.name.toLowerCase().includes("black");
-        if (hasBlackA !== hasBlackB) continue;
-
-        const hasFireA = titleLower.includes("fire");
-        const hasFireB = f.name.toLowerCase().includes("fire");
-        if (hasFireA !== hasFireB) continue;
-
-        const hasHerA = titleLower.includes("for her") || titleLower.includes("pour femme");
-        const hasHerB = f.name.toLowerCase().includes("for her") || f.name.toLowerCase().includes("pour femme");
-        if (hasHerA !== hasHerB) continue;
+        // Comprehensive Flanker Guard
+        let flankerMismatch = false;
+        const fText = (f.id + " " + f.name).toLowerCase().replace(/[^a-z0-9]/g, "");
+        const rawText = (titleLower + " " + resolvedSlug).replace(/[^a-z0-9]/g, "");
+        for (const token of FLANKER_DISTINCT_TOKENS) {
+          if (rawText.includes(token) !== fText.includes(token)) {
+            flankerMismatch = true;
+            break;
+          }
+        }
+        if (flankerMismatch) continue;
 
         const slugClean = normalize(resolvedSlug);
         if (slugClean === combined || (slugClean.startsWith(fBrandClean) && slugClean.endsWith(fNameClean))) {
