@@ -140,23 +140,6 @@ export default function MarketPulseBar({
           <span>Curated Highlights</span>
         </button>
 
-        {/* Toggle 2: Full Retail Bottles */}
-        <button
-          onClick={() => {
-            if (setQuickFilterTab) setQuickFilterTab('retail');
-            setFilterState(prev => ({ ...prev, formats: ['retail'], dealsOnly: null }));
-            if (onShowAll) onShowAll();
-          }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
-            formats.length === 1 && formats.includes('retail') && !dealsOnly && !isCuratedActive
-              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
-          }`}
-        >
-          <span>🍾</span>
-          <span>Full Retail Bottles ({counts.retail || 921})</span>
-        </button>
-
         {/* Toggle 2: Price Drops */}
         <button
           onClick={() => {
