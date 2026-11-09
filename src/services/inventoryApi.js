@@ -178,51 +178,54 @@ export async function fetchInventoryPage({
         { count: 'exact' }
       );
 
-    // 0. Deals / New Arrivals Filter
-    if (dealsOnly === 'drops') {
-      query = query.eq('is_price_drop', true);
-    } else if (dealsOnly === 'new') {
-      query = query.eq('is_new_arrival', true);
+    const hasSearch = tokens.length > 0;
+
+    // 0. When search is active, the search is completely independent of the filters applied (searches entire catalog)
+    if (!hasSearch) {
+      // 0a. Deals / New Arrivals Filter
+      if (dealsOnly === 'drops') {
+        query = query.eq('is_price_drop', true);
+      } else if (dealsOnly === 'new') {
+        query = query.eq('is_new_arrival', true);
+      } else {
+        // 1. Format Filtering
+        if (formats.length === 1 && formats[0] === 'retail') {
+          query = query.eq('in_seller_stock', true).gt('community_price', 0);
+        } else if (formats.length === 1 && formats[0] === 'decant') {
+          query = query.eq('has_decants', true).gt('lowest_decant_price', 0);
+        } else if (formats.length === 1 && formats[0] === 'tester') {
+          query = query.contains('community_sellers', JSON.stringify([{ is_tester: true }]));
+        } else if (formats.length === 1 && formats[0] === 'partial') {
+          query = query.contains('community_sellers', JSON.stringify([{ is_partial: true }]));
+        } else {
+          query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+        }
+      }
+
+      // 2. Seller Isolation
+      if (seller && seller !== 'all') {
+        if (formats.length === 1 && formats[0] === 'decant') {
+          query = query.filter('community_decants', 'cs', JSON.stringify([{ seller_id: seller }]));
+        } else if (formats.length === 1 && (formats[0] === 'retail' || formats[0] === 'tester' || formats[0] === 'partial')) {
+          query = query.filter('community_sellers', 'cs', JSON.stringify([{ seller_id: seller }]));
+        } else {
+          query = query.or(`community_sellers.cs.[{"seller_id":"${seller}"}],community_decants.cs.[{"seller_id":"${seller}"}]`);
+        }
+      }
+
+      // 2b. Brand Isolation
+      if (brand && brand !== 'all') {
+        query = query.ilike('brand', brand);
+      }
+
+      const isDecantOnly = formats.length === 1 && formats[0] === 'decant';
+
+      // 3. Max Budget (Only applies to full bottle price if not in decant-only mode)
+      if (!isDecantOnly && maxBudget < 15000) {
+        query = query.lte('community_price', maxBudget);
+      }
     } else {
-      // 1. Format Filtering
-      if (formats.length === 1 && formats[0] === 'retail') {
-        query = query.eq('in_seller_stock', true).gt('community_price', 0);
-      } else if (formats.length === 1 && formats[0] === 'decant') {
-        query = query.eq('has_decants', true).gt('lowest_decant_price', 0);
-      } else if (formats.length === 1 && formats[0] === 'tester') {
-        query = query.contains('community_sellers', JSON.stringify([{ is_tester: true }]));
-      } else if (formats.length === 1 && formats[0] === 'partial') {
-        query = query.contains('community_sellers', JSON.stringify([{ is_partial: true }]));
-      } else {
-        query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
-      }
-    }
-
-    // 2. Seller Isolation
-    if (seller && seller !== 'all') {
-      if (formats.length === 1 && formats[0] === 'decant') {
-        query = query.filter('community_decants', 'cs', JSON.stringify([{ seller_id: seller }]));
-      } else if (formats.length === 1 && (formats[0] === 'retail' || formats[0] === 'tester' || formats[0] === 'partial')) {
-        query = query.filter('community_sellers', 'cs', JSON.stringify([{ seller_id: seller }]));
-      } else {
-        query = query.or(`community_sellers.cs.[{"seller_id":"${seller}"}],community_decants.cs.[{"seller_id":"${seller}"}]`);
-      }
-    }
-
-    // 2b. Brand Isolation
-    if (brand && brand !== 'all') {
-      query = query.ilike('brand', brand);
-    }
-
-    const isDecantOnly = formats.length === 1 && formats[0] === 'decant';
-
-    // 3. Max Budget (Only applies to full bottle price if not in decant-only mode)
-    if (!isDecantOnly && maxBudget < 15000) {
-      query = query.lte('community_price', maxBudget);
-    }
-
-    // 4. Semantic Search Query (Matches all tokens across name, brand, inspiration, or notes profile)
-    if (tokens.length > 0) {
+      // 4. Global Semantic Search Query (Matches all tokens across entire catalog)
       for (const t of tokens) {
         query = query.or(`name.ilike.%${t}%,brand.ilike.%${t}%,dna_inspiration.ilike.%${t}%,dna_type.ilike.%${t}%`);
       }
@@ -282,12 +285,21 @@ export async function fetchInventoryPage({
         items = list.slice(from, from + pageSize);
       } else {
         // For general catalog browsing, sort and paginate directly in Postgres
-        if (sortBy === 'price_desc') {
+        if (dealsOnly === 'drops' && sortBy !== 'price_desc' && sortBy !== 'rating') {
+          // Price Drops are strictly ordered by latest price drop date and time
+          query = query
+            .order('price_change_date', { ascending: false, nullsFirst: false })
+            .order('price_change_time', { ascending: false, nullsFirst: false })
+            .order('price_updated_at', { ascending: false, nullsFirst: false });
+        } else if (dealsOnly === 'new' && sortBy !== 'price_desc' && sortBy !== 'rating') {
+          // New Arrivals are strictly ordered by latest arrival date
+          query = query
+            .order('new_arrival_date', { ascending: false, nullsFirst: false })
+            .order('discovered_at', { ascending: false, nullsFirst: false });
+        } else if (sortBy === 'price_desc') {
           query = query.order('community_price', { ascending: false, nullsFirst: false });
         } else if (sortBy === 'rating') {
           query = query.order('rating_value', { ascending: false, nullsFirst: false });
-        } else if (dealsOnly === 'drops' || dealsOnly === 'new') {
-          query = query.order('discovered_at', { ascending: false, nullsFirst: false });
         } else {
           query = query.order('community_price', { ascending: true, nullsFirst: false });
         }

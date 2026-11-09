@@ -25,62 +25,72 @@ export default function MarketPulseBar({
     sortBy = 'price_asc'
   } = filterState;
 
-  // Active filter chips (Full Retail Bottle shown by default)
+  // Active filter chips (When search is active, it runs globally across the catalog)
   const activeChips = [];
-  if (formats.length > 0 && formats.length < 4) {
-    formats.forEach(f => {
-      const label = f === 'retail' ? '🍾 Full Retail Bottle' : f === 'tester' ? '🧪 Tester Unit' : f === 'partial' ? '🏷️ Partial Bottle' : '💧 Decants In Stock';
-      activeChips.push({
-        id: `fmt-${f}`,
-        label,
-        onRemove: () => setFilterState(p => {
-          const next = p.formats.filter(x => x !== f);
-          return { ...p, formats: next.length > 0 ? next : ['retail', 'tester', 'partial', 'decant'] };
-        })
+  const hasSearch = Boolean(searchQuery && searchQuery.trim().length > 0);
+
+  if (hasSearch) {
+    activeChips.push({
+      id: 'search-query',
+      label: `🔍 "${searchQuery.trim()}" (Global Search)`,
+      onRemove: () => setSearchQuery('')
+    });
+  } else {
+    if (formats.length > 0 && formats.length < 4) {
+      formats.forEach(f => {
+        const label = f === 'retail' ? '🍾 Full Retail Bottle' : f === 'tester' ? '🧪 Tester Unit' : f === 'partial' ? '🏷️ Partial Bottle' : '💧 Decants In Stock';
+        activeChips.push({
+          id: `fmt-${f}`,
+          label,
+          onRemove: () => setFilterState(p => {
+            const next = p.formats.filter(x => x !== f);
+            return { ...p, formats: next.length > 0 ? next : ['retail', 'tester', 'partial', 'decant'] };
+          })
+        });
       });
-    });
-  }
-  if (maxBudget < 15000) {
-    activeChips.push({
-      id: 'budget',
-      label: `< ₹${maxBudget.toLocaleString()}`,
-      onRemove: () => setFilterState(p => ({ ...p, maxBudget: 15000 }))
-    });
-  }
-  if (selectedSeller !== 'all') {
-    activeChips.push({
-      id: 'seller',
-      label: `Seller: ${selectedSeller}`,
-      onRemove: () => setFilterState(p => ({ ...p, selectedSeller: 'all' }))
-    });
-  }
-  if (selectedBrand && selectedBrand !== 'all') {
-    activeChips.push({
-      id: 'brand',
-      label: `Brand: ${selectedBrand}`,
-      onRemove: () => setFilterState(p => ({ ...p, selectedBrand: 'all' }))
-    });
-  }
-  if (dealsOnly) {
-    activeChips.push({
-      id: 'deals',
-      label: dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Arrivals',
-      onRemove: () => setFilterState(p => ({ ...p, dealsOnly: null }))
-    });
-  }
-  if (selectedDna) {
-    activeChips.push({
-      id: 'dna',
-      label: `Clones: ${selectedDna}`,
-      onRemove: () => setFilterState(p => ({ ...p, selectedDna: null }))
-    });
-  }
-  if (selectedVibe) {
-    activeChips.push({
-      id: 'vibe',
-      label: `Vibe: ${selectedVibe}`,
-      onRemove: () => setFilterState(p => ({ ...p, selectedVibe: null }))
-    });
+    }
+    if (maxBudget < 15000) {
+      activeChips.push({
+        id: 'budget',
+        label: `< ₹${maxBudget.toLocaleString()}`,
+        onRemove: () => setFilterState(p => ({ ...p, maxBudget: 15000 }))
+      });
+    }
+    if (selectedSeller !== 'all') {
+      activeChips.push({
+        id: 'seller',
+        label: `Seller: ${selectedSeller}`,
+        onRemove: () => setFilterState(p => ({ ...p, selectedSeller: 'all' }))
+      });
+    }
+    if (selectedBrand && selectedBrand !== 'all') {
+      activeChips.push({
+        id: 'brand',
+        label: `Brand: ${selectedBrand}`,
+        onRemove: () => setFilterState(p => ({ ...p, selectedBrand: 'all' }))
+      });
+    }
+    if (dealsOnly) {
+      activeChips.push({
+        id: 'deals',
+        label: dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Arrivals',
+        onRemove: () => setFilterState(p => ({ ...p, dealsOnly: null }))
+      });
+    }
+    if (selectedDna) {
+      activeChips.push({
+        id: 'dna',
+        label: `Clones: ${selectedDna}`,
+        onRemove: () => setFilterState(p => ({ ...p, selectedDna: null }))
+      });
+    }
+    if (selectedVibe) {
+      activeChips.push({
+        id: 'vibe',
+        label: `Vibe: ${selectedVibe}`,
+        onRemove: () => setFilterState(p => ({ ...p, selectedVibe: null }))
+      });
+    }
   }
 
   return (

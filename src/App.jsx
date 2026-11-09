@@ -463,20 +463,28 @@ export default function App() {
                         (Page {currentPage} of {totalPages})
                       </span>
                     )}
-                    {filterState.selectedSeller !== 'all' && (
-                      <span className="text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
-                        Seller: {sellersWithLiveCounts.find(s => s.id === filterState.selectedSeller)?.name || filterState.selectedSeller}
+                    {searchQuery.trim() ? (
+                      <span className="text-xs font-mono font-bold bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800">
+                        🔍 &ldquo;{searchQuery.trim()}&rdquo; (Global Catalog Search)
                       </span>
-                    )}
-                    {filterState.dealsOnly && (
-                      <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                        {filterState.dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Stock'}
-                      </span>
-                    )}
-                    {filterState.maxBudget < 15000 && (
-                      <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                        &lt; ₹{filterState.maxBudget.toLocaleString()}
-                      </span>
+                    ) : (
+                      <>
+                        {filterState.selectedSeller !== 'all' && (
+                          <span className="text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                            Seller: {sellersWithLiveCounts.find(s => s.id === filterState.selectedSeller)?.name || filterState.selectedSeller}
+                          </span>
+                        )}
+                        {filterState.dealsOnly && (
+                          <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                            {filterState.dealsOnly === 'drops' ? '📉 Price Drops (Latest First)' : '✨ New Stock'}
+                          </span>
+                        )}
+                        {filterState.maxBudget < 15000 && (
+                          <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                            &lt; ₹{filterState.maxBudget.toLocaleString()}
+                          </span>
+                        )}
+                      </>
                     )}
                   </div>
 

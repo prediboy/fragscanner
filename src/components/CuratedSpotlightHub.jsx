@@ -17,31 +17,51 @@ export default function CuratedSpotlightHub({
   catalogCount = 965,
   selectedFormats = ['retail']
 }) {
-  // 1. Top Verified Price Drops (always sorted by latest discovered)
+  // 1. Top Verified Price Drops (strictly sorted by latest price drop timestamp)
   const topPriceDrops = useMemo(() => {
+    const getDropTimestamp = (item) => {
+      if (item.price_updated_at) return new Date(item.price_updated_at).getTime();
+      if (item.price_change_date) {
+        const timeStr = item.price_change_time || '00:00:00';
+        return new Date(`${item.price_change_date}T${timeStr}Z`).getTime();
+      }
+      if (item.discovered_at) return new Date(item.discovered_at).getTime();
+      return 0;
+    };
+
     if (priceDrops && priceDrops.length > 0) {
       return [...priceDrops]
         .filter(f => Number(f.community_price) > 0)
-        .sort((a, b) => new Date(b.discovered_at || b.price_change_date || 0) - new Date(a.discovered_at || a.price_change_date || 0))
+        .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
         .slice(0, 6);
     }
     return (catalog || [])
       .filter(f => f.is_price_drop && Number(f.community_price) > 0)
-      .sort((a, b) => new Date(b.discovered_at || b.price_change_date || b.price_updated_at || 0) - new Date(a.discovered_at || a.price_change_date || a.price_updated_at || 0))
+      .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
       .slice(0, 6);
   }, [catalog, priceDrops]);
 
-  // 2. New Community Arrivals (always sorted by latest discovered)
+  // 2. New Community Arrivals (strictly sorted by latest arrival timestamp)
   const newArrivals = useMemo(() => {
+    const getArrivalTimestamp = (item) => {
+      if (item.new_arrival_date) {
+        const timeStr = item.new_arrival_time || '00:00:00';
+        return new Date(`${item.new_arrival_date}T${timeStr}Z`).getTime();
+      }
+      if (item.discovered_at) return new Date(item.discovered_at).getTime();
+      if (item.price_updated_at) return new Date(item.price_updated_at).getTime();
+      return 0;
+    };
+
     if (customNewArrivals && customNewArrivals.length > 0) {
       return [...customNewArrivals]
         .filter(f => Number(f.community_price) > 0)
-        .sort((a, b) => new Date(b.discovered_at || b.new_arrival_date || 0) - new Date(a.discovered_at || a.new_arrival_date || 0))
+        .sort((a, b) => getArrivalTimestamp(b) - getArrivalTimestamp(a))
         .slice(0, 6);
     }
     return (catalog || [])
       .filter(f => f.is_new_arrival && Number(f.community_price) > 0)
-      .sort((a, b) => new Date(b.discovered_at || b.new_arrival_date || b.price_updated_at || 0) - new Date(a.discovered_at || a.new_arrival_date || a.price_updated_at || 0))
+      .sort((a, b) => getArrivalTimestamp(b) - getArrivalTimestamp(a))
       .slice(0, 6);
   }, [catalog, customNewArrivals]);
 
