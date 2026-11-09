@@ -333,16 +333,36 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
       if (matchedFrag) {
         console.log(`   ✓ Matched to existing perfume: [${matchedFrag.id}] (${matchedFrag.name})`);
 
-        // A. Save learned alias to Supabase so future syncs match directly
+        // A. Save learned alias to Supabase so future syncs match directly (with strict Safety Gate)
+        const BANNED_GENERIC_ALIASES = new Set([
+          'silver', 'gold', 'black', 'white', 'blue', 'blu', 'red', 'rouge', 'noir', 'noire',
+          'pink', 'green', 'brown', 'amber', 'rose', 'vanilla', 'musk', 'leather', 'tobacco',
+          'oud', 'oudh', 'iris', 'vetiver', 'patchouli', 'sandalwood',
+          'edp', 'edt', 'edc', 'parfum', 'extrait', 'cologne', 'elixir', 'intense', 'extreme',
+          'sport', 'aqua', 'tester', 'retail', 'spray', 'bottle', 'bnib', 'limited', 'edition',
+          'collector', 'collectors', 'pure', 'fresh', 'dark', 'light', 'royal',
+          'gold edition', 'silver edition', 'black edition', 'white edition', 'limited edition',
+          'pure parfum', 'le', 'pp', 'me', 'se', 'ee', 'gt', 'bt', 'wt', 'pour homme', 'pour femme', 'homme', 'femme',
+          'men', 'women', 'man', 'woman', 'for him', 'for her'
+        ]);
+
         const cleanAlias = (decision.learned_alias || nameRaw).toLowerCase().trim();
         const curAliases = matchedFrag.aliases || [];
-        if (cleanAlias && cleanAlias.length >= 2 && !curAliases.includes(cleanAlias)) {
+        const isSafeAlias = cleanAlias &&
+                            cleanAlias.length >= 3 &&
+                            !/^\d+$/.test(cleanAlias) &&
+                            !BANNED_GENERIC_ALIASES.has(cleanAlias) &&
+                            !curAliases.includes(cleanAlias);
+
+        if (isSafeAlias) {
           const newAliases = [...curAliases, cleanAlias];
           matchedFrag.aliases = newAliases;
           if (supabase) {
             await supabase.from('fragrances').update({ aliases: newAliases }).eq('id', matchedFrag.id);
-            console.log(`   ✓ Saved learned alias "${cleanAlias}" to Supabase for [${matchedFrag.id}]`);
+            console.log(`   ✓ Saved safe learned alias "${cleanAlias}" to Supabase for [${matchedFrag.id}]`);
           }
+        } else if (cleanAlias && !curAliases.includes(cleanAlias)) {
+          console.log(`   🛡 Blocked generic alias "${cleanAlias}" from saving to database to prevent cross-contamination.`);
         }
 
         // B. Attach seller quote to existing perfume
