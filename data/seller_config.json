@@ -143,12 +143,30 @@
     "sheet_url_decants_men": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=0",
     "sheet_url_decants_women": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=1022333211",
     "sheet_url_retail": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&gid=91520254",
+    "sheet_url_testers_retail": "https://docs.google.com/spreadsheets/d/118f-ZLbawdsi38eDv9TqV7pq-yxjaHPdunruCwuerb8/gviz/tq?tqx=out:csv&sheet=Testers%20%26%20Retail",
     "whatsapp": "8826709398",
     "shipping": "₹80 Pan-India (Free above ₹1,000 on 3+ decants) | Delhi-NCR ₹65",
     "dispatch": "24-48 hrs",
     "decant_sizes": [
       "3ml",
       "5ml",
+      "8ml",
+      "10ml",
+      "20ml",
+      "30ml"
+    ]
+  },
+  {
+    "id": "aromatic_rabbit",
+    "seller_name": "Aromatic Rabbit",
+    "type": "decant_and_bottle",
+    "sheet_url_xlsx": "https://docs.google.com/spreadsheets/d/1O-hEDehz5oNrka5UiuZOH_CuDD59dQv-/edit?gid=1327276606",
+    "whatsapp": "8527824887",
+    "whatsapp_group": "https://chat.whatsapp.com/JxcXjmqF3YhCnKfSkzjFId",
+    "shipping": "Free Pan-India Shipping (J&K & North East +₹50)",
+    "dispatch": "2 working days",
+    "decant_sizes": [
+      "4ml",
       "8ml",
       "10ml",
       "20ml",

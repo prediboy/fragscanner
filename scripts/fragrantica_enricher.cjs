@@ -257,7 +257,7 @@ CRITICAL DOMAIN RULES:
    - Use UNRESOLVED if the listing is junk, empty bottles, non-fragrance accessories ('Gift Bag Only', 'Cap Only', 'Box Only'), or cannot be reliably identified as a legitimate perfume.
    - We must NEVER pollute the database with junk entries.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${key}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`;
     const payload = {
       contents: [{ parts: [{ text: systemInstruction }] }],
       generationConfig: { responseMimeType: 'application/json' }

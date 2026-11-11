@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci --omit=dev
 
-      - name: Run Master Refresh Pipeline across All 10 Sellers
+      - name: Run Master Refresh Pipeline across All 11 Sellers
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
@@ -37,4 +37,13 @@ jobs:
         run: |
           node scripts/scrape_aar_middle_east.cjs || true
           node scripts/refresh_all_sellers.cjs
-          echo "✓ Successfully refreshed all 10 sellers and synced directly to Supabase!"
+          echo "✓ Successfully refreshed all 11 sellers and synced directly to Supabase!"
+
+      - name: Upload Refresh & Price-Drop Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-price-drop-logs
+          path: data/refresh_logs/*.json
+          retention-days: 14
+          if-no-files-found: ignore
