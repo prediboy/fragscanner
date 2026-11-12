@@ -232,8 +232,10 @@ Your task is to judge this listing using domain expertise and return a JSON obje
     "rating_value": 4.3,
     "rating_count": 350,
     "primary_season": "Fall" | "Winter" | "Spring" | "Summer"
-  } // only populate new_fragrance if verdict is NEW_FLANKER, else set to null
+  }
 }
+
+Note: If verdict is not NEW_FLANKER, set "new_fragrance" to null. Return strictly raw JSON with NO markdown fences and NO code comments (//).
 
 CRITICAL DOMAIN RULES:
 1. MATCH_EXISTING:
@@ -257,32 +259,51 @@ CRITICAL DOMAIN RULES:
    - Use UNRESOLVED if the listing is junk, empty bottles, non-fragrance accessories ('Gift Bag Only', 'Cap Only', 'Box Only'), or cannot be reliably identified as a legitimate perfume.
    - We must NEVER pollute the database with junk entries.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`;
+    const candidateModels = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3-flash-preview'];
     const payload = {
       contents: [{ parts: [{ text: systemInstruction }] }],
       generationConfig: { responseMimeType: 'application/json' }
     };
 
+    function safeParseJson(raw) {
+      if (!raw) return null;
+      let cleaned = raw.trim()
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```$/i, '')
+        .replace(/,\s*([}\]])/g, '$1');
+      try {
+        return JSON.parse(cleaned);
+      } catch (e1) {
+        try {
+          return (new Function('return (' + cleaned + ')'))();
+        } catch (e2) {
+          return null;
+        }
+      }
+    }
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      const activeModel = candidateModels[attempt - 1] || candidateModels[0];
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${key}`;
       try {
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(15000)
+          signal: AbortSignal.timeout(20000)
         });
 
         if (res.status === 429) {
           const waitSec = attempt * 3;
-          console.warn(`  [AI-Judge] Rate limit (429) on "${brandRaw} ${nameRaw}". Backing off ${waitSec}s (Attempt ${attempt}/${maxRetries})...`);
+          console.warn(`  [AI-Judge] Rate limit (429) on model ${activeModel} for "${brandRaw} ${nameRaw}". Backing off ${waitSec}s (Attempt ${attempt}/${maxRetries})...`);
           await new Promise(r => setTimeout(r, waitSec * 1000));
           continue;
         }
 
         if (!res.ok) {
-          console.warn(`  [AI-Judge] Status ${res.status} from Gemini (Attempt ${attempt}/${maxRetries})`);
+          console.warn(`  [AI-Judge] Status ${res.status} from Gemini model ${activeModel} (Attempt ${attempt}/${maxRetries})`);
           if (attempt < maxRetries) {
-            await new Promise(r => setTimeout(r, 2000));
+            await new Promise(r => setTimeout(r, 1500));
             continue;
           }
           return null;
@@ -292,12 +313,12 @@ CRITICAL DOMAIN RULES:
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (!text) return null;
 
-        const parsed = JSON.parse(text);
+        const parsed = safeParseJson(text);
         return parsed;
       } catch (err) {
-        console.warn(`  [AI-Judge] Attempt ${attempt} notice:`, err.message);
+        console.warn(`  [AI-Judge] Attempt ${attempt} notice (${activeModel}):`, err.message);
         if (attempt < maxRetries) {
-          await new Promise(r => setTimeout(r, 2000));
+          await new Promise(r => setTimeout(r, 1500));
         }
       }
     }

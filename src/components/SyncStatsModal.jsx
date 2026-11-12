@@ -30,7 +30,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Synced across all 10 verified community resources & Supabase
+                Synced across all 11 verified community resources & Supabase
               </p>
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
             <div className="p-3.5 rounded-2xl bg-[#141f36] border border-slate-800 text-center">
               <span className="text-[10px] uppercase font-bold text-cyan-400 block mb-1">Decanted Scents</span>
               <strong className="text-xl font-mono text-cyan-400">{syncMeta.decants_available_count || 372}</strong>
-              <span className="text-[10px] text-slate-400 block mt-0.5">5ml, 8ml, 10ml, 30ml</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">4ml, 5ml, 8ml, 10ml, 30ml</span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-[#141f36] border border-slate-800 text-center">
@@ -78,7 +78,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
             <div className="flex items-center justify-between text-xs font-bold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <Store className="w-4 h-4 text-amber-400" />
-                <span>10 Verified Sellers Breakdown</span>
+                <span>11 Verified Sellers Breakdown</span>
               </span>
               <span className="text-slate-400 font-normal">Updated: {formattedDate}</span>
             </div>
@@ -128,7 +128,7 @@ export default function SyncStatsModal({ syncMeta, onClose }) {
               <span className="text-[11px] text-slate-400">GitHub Actions + Supabase</span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Every 2 hours, fresh price lists from all 10 verified sellers are fetched and upserted into Supabase. Website visitors always see live inventory without needing page redeployments.
+              Every 2 hours, fresh price lists from all 11 verified sellers are fetched and upserted into Supabase. Website visitors always see live inventory without needing page redeployments.
             </p>
           </div>
 
