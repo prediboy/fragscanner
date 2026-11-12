@@ -586,6 +586,7 @@ async function runMasterRefresh() {
       if ((bClean === 'pariscorner' || bClean === 'emir' || bClean === 'pariscorneremir' || bClean === 'pendorascents') && (fbClean === 'pariscorner' || fbClean === 'emir' || fbClean === 'pendorascents')) return true;
       if ((bClean === 'lattafa' || bClean === 'maisonalhambra' || bClean === 'alhambra') && (fbClean === 'lattafa' || fbClean === 'maisonalhambra')) return true;
       if ((bClean === 'fragranceworld' || bClean === 'frenchavenue') && (fbClean === 'fragranceworld' || fbClean === 'frenchavenue')) return true;
+      if ((bClean === 'arabiyat' || bClean === 'arabiyatprestige') && (fbClean === 'arabiyat' || fbClean === 'arabiyatprestige')) return true;
       if ((bClean === 'giorgioarmani' || bClean === 'armani' || bClean === 'emporioarmani' || bClean === 'armaniprive') && (fbClean === 'giorgioarmani' || fbClean === 'armani')) return true;
       if ((bClean === 'rabanne' || bClean === 'pacorabanne') && (fbClean === 'rabanne' || fbClean === 'pacorabanne')) return true;
       return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
