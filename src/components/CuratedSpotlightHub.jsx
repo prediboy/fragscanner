@@ -17,14 +17,14 @@ export default function CuratedSpotlightHub({
   catalogCount = 965,
   selectedFormats = ['retail']
 }) {
-  // 1. Top Verified Price Drops (strictly sorted by latest price drop timestamp)
+  // 1. Top Verified Price Drops (strictly sorted by latest price drop timestamp, matching Price Drops tab)
   const topPriceDrops = useMemo(() => {
     const getDropTimestamp = (item) => {
-      if (item.price_updated_at) return new Date(item.price_updated_at).getTime();
       if (item.price_change_date) {
         const timeStr = item.price_change_time || '00:00:00';
         return new Date(`${item.price_change_date}T${timeStr}Z`).getTime();
       }
+      if (item.price_updated_at) return new Date(item.price_updated_at).getTime();
       if (item.discovered_at) return new Date(item.discovered_at).getTime();
       return 0;
     };
