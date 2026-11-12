@@ -330,7 +330,7 @@ export default function PowerFragranceCard({
                   <span>Price Drop</span>
                 </span>
               )}
-              {f.is_new_arrival && (
+              {f.is_new_arrival && f.in_seller_stock && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 flex items-center gap-1">
                   <span>✨</span>
                   <span>New</span>
@@ -525,6 +525,11 @@ export default function PowerFragranceCard({
           {/* POD 4: Decants Ready (Rendered when Decants is ticked) */}
           {showDecant && activeDecant && (
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-cyan-400/30 dark:border-cyan-500/30 shadow-xs hover:border-cyan-400 transition-all space-y-2.5">
+              {!activeFormats.includes('decant') && !lowestRetail && (
+                <div className="text-[10px] font-mono font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/70 px-2 py-0.5 rounded-md">
+                  Full bottle currently unlisted • Decants available
+                </div>
+              )}
               
               {/* Main Decant Info Row */}
               <div className="flex items-start justify-between gap-2">

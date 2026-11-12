@@ -231,7 +231,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Hot Selling</span>
                         </span>
                       )}
-                      {fragrance.is_new_arrival && (
+                      {fragrance.is_new_arrival && fragrance.in_seller_stock && (
                         <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold flex items-center gap-1.5 shadow-xs">
                           <span className="relative flex h-1.5 w-1.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -457,10 +457,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
                         <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>🧪 Decants & Samples (5ml • 8ml • 10ml • 20ml • 30ml)</span>
+                        <span>🧪 Decants & Samples (4ml • 5ml • 8ml • 10ml • 20ml • 30ml)</span>
                       </h4>
                       <p className="text-[11px] text-slate-400">
-                        Comparing live decant rates from <strong>Enigma Perfumes</strong>, <strong>Blue Wings</strong> & <strong>Whiff Culture</strong>:
+                        Comparing live decant rates from verified community sellers:
                       </p>
                     </div>
 
@@ -502,7 +502,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
                   {fragrance.has_decants && effectiveDecantComparison ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                      {['2ml', '3ml', '5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
+                      {['2ml', '3ml', '4ml', '5ml', '8ml', '10ml', '20ml', '30ml'].map((size) => {
                         const sizeData = effectiveDecantComparison[size];
                         if (!sizeData || !sizeData.quotes || sizeData.quotes.length === 0) return null;
 
@@ -732,29 +732,16 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                 </h4>
 
                 {(() => {
-                  const topNotes = (fragrance.notes?.top && fragrance.notes.top.length > 0)
-                    ? fragrance.notes.top
-                    : (Array.isArray(fragrance.top_notes) && fragrance.top_notes.length > 0
-                      ? fragrance.top_notes
-                      : (typeof fragrance.top_notes === 'string' && fragrance.top_notes.trim()
-                        ? fragrance.top_notes.split(',').map(s => s.trim())
-                        : []));
-
-                  const middleNotes = (fragrance.notes?.middle && fragrance.notes.middle.length > 0)
-                    ? fragrance.notes.middle
-                    : (Array.isArray(fragrance.middle_notes) && fragrance.middle_notes.length > 0
-                      ? fragrance.middle_notes
-                      : (typeof fragrance.middle_notes === 'string' && fragrance.middle_notes.trim()
-                        ? fragrance.middle_notes.split(',').map(s => s.trim())
-                        : []));
-
-                  const baseNotes = (fragrance.notes?.base && fragrance.notes.base.length > 0)
-                    ? fragrance.notes.base
-                    : (Array.isArray(fragrance.base_notes) && fragrance.base_notes.length > 0
-                      ? fragrance.base_notes
-                      : (typeof fragrance.base_notes === 'string' && fragrance.base_notes.trim()
-                        ? fragrance.base_notes.split(',').map(s => s.trim())
-                        : []));
+                  const toNoteArray = (primary, fallback) => {
+                    for (const val of [primary, fallback]) {
+                      if (Array.isArray(val) && val.length > 0) return val.map(v => String(v || '').trim()).filter(Boolean);
+                      if (typeof val === 'string' && val.trim()) return val.split(',').map(s => s.trim()).filter(Boolean);
+                    }
+                    return [];
+                  };
+                  const topNotes = toNoteArray(fragrance.notes?.top, fragrance.top_notes);
+                  const middleNotes = toNoteArray(fragrance.notes?.middle, fragrance.middle_notes);
+                  const baseNotes = toNoteArray(fragrance.notes?.base, fragrance.base_notes);
 
                   return (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -847,10 +834,29 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
                 <div className="p-4 rounded-2xl bg-[#131d31] border border-slate-800">
                   <span className="text-xs text-slate-400 block mb-1">Day vs Night</span>
-                  <span className="text-sm font-bold text-purple-400 flex items-center gap-1.5">
-                    <Moon className="w-4 h-4" />
-                    Night {fragrance.day_night?.night ?? 55}% / Day {fragrance.day_night?.day ?? 45}%
-                  </span>
+                  {(() => {
+                    let dn = fragrance.day_night;
+                    if (typeof dn === 'string') {
+                      const trimmed = dn.trim();
+                      if (trimmed.startsWith('{')) {
+                        try { dn = JSON.parse(trimmed); } catch { dn = null; }
+                      } else if (/night/i.test(trimmed)) {
+                        dn = { day: 30, night: 70 };
+                      } else if (/day/i.test(trimmed)) {
+                        dn = { day: 70, night: 30 };
+                      } else {
+                        dn = null;
+                      }
+                    }
+                    const nightPct = Number(dn?.night);
+                    const dayPct = Number(dn?.day);
+                    return (
+                      <span className="text-sm font-bold text-purple-400 flex items-center gap-1.5">
+                        <Moon className="w-4 h-4" />
+                        Night {!isNaN(nightPct) ? nightPct : 55}% / Day {!isNaN(dayPct) ? dayPct : 45}%
+                      </span>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -1102,7 +1108,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         </h4>
 
                         <p className="text-xs text-slate-400 mb-3">
-                          {match.fragrance.collection} • <span className="text-emerald-400 font-bold font-mono">{match.fragrance.community_price ? `₹${match.fragrance.community_price}` : `₹${match.fragrance.estimated_community_price || '2,450'}`}</span> • ★ {match.fragrance.rating_value.toFixed(2)}
+                          {match.fragrance.collection} • <span className="text-emerald-400 font-bold font-mono">{match.fragrance.community_price ? `₹${match.fragrance.community_price}` : `₹${match.fragrance.estimated_community_price || '2,450'}`}</span> • ★ {(Number(match.fragrance.rating_value) || 4.2).toFixed(2)}
                         </p>
 
                         {/* Shared Accords */}

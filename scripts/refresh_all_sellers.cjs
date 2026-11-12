@@ -74,31 +74,36 @@ async function fetchUrl(url, timeoutMs = 10000, maxRetries = 3) {
 }
 
 function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
   const rows = [];
-  for (const line of lines) {
-    const row = [];
-    let insideQuote = false;
-    let entry = "";
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') {
-        if (insideQuote && line[i + 1] === '"') {
-          entry += '"';
-          i++;
-        } else {
-          insideQuote = !insideQuote;
-        }
-      } else if (c === ',' && !insideQuote) {
-        row.push(entry.trim());
-        entry = "";
+  let row = [];
+  let entry = "";
+  let insideQuote = false;
+  const s = String(text || "");
+
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '"') {
+      if (insideQuote && s[i + 1] === '"') {
+        entry += '"';
+        i++;
       } else {
-        entry += c;
+        insideQuote = !insideQuote;
       }
+    } else if (c === ',' && !insideQuote) {
+      row.push(entry.trim());
+      entry = "";
+    } else if ((c === '\n' || c === '\r') && !insideQuote) {
+      if (c === '\r' && s[i + 1] === '\n') i++;
+      row.push(entry.trim());
+      if (row.some(cell => cell.length > 0)) rows.push(row);
+      row = [];
+      entry = "";
+    } else {
+      entry += c;
     }
-    row.push(entry.trim());
-    rows.push(row);
   }
+  row.push(entry.trim());
+  if (row.some(cell => cell.length > 0)) rows.push(row);
   return rows;
 }
 
@@ -123,6 +128,7 @@ const canonicalBrands = {
   'maison alhambra': 'Maison Alhambra', 'alhambra': 'Maison Alhambra',
   'al haramain': 'Al Haramain', 'al harmain': 'Al Haramain', 'al majed oud': 'Al Majed Oud',
   'al rehab': 'Al Rehab', 'al wataniah': 'Al Wataniah', 'albait aldimashqi': 'Albait Aldimashqi',
+  'albait niche': 'Albait Aldimashqi', 'albait': 'Albait Aldimashqi',
   'anfar': 'Anfar', 'arabiyat': 'Arabiyat', 'arabiyat prestige': 'Arabiyat Prestige',
   'arabiyat presitige': 'Arabiyat Prestige', 'arabiat prestige': 'Arabiyat Prestige',
   'ard al zaafaran': 'Ard Al Zaafaran', 'ard al zafran': 'Ard Al Zaafaran',
@@ -130,6 +136,7 @@ const canonicalBrands = {
   'caneza': 'Caneza', 'dumont': 'Dumont', 'dumont paris': 'Dumont',
   'fragrance world': 'Fragrance World', 'french avenue': 'French Avenue', 'gissah': 'Gissah', 'gulf orchid': 'Gulf Orchid',
   'ibraq': 'Ibraq', 'ibraheem al qurashi': 'Ibrahim Al Qureshi', 'ibrahim al qureshi': 'Ibrahim Al Qureshi',
+  'ibraheem alqurashi': 'Ibrahim Al Qureshi', 'ibrahim al qurashi': 'Ibrahim Al Qureshi',
   'khadlaj': 'Khadlaj', 'lalique': 'Lalique', 'lattafa': 'Lattafa', 'laverne': 'Laverne',
   'maison asrar': 'Maison Asrar', 'mykonos': 'Mykonos', 'naseem': 'Naseem', 'nusuk': 'Nusuk',
   'paris corner': 'Paris Corner', 'pendora scent': 'Pendora Scents', 'pendora scents': 'Pendora Scents',
@@ -156,12 +163,37 @@ const canonicalBrands = {
   'paco rabanne': 'Rabanne', 'rabanne': 'Rabanne', 'prada': 'Prada', 'ralph lauren': 'Ralph Lauren',
   'serge lutens': 'Serge Lutens', 'sospiro perfumes': 'Sospiro', 'sospiro': 'Sospiro',
   'tom ford': 'Tom Ford', 'versace': 'Versace', 'viktor & rolf': 'Viktor & Rolf', 'viktor&rolf': 'Viktor & Rolf',
-  'yves saint laurent': 'Yves Saint Laurent', 'ysl': 'Yves Saint Laurent'
+  'yves saint laurent': 'Yves Saint Laurent', 'ysl': 'Yves Saint Laurent',
+  'creed': 'Creed', 'parfums de marly': 'Parfums de Marly', 'pdm': 'Parfums de Marly', 'xerjoff': 'Xerjoff',
+  'initio': 'Initio Parfums Prives', 'initio parfums prives': 'Initio Parfums Prives',
+  'kilian': 'By Kilian', 'by kilian': 'By Kilian', 'amouage': 'Amouage',
+  'maison francis kurkdjian': 'Maison Francis Kurkdjian', 'mfk': 'Maison Francis Kurkdjian',
+  'roja': 'Roja Dove', 'roja dove': 'Roja Dove', 'roja parfums': 'Roja Dove',
+  'louis vuitton': 'Louis Vuitton', 'lv': 'Louis Vuitton', 'valentino': 'Valentino',
+  'le labo': 'Le Labo', 'kenzo': 'Kenzo', 'lacoste': 'Lacoste', 'coach': 'Coach',
+  'jimmy choo': 'Jimmy Choo', 'dunhill': 'Dunhill', 'mercedes': 'Mercedes-Benz', 'mercedes benz': 'Mercedes-Benz', 'mercedez': 'Mercedes-Benz', 'merc': 'Mercedes-Benz',
+  'scentedelic': 'Scentedelic', 'bdk': 'BDK Parfums', 'bdk parfums': 'BDK Parfums',
+  'tiziana terenzi': 'Tiziana Terenzi', 'acqua di parma': 'Acqua di Parma', 'jo malone': 'Jo Malone London',
+  'penhaligons': "Penhaligon's", "penhaligon's": "Penhaligon's", 'maison crivelli': 'Maison Crivelli',
+  'salvatore ferragamo': 'Salvatore Ferragamo', 'ferragamo': 'Salvatore Ferragamo', 'moschino': 'Moschino',
+  'roberto cavalli': 'Roberto Cavalli', 'rochas': 'Rochas', 'cartier': 'Cartier', 'zara': 'Zara',
+  'carolina harrera': 'Carolina Herrera', 'caroline herrera': 'Carolina Herrera',
+  'franck oliver': 'Franck Olivier', 'franck olivier': 'Franck Olivier',
+  'rue brocca': 'Rue Broca', 'rue broca': 'Rue Broca',
+  'maison margelia': 'Maison Margiela', 'maison margiela': 'Maison Margiela', 'maison martin margiela': 'Maison Margiela',
+  'dyptique': 'Diptyque', 'diptyque': 'Diptyque',
+  'bottega venetta': 'Bottega Veneta', 'bottega veneta': 'Bottega Veneta',
+  'memo': 'Memo Paris', 'memo paris': 'Memo Paris',
+  'victoria secret': "Victoria's Secret", "victoria's secret": "Victoria's Secret",
+  'armani prive': 'Giorgio Armani', 'armani privé': 'Giorgio Armani',
+  'reef perfmes': 'Reef', 'reef perfumes': 'Reef',
+  'emir': 'Paris Corner', 'paris corner emir': 'Paris Corner',
+  'fragrance world & french avenue': 'Fragrance World'
 };
 
 function normalizeBrand(raw) {
-  const l = (raw || "").toLowerCase().trim();
-  return canonicalBrands[l] || raw.trim();
+  const l = (raw || "").toLowerCase().replace(/\s+/g, " ").trim();
+  return canonicalBrands[l] || raw.replace(/\s+/g, " ").trim();
 }
 
 function cleanStr(s) {
@@ -548,8 +580,13 @@ async function runMasterRefresh() {
     // Filter candidate list strictly to the matching brand
     const brandFrags = fragrances.filter(f => {
       const fbClean = cleanStr(f.brand);
-      if ((bClean === 'ibraq' || bClean === 'ibrahimalqureshi') && (fbClean === 'ibraq' || fbClean === 'ibrahimalqureshi')) return true;
-      if ((bClean === 'giorgioarmani' || bClean === 'armani' || bClean === 'emporioarmani') && (fbClean === 'giorgioarmani' || fbClean === 'armani')) return true;
+      if ((bClean === 'ibraq' || bClean.includes('ibrahimalqur') || bClean.includes('ibraheemalqur')) && (fbClean === 'ibraq' || fbClean.includes('ibrahimalqur') || fbClean.includes('ibraheemalqur'))) return true;
+      if (bClean.startsWith('albait') && fbClean.startsWith('albait')) return true;
+      if (bClean.startsWith('reef') && fbClean.startsWith('reef')) return true;
+      if ((bClean === 'pariscorner' || bClean === 'emir' || bClean === 'pariscorneremir' || bClean === 'pendorascents') && (fbClean === 'pariscorner' || fbClean === 'emir' || fbClean === 'pendorascents')) return true;
+      if ((bClean === 'lattafa' || bClean === 'maisonalhambra' || bClean === 'alhambra') && (fbClean === 'lattafa' || fbClean === 'maisonalhambra')) return true;
+      if ((bClean === 'fragranceworld' || bClean === 'frenchavenue') && (fbClean === 'fragranceworld' || fbClean === 'frenchavenue')) return true;
+      if ((bClean === 'giorgioarmani' || bClean === 'armani' || bClean === 'emporioarmani' || bClean === 'armaniprive') && (fbClean === 'giorgioarmani' || fbClean === 'armani')) return true;
       if ((bClean === 'rabanne' || bClean === 'pacorabanne') && (fbClean === 'rabanne' || fbClean === 'pacorabanne')) return true;
       return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
     });
@@ -844,7 +881,7 @@ async function runMasterRefresh() {
         if (prices.length === 0) continue;
 
         const brandNorm = normalizeBrand(currentBrand);
-        const matched = findBestMatch(brandNorm, nameRaw, inspiredBy);
+        const matched = findBestMatch(brandNorm, nameRaw, inspiredBy, { allowDesigner: true });
         if (matched) {
           addDecantQuote(matched, {
             seller_id: rpSeller.id,
@@ -1139,7 +1176,7 @@ async function runMasterRefresh() {
 
           const brandNorm = normalizeBrand(brandRaw);
           let cleanedName = nameRaw.replace(/^afnan\s+/i, '');
-          const matched = findBestMatch(brandNorm, cleanedName, inspiredBy);
+          const matched = findBestMatch(brandNorm, cleanedName, inspiredBy, { allowDesigner: true });
           if (matched) {
             addDecantQuote(matched, {
               seller_id: sovSeller.id,
@@ -1236,10 +1273,10 @@ async function runMasterRefresh() {
       if (prodMatch) {
         const bwProducts = eval(prodMatch[1]);
         for (const p of bwProducts) {
-          if (!p.name || p.cat === "DESIGNER & NICHE" || isDesigner(p.brand || p.name)) continue;
+          if (!p.name) continue;
           const rawName = p.name.replace(/^.*?-\s*/, "");
           const brand = normalizeBrand(p.brand);
-          const matched = findBestMatch(brand, rawName, p.inspo);
+          const matched = findBestMatch(brand, rawName, p.inspo, { allowDesigner: true });
           if (matched) {
             const sizes = {};
             if (p.p5 && Number(p.p5) > 50) sizes["5ml"] = Number(p.p5);
@@ -1272,10 +1309,10 @@ async function runMasterRefresh() {
       if (bnibMatch) {
         const bnibProducts = eval(bnibMatch[1]);
         for (const p of bnibProducts) {
-          if (!p.name || !p.price || p.cat === "DESIGNER & NICHE" || isDesigner(p.brand || p.name)) continue;
+          if (!p.name || !p.price) continue;
           const rawName = p.name.replace(/^.*?-\s*/, "");
           const brand = normalizeBrand(p.brand);
-          const matched = findBestMatch(brand, rawName);
+          const matched = findBestMatch(brand, rawName, "", { allowDesigner: true });
           if (matched) {
             const meta = extractBottleMetadata(brand, rawName, matched.bottle_size);
             addBottleQuote(matched, {
@@ -1785,8 +1822,11 @@ async function runMasterRefresh() {
       frag.is_price_drop = false;
     }
 
-    // 2. Compute 4-day rolling window expiration for new arrivals
-    if (frag.is_new_arrival) {
+    // 2. Enforce full-bottle-only New Arrivals & 4-day rolling window expiration
+    if (!frag.in_seller_stock || !frag.community_price || frag.community_price <= 0) {
+      frag.is_new_arrival = false;
+      frag.new_arrival_date = null;
+    } else if (frag.is_new_arrival) {
       const arrivalDate = frag.new_arrival_timestamp || frag.new_arrival_date || frag.price_updated_at;
       const arrivalTimeMs = arrivalDate ? new Date(arrivalDate).getTime() : 0;
       const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
@@ -1881,7 +1921,8 @@ async function runMasterRefresh() {
 
   if (supabase) {
     try {
-      const chunkSize = 100;
+      const chunkSize = 50;
+      let failedChunks = 0;
       for (let i = 0; i < fragrances.length; i += chunkSize) {
         const chunk = fragrances.slice(i, i + chunkSize).map(f => ({
         id: f.id,
@@ -1928,12 +1969,30 @@ async function runMasterRefresh() {
         updated_at: new Date().toISOString()
       }));
 
-      const { error } = await supabase.from('fragrances').upsert(chunk, { onConflict: 'id' });
-      if (error) {
-        console.error("  Warning: Supabase sync chunk error:", error.message);
+      let chunkErr = null;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const { error } = await supabase.from('fragrances').upsert(chunk, { onConflict: 'id' });
+          if (!error) {
+            chunkErr = null;
+            break;
+          }
+          chunkErr = error.message || String(error);
+        } catch (upErr) {
+          chunkErr = upErr.message || String(upErr);
+        }
+        if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 1500));
+      }
+      if (chunkErr) {
+        failedChunks++;
+        console.error(`  Warning: Supabase sync chunk ${Math.floor(i / chunkSize) + 1} error after 3 attempts:`, chunkErr);
       }
     }
-    console.log("  ✓ Successfully synced all live prices to Supabase!");
+    if (failedChunks === 0) {
+      console.log("  ✓ Successfully synced all live prices to Supabase!");
+    } else {
+      console.warn(`  ⚠ Supabase sync finished with ${failedChunks} failed chunk(s)!`);
+    }
     } catch (err) {
       console.error("  Warning: Supabase sync failed:", err.message);
     }

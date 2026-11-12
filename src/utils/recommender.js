@@ -1,10 +1,18 @@
 // Olfactory similarity & recommendation logic
 
+function toNoteList(val, fallback) {
+  for (const src of [val, fallback]) {
+    if (Array.isArray(src) && src.length > 0) return src.map(s => String(s || '').trim()).filter(Boolean);
+    if (typeof src === 'string' && src.trim()) return src.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  return [];
+}
+
 export function calculateAccordSimilarity(accordsA, accordsB) {
   const vecA = {};
-  accordsA.forEach(a => { vecA[a.name.toLowerCase()] = a.score; });
+  (Array.isArray(accordsA) ? accordsA : []).forEach(a => { if (a?.name) vecA[String(a.name).toLowerCase()] = Number(a.score) || 0; });
   const vecB = {};
-  accordsB.forEach(b => { vecB[b.name.toLowerCase()] = b.score; });
+  (Array.isArray(accordsB) ? accordsB : []).forEach(b => { if (b?.name) vecB[String(b.name).toLowerCase()] = Number(b.score) || 0; });
 
   const allKeys = new Set([...Object.keys(vecA), ...Object.keys(vecB)]);
   if (allKeys.size === 0) return 0;
@@ -53,9 +61,9 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
   if (!target) return emptyResult;
 
   const targetNotes = [
-    ...(target.notes?.top || []),
-    ...(target.notes?.middle || []),
-    ...(target.notes?.base || [])
+    ...toNoteList(target.notes?.top, target.top_notes),
+    ...toNoteList(target.notes?.middle, target.middle_notes),
+    ...toNoteList(target.notes?.base, target.base_notes)
   ];
 
   const flankers = [];
@@ -89,9 +97,9 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
 
     // 3. Olfactory Accord & Note Match Computation
     const candidateNotes = [
-      ...(candidate.notes?.top || []),
-      ...(candidate.notes?.middle || []),
-      ...(candidate.notes?.base || [])
+      ...toNoteList(candidate.notes?.top, candidate.top_notes),
+      ...toNoteList(candidate.notes?.middle, candidate.middle_notes),
+      ...toNoteList(candidate.notes?.base, candidate.base_notes)
     ];
 
     const accordSim = calculateAccordSimilarity(target.accords || [], candidate.accords || []);
@@ -102,8 +110,10 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
     const overallScore = (accordSim * 0.60) + (noteSim * 0.28) + (seasonMatch * 0.12);
     const matchPercentage = Math.min(99, Math.max(35, Math.round(overallScore * 100)));
 
-    const sharedAccords = (candidate.accords || [])
-      .filter(ca => (target.accords || []).some(ta => ta.name.toLowerCase() === ca.name.toLowerCase()))
+    const targetAccordsArr = Array.isArray(target.accords) ? target.accords : [];
+    const candAccordsArr = Array.isArray(candidate.accords) ? candidate.accords : [];
+    const sharedAccords = candAccordsArr
+      .filter(ca => ca?.name && targetAccordsArr.some(ta => ta?.name && String(ta.name).toLowerCase() === String(ca.name).toLowerCase()))
       .map(a => a.name);
 
     const sharedNotes = candidateNotes.filter(cn => 
