@@ -265,14 +265,18 @@ export async function fetchInventoryPage({
       items = scored.slice(from, from + pageSize).map(x => x.item);
     } else {
       if (isDecantOnly && (sortBy === 'price_asc' || sortBy === 'price_desc')) {
-        // For decants, sort by price per ml (lowest rate first)
-        const { data, error } = await query;
-        if (error) {
-          console.warn('Supabase decants query error:', error.message);
-          throw error;
+        // For decants, fetch all pages (bypass PostgREST 1000-row cap) and sort by price per ml
+        let list = [];
+        for (let offset = 0; offset < 5000; offset += 1000) {
+          const { data, error } = await query.range(offset, offset + 999);
+          if (error) {
+            console.warn('Supabase decants query error:', error.message);
+            throw error;
+          }
+          if (!data || data.length === 0) break;
+          list.push(...data);
+          if (data.length < 1000) break;
         }
-
-        let list = data || [];
         if (sortBy === 'price_asc') {
           list.sort((a, b) => (getBestDecantRate(a)?.perMl || 99999) - (getBestDecantRate(b)?.perMl || 99999));
         } else {
