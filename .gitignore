@@ -23,5 +23,6 @@ Thumbs.db
 data/fragrances.json
 data/cache_*.json
 data/sync_meta.json
+data/refresh_logs/
 *.csv
 *.xlsx

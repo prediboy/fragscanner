@@ -7,6 +7,7 @@ import MarketPulseBar from './components/MarketPulseBar';
 import FragranceDetailModal from './components/FragranceDetailModal';
 import ModalErrorBoundary from './components/ModalErrorBoundary';
 import SyncStatsModal from './components/SyncStatsModal';
+import AiConciergeModal from './components/AiConciergeModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
 import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata } from './services/inventoryApi.js';
@@ -69,6 +70,7 @@ export default function App() {
   // Modals state
   const [activeFragrance, setActiveFragrance] = useState(null);
   const [syncStatsOpen, setSyncStatsOpen] = useState(false);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState(null);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(() => {
     try {
@@ -336,6 +338,17 @@ export default function App() {
           {/* Right Action Controls */}
           <div className="flex items-center gap-2 sm:gap-3">
             
+            {/* Ask Khushboo AI Button */}
+            <button
+              onClick={() => setIsAiModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-indigo-500/15 hover:from-cyan-500/25 hover:to-indigo-500/25 text-xs font-mono font-bold text-cyan-600 dark:text-cyan-300 transition-all shadow-xs hover:shadow-cyan-500/20 hover:scale-105"
+              title="Ask Khushboo — AI Fragrance Sommelier"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-cyan-500 animate-pulse" />
+              <span className="hidden sm:inline">Ask Khushboo</span>
+              <span className="sm:hidden">Khushboo</span>
+            </button>
+
             {/* Sync Meta Stats Button */}
             <button
               onClick={() => setSyncStatsOpen(true)}
@@ -614,6 +627,28 @@ export default function App() {
           availableDecants={catalogCounts.decants}
         />
       )}
+
+      {/* AI FRAGRANCE SOMMELIER MODAL */}
+      <AiConciergeModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onSelectFragrance={async (selected) => {
+          setIsAiModalOpen(false);
+          setActiveFragrance(selected);
+          const detail = await fetchFragranceDetail(selected.id);
+          if (detail) setActiveFragrance(detail);
+        }}
+      />
+
+      {/* FLOATING ASK KHUSHBOO ACTION PILL */}
+      <button
+        onClick={() => setIsAiModalOpen(true)}
+        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40 flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 text-white font-mono text-xs font-bold shadow-xl shadow-cyan-600/30 hover:shadow-cyan-500/50 hover:scale-105 transition-all group"
+        title="Ask Khushboo — AI Fragrance Sommelier"
+      >
+        <Sparkles className="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform" />
+        <span className="tracking-wide">Ask Khushboo</span>
+      </button>
 
       <Analytics />
     </div>
