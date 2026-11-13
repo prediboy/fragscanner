@@ -529,7 +529,7 @@ export default function App() {
                         }}
                         isExpanded={expandedCardId === f.id}
                         onToggleExpand={(id) => setExpandedCardId(prev => prev === id ? null : id)}
-                        selectedSeller={filterState.selectedSeller}
+                        selectedSeller={searchQuery.trim() ? 'all' : filterState.selectedSeller}
                       />
                     ))}
                   </div>

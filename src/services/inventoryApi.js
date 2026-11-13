@@ -224,7 +224,8 @@ export async function fetchInventoryPage({
         query = query.lte('community_price', maxBudget);
       }
     } else {
-      // 4. Global Semantic Search Query (Matches all tokens across entire catalog)
+      // 4. Global Semantic Search Query (Matches all tokens across available in-stock / decant catalog)
+      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
       for (const t of tokens) {
         query = query.or(`name.ilike.%${t}%,brand.ilike.%${t}%,dna_inspiration.ilike.%${t}%,dna_type.ilike.%${t}%`);
       }
@@ -239,8 +240,14 @@ export async function fetchInventoryPage({
       const { data, count, error } = await query;
       if (error) throw error;
 
-      items = data || [];
-      const scored = items.map(item => ({ item, score: scoreRelevance(item, tokens) }));
+      // Only include items with active verified quotes so cards never return null
+      const activeData = (data || []).filter(item => {
+        const hasBottle = item.in_seller_stock && Array.isArray(item.community_sellers) && item.community_sellers.some(s => Number(s.price) > 0);
+        const hasDecant = item.has_decants && Array.isArray(item.community_decants) && item.community_decants.some(d => d.sizes && Object.values(d.sizes).some(v => Number(v) > 0));
+        return hasBottle || hasDecant;
+      });
+
+      const scored = activeData.map(item => ({ item, score: scoreRelevance(item, tokens) }));
 
       if (sortBy === 'price_desc') {
         if (isDecantOnly) {
