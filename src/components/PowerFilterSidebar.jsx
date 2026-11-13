@@ -245,7 +245,7 @@ export default function PowerFilterSidebar({
           onChange={(e) => setFilterState(prev => ({ ...prev, selectedSeller: e.target.value }))}
           className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-400 focus:outline-none"
         >
-          <option value="all">All 10 Verified Sellers</option>
+          <option value="all">All 11 Verified Sellers</option>
           {sellers.map(s => (
             <option key={s.id} value={s.id}>
               {s.name} {s.count ? `(${s.count})` : ''}

@@ -328,7 +328,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono hidden sm:block">
-                10 Community Sellers • Pan-India Verified Rates
+                11 Community Sellers • Pan-India Verified Rates
               </p>
             </div>
           </div>
@@ -343,7 +343,7 @@ export default function App() {
               title="View live catalog sync status"
             >
               <Database className="w-3.5 h-3.5 text-cyan-500" />
-              <span className="hidden md:inline">10 Sellers Synced</span>
+              <span className="hidden md:inline">11 Sellers Synced</span>
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
             </button>
 
