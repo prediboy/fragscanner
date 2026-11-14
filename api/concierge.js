@@ -86,7 +86,7 @@ export default async function handler(req) {
     // 2. Chat / Reasoning Generation Endpoint (Gemini Flash)
     const { systemInstruction } = body;
     const res = await fetchWithKeyFailover(
-      (key) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
+      (key) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${key}`,
       () => ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

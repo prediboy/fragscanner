@@ -12,7 +12,8 @@ function extractDeterministicDislikes(chatHistory) {
   const dislikes = new Set();
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
-    const text = (m.content || '').toLowerCase();
+    const rawContent = (m.content || '').toLowerCase();
+    const text = rawContent.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
 
     // 1. "hate / hated / dislike X and Y"
     const hateMatches = text.matchAll(/(?:hate|hated|dislike|disliked|avoid|done with)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|$)/gi);
@@ -20,7 +21,8 @@ function extractDeterministicDislikes(chatHistory) {
       const raw = match[1].trim();
       const parts = raw.split(/\band\b|,/);
       for (const p of parts) {
-        const term = p.trim();
+        let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
+        term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done with)\s+/i, '').trim();
         if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
           dislikes.add(term);
         }
@@ -30,7 +32,8 @@ function extractDeterministicDislikes(chatHistory) {
     // 2. "tried / wore / bought X ... hated it"
     const triedMatches = text.matchAll(/(?:tried|wore|bought|tested)\s+([a-z0-9\s]{3,35}?)(?:,|\.|\s+based on|\s+and\s+|\s+but\s+).*?(?:hated|disliked|didn't like)/gi);
     for (const match of triedMatches) {
-      const term = match[1].trim();
+      let term = match[1].trim().replace(/^(?:the|a|an)\s+/i, '');
+      term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done with)\s+/i, '').trim();
       if (term && term !== 'it' && term !== 'them') {
         dislikes.add(term);
       }

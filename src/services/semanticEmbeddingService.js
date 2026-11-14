@@ -230,7 +230,7 @@ export async function computeSemanticReviewMatchBatch(userQuery, candidateFragra
 /**
  * Searches the catalog in Supabase Postgres using native pgvector cosine similarity
  */
-export async function searchFragrancesBySemanticEmbedding(queryText, limit = 12) {
+export async function searchFragrancesBySemanticEmbedding(queryText, limit = 20) {
   if (!queryText || typeof queryText !== 'string') return [];
 
   try {
@@ -240,7 +240,7 @@ export async function searchFragrancesBySemanticEmbedding(queryText, limit = 12)
 
     const { data, error } = await supabase.rpc('match_fragrances_semantic', {
       query_embedding: queryVector,
-      match_threshold: 0.35,
+      match_threshold: 0.20,
       match_count: limit
     });
 
