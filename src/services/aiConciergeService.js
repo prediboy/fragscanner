@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
-import { evaluateOlfactoryMatch, calculateSeasonalProfile } from '../utils/olfactoryAlgorithm.js';
+import { evaluateOlfactoryMatch, evaluateOlfactoryMatchWithVectors, calculateSeasonalProfile } from '../utils/olfactoryAlgorithm.js';
 
 const GEMINI_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
@@ -913,23 +913,37 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     }
   }
 
-  // 4. Multi-Factor Olfactory & Semantic Review Algorithm Scoring
+  // 4. Multi-Factor Olfactory & Semantic Review Algorithm Scoring (Gemini gemini-embedding-001)
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
   const queryContext = `${lastUserMsg} ${criteria.taste_summary || ''}`;
 
-  safeMatches.forEach(m => {
-    const analysis = evaluateOlfactoryMatch(m, queryContext, {
+  try {
+    const vectorEvaluations = await evaluateOlfactoryMatchWithVectors(safeMatches, queryContext, {
       semantic: 0.35,
       notes: 0.30,
       season: 0.20,
       accord: 0.15
     });
 
-    m.match_score = analysis.finalMatchPercentage;
-    m.season_match = analysis.season;
-    m.notes_match = analysis.notes;
-    m.semantic_match = analysis.semantic;
-  });
+    safeMatches.forEach((m, idx) => {
+      const analysis = vectorEvaluations[idx];
+      if (analysis) {
+        m.match_score = analysis.finalMatchPercentage;
+        m.season_match = analysis.season;
+        m.notes_match = analysis.notes;
+        m.semantic_match = analysis.semantic;
+      }
+    });
+  } catch (err) {
+    console.warn('[Concierge Scoring] Vector evaluation fallback:', err.message);
+    safeMatches.forEach(m => {
+      const analysis = evaluateOlfactoryMatch(m, queryContext);
+      m.match_score = analysis.finalMatchPercentage;
+      m.season_match = analysis.season;
+      m.notes_match = analysis.notes;
+      m.semantic_match = analysis.semantic;
+    });
+  }
 
   // Sort by algorithmic match score descending
   safeMatches.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));

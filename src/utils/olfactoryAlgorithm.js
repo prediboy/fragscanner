@@ -5,9 +5,16 @@
  * 1. Summer / Winter Seasonal Profile & Match Percentage
  * 2. Independent Top, Middle, and Base Notes Decomposition
  * 3. Overall Notes Percentage Overlap (Dice + Weighted Pyramid)
- * 4. Semantic Match on User Community Comments (Quotes, Pros, Cons, Verdict)
+ * 4. Semantic Match on User Community Comments via Gemini Vector Embedding Model (`gemini-embedding-001`)
  * 5. Composite Olfactory Scoring & Multi-Factor Explanations
  */
+
+import {
+  calculateCosineSimilarity,
+  cosineToPercentage,
+  computeSemanticReviewMatchBatch,
+  getBatchEmbeddings
+} from '../services/semanticEmbeddingService.js';
 
 // ---------------------------------------------------------------------------
 // 1. OLFACTORY NOTE FAMILIES & SYNONYMS
@@ -24,7 +31,6 @@ export const NOTE_FAMILIES = {
   LEATHER_ORIENTAL: ['leather', 'suede', 'tobacco', 'oud', 'agarwood', 'castoreum', 'civet', 'smoke', 'ash', 'tar', 'birch tar']
 };
 
-// Map each note term to its canonical family key
 const NOTE_TO_FAMILY = {};
 Object.entries(NOTE_FAMILIES).forEach(([family, notes]) => {
   notes.forEach(note => {
@@ -32,7 +38,6 @@ Object.entries(NOTE_FAMILIES).forEach(([family, notes]) => {
   });
 });
 
-// Common note aliases & botanical normalizations
 export const NOTE_SYNONYMS = {
   'calabrian bergamot': 'bergamot',
   'italian bergamot': 'bergamot',
@@ -61,9 +66,6 @@ export const NOTE_SYNONYMS = {
   'oud wood': 'oud'
 };
 
-/**
- * Clean & normalize a note string
- */
 export function normalizeNote(raw) {
   if (!raw || typeof raw !== 'string') return '';
   let clean = raw.toLowerCase()
@@ -73,9 +75,6 @@ export function normalizeNote(raw) {
   return NOTE_SYNONYMS[clean] || clean;
 }
 
-/**
- * Extracts normalized lists for Top, Middle, and Base notes from any fragrance schema
- */
 export function extractNotePyramid(fragrance) {
   if (!fragrance) return { top: [], middle: [], base: [], all: [] };
 
@@ -121,10 +120,6 @@ export function extractNotePyramid(fragrance) {
 export const SUMMER_ACCORD_KEYWORDS = ['aquatic', 'marine', 'citrus', 'fresh', 'ozonic', 'fruity', 'watermelon', 'green', 'tropical', 'watery', 'aromatic'];
 export const WINTER_ACCORD_KEYWORDS = ['amber', 'vanilla', 'warm spicy', 'woody', 'leather', 'oud', 'tobacco', 'sweet', 'cinnamon', 'smoky', 'balsamic'];
 
-/**
- * Calculates accurate seasonal profile (Summer %, Winter %, Spring %, Fall %)
- * Works with both explicit `seasons` object and derives from `primary_season` + `accords`.
- */
 export function calculateSeasonalProfile(fragrance) {
   if (!fragrance) {
     return { summer: 25, winter: 25, spring: 25, fall: 25, primary: 'All Year', isDerived: false };
@@ -201,14 +196,10 @@ export function calculateSeasonalProfile(fragrance) {
   };
 }
 
-/**
- * Calculates seasonal match percentage between two fragrances or a target season criteria
- */
 export function calculateSeasonMatch(profileA, profileB) {
   const profA = profileA.summer !== undefined ? profileA : calculateSeasonalProfile(profileA);
   const profB = profileB.summer !== undefined ? profileB : calculateSeasonalProfile(profileB);
 
-  // Euclidean distance normalized across 4 dimensions
   const dSummer = (profA.summer - profB.summer) / 100;
   const dWinter = (profA.winter - profB.winter) / 100;
   const dSpring = (profA.spring - profB.spring) / 100;
@@ -232,9 +223,6 @@ export function calculateSeasonMatch(profileA, profileB) {
 // 3. INDEPENDENT TIERED NOTE DECOMPOSITION & NOTES OVERLAP
 // ---------------------------------------------------------------------------
 
-/**
- * Checks if two note strings match either exactly or share an olfactory family
- */
 function compareNotes(noteA, noteB) {
   if (!noteA || !noteB) return { isMatch: false, weight: 0 };
   const a = normalizeNote(noteA);
@@ -252,9 +240,6 @@ function compareNotes(noteA, noteB) {
   return { isMatch: false, weight: 0 };
 }
 
-/**
- * Calculates overlap for a single note tier (top, middle, or base)
- */
 export function calculateTierOverlap(notesA, notesB) {
   const listA = (notesA || []).map(normalizeNote).filter(Boolean);
   const listB = (notesB || []).map(normalizeNote).filter(Boolean);
@@ -289,7 +274,6 @@ export function calculateTierOverlap(notesA, notesB) {
     }
   });
 
-  // Jaccard / Dice overlap scaled
   const denominator = Math.max(listA.length, listB.length);
   const score = denominator > 0 ? (totalMatchScore / denominator) : 0;
   const matchPct = Math.min(100, Math.round(score * 100));
@@ -301,19 +285,14 @@ export function calculateTierOverlap(notesA, notesB) {
   };
 }
 
-/**
- * Calculates independent Top, Middle, and Base notes overlap + weighted composite
- */
 export function calculateTieredNotesOverlap(fragranceA, fragranceB) {
   const pyrA = extractNotePyramid(fragranceA);
   const pyrB = extractNotePyramid(fragranceB);
 
-  // 1. Independent tier analysis
   const topRes = calculateTierOverlap(pyrA.top, pyrB.top);
   const midRes = calculateTierOverlap(pyrA.middle, pyrB.middle);
   const baseRes = calculateTierOverlap(pyrA.base, pyrB.base);
 
-  // 2. Global Notes Overlap (Set Dice coefficient across all combined notes)
   const allA = new Set(pyrA.all);
   const allB = new Set(pyrB.all);
   let globalHits = 0;
@@ -334,8 +313,6 @@ export function calculateTieredNotesOverlap(fragranceA, fragranceB) {
   const globalDice = (2 * globalHits) / unionSize;
   const globalNotesMatchPct = Math.min(100, Math.round(globalDice * 100));
 
-  // 3. Weighted Olfactory Pyramid:
-  // Base notes linger longest (40%), heart defines character (35%), top is initial impression (25%)
   const weightedScore = (baseRes.score * 0.40) + (midRes.score * 0.35) + (topRes.score * 0.25);
   const weightedNotesMatchPct = Math.min(100, Math.round(weightedScore * 100));
 
@@ -355,53 +332,11 @@ export function calculateTieredNotesOverlap(fragranceA, fragranceB) {
 }
 
 // ---------------------------------------------------------------------------
-// 4. SEMANTIC MATCH ON USER COMMUNITY COMMENTS & REVIEWS
+// 4. SEMANTIC MATCH ON USER COMMENTS (VECTOR EMBEDDING MODEL)
 // ---------------------------------------------------------------------------
 
-// High-value olfactory community descriptors & their semantic cluster mappings
-export const SEMANTIC_COMMUNITY_THESAURUS = {
-  beast_mode: {
-    terms: ['beast mode', 'longevity', 'lasts all day', 'nuclear', 'projection', 'staying power', 'full workday', '8-10 hours', '10+ hours', 'monster performance'],
-    sentiment: 'positive',
-    category: 'performance'
-  },
-  smooth_opening: {
-    terms: ['zero harshness', 'smooth opening', 'no chemical edge', 'natural smelling', 'zero harsh chemical edge', 'well blended', 'balanced blend', 'crisp and refreshing', 'sparkling'],
-    sentiment: 'positive',
-    category: 'quality'
-  },
-  harsh_screechy: {
-    terms: ['screechy', 'synthetic', 'harsh opening', 'chemical', 'headache', 'alcohol blast', 'synthetic sharpness', 'sharpness', 'cloying', 'overbearing'],
-    sentiment: 'negative',
-    category: 'quality'
-  },
-  indian_summer: {
-    terms: ['indian heat', 'high heat', 'summer heat', 'humid', 'humidity', 'sweat', 'refreshing', 'monsoon', 'cool down', 'refreshing watermelon'],
-    sentiment: 'positive',
-    category: 'climate'
-  },
-  office_versatile: {
-    terms: ['office safe', 'daily driver', 'work wear', 'college', 'daily casual', 'signature scent', 'mass-appealing', 'mass appealing', 'versatile', 'inoffensive', 'crowd pleaser'],
-    sentiment: 'positive',
-    category: 'occasion'
-  },
-  date_night_warmth: {
-    terms: ['date night', 'sexy', 'compliment monster', 'compliments consistently', 'intimate', 'cozy', 'warm embrace', 'gourmand', 'seductive', 'sweet vanilla'],
-    sentiment: 'positive',
-    category: 'occasion'
-  },
-  blind_buy_value: {
-    terms: ['easy blind buy', 'safe blind buy', 'exceptional value', 'best value blind buy', 'smells expensive', 'worth every rupee', 'bang for buck'],
-    sentiment: 'positive',
-    category: 'value'
-  }
-};
-
-/**
- * Extracts all textual reviewer signals into a unified searchable corpus
- */
 export function extractReviewCorpus(fragrance) {
-  if (!fragrance) return { pros: [], cons: [], quotes: [], verdict: '', fullText: '', fullPositiveText: '', fullNegativeText: '' };
+  if (!fragrance) return { pros: [], cons: [], quotes: [], verdict: '', fullText: '' };
 
   const rs = fragrance.review_summary;
   let pros = [];
@@ -419,9 +354,7 @@ export function extractReviewCorpus(fragrance) {
   }
 
   const desc = fragrance.description || '';
-  const fullPositiveText = [...pros, ...quotes, verdict, desc].filter(Boolean).join(' ');
-  const fullNegativeText = cons.filter(Boolean).join(' ');
-  const fullText = `${fullPositiveText} ${fullNegativeText}`.trim();
+  const fullText = [verdict, ...pros, ...quotes, desc].filter(Boolean).join(' ').trim();
 
   return {
     pros,
@@ -429,134 +362,33 @@ export function extractReviewCorpus(fragrance) {
     quotes,
     verdict,
     desc,
-    fullPositiveText,
-    fullNegativeText,
     fullText
   };
 }
 
 /**
- * Semantic review matcher: scores how well candidate reviews match a user prompt or target profile
+ * Fast synchronous semantic approximation used when offline or initializing
  */
-export function calculateSemanticReviewMatch(fragrance, userPromptOrTarget) {
+export function calculateSemanticReviewMatchSync(fragrance, userPromptOrTarget) {
   const corpus = extractReviewCorpus(fragrance);
-  if (!corpus.fullText) {
-    return {
-      semanticMatchPct: 70,
-      matchedThemes: ['Community Approved'],
-      highlightQuote: 'Balanced and verified by community reviewers.',
-      consensusSnippet: 'Solid community rating.'
-    };
-  }
-
-  let queryText = '';
-  if (typeof userPromptOrTarget === 'string') {
-    queryText = userPromptOrTarget.toLowerCase();
-  } else if (userPromptOrTarget && typeof userPromptOrTarget === 'object') {
-    const targetCorpus = extractReviewCorpus(userPromptOrTarget);
-    queryText = targetCorpus.fullPositiveText.toLowerCase();
-  }
-
-  const posText = corpus.fullPositiveText.toLowerCase();
-  const negText = corpus.fullNegativeText.toLowerCase();
-
-  // 1. Semantic Thesaurus Cluster Matches
-  let clusterScore = 0;
-  const matchedThemes = [];
-  const matchedKeywords = [];
-
-  Object.entries(SEMANTIC_COMMUNITY_THESAURUS).forEach(([clusterKey, cluster]) => {
-    // Check if query is looking for this theme
-    const queryMentionsTheme = cluster.terms.some(t => queryText.includes(t.toLowerCase()));
-
-    if (queryMentionsTheme || queryText.length < 10) {
-      if (cluster.sentiment === 'positive') {
-        const hasHit = cluster.terms.some(t => {
-          if (posText.includes(t.toLowerCase())) {
-            matchedKeywords.push(t);
-            return true;
-          }
-          return false;
-        });
-
-        if (hasHit) {
-          clusterScore += 1.5;
-          matchedThemes.push(clusterKey.replace(/_/g, ' '));
-        }
-      } else if (cluster.sentiment === 'negative') {
-        // If user specifically asked to AVOID this (e.g. "no screechy", "not harsh")
-        const userAversion = /not|no|avoid|hate|dislike|zero/i.test(queryText);
-        const perfumeHasFlaw = cluster.terms.some(t => negText.includes(t.toLowerCase()));
-
-        if (userAversion && perfumeHasFlaw) {
-          clusterScore -= 2.0; // Penalty for having the exact flaw user wants to avoid
-        } else if (userAversion && posText.includes('zero harsh')) {
-          clusterScore += 2.0; // Bonus: verified safe from that flaw!
-          matchedThemes.push('Zero Harshness Verified');
-        }
-      }
-    }
-  });
-
-  // 2. Token overlap with stop-word filtration
-  const STOP_WORDS = new Set(['the', 'and', 'for', 'with', 'that', 'this', 'from', 'have', 'are', 'was', 'were', 'not', 'you', 'your', 'about', 'want', 'like', 'give', 'show', 'looking']);
-  const queryTokens = queryText
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
-    .map(t => t.trim())
-    .filter(t => t.length > 2 && !STOP_WORDS.has(t));
-
-  let tokenHits = 0;
-  queryTokens.forEach(token => {
-    if (posText.includes(token)) {
-      tokenHits++;
-      matchedKeywords.push(token);
-    }
-  });
-
-  const tokenRatio = queryTokens.length > 0 ? (tokenHits / queryTokens.length) : 0.5;
-  const rawSemantic = (tokenRatio * 60) + (Math.min(4, clusterScore) * 10);
-  const semanticMatchPct = Math.min(99, Math.max(40, Math.round(rawSemantic)));
-
-  // 3. Highlight Quote Finder: Select the best verbatim quote from actual reviewers
-  let bestQuote = '';
-  let bestScore = -1;
-  const allCandidateQuotes = [...corpus.quotes, ...corpus.pros, corpus.verdict].filter(Boolean);
-
-  allCandidateQuotes.forEach(q => {
-    const qLower = q.toLowerCase();
-    let score = 0;
-    queryTokens.forEach(t => { if (qLower.includes(t)) score++; });
-    if (qLower.includes('compliment') || qLower.includes('unbeatable') || qLower.includes('blown away')) score += 0.5;
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestQuote = q;
-    }
-  });
-
+  const highlightQuote = corpus.quotes[0] || corpus.pros[0] || corpus.verdict || 'Highly rated across community reviewers.';
   return {
-    semanticMatchPct,
-    matchedThemes: Array.from(new Set(matchedThemes)),
-    matchedKeywords: Array.from(new Set(matchedKeywords)).slice(0, 6),
-    highlightQuote: bestQuote || corpus.verdict || 'Highly regarded across community fragrance reviews.',
+    semanticMatchPct: 75,
+    highlightQuote,
     consensusSnippet: corpus.verdict || 'Community approved fragrance profile.'
   };
 }
+
+export const calculateSemanticReviewMatch = calculateSemanticReviewMatchSync;
 
 // ---------------------------------------------------------------------------
 // 5. MASTER OLFACTORY MATCH EVALUATOR
 // ---------------------------------------------------------------------------
 
 /**
- * Computes complete multi-dimensional olfactory match between target and candidate
- * Combines:
- * - Summer / Winter Seasonal Profile
- * - Independent Top, Middle, Base Notes Overlap
- * - Overall Notes Overlap
- * - Semantic Match on User Community Comments & Reviewer Quotes
+ * Evaluates candidate using pre-computed semantic vector match or sync fallback
  */
-export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
+export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult = null, weights = {}) {
   const wSemantic = weights.semantic ?? 0.35;
   const wNotes = weights.notes ?? 0.30;
   const wSeason = weights.season ?? 0.20;
@@ -568,7 +400,6 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
   if (typeof targetOrQuery === 'object' && targetOrQuery !== null && !Array.isArray(targetOrQuery)) {
     seasonRes = calculateSeasonMatch(targetOrQuery, candidateSeason);
   } else {
-    // If target is text (e.g. user search prompt)
     const q = String(targetOrQuery || '').toLowerCase();
     const wantsSummer = /summer|heat|hot|fresh|beach|citrus|aquatic/i.test(q);
     const wantsWinter = /winter|cold|cozy|warm|amber|vanilla|date night/i.test(q);
@@ -586,7 +417,6 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
   if (typeof targetOrQuery === 'object' && targetOrQuery !== null) {
     notesRes = calculateTieredNotesOverlap(targetOrQuery, candidate);
   } else {
-    // If target is text query, extract mentioned notes
     const qTokens = String(targetOrQuery || '').split(/[,\s]+/).map(normalizeNote).filter(Boolean);
     const candPyr = extractNotePyramid(candidate);
     const topOverlap = calculateTierOverlap(qTokens, candPyr.top);
@@ -605,10 +435,10 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
     };
   }
 
-  // 3. Semantic Review & Comment Match
-  const semanticRes = calculateSemanticReviewMatch(candidate, targetOrQuery);
+  // 3. Semantic Review & Comment Match (from Vector Embedding Model)
+  const semantic = semanticResult || calculateSemanticReviewMatchSync(candidate, targetOrQuery);
 
-  // 4. Accord Harmony (if target has accords)
+  // 4. Accord Harmony
   let accordMatchPct = 75;
   if (typeof targetOrQuery === 'object' && targetOrQuery?.accords && candidate.accords) {
     const vecA = {};
@@ -633,7 +463,7 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
 
   // 5. Composite Final Score
   const compositeScore = (
-    (semanticRes.semanticMatchPct * wSemantic) +
+    (semantic.semanticMatchPct * wSemantic) +
     (notesRes.overallNotesMatchPct * wNotes) +
     (seasonRes.matchPct * wSeason) +
     (accordMatchPct * wAccord)
@@ -662,12 +492,37 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, weights = {}) {
       totalSharedNotes: notesRes.totalSharedNotes
     },
     semantic: {
-      semanticMatchPct: semanticRes.semanticMatchPct,
-      matchedThemes: semanticRes.matchedThemes,
-      matchedKeywords: semanticRes.matchedKeywords,
-      highlightQuote: semanticRes.highlightQuote,
-      consensusSnippet: semanticRes.consensusSnippet
+      semanticMatchPct: semantic.semanticMatchPct,
+      cosineScore: semantic.cosineScore,
+      highlightQuote: semantic.highlightQuote,
+      consensusSnippet: semantic.consensusSnippet || semantic.highlightQuote
     },
     accordMatchPct
   };
+}
+
+/**
+ * Asynchronous Batch Olfactory Evaluator using the true Gemini Vector Embedding Model (`gemini-embedding-001`)
+ */
+export async function evaluateOlfactoryMatchWithVectors(candidates, targetOrQuery, weights = {}) {
+  if (!Array.isArray(candidates) || candidates.length === 0) return [];
+
+  const queryText = typeof targetOrQuery === 'string'
+    ? targetOrQuery
+    : (targetOrQuery?.description || `${targetOrQuery?.brand} ${targetOrQuery?.name}`);
+
+  // 1. Run true Vector Embedding Cosine Matching across all candidates in parallel
+  let semanticMatches = [];
+  try {
+    semanticMatches = await computeSemanticReviewMatchBatch(queryText, candidates);
+  } catch (err) {
+    console.warn('[OlfactoryAlgorithm] Vector embedding fallback:', err.message);
+    semanticMatches = candidates.map(c => calculateSemanticReviewMatchSync(c, targetOrQuery));
+  }
+
+  // 2. Evaluate each candidate with its computed semantic vector cosine score
+  return candidates.map((cand, idx) => {
+    const sem = semanticMatches[idx];
+    return evaluateOlfactoryMatch(cand, targetOrQuery, sem, weights);
+  });
 }

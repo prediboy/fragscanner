@@ -13,9 +13,32 @@ export default async function handler(req) {
   }
 
   try {
-    const { systemInstruction, type } = await req.json();
+    const body = await req.json();
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${key}`, {
+    // 1. Semantic Vector Embedding Endpoint (Gemini gemini-embedding-001)
+    if (body.type === 'embed') {
+      const texts = Array.isArray(body.texts) ? body.texts : [body.text || ''];
+      const requests = texts.map(t => ({
+        model: 'models/gemini-embedding-001',
+        content: { parts: [{ text: String(t).slice(0, 1500) }] }
+      }));
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requests })
+      });
+
+      const data = await res.json();
+      return new Response(JSON.stringify(data), {
+        status: res.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // 2. Chat / Reasoning Generation Endpoint (Gemini Flash)
+    const { systemInstruction } = body;
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
