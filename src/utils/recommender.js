@@ -73,8 +73,12 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
   allFragrances.forEach(candidate => {
     if (candidate.id === target.id) return;
 
-    // 1. Direct Flankers (same brand & collection)
-    if (candidate.brand === target.brand && candidate.collection && candidate.collection === target.collection) {
+    // 1. Direct Flankers (same brand & series/collection, or explicit flankers link)
+    const isFlanker = (
+      (Array.isArray(target.flankers) && target.flankers.includes(candidate.id)) ||
+      (candidate.brand === target.brand && candidate.collection && target.collection && candidate.collection === target.collection)
+    );
+    if (isFlanker) {
       flankers.push(candidate);
     }
 
