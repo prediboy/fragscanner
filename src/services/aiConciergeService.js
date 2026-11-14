@@ -821,16 +821,15 @@ Return strictly raw JSON:
 
 function generateFallbackWhy(m, criteria, deltaInfo) {
   if (m.palette_role) {
-    const quote = m.review_summary?.top_reviewer_quotes?.[0] || m.review_summary?.community_verdict;
-    return `${m.palette_role}: Highly praised by community wearers (${quote ? `"${quote.slice(0, 85)}..."` : 'superb mass appeal'}). Eliminates harsh sharpness with verified performance via ${m.best_seller}.`;
+    return `${m.palette_role}: A standout recommendation tailored to your taste profile, in stock via ${m.best_seller || 'verified sellers'}.`;
   }
   if (criteria?.intent === 'brand_catalog') {
-    return `One of ${m.brand}'s standout creations in community stock with verified ${m.rating_value ? `★ ${m.rating_value}` : 'high'} rating.`;
+    return `One of ${m.brand}'s standout creations in community stock with a verified ${m.rating_value ? `★ ${m.rating_value}` : 'high'} rating.`;
   }
   if (m.dna_inspiration && !m.dna_inspiration.toLowerCase().includes('original creation')) {
-    return `Captures the ${m.dna_type || 'harmonious'} olfactory structure inspired by ${m.dna_inspiration}. Verified community price at ₹${m.community_price || m.lowest_decant_price}.`;
+    return `Captures the smooth ${m.dna_type || 'balanced'} olfactory profile inspired by ${m.dna_inspiration}. In stock via ${m.best_seller || 'verified sellers'}.`;
   }
-  return `Matches your requested notes profile with verified community performance via ${m.best_seller || 'verified sellers'}.`;
+  return `Matches your preferred scent profile and accords, available via ${m.best_seller || 'verified sellers'}.`;
 }
 
 /**
