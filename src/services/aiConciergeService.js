@@ -13,28 +13,35 @@ function extractDeterministicDislikes(chatHistory) {
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
     const rawContent = (m.content || '').toLowerCase();
-    const text = rawContent.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
+    const clean = rawContent.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
 
-    // 1. "hate / hated / dislike X and Y"
-    const hateMatches = text.matchAll(/(?:hate|hated|dislike|disliked|avoid|done with)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|$)/gi);
-    for (const match of hateMatches) {
-      const raw = match[1].trim();
-      const parts = raw.split(/\band\b|,/);
+    // 1. didn't like / don't like / hate / dislike / not a fan of / avoid
+    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi;
+    for (const match of clean.matchAll(re1)) {
+      const parts = match[1].split(/\band\b|,/);
       for (const p of parts) {
         let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
-        term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done with)\s+/i, '').trim();
+        term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done\s+with|didn'?t\s+like|don'?t\s+like)\s+/i, '').trim();
         if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
           dislikes.add(term);
         }
       }
     }
 
-    // 2. "tried / wore / bought X ... hated it"
-    const triedMatches = text.matchAll(/(?:tried|wore|bought|tested)\s+([a-z0-9\s]{3,35}?)(?:,|\.|\s+based on|\s+and\s+|\s+but\s+).*?(?:hated|disliked|didn't like)/gi);
-    for (const match of triedMatches) {
+    // 2. tried / wore / tested X and didn't like / hated / wasn't good / missed the mark
+    const re2 = /(?:tried|wore|bought|tested)\s+([a-z0-9\s]{3,35}?)(?:,|\.|\s+and\s+|\s+but\s+).*?(?:didn'?t\s+like|hated|disliked|not\s+good|missed\s+the\s+mark|didn'?t\s+work|disappointing)/gi;
+    for (const match of clean.matchAll(re2)) {
       let term = match[1].trim().replace(/^(?:the|a|an)\s+/i, '');
-      term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done with)\s+/i, '').trim();
-      if (term && term !== 'it' && term !== 'them') {
+      if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
+        dislikes.add(term);
+      }
+    }
+
+    // 3. X missed the mark / X was disappointing / X was too sweet/heavy
+    const re3 = /([a-z0-9\s]{3,35}?)\s+(?:missed\s+the\s+mark|didn'?t\s+work|was\s+disappointing|was\s+too\s+(?:sweet|harsh|sharp|heavy))/gi;
+    for (const match of clean.matchAll(re3)) {
+      let term = match[1].trim().replace(/^(?:the|a|an|but|and)\s+/i, '');
+      if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
         dislikes.add(term);
       }
     }
@@ -923,7 +930,7 @@ function generateFallbackWhy(m, criteria, deltaInfo) {
  * Supplies the candidate pool to Gemini to evaluate candidates against the cumulative conversation,
  * remove violating profiles, select the Top 10 best perfumes, and write authentic sommelier whys.
  */
-async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaInfo) {
+async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaInfo, allDislikes = new Set()) {
   if (!Array.isArray(candidates) || candidates.length === 0) return [];
 
   // Sort by algorithmic score to present the most promising 20 candidates to Gemini
@@ -958,6 +965,7 @@ Cumulative Taste Profile: "${criteria.taste_summary}"
 Target Notes: ${JSON.stringify(criteria.target_notes || [])}
 Target Accords: ${JSON.stringify(criteria.target_accords || [])}
 Excluded Accords/Notes: ${JSON.stringify([...(criteria.exclude_accords || []), ...(criteria.exclude_notes || [])])}
+Forbidden/Disliked Fragrances: ${JSON.stringify(Array.from(allDislikes || []))}
 ${deltaInfo?.summary ? `\nOLFACTORY CONTRAST INSIGHT:\n${deltaInfo.summary}` : ''}
 
 Here are ${candidateSummaries.length} available candidate perfumes in stock from verified community sellers:
@@ -965,8 +973,9 @@ ${JSON.stringify(candidateSummaries, null, 2)}
 
 TASK:
 1. Review all candidates against the user's cumulative constraints.
-2. Select and rank the TOP 10 best perfumes that strictly fulfill all user requirements (e.g. if user said "remove sweet", reject any sweet/vanilla/gourmand scent; if user wants spicy mint and lavender for summer, prioritize scents that hit those notes without sweetness).
-3. For each selected perfume, write a passionate, connoisseur 1-2 sentence "why_this_fits" sommelier explanation explaining specifically how it captures the user's refined preferences.
+2. STRICT DISQUALIFICATION: Never, under any circumstances, select or recommend a perfume the user disliked, tried and failed, found disappointing, or said missed the mark (including ${Array.from(allDislikes || []).join(', ')}). Reject them immediately.
+3. Select and rank the TOP 10 best perfumes that strictly fulfill all user requirements (e.g. if user said "remove sweet", reject any sweet/vanilla/gourmand scent; if user wants spicy mint and lavender for summer, prioritize scents that hit those notes without sweetness).
+4. For each selected perfume, write a passionate, connoisseur 1-2 sentence "why_this_fits" sommelier explanation explaining specifically how it captures the user's refined preferences.
 
 Return strictly raw JSON with this schema:
 {
@@ -1053,6 +1062,19 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
   const deterministicLiked = extractDeterministicLiked(chatHistory);
 
+  // Construct comprehensive disliked set from deterministic matches, contrast_disliked, and LLM exclusions
+  const allDislikes = new Set([...deterministicDislikes]);
+  if (criteria.contrast_disliked) {
+    allDislikes.add(criteria.contrast_disliked.toLowerCase().trim());
+  }
+  for (const ex of (criteria.exclude_perfumes || [])) {
+    allDislikes.add(ex.toLowerCase().trim());
+  }
+  for (const ex of (criteria.exclude_terms || [])) {
+    const clean = ex.replace(/%/g, '').toLowerCase().trim();
+    if (clean) allDislikes.add(clean);
+  }
+
   // 1. Compute Olfactory Delta if contrast statement was detected
   let deltaInfo = null;
   if (criteria.contrast_liked && criteria.contrast_disliked) {
@@ -1076,35 +1098,44 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       const p = (phrase || '').replace(/%/g, '').toLowerCase().trim();
       if (!p || p.length < 3) return false;
       if (target.includes(p)) return true;
-      const words = p.split(/\s+/).filter(w => w.length > 2 && !['the', 'and', 'for', 'perfume', 'perfumes'].includes(w));
-      if (words.length > 1 && words.every(w => target.includes(w))) return true;
+      const targetClean = target.replace(/[^a-z0-9]/g, ' ');
+      const pClean = p.replace(/[^a-z0-9]/g, ' ');
+      if (targetClean.includes(pClean)) return true;
+
+      const words = pClean.split(/\s+/).filter(w => w.length > 2 && !['the', 'and', 'for', 'perfume', 'perfumes', 'al'].includes(w));
+      if (words.length > 0) {
+        if (words.some(w => w.length >= 5 && targetClean.includes(w))) return true;
+        if (words.length > 1 && words.every(w => targetClean.includes(w))) return true;
+      }
       return false;
     };
 
-    // 1. Check deterministic dislikes extracted directly from chat dialogue
-    for (const disliked of deterministicDislikes) {
+    // 1. Strict Disqualification: Disliked / Tried & Failed / Hated perfumes
+    for (const disliked of allDislikes) {
       if (isMatchDisliked(fullText, disliked)) return false;
     }
 
-    // 2. Already Loved/Owned Exclusion
+    // 2. Disliked contrast delta perfume B
+    if (deltaInfo?.perfumeB && (m.id === deltaInfo.perfumeB.id || isMatchDisliked(fullText, deltaInfo.perfumeB.name))) {
+      return false;
+    }
+
+    // 3. Already Loved/Owned Exclusion
     if (criteria.intent !== 'direct_search') {
       for (const likedName of deterministicLiked) {
         if (isMatchDisliked(fullText, likedName)) return false;
       }
+      if (deltaInfo?.perfumeA && (m.id === deltaInfo.perfumeA.id || isMatchDisliked(fullText, deltaInfo.perfumeA.name))) {
+        return false;
+      }
     }
 
-    // 3. LLM-extracted fragrance exclusions
-    for (const ex of (criteria.exclude_perfumes || [])) {
-      if (isMatchDisliked(fullText, ex)) return false;
-    }
-    for (const ex of (criteria.exclude_terms || [])) {
-      if (isMatchDisliked(fullText, ex)) return false;
-    }
+    // 4. Excluded Inspirations Archetypes
     for (const ex of (criteria.exclude_inspirations || [])) {
       if (isMatchDisliked(fullText, ex)) return false;
     }
 
-    // 4. Strict Accord Exclusions (e.g. sweet, vanilla, gourmand)
+    // 5. Strict Accord Exclusions (e.g. sweet, vanilla, gourmand)
     const accords = m.accords || [];
     for (const forbidden of (criteria.exclude_accords || [])) {
       const fClean = String(forbidden || '').toLowerCase().trim();
@@ -1220,7 +1251,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   }
 
   // 5. Agentic Sommelier Selection & Curated Whys
-  const matchesWithWhys = await curateMatchesWithGemini(chatHistory, safeMatches, criteria, deltaInfo);
+  const matchesWithWhys = await curateMatchesWithGemini(chatHistory, safeMatches, criteria, deltaInfo, allDislikes);
 
   const assistantResponse = {
     role: 'assistant',
