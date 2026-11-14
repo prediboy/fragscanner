@@ -1,9 +1,14 @@
 /**
  * generate_review_embeddings.cjs
  * 
- * Precomputes 3,072-dimensional dense vector embeddings for all fragrances
+ * Precomputes 3,072-dimensional dense vector embeddings for fragrances
  * using Google Gemini's `gemini-embedding-001` model and stores them directly into
  * `public.fragrances.review_embedding` in Supabase Postgres.
+ * 
+ * PRIORITIZATION PIPELINE:
+ * Phase 1: Middle Eastern Full Bottles (Lattafa, Afnan, Armaf, French Avenue, etc. with price > 500 or in stock)
+ * Phase 2: All remaining Middle Eastern fragrances
+ * Phase 3: All remaining fragrances across the catalog
  */
 
 const fs = require('fs');
@@ -20,8 +25,19 @@ const sb = createClient(envVars.VITE_SUPABASE_URL, envVars.VITE_SUPABASE_ANON_KE
 const GEMINI_KEY = envVars.VITE_GEMINI_API_KEY || envVars.GEMINI_API_KEY;
 const EMBED_MODEL = 'gemini-embedding-001';
 
-const BATCH_SIZE = 25; // 25 texts per batch request
-const DELAY_MS = 1200; // 1.2s buffer to stay comfortably within Gemini RPM quota
+const BATCH_SIZE = 10; // 10 texts per batch request
+const DELAY_MS = 4200; // 4.2s delay keeps rate strictly under free-tier 15 RPM quota (140 perfumes/min)
+
+const ME_BRANDS = [
+  'Lattafa', 'Afnan', 'Armaf', 'Rasasi', 'Ahmed Al Maghribi', 'Ajmal', 
+  'Paris Corner', 'Fragrance World', 'Arabiyat Prestige', 'Albait Aldimashqi',
+  'Al Haramain', 'Swiss Arabian', 'Rayhaan', 'French Avenue', 'Maison Alhambra',
+  'Reef', 'Mykonos', 'Khadlaj', 'Ibraq', 'Dumont', 'Zimaya', 'Orientica',
+  'Arabiyat', 'Assaf', 'Al Wataniah', 'Anfar', 'Ard Al Zaafaran', 'Al Majed Oud',
+  'Alezz Oud', 'Al Rehab', 'Arabian Oud', 'Naseem', 'Ibrahim Al Qureshi',
+  'Ibraheem Al Qurashi', 'Rue Broca', 'Riiffs', 'Emper', 'Mousuf', 'Gissah',
+  'Laverne', 'Maison Asrar', 'Nusuk'
+];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,7 +58,7 @@ function constructReviewText(fragrance) {
   const desc = fragrance.description || '';
   const brand = fragrance.brand || '';
   const name = fragrance.name || '';
-  const accords = (fragrance.accords || []).map(a => a.name).join(', ');
+  const accords = (fragrance.accords || []).map(a => a.name || a).join(', ');
 
   const full = `${brand} ${name}. ${text || desc} Accords: ${accords}`.trim();
   return full.slice(0, 1800);
@@ -63,39 +79,32 @@ async function fetchBatchEmbeddings(texts) {
 
   if (!res.ok) {
     const errText = await res.text();
-    throw new Error(`Embedding API error ${res.status}: ${errText.slice(0, 200)}`);
+    throw new Error(`Embedding API error ${res.status}: ${errText.slice(0, 250)}`);
   }
 
   const data = await res.json();
   return data.embeddings.map(e => e.values);
 }
 
-async function run() {
-  console.log('=== FRAGRANCE REVIEW VECTOR EMBEDDING PIPELINE ===');
-  console.log('Model: models/gemini-embedding-001 (3,072 dimensions)');
-  console.log('Destination: Supabase public.fragrances.review_embedding');
+async function processQueue(phaseName, queryBuilder) {
+  console.log(`\n======================================================`);
+  console.log(`STARTING: ${phaseName}`);
+  console.log(`======================================================`);
 
-  const { count: totalCount } = await sb.from('fragrances').select('id', { count: 'exact', head: true });
-  const { count: doneCount } = await sb.from('fragrances').select('id', { count: 'exact', head: true }).not('review_embedding', 'is', null);
-
-  console.log(`Total catalog: ${totalCount} | Already embedded: ${doneCount} | Remaining: ${totalCount - doneCount}\n`);
-
-  let processed = doneCount;
+  let countDone = 0;
 
   while (true) {
-    // Fetch next batch of perfumes with null review_embedding
-    const { data: batch, error } = await sb.from('fragrances')
-      .select('id, name, brand, review_summary, description, accords')
-      .is('review_embedding', null)
-      .limit(BATCH_SIZE);
+    // Always fetch items currently lacking review_embedding
+    let q = queryBuilder();
+    const { data: batch, error } = await q.limit(BATCH_SIZE);
 
     if (error) {
-      console.error('Database fetch error:', error.message);
+      console.error(`Database fetch error in ${phaseName}:`, error.message);
       break;
     }
 
     if (!batch || batch.length === 0) {
-      console.log('\nAll fragrances in catalog have been successfully embedded!');
+      console.log(`\nCOMPLETED ${phaseName}! (Processed in this phase: ${countDone})`);
       break;
     }
 
@@ -104,29 +113,65 @@ async function run() {
     try {
       const vectors = await fetchBatchEmbeddings(texts);
 
-      // Save each embedding back to Supabase
-      for (let i = 0; i < batch.length; i++) {
-        const vec = vectors[i];
-        if (vec && Array.isArray(vec)) {
-          await sb.from('fragrances')
+      // Concurrent update of the 10 rows
+      await Promise.all(batch.map((item, idx) => {
+        const vec = vectors[idx];
+        if (vec && Array.isArray(vec) && vec.length === 3072) {
+          return sb.from('fragrances')
             .update({ review_embedding: vec })
-            .eq('id', batch[i].id);
+            .eq('id', item.id);
         }
-      }
+        return Promise.resolve();
+      }));
 
-      processed += batch.length;
-      const pct = ((processed / totalCount) * 100).toFixed(1);
-      process.stdout.write(`\rProgress: [${processed} / ${totalCount}] (${pct}%) - Last: ${batch[batch.length - 1].name.slice(0, 25)}`);
+      countDone += batch.length;
+      const lastItem = batch[batch.length - 1];
+      console.log(`[${phaseName}] +${batch.length} done (Phase Total: ${countDone}) -> Last: ${lastItem.brand} - ${lastItem.name}`);
 
       await sleep(DELAY_MS);
     } catch (err) {
-      console.error('\nBatch notice:', err.message.slice(0, 100));
-      console.log('Backing off 8 seconds for Gemini quota window...');
-      await sleep(8000);
+      console.error(`\n[Notice] API rate limit or error: ${err.message.slice(0, 150)}`);
+      console.log('Backing off 10s for quota window recovery...');
+      await sleep(10000);
     }
   }
+}
 
-  console.log('\nEmbedding pipeline complete.');
+async function run() {
+  console.log('=== VECTOR EMBEDDING GENERATOR ===');
+  console.log(`Model: models/${EMBED_MODEL} (3,072 dimensions)`);
+  console.log(`Key: ${GEMINI_KEY.slice(0, 8)}...${GEMINI_KEY.slice(-6)}`);
+
+  // Phase 1: Middle Eastern Full Bottles
+  await processQueue(
+    'Phase 1: Middle Eastern Full Bottles (Stock/Price > 500)',
+    () => sb.from('fragrances')
+      .select('id, name, brand, review_summary, description, accords')
+      .in('brand', ME_BRANDS)
+      .is('review_embedding', null)
+      .or('in_seller_stock.eq.true,community_price.gt.500')
+  );
+
+  // Phase 2: All other Middle Eastern Fragrances (decants or unpriced)
+  await processQueue(
+    'Phase 2: Remaining Middle Eastern Catalog',
+    () => sb.from('fragrances')
+      .select('id, name, brand, review_summary, description, accords')
+      .in('brand', ME_BRANDS)
+      .is('review_embedding', null)
+  );
+
+  // Phase 3: Designer & Niche Catalog
+  await processQueue(
+    'Phase 3: Designer & Niche Full Catalog',
+    () => sb.from('fragrances')
+      .select('id, name, brand, review_summary, description, accords')
+      .is('review_embedding', null)
+  );
+
+  console.log('\n======================================================');
+  console.log('ALL PHASES COMPLETE: Full catalog vector embeddings populated.');
+  console.log('======================================================');
 }
 
 run();

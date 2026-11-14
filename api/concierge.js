@@ -2,14 +2,58 @@ export const config = {
   runtime: 'edge',
 };
 
+// Gather all available Gemini API keys for seamless automatic failover
+function getApiKeys() {
+  const candidateKeys = [
+    process.env.GEMINI_API_KEY,
+    process.env.GEMINI_KEY2,
+    process.env.GEMINI_API_KEY_2,
+    process.env.VITE_GEMINI_API_KEY,
+    process.env.VITE_GEMINI_KEY2
+  ];
+  return [...new Set(candidateKeys.filter(Boolean))];
+}
+
+async function fetchWithKeyFailover(buildUrl, buildOptions) {
+  const keys = getApiKeys();
+  if (keys.length === 0) {
+    throw new Error('No GEMINI_API_KEY configured');
+  }
+
+  let lastResponse = null;
+  let lastError = null;
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    try {
+      const url = buildUrl(key);
+      const res = await fetch(url, buildOptions());
+      if (res.ok) {
+        return res;
+      }
+
+      // If rate limited (429) or forbidden (403), failover to next key immediately
+      if (res.status === 429 || res.status === 403 || res.status >= 500) {
+        console.warn(`[Concierge] Gemini API key index ${i} returned status ${res.status}. Attempting next available key...`);
+        lastResponse = res;
+        continue;
+      }
+
+      // Other 4xx client errors (e.g. 400 Bad Request) - return directly
+      return res;
+    } catch (err) {
+      lastError = err;
+      console.warn(`[Concierge] Gemini network error on key index ${i}:`, err.message);
+    }
+  }
+
+  if (lastResponse) return lastResponse;
+  throw lastError || new Error('All Gemini API keys failed');
+}
+
 export default async function handler(req) {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
-
-  const key = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-  if (!key) {
-    return new Response(JSON.stringify({ error: 'No GEMINI_API_KEY configured' }), { status: 500 });
   }
 
   try {
@@ -23,11 +67,14 @@ export default async function handler(req) {
         content: { parts: [{ text: String(t).slice(0, 1500) }] }
       }));
 
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents?key=${key}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requests })
-      });
+      const res = await fetchWithKeyFailover(
+        (key) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents?key=${key}`,
+        () => ({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ requests })
+        })
+      );
 
       const data = await res.json();
       return new Response(JSON.stringify(data), {
@@ -38,14 +85,17 @@ export default async function handler(req) {
 
     // 2. Chat / Reasoning Generation Endpoint (Gemini Flash)
     const { systemInstruction } = body;
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: systemInstruction }] }],
-        generationConfig: { responseMimeType: 'application/json' }
+    const res = await fetchWithKeyFailover(
+      (key) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
+      () => ({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: systemInstruction }] }],
+          generationConfig: { responseMimeType: 'application/json' }
+        })
       })
-    });
+    );
 
     const data = await res.json();
     return new Response(JSON.stringify(data), {

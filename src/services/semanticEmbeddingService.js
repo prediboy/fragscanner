@@ -11,9 +11,15 @@
 
 import { supabase } from '../lib/supabaseTelemetry.js';
 
-function getGeminiKey() {
-  return (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ||
-         (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
+function getGeminiKeys() {
+  const keys = [
+    typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GEMINI_API_KEY : '',
+    typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GEMINI_KEY2 : '',
+    typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : '',
+    typeof process !== 'undefined' ? process.env?.GEMINI_KEY2 : '',
+    typeof process !== 'undefined' ? process.env?.VITE_GEMINI_API_KEY : ''
+  ];
+  return [...new Set(keys.filter(Boolean))];
 }
 const EMBED_MODEL = 'gemini-embedding-001';
 
@@ -125,9 +131,9 @@ export async function getBatchEmbeddings(texts) {
     }
   } catch {}
 
-  // 2. Direct client-side Gemini embedding call
-  const geminiKey = getGeminiKey();
-  if (geminiKey) {
+  // 2. Direct client-side Gemini embedding call with multi-key failover
+  const geminiKeys = getGeminiKeys();
+  for (const geminiKey of geminiKeys) {
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:batchEmbedContents?key=${geminiKey}`;
       const res = await fetch(url, {
@@ -150,7 +156,7 @@ export async function getBatchEmbeddings(texts) {
         }
       }
     } catch (err) {
-      console.warn('[SemanticEmbedding] Direct embedding error:', err.message);
+      console.warn('[SemanticEmbedding] Direct embedding attempt error:', err.message);
     }
   }
 
