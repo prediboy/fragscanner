@@ -40,6 +40,37 @@ function extractDeterministicDislikes(chatHistory) {
 }
 
 /**
+ * Deterministically extract all perfumes the user already owns or explicitly loves
+ * so recommendation mode never echoes back bottles they already have.
+ */
+function extractDeterministicLiked(chatHistory) {
+  const liked = new Set();
+  const genericWords = new Set([
+    'it', 'them', 'that', 'this', 'summer', 'winter', 'fragrance', 'fragrances',
+    'perfume', 'perfumes', 'notes', 'scents', 'ones', 'one', 'summer fragrances',
+    'minty and lavendery ones', 'minty', 'lavendery', 'fresh', 'fresh ones'
+  ]);
+
+  for (const m of (chatHistory || [])) {
+    if (m.role !== 'user') continue;
+    const text = (m.content || '').toLowerCase();
+
+    const loveMatches = text.matchAll(/(?:love|loved|like|liked|own|have|wearing|favorite(?:\s+is)?)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi);
+    for (const match of loveMatches) {
+      const raw = match[1].trim();
+      const parts = raw.split(/\band\b|,/);
+      for (const p of parts) {
+        const term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
+        if (term && !genericWords.has(term) && term.length > 2) {
+          liked.add(term);
+        }
+      }
+    }
+  }
+  return Array.from(liked);
+}
+
+/**
  * Universal Gemini Caller: Tries secure /api/concierge serverless route first,
  * then falls back to direct client call if GEMINI_KEY is present.
  */
@@ -515,7 +546,7 @@ async function executeMultiQuery(criteria) {
       ...(criteria.target_accords || [])
     ].filter(Boolean).map(s => String(s).replace(/%/g, '')).join(' ');
 
-    const semanticCandidates = await searchFragrancesBySemanticEmbedding(semanticText, 12);
+    const semanticCandidates = await searchFragrancesBySemanticEmbedding(semanticText, 25);
     if (semanticCandidates && semanticCandidates.length > 0) {
       return semanticCandidates;
     }
@@ -664,7 +695,7 @@ function isClashingProfile(fragrance, userPrompt) {
  * 3. Elevated Curveball Discovery (niche horizon)
  * 4. Clean Daily Driver (crowd-pleasing versatile performer)
  */
-async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes) {
+async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes, deterministicLiked = []) {
   try {
     let query = supabase.from('fragrances')
       .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers')
@@ -689,6 +720,9 @@ async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes)
       const full = `${f.brand} ${f.name} ${f.dna_inspiration || ''}`.toLowerCase();
       for (const d of (deterministicDislikes || [])) {
         if (full.includes(d.toLowerCase())) return true;
+      }
+      for (const l of (deterministicLiked || [])) {
+        if (full.includes(l.toLowerCase())) return true;
       }
       for (const ex of (criteria.exclude_terms || [])) {
         const clean = ex.replace(/%/g, '').toLowerCase().trim();
@@ -872,6 +906,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
 
   // Client-side strict filter to guarantee exclusions never slip through
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
+  const deterministicLiked = extractDeterministicLiked(chatHistory);
 
   // 1. Compute Olfactory Delta if contrast statement was detected
   let deltaInfo = null;
@@ -884,7 +919,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   if (!rawMatches || rawMatches.length === 0) {
     const isDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo);
     if (isDiscovery) {
-      rawMatches = await buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes);
+      rawMatches = await buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes, deterministicLiked);
     }
   }
 
@@ -931,6 +966,16 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     // 4. Olfactory Clash Filter: Disqualify heavy leather/oud/warm spicy scents if user asked for summer fresh mint/aquatic
     if (isClashingProfile(m, lastUserMsg)) {
       return false;
+    }
+
+    // 5. Already Loved/Owned Exclusion:
+    // If user says "i love Raw, i love Verge", do NOT recommend Raw or Verge back to them!
+    if (criteria.intent !== 'direct_search') {
+      for (const likedName of deterministicLiked) {
+        if (isMatchDisliked(fullText, likedName)) {
+          return false;
+        }
+      }
     }
 
     return true;
@@ -996,10 +1041,11 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     });
   }
 
-  // Sort by algorithmic match score descending
+  // Sort by algorithmic match score descending and take the Top 10 curated matches
   safeMatches.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+  const top10Matches = safeMatches.slice(0, 10);
 
-  const matchesWithWhys = await synthesizeWhys(chatHistory, safeMatches, criteria, deltaInfo);
+  const matchesWithWhys = await synthesizeWhys(chatHistory, top10Matches, criteria, deltaInfo);
 
   const assistantResponse = {
     role: 'assistant',
