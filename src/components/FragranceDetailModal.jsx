@@ -82,17 +82,40 @@ function PriceTrendIntelligence({ fragrance }) {
       ? valid.filter(p => Number(p.price) >= 0.5 * median && Number(p.price) <= 2.5 * median)
       : valid;
 
-    // Deduplicate consecutive identical prices on the same day for smoother sparkline
-    const deduped = [];
+    // Group by calendar date and strictly select the LOWEST (Best Community Deal) price on each day
+    // A price trend chart must track the best market entry price over time, never competing higher seller variance
+    const byDay = {};
     sanitized.forEach(p => {
       const day = (p.recorded_at || '').slice(0, 10);
-      const last = deduped[deduped.length - 1];
-      if (!last || last.day !== day || Number(last.price) !== Number(p.price)) {
-        deduped.push({ ...p, day });
+      const price = Number(p.price);
+      if (!byDay[day] || price < Number(byDay[day].price)) {
+        byDay[day] = {
+          ...p,
+          day,
+          price
+        };
       }
     });
 
-    return deduped;
+    // Ensure today's active verified lowest community price from catalog is locked in
+    const today = new Date().toISOString().slice(0, 10);
+    const catPrice = Number(fragrance?.community_price || 0);
+    if (catPrice > 0) {
+      if (!byDay[today] || catPrice < Number(byDay[today].price)) {
+        byDay[today] = {
+          price: catPrice,
+          seller_name: fragrance.best_bottle_seller || byDay[today]?.seller_name || 'Verified Seller',
+          format: 'retail',
+          size: 'Bottle',
+          recorded_at: new Date().toISOString(),
+          day: today
+        };
+      }
+    }
+
+    // Sort days chronologically
+    const sortedDays = Object.keys(byDay).sort();
+    return sortedDays.map(d => byDay[d]);
   }, [trends, fragrance?.community_price, fragrance?.best_bottle_seller]);
 
   const currentPrice = Number(fragrance?.community_price || (points[points.length - 1]?.price || 0));
