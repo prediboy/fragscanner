@@ -485,6 +485,36 @@ export async function fetchFragranceDetail(id) {
 }
 
 /**
+ * Fetch historical price trends for a fragrance from the price_trends SQL table
+ */
+export async function fetchFragrancePriceTrend(fragranceId, fragranceName) {
+  try {
+    if (!supabase) return [];
+    let query = supabase
+      .from('price_trends')
+      .select('price, previous_price, price_change, seller_name, format, size, is_best_price, source, recorded_at');
+
+    if (fragranceId) {
+      query = query.eq('fragrance_id', fragranceId);
+    } else if (fragranceName) {
+      query = query.ilike('fragrance_name', `%${fragranceName}%`);
+    } else {
+      return [];
+    }
+
+    const { data, error } = await query
+      .order('recorded_at', { ascending: true })
+      .limit(100);
+
+    if (error) throw error;
+    return data || [];
+  } catch (e) {
+    console.warn('Could not fetch price trends from Supabase:', e);
+    return [];
+  }
+}
+
+/**
  * Fetch sync metadata and seller stats from Supabase
  */
 export async function fetchSyncMetadata() {

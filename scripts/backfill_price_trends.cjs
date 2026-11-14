@@ -147,7 +147,7 @@ async function backfillPriceTrends() {
           `${f.brand} ${f.name}`.toLowerCase() === `${it.brand} ${it.name}`.toLowerCase()
         );
         addRecord({
-          fragrance_id: matchedFrag ? matchedFrag.id : it.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+          fragrance_id: matchedFrag ? matchedFrag.id : null,
           fragrance_name: it.name,
           brand: it.brand || (matchedFrag ? matchedFrag.brand : 'Unknown'),
           seller_name: it.seller_name,
