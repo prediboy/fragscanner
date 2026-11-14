@@ -5,18 +5,74 @@ import { searchFragrancesBySemanticEmbedding } from './semanticEmbeddingService.
 const GEMINI_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 
+function levenshtein(a, b) {
+  const m = a.length;
+  const n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      }
+    }
+  }
+  return dp[m][n];
+}
+
 /**
- * Deterministically extract all hated / disliked perfumes from chat history
+ * Typo-tolerant and fuzzy matcher for perfume titles, nicknames, and brands.
+ * Handles single/double spelling mistakes (e.g. 'nashma' -> 'nashama', 'sedly' -> 'sedley')
+ */
+export function isMatchFuzzy(target, phrase) {
+  const p = (phrase || '').replace(/[%'"`]/g, '').toLowerCase().trim();
+  if (!p || p.length < 3) return false;
+  const t = (target || '').toLowerCase();
+
+  // 1. Direct substring
+  if (t.includes(p)) return true;
+
+  // 2. Tokenized word comparison with Levenshtein distance
+  const tWords = t.replace(/[^a-z0-9]/g, ' ').split(/\s+/).filter(w => w.length >= 3 && !['the', 'and', 'for', 'perfume', 'eau', 'edp', 'edt', 'pour', 'homme', 'femme'].includes(w));
+  const pWords = p.replace(/[^a-z0-9]/g, ' ').split(/\s+/).filter(w => w.length >= 3 && !['the', 'and', 'for', 'perfume', 'eau', 'edp', 'edt', 'pour', 'homme', 'femme'].includes(w));
+
+  // If entire phrase matches after punctuation strip
+  const tClean = tWords.join(' ');
+  const pClean = pWords.join(' ');
+  if (tClean.includes(pClean) || pClean.includes(tClean)) return true;
+
+  for (const pw of pWords) {
+    if (pw.length < 3) continue;
+    for (const tw of tWords) {
+      if (tw === pw) return true;
+      if (tw.includes(pw) || pw.includes(tw)) return true;
+      const maxDist = pw.length >= 7 ? 2 : 1;
+      if (Math.abs(pw.length - tw.length) <= maxDist) {
+        if (levenshtein(pw, tw) <= maxDist) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Deterministically extract all hated / disliked perfumes from chat history.
+ * Resilient against typos like semicolons ("didn;t like"), curly apostrophes ("didn’t"), etc.
  */
 function extractDeterministicDislikes(chatHistory) {
   const dislikes = new Set();
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
     const rawContent = (m.content || '').toLowerCase();
-    const clean = rawContent.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
+    // Normalize semicolons or curly quotes inside contractions like didn;t -> didn't
+    const normalized = rawContent.replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2");
+    const clean = normalized.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
 
     // 1. didn't like / don't like / hate / dislike / not a fan of / avoid
-    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi;
+    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with|sick\s+of)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi;
     for (const match of clean.matchAll(re1)) {
       const parts = match[1].split(/\band\b|,/);
       for (const p of parts) {
@@ -63,7 +119,7 @@ function extractDeterministicLiked(chatHistory) {
 
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
-    const text = (m.content || '').toLowerCase();
+    const text = (m.content || '').toLowerCase().replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2");
 
     const loveMatches = text.matchAll(/(?:love|loved|like|liked|own|have|wearing|favorite(?:\s+is)?)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi);
     for (const match of loveMatches) {
@@ -226,15 +282,32 @@ Analyze this ongoing conversation between a fragrance enthusiast and Khushboo:
 
 ${JSON.stringify(chatHistory, null, 2)}
 
-CRITICAL CONVERSATIONAL REFINEMENT & MULTI-TURN STATE RULES:
+CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
 1. MULTI-TURN CUMULATIVE STATE:
    - Unless the user explicitly says "start over" or "new search", EVERY user message is an INCREMENTAL REFINEMENT on top of the conversation so far!
    - ACCUMULATE PREFERENCES: If the user loved Raw/Verge (summer, fresh, mint, lavender) in Turn 1, and in Turn 2 asks to "remove sweet fragrances, and spicy mint is something that is good, only summer":
      * PRESERVE: Summer season, mint, lavender, crisp aromatic freshness.
      * REFINE/MODIFY: Add fresh-spicy facet to the mint.
      * APPLY NEGATION: Strictly strip out all sweet, gourmand, vanilla, tonka, and heavy fruit notes.
-     * EXCLUDE: Exclude perfumes user loves/owns (Raw, Verge) and hates (Rare Reef, Zanzibar).
-2. CLASSIFY THE USER'S INTENT into ONE of these query modes:
+     * EXCLUDE: Exclude perfumes user loves/owns (Raw, Verge) and hates (Rare Reef, Zanzibar, Al Nashama Caprice).
+
+2. TYPO-TOLERANT SENTIMENT & PERFUME ENTITY EXTRACTION:
+   - Users speak informally, make typos, miss letters, use semicolons instead of apostrophes (e.g. "didn;t like", "didnt like", "hated", "not a fan", "caprice missed the mark", "nashma caprice", "zanzibar", "rare reef").
+   - Extract "disliked_perfumes": An exhaustive list of ALL fragrances the user disliked, hated, tried and failed, found disappointing, or said to avoid.
+     Include canonical names AND user typo variants/nicknames (e.g. ["Lattafa Al Nashama Caprice", "Al Nashama Caprice", "Nashama Caprice", "Nashma Caprice", "Caprice", "Rare Reef", "Zanzibar", "Rare Reef Zanzibar", "Tres Nuit"]).
+   - Extract "liked_perfumes": Fragrances user already loves, likes, or currently owns (e.g. ["Titan Skinn Raw", "Raw", "Titan Skinn Verge", "Verge"]). NEVER recommend these as new purchases since the user already has them.
+
+3. AGENTIC OLFACTORY NOTE & ACCORD SYNTHESIS:
+   - Do NOT just repeat literal words. Translate natural descriptions into authentic perfumery note pyramids and accords:
+     * User: "minty and lavendery ones, specially the combo", "spicy mint", "only summer", "remove sweet fragrances":
+     * target_top_notes: ["Mint", "Spearmint", "Peppermint", "Lavender", "Lemon", "Bergamot", "Grapefruit"]
+     * target_middle_notes: ["Lavender", "Mint", "Geranium", "Cardamom", "Ginger", "Rosemary", "Black Pepper"]
+     * target_base_notes: ["Cedarwood", "Vetiver", "Ambroxan", "White Musk"]
+     * target_accords: ["Aromatic", "Fresh Spicy", "Green", "Fresh", "Lavender", "Citrus"]
+     * exclude_accords: If user wants no sweet scents, strictly ban ["Sweet", "Vanilla", "Warm Spicy", "Gourmand", "Caramel", "Honey", "Amber"]
+     * exclude_notes: If user wants no sweet scents, strictly ban ["Vanilla", "Tonka Bean", "Sugar", "Caramel", "Praline", "Honey", "Chocolate", "Amber"]
+
+4. CLASSIFY THE USER'S INTENT into ONE of these query modes:
    - "brand_catalog": The user asks to list, explore, or see perfumes from a specific brand (e.g. "give me all ajmal perfumes", "show me lattafa perfumes", "what do you have from afnan?", "skinn by titan fragrances").
    - "direct_search": The user asks about a specific fragrance title or famous clone/line (e.g. "do you have hawas?", "show me khamrah", "kuro", "liquid brun", "aventus clones").
    - "decant_finder": The user specifically asks for decants, samplers, discovery vials, or budget decants (e.g. "show me cheap decants under 250", "summer decants").
@@ -243,10 +316,10 @@ CRITICAL CONVERSATIONAL REFINEMENT & MULTI-TURN STATE RULES:
    - "olfactory_match": The user describes scent preferences, notes they love or hate (opening blast vs heart vs drydown), or asks for alternatives/inspirations (e.g. "i like raw, want citrus opening with woody drydown, no bdc clones").
    - "general_qa": The user asks a pure knowledge question (e.g. "what is ambroxan?", "what does maceration mean?", "how long does Kaaf last?", "what is the difference between EDT and EDP?") where NO product cards are needed.
 
-3. SEMANTIC SEARCH PROMPT:
+5. SEMANTIC SEARCH PROMPT:
    - Generate a rich, descriptive query for pgvector dense vector embedding search that captures the CUMULATIVE profile (e.g. "summer fresh spicy mint lavender crisp aromatic aquatic non-sweet cooling masculine daytime").
 
-4. CONVERSATIONAL REPLY:
+6. CONVERSATIONAL REPLY:
    - Write Khushboo's warm, knowledgeable, charming 1-3 sentence response directly acknowledging the user's refinement (e.g. how we stripped out all sweetness to focus purely on crisp spicy mint and lavender for summer).
 
 Return strictly raw JSON with this schema:
@@ -258,6 +331,8 @@ Return strictly raw JSON with this schema:
   "seller_filter": "Seller name or null",
   "contrast_liked": "Perfume title or null",
   "contrast_disliked": "Perfume title or null",
+  "disliked_perfumes": ["Perfume name or variant 1", "variant 2"],
+  "liked_perfumes": ["Perfume name or variant 1", "variant 2"],
   "is_discovery_mode": true | false,
   "conversational_reply": "Khushboo's warm personalized response",
   "taste_summary": "1-sentence summary capsule of current cumulative criteria",
@@ -305,6 +380,17 @@ Rules:
         });
       });
 
+      // Merge explicit disliked & exclude_perfumes
+      const allDislikedPerfumes = Array.from(new Set([
+        ...unwrap(parsed.disliked_perfumes),
+        ...unwrap(parsed.exclude_perfumes)
+      ]));
+
+      const allLikedPerfumes = Array.from(new Set([
+        ...unwrap(parsed.liked_perfumes),
+        ...unwrap(parsed.liked_or_owned_perfumes)
+      ]));
+
       return {
         intent: parsed.intent || 'olfactory_match',
         is_refinement: Boolean(parsed.is_refinement),
@@ -313,6 +399,8 @@ Rules:
         seller_filter: parsed.seller_filter || null,
         contrast_liked: parsed.contrast_liked || null,
         contrast_disliked: parsed.contrast_disliked || null,
+        disliked_perfumes: allDislikedPerfumes,
+        liked_perfumes: allLikedPerfumes,
         is_discovery_mode: Boolean(parsed.is_discovery_mode),
         conversational_reply: parsed.conversational_reply || "Here is what I found across our verified catalog.",
         taste_summary: parsed.taste_summary || "Curated olfactory selections based on your conversation.",
@@ -320,7 +408,7 @@ Rules:
         target_inspirations: safeTargets,
         exclude_inspirations: cleanExclusions,
         exclude_terms: wrap(parsed.exclude_terms),
-        exclude_perfumes: unwrap(parsed.exclude_perfumes),
+        exclude_perfumes: allDislikedPerfumes,
         target_accords: wrap(parsed.target_accords),
         exclude_accords: unwrap(parsed.exclude_accords),
         target_top_notes: wrap(parsed.target_top_notes),
@@ -1010,6 +1098,14 @@ Return strictly raw JSON with this schema:
             for (const cand of candidatePool) {
               if (curated.length >= 10) break;
               if (!addedIds.has(cand.id)) {
+                // Ensure backfilled item doesn't violate excluded accords or notes
+                const accords = cand.accords || [];
+                const violatesAccord = (criteria.exclude_accords || []).some(fa => {
+                  const ma = accords.find(a => (a.name || '').toLowerCase().includes(fa.toLowerCase()));
+                  return ma && Number(ma.score) > 35;
+                });
+                if (violatesAccord) continue;
+
                 curated.push({
                   ...cand,
                   why: generateFallbackWhy(cand, criteria, deltaInfo)
@@ -1019,12 +1115,9 @@ Return strictly raw JSON with this schema:
             }
           }
 
-          // Sort by match score descending and calibrate dynamic descending scores across ranks (96% down to 72%)
-          curated.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+          // Return in sommelier curated order with smooth dynamic descending match scores (96% down to 74%)
           return curated.slice(0, 10).map((m, idx) => {
-            const base = Number(m.match_score) || 85;
-            const targetCap = 96 - (idx * 2.2);
-            const calibrated = Math.min(Math.round(targetCap), Math.max(68, Math.round(base - (idx * 1.5))));
+            const calibrated = Math.max(70, Math.round(96 - (idx * 2.4)));
             return {
               ...m,
               match_score: calibrated
@@ -1062,17 +1155,27 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
   const deterministicLiked = extractDeterministicLiked(chatHistory);
 
-  // Construct comprehensive disliked set from deterministic matches, contrast_disliked, and LLM exclusions
-  const allDislikes = new Set([...deterministicDislikes]);
+  // Construct comprehensive disliked set from Gemini's agentic extraction + deterministic regexes
+  const allDislikes = new Set([
+    ...deterministicDislikes,
+    ...(criteria.disliked_perfumes || []),
+    ...(criteria.exclude_perfumes || []),
+    ...(criteria.exclude_terms || [])
+  ].map(s => String(s || '').replace(/%/g, '').toLowerCase().trim()).filter(Boolean));
+
   if (criteria.contrast_disliked) {
     allDislikes.add(criteria.contrast_disliked.toLowerCase().trim());
   }
-  for (const ex of (criteria.exclude_perfumes || [])) {
-    allDislikes.add(ex.toLowerCase().trim());
-  }
-  for (const ex of (criteria.exclude_terms || [])) {
-    const clean = ex.replace(/%/g, '').toLowerCase().trim();
-    if (clean) allDislikes.add(clean);
+
+  // Construct comprehensive liked/owned set from Gemini's agentic extraction + deterministic regexes
+  const allLiked = new Set([
+    ...deterministicLiked,
+    ...(criteria.liked_perfumes || []),
+    ...(criteria.liked_or_owned_perfumes || [])
+  ].map(s => String(s || '').replace(/%/g, '').toLowerCase().trim()).filter(Boolean));
+
+  if (criteria.contrast_liked) {
+    allLiked.add(criteria.contrast_liked.toLowerCase().trim());
   }
 
   // 1. Compute Olfactory Delta if contrast statement was detected
@@ -1093,46 +1196,29 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const safeMatches = (rawMatches || []).filter(m => {
     const fullText = `${m.brand} ${m.name} ${m.dna_inspiration || ''}`.toLowerCase();
 
-    // Helper to check fuzzy/tokenized match against disliked phrases
-    const isMatchDisliked = (target, phrase) => {
-      const p = (phrase || '').replace(/%/g, '').toLowerCase().trim();
-      if (!p || p.length < 3) return false;
-      if (target.includes(p)) return true;
-      const targetClean = target.replace(/[^a-z0-9]/g, ' ');
-      const pClean = p.replace(/[^a-z0-9]/g, ' ');
-      if (targetClean.includes(pClean)) return true;
-
-      const words = pClean.split(/\s+/).filter(w => w.length > 2 && !['the', 'and', 'for', 'perfume', 'perfumes', 'al'].includes(w));
-      if (words.length > 0) {
-        if (words.some(w => w.length >= 5 && targetClean.includes(w))) return true;
-        if (words.length > 1 && words.every(w => targetClean.includes(w))) return true;
-      }
-      return false;
-    };
-
-    // 1. Strict Disqualification: Disliked / Tried & Failed / Hated perfumes
+    // 1. Strict Disqualification: Disliked / Tried & Failed / Hated perfumes (with Levenshtein fuzzy matching)
     for (const disliked of allDislikes) {
-      if (isMatchDisliked(fullText, disliked)) return false;
+      if (isMatchFuzzy(fullText, disliked)) return false;
     }
 
     // 2. Disliked contrast delta perfume B
-    if (deltaInfo?.perfumeB && (m.id === deltaInfo.perfumeB.id || isMatchDisliked(fullText, deltaInfo.perfumeB.name))) {
+    if (deltaInfo?.perfumeB && (m.id === deltaInfo.perfumeB.id || isMatchFuzzy(fullText, deltaInfo.perfumeB.name))) {
       return false;
     }
 
-    // 3. Already Loved/Owned Exclusion
+    // 3. Already Loved/Owned Exclusion (Never recommend bottles user already has/loves)
     if (criteria.intent !== 'direct_search') {
-      for (const likedName of deterministicLiked) {
-        if (isMatchDisliked(fullText, likedName)) return false;
+      for (const likedName of allLiked) {
+        if (isMatchFuzzy(fullText, likedName)) return false;
       }
-      if (deltaInfo?.perfumeA && (m.id === deltaInfo.perfumeA.id || isMatchDisliked(fullText, deltaInfo.perfumeA.name))) {
+      if (deltaInfo?.perfumeA && (m.id === deltaInfo.perfumeA.id || isMatchFuzzy(fullText, deltaInfo.perfumeA.name))) {
         return false;
       }
     }
 
     // 4. Excluded Inspirations Archetypes
     for (const ex of (criteria.exclude_inspirations || [])) {
-      if (isMatchDisliked(fullText, ex)) return false;
+      if (isMatchFuzzy(fullText, ex)) return false;
     }
 
     // 5. Strict Accord Exclusions (e.g. sweet, vanilla, gourmand)
