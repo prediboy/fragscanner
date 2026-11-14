@@ -1,12 +1,22 @@
-// Olfactory similarity & recommendation logic
+// Olfactory similarity & recommendation logic powered by the multi-dimensional Olfactory Algorithm
 
-function toNoteList(val, fallback) {
-  for (const src of [val, fallback]) {
-    if (Array.isArray(src) && src.length > 0) return src.map(s => String(s || '').trim()).filter(Boolean);
-    if (typeof src === 'string' && src.trim()) return src.split(',').map(s => s.trim()).filter(Boolean);
-  }
-  return [];
-}
+import {
+  calculateSeasonalProfile,
+  calculateSeasonMatch,
+  calculateTieredNotesOverlap,
+  calculateSemanticReviewMatch,
+  evaluateOlfactoryMatch,
+  extractNotePyramid
+} from './olfactoryAlgorithm.js';
+
+export {
+  calculateSeasonalProfile,
+  calculateSeasonMatch,
+  calculateTieredNotesOverlap,
+  calculateSemanticReviewMatch,
+  evaluateOlfactoryMatch,
+  extractNotePyramid
+};
 
 export function calculateAccordSimilarity(accordsA, accordsB) {
   const vecA = {};
@@ -37,8 +47,8 @@ export function calculateAccordSimilarity(accordsA, accordsB) {
 }
 
 export function calculateNotesOverlap(notesA, notesB) {
-  const setA = new Set(notesA.map(n => n.toLowerCase()));
-  const setB = new Set(notesB.map(n => n.toLowerCase()));
+  const setA = new Set((notesA || []).map(n => String(n).toLowerCase().trim()));
+  const setB = new Set((notesB || []).map(n => String(n).toLowerCase().trim()));
 
   let intersectionCount = 0;
   setA.forEach(n => {
@@ -60,12 +70,6 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
     
   if (!target) return emptyResult;
 
-  const targetNotes = [
-    ...toNoteList(target.notes?.top, target.top_notes),
-    ...toNoteList(target.notes?.middle, target.middle_notes),
-    ...toNoteList(target.notes?.base, target.base_notes)
-  ];
-
   const flankers = [];
   const dnaTwins = [];
   const scoredMatches = [];
@@ -86,7 +90,6 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
     const targetInspiration = (target.dna_inspiration || '').toLowerCase();
     const candInspiration = (candidate.dna_inspiration || '').toLowerCase();
     
-    // Check for matching inspiration substrings (e.g. "angels' share", "aventus", "sauvage", "ultra male")
     const isDirectTwin = (
       (targetInspiration && candInspiration && (
         targetInspiration.includes(candInspiration) || 
@@ -99,20 +102,17 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
       dnaTwins.push(candidate);
     }
 
-    // 3. Olfactory Accord & Note Match Computation
-    const candidateNotes = [
-      ...toNoteList(candidate.notes?.top, candidate.top_notes),
-      ...toNoteList(candidate.notes?.middle, candidate.middle_notes),
-      ...toNoteList(candidate.notes?.base, candidate.base_notes)
-    ];
-
-    const accordSim = calculateAccordSimilarity(target.accords || [], candidate.accords || []);
-    const noteSim = calculateNotesOverlap(targetNotes, candidateNotes);
-    const seasonMatch = target.primary_season === candidate.primary_season ? 1.0 : 0.6;
-
-    // 60% Accord harmony, 28% Note identity, 12% Season match
-    const overallScore = (accordSim * 0.60) + (noteSim * 0.28) + (seasonMatch * 0.12);
-    const matchPercentage = Math.min(99, Math.max(35, Math.round(overallScore * 100)));
+    // 3. Multi-Factor Olfactory Match:
+    // - Summer / Winter seasonal match
+    // - Independent Top, Middle, Base note match percentages
+    // - Notes percentage overlap
+    // - Semantic match on user community comments
+    const matchAnalysis = evaluateOlfactoryMatch(candidate, target, {
+      accord: 0.25,
+      notes: 0.35,
+      season: 0.20,
+      semantic: 0.20
+    });
 
     const targetAccordsArr = Array.isArray(target.accords) ? target.accords : [];
     const candAccordsArr = Array.isArray(candidate.accords) ? candidate.accords : [];
@@ -120,15 +120,14 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
       .filter(ca => ca?.name && targetAccordsArr.some(ta => ta?.name && String(ta.name).toLowerCase() === String(ca.name).toLowerCase()))
       .map(a => a.name);
 
-    const sharedNotes = candidateNotes.filter(cn => 
-      targetNotes.some(tn => tn.toLowerCase() === cn.toLowerCase())
-    );
-
     scoredMatches.push({
       fragrance: candidate,
-      matchPercentage,
+      matchPercentage: matchAnalysis.finalMatchPercentage,
+      season: matchAnalysis.season,
+      notes: matchAnalysis.notes,
+      semantic: matchAnalysis.semantic,
       sharedAccords,
-      sharedNotes: Array.from(new Set(sharedNotes))
+      sharedNotes: matchAnalysis.notes.totalSharedNotes || []
     });
   });
 

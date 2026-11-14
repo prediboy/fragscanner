@@ -5,7 +5,7 @@ import {
   Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe,
   TrendingDown, TrendingUp, Activity, Clock, ChevronDown, ChevronUp
 } from 'lucide-react';
-import { getFragranceRecommendations } from '../utils/recommender';
+import { getFragranceRecommendations, calculateSeasonalProfile } from '../utils/recommender';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
 import { fetchFragrancePriceTrend } from '../services/inventoryApi';
 
@@ -1311,11 +1311,21 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#131d31] border border-slate-800">
-                  <span className="text-xs text-slate-400 block mb-1">Primary Season</span>
-                  <span className="text-sm font-bold text-blue-400 flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" />
-                    {fragrance.primary_season || 'All Season'} ({fragrance.primary_season && fragrance.seasons?.[fragrance.primary_season.toLowerCase()] ? fragrance.seasons[fragrance.primary_season.toLowerCase()] : 50}%)
-                  </span>
+                  <span className="text-xs text-slate-400 block mb-1">Seasonal Profile</span>
+                  {(() => {
+                    const sp = calculateSeasonalProfile(fragrance);
+                    return (
+                      <div>
+                        <span className="text-sm font-bold text-cyan-400 flex items-center gap-1.5">
+                          <Calendar className="w-4 h-4 text-cyan-400" />
+                          <span>☀️ {sp.summer}% / ❄️ {sp.winter}%</span>
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+                          {sp.primary} Fit (Spring {sp.spring}%, Fall {sp.fall}%)
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#131d31] border border-slate-800">
@@ -1593,9 +1603,38 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           {match.fragrance.name}
                         </h4>
 
-                        <p className="text-xs text-slate-400 mb-3">
+                        <p className="text-xs text-slate-400 mb-2">
                           {match.fragrance.collection} • <span className="text-emerald-400 font-bold font-mono">{match.fragrance.community_price ? `₹${match.fragrance.community_price}` : `₹${match.fragrance.estimated_community_price || '2,450'}`}</span> • ★ {(Number(match.fragrance.rating_value) || 4.2).toFixed(2)}
                         </p>
+
+                        {/* Multi-Dimensional Olfactory Breakdown */}
+                        <div className="space-y-1.5 mb-3 font-mono text-[10px]">
+                          {/* Season & Notes Match Pills */}
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {match.season && (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-900 text-cyan-300 border border-cyan-800/50">
+                                ☀️ {match.season.summerPct}% / ❄️ {match.season.winterPct}%
+                              </span>
+                            )}
+                            {match.notes && (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-900 text-slate-300 border border-slate-800 flex items-center gap-1">
+                                <span className="text-amber-300" title="Top Notes (Opening)">Top {match.notes.topNotesMatchPct}%</span>
+                                <span className="text-slate-600">•</span>
+                                <span className="text-pink-300" title="Heart Notes">Mid {match.notes.midNotesMatchPct}%</span>
+                                <span className="text-slate-600">•</span>
+                                <span className="text-indigo-300" title="Drydown Notes">Base {match.notes.baseNotesMatchPct}%</span>
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Semantic Community Review Quote */}
+                          {match.semantic?.highlightQuote && (
+                            <div className="text-[11px] font-sans italic text-slate-400 bg-slate-950/70 p-2 rounded-lg border border-slate-800/80 line-clamp-2">
+                              <span className="text-amber-400 font-bold not-italic">Community Consensus: </span>
+                              "{match.semantic.highlightQuote}"
+                            </div>
+                          )}
+                        </div>
 
                         {/* Shared Accords */}
                         <div className="space-y-1.5 text-xs">

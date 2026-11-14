@@ -254,6 +254,42 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                                   )}
                                 </div>
 
+                                {/* Olfactory Algorithm Breakdown */}
+                                <div className="space-y-1.5 pt-0.5">
+                                  {/* Seasonal & Notes Breakdown */}
+                                  <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
+                                    {m.season_match && (
+                                      <span className="px-2 py-0.5 rounded-md bg-slate-900 text-cyan-300 border border-cyan-800/50 flex items-center gap-1">
+                                        <span>☀️ {m.season_match.summerPct}%</span>
+                                        <span className="text-slate-500">|</span>
+                                        <span>❄️ {m.season_match.winterPct}%</span>
+                                      </span>
+                                    )}
+                                    {m.notes_match && (
+                                      <span className="px-2 py-0.5 rounded-md bg-slate-900 text-slate-300 border border-slate-800 flex items-center gap-1">
+                                        <span className="text-amber-300" title="Top Notes (Opening)">Top {m.notes_match.topNotesMatchPct}%</span>
+                                        <span className="text-slate-600">•</span>
+                                        <span className="text-pink-300" title="Heart Notes">Mid {m.notes_match.midNotesMatchPct}%</span>
+                                        <span className="text-slate-600">•</span>
+                                        <span className="text-indigo-300" title="Drydown Notes">Base {m.notes_match.baseNotesMatchPct}%</span>
+                                      </span>
+                                    )}
+                                    {m.semantic_match && (
+                                      <span className="px-2 py-0.5 rounded-md bg-purple-950/60 text-purple-300 border border-purple-800/40">
+                                        💬 {m.semantic_match.semanticMatchPct}% Review Match
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {/* Community Review Quote Highlight */}
+                                  {m.semantic_match?.highlightQuote && (
+                                    <div className="text-[11px] font-sans italic text-slate-400 bg-slate-950/60 p-2 rounded-lg border border-slate-800/70 line-clamp-2">
+                                      <span className="text-cyan-400 font-bold not-italic">Community Reviewer: </span>
+                                      "{m.semantic_match.highlightQuote}"
+                                    </div>
+                                  )}
+                                </div>
+
                                 {/* Why this fits you */}
                                 <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-950/40 via-slate-900 to-slate-900 border border-cyan-500/25 text-xs space-y-1">
                                   <div className="flex items-center gap-1 text-cyan-300 font-bold text-[10px] font-mono uppercase">
