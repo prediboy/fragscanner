@@ -115,7 +115,24 @@ function PriceTrendIntelligence({ fragrance }) {
 
     // Sort days chronologically
     const sortedDays = Object.keys(byDay).sort();
-    return sortedDays.map(d => byDay[d]);
+    const rawDailyPoints = sortedDays.map(d => byDay[d]);
+
+    // Suppress single-day sampling artifacts (e.g. when only a premium seller was sampled on day i, but discounters were active on day i-1 and day i+1)
+    if (rawDailyPoints.length >= 3) {
+      return rawDailyPoints.filter((pt, idx) => {
+        if (idx === 0 || idx === rawDailyPoints.length - 1) return true;
+        const prevP = Number(rawDailyPoints[idx - 1].price);
+        const nextP = Number(rawDailyPoints[idx + 1].price);
+        const currP = Number(pt.price);
+        // If a single-day spike exceeds both surrounding days by >= 15%, it's a single-seller sampling artifact
+        if (currP > prevP * 1.15 && currP > nextP * 1.15) {
+          return false;
+        }
+        return true;
+      });
+    }
+
+    return rawDailyPoints;
   }, [trends, fragrance?.community_price, fragrance?.best_bottle_seller]);
 
   const currentPrice = Number(fragrance?.community_price || (points[points.length - 1]?.price || 0));
