@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
 
-const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+const GEMINI_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 
 /**
@@ -197,16 +197,19 @@ Your task:
    - brand_filter: Extract brand name if brand_catalog (e.g. "Ajmal", "Lattafa", "Titan Skinn", "Afnan", "Rasasi", "Armaf").
    - search_term: Extract search string if direct_search (e.g. "Hawas", "Khamrah", "Kuro", "Aventus").
    - seller_filter: Extract seller name if seller_stock.
+   - contrast_liked: If user mentions a perfume they love or liked (e.g. "Turathi Blue", "Bleu de Chanel", "Ajmal Blu"), extract its name.
+   - contrast_disliked: If user mentions a perfume they hated, disliked, or found screechy/failed (e.g. "Rayhaan Tiger Cal", "Al Nashama Caprice"), extract its name.
+   - is_discovery_mode: Set to true if the user wants to discover NEW scents / new profiles rather than just clones of what they have.
    - max_price: Realistic budget limit if stated (default 15000). CRITICAL RULE: When user says "under 2500" or similar budget without explicitly asking for decants/samples, they ALWAYS mean retail/tester full bottles. Never count decant prices towards a bottle budget! Only use decant prices if intent is decant_finder.
    - target_top_notes: Opening fresh blast notes (e.g. Watermelon, Bergamot, Lemon, Mint).
    - target_middle_notes: Heart transition notes (e.g. Jasmine, Geranium, Lavender).
    - target_base_notes: Drydown skin scent notes (e.g. Ambroxan, Sandalwood, Patchouli, Vanilla).
    - target_notes: General notes.
    - exclude_inspirations: Luxury archetypes user wants to avoid (e.g. ["%Bleu de Chanel%"]). NOTE: strip the word "clone", just use the bare perfume name!
-   - exclude_terms: Disliked perfumes (e.g. ["%Rare Reef%"]).
+   - exclude_terms: Disliked perfumes (e.g. ["%Rayhaan Tiger Cal%"]).
 
 3. CONVERSATIONAL REPLY:
-   Write Khushboo's warm, knowledgeable, charming 1-3 sentence response acknowledging their specific query, notes, or brand heritage.
+   Write Khushboo's warm, knowledgeable, charming 1-3 sentence response. If a contrast between a liked and disliked perfume was mentioned, acknowledge WHY the disliked one failed (e.g. too sharp/harsh/synthetic) and how we are discovering new horizon scents rather than clones.
 
 Return strictly raw JSON with this schema:
 {
@@ -214,6 +217,9 @@ Return strictly raw JSON with this schema:
   "brand_filter": "Brand name or null",
   "search_term": "Search title or null",
   "seller_filter": "Seller name or null",
+  "contrast_liked": "Perfume title or null",
+  "contrast_disliked": "Perfume title or null",
+  "is_discovery_mode": true | false,
   "conversational_reply": "Khushboo's warm personalized response",
   "taste_summary": "1-sentence summary capsule of current criteria",
   "target_inspirations": ["%LuxuryBrand Or Perfume%"],
@@ -259,6 +265,9 @@ Rules:
           brand_filter: parsed.brand_filter || null,
           search_term: parsed.search_term || null,
           seller_filter: parsed.seller_filter || null,
+          contrast_liked: parsed.contrast_liked || null,
+          contrast_disliked: parsed.contrast_disliked || null,
+          is_discovery_mode: Boolean(parsed.is_discovery_mode),
           conversational_reply: parsed.conversational_reply || "Here is what I found across our verified catalog.",
           taste_summary: parsed.taste_summary || "Curated olfactory selections based on your conversation.",
           target_inspirations: safeTargets,
@@ -531,21 +540,216 @@ async function executeMultiQuery(criteria) {
 }
 
 /**
- * --- "WHY THIS FITS YOU" SYNTHESIS ---
+ * --- OLFACTORY CONTRAST & DELTA ENGINE ---
+ * Compares liked perfume A vs disliked perfume B to determine why B failed and what A did right.
  */
-async function synthesizeWhys(chatHistory, matches, criteria) {
+async function computeOlfactoryDelta(likedQuery, dislikedQuery) {
+  if (!likedQuery || !dislikedQuery) return null;
+
+  const findFrag = async (query) => {
+    const clean = (query || '').replace(/%/g, '').trim().toLowerCase();
+    if (!clean) return null;
+    const { data } = await supabase.from('fragrances')
+      .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_twins, flankers')
+      .or(`name.ilike.%${clean}%,dna_inspiration.ilike.%${clean}%`)
+      .limit(1);
+    return data?.[0] || null;
+  };
+
+  try {
+    const [perfumeA, perfumeB] = await Promise.all([
+      findFrag(likedQuery),
+      findFrag(dislikedQuery)
+    ]);
+
+    if (!perfumeA || !perfumeB) return null;
+
+    const accordsA = {};
+    (perfumeA.accords || []).forEach(a => accordsA[a.name.toLowerCase()] = a.score || 0);
+    const accordsB = {};
+    (perfumeB.accords || []).forEach(b => accordsB[b.name.toLowerCase()] = b.score || 0);
+
+    const prizedAccords = [];
+    const offendingAccords = [];
+
+    for (const [k, vA] of Object.entries(accordsA)) {
+      const vB = accordsB[k] || 0;
+      if (vA - vB >= 10 || (vA > 60 && vB === 0)) {
+        prizedAccords.push({ name: k, diff: vA - vB, score: vA });
+      }
+    }
+
+    for (const [k, vB] of Object.entries(accordsB)) {
+      const vA = accordsA[k] || 0;
+      if (vB - vA >= 10 || (vB > 60 && vA === 0)) {
+        offendingAccords.push({ name: k, diff: vB - vA, score: vB });
+      }
+    }
+
+    const consB = perfumeB.review_summary?.cons || [];
+    const prosA = perfumeA.review_summary?.pros || [];
+    const quotesA = perfumeA.review_summary?.top_reviewer_quotes || [];
+
+    return {
+      perfumeA,
+      perfumeB,
+      likedName: `${perfumeA.brand} ${perfumeA.name}`,
+      dislikedName: `${perfumeB.brand} ${perfumeB.name}`,
+      prizedAccords,
+      offendingAccords,
+      prosA,
+      consB,
+      quotesA,
+      summary: `Contrast Analysis: User loved ${perfumeA.brand} ${perfumeA.name} but disliked ${perfumeB.brand} ${perfumeB.name}. Key difference: ${perfumeA.name} is prized for ${prizedAccords.map(a => a.name).join(', ') || 'its smooth balanced drydown'}, whereas ${perfumeB.name} over-indexed on ${offendingAccords.map(a => a.name).join(', ') || 'harsh sharpness'} with reviewer concerns (${consB[0] || 'synthetic sharpness'}).`
+    };
+  } catch (err) {
+    console.warn('[Khushboo Delta] Error computing delta:', err.message);
+    return null;
+  }
+}
+
+/**
+ * --- CURATED DISCOVERY PALETTE (BEYOND CLONES) ---
+ * Builds a balanced 4-quadrant discovery experience:
+ * 1. Refined Sibling (fixes the flaw of the disliked twin)
+ * 2. Adjacent Olfactory Cousin (different inspiration, shared loved accord harmony)
+ * 3. Elevated Curveball Discovery (niche horizon)
+ * 4. Clean Daily Driver (crowd-pleasing versatile performer)
+ */
+async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes) {
+  try {
+    let query = supabase.from('fragrances')
+      .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers')
+      .gte('rating_value', 3.8);
+
+    if (criteria.max_price && criteria.max_price < 50000) {
+      query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
+    } else {
+      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+    }
+
+    const { data: pool, error } = await query.limit(250);
+    if (error || !pool || pool.length === 0) return null;
+
+    const pA = deltaInfo?.perfumeA;
+    const pB = deltaInfo?.perfumeB;
+    const offendingAccordNames = (deltaInfo?.offendingAccords || []).map(a => a.name.toLowerCase());
+
+    const isExcluded = (f) => {
+      if (pA && f.id === pA.id) return true;
+      if (pB && f.id === pB.id) return true;
+      const full = `${f.brand} ${f.name} ${f.dna_inspiration || ''}`.toLowerCase();
+      for (const d of (deterministicDislikes || [])) {
+        if (full.includes(d.toLowerCase())) return true;
+      }
+      for (const ex of (criteria.exclude_terms || [])) {
+        const clean = ex.replace(/%/g, '').toLowerCase().trim();
+        if (clean && full.includes(clean)) return true;
+      }
+      return false;
+    };
+
+    const validPool = pool.filter(f => !isExcluded(f));
+
+    // 1. Refined Sibling (if delta exists, pick sibling clone from dna_twins or inspiration that has LOW offending accord)
+    let sibling = null;
+    if (pA?.dna_twins && Array.isArray(pA.dna_twins) && pA.dna_twins.length > 0) {
+      sibling = validPool.find(f => {
+        if (!pA.dna_twins.includes(f.id)) return false;
+        const accords = f.accords || [];
+        const offendingScore = accords.find(a => offendingAccordNames.includes(a.name.toLowerCase()))?.score || 0;
+        return offendingScore < 50;
+      });
+    }
+    if (!sibling && pA?.dna_inspiration && !pA.dna_inspiration.toLowerCase().includes('original creation')) {
+      const inspCore = pA.dna_inspiration.toLowerCase();
+      sibling = validPool.find(f => {
+        const candInsp = (f.dna_inspiration || '').toLowerCase();
+        return candInsp && (candInsp.includes(inspCore) || inspCore.includes(candInsp));
+      });
+    }
+
+    // 2. Adjacent Olfactory Cousin (different inspiration, shares prized accords like Amber/Musk/Citrus/Aquatic, no offending accords)
+    const cousin = validPool.find(f => {
+      if (sibling && f.id === sibling.id) return false;
+      const candInsp = (f.dna_inspiration || '').toLowerCase();
+      const aInsp = (pA?.dna_inspiration || '').toLowerCase();
+      if (aInsp && candInsp && (candInsp.includes(aInsp) || aInsp.includes(candInsp))) return false;
+
+      const accords = f.accords || [];
+      const hasPrized = (deltaInfo?.prizedAccords || []).some(pa => accords.some(ca => ca.name.toLowerCase().includes(pa.name.toLowerCase()) && ca.score > 60));
+      const hasOffending = accords.some(ca => offendingAccordNames.includes(ca.name.toLowerCase()) && ca.score > 55);
+
+      if (hasOffending) return false;
+      if (deltaInfo?.prizedAccords?.length > 0) return hasPrized;
+
+      // Fallback: match target accords from criteria
+      return (criteria.target_accords || []).some(ta => accords.some(ca => ca.name.toLowerCase().includes(ta.replace(/%/g, '').toLowerCase())));
+    });
+
+    // 3. Elevated Curveball Discovery (distinct luxury niche profile: Elysium, God of Fire, Imagination, Pacific Chill, Hacivat, etc.)
+    const curveball = validPool.find(f => {
+      if (sibling && f.id === sibling.id) return false;
+      if (cousin && f.id === cousin.id) return false;
+      const insp = (f.dna_inspiration || '').toLowerCase();
+      return (
+        insp.includes('god of fire') ||
+        insp.includes('elysium') ||
+        insp.includes('imagination') ||
+        insp.includes('pacific chill') ||
+        insp.includes('hacivat') ||
+        insp.includes('torino21') ||
+        insp.includes('gentle fluidity') ||
+        insp.includes('sedley')
+      );
+    });
+
+    // 4. Clean Daily Driver / Versatile Signature (high rated fresh staple with 0 sweetness/harshness)
+    const dailyDriver = validPool.find(f => {
+      if (sibling && f.id === sibling.id) return false;
+      if (cousin && f.id === cousin.id) return false;
+      if (curveball && f.id === curveball.id) return false;
+      const accords = f.accords || [];
+      const isFresh = accords.some(a => ['aquatic', 'fresh', 'citrus', 'aromatic', 'marine'].some(k => a.name.toLowerCase().includes(k)));
+      const isSweet = accords.find(a => a.name.toLowerCase().includes('sweet'))?.score || 0;
+      return isFresh && isSweet < 35 && f.rating_value >= 4.0;
+    });
+
+    const palette = [
+      sibling && { ...sibling, palette_role: 'Refined Sibling (Fixes the Flaw)' },
+      cousin && { ...cousin, palette_role: 'Adjacent Olfactory Cousin (New Horizon)' },
+      curveball && { ...curveball, palette_role: 'Elevated Curveball Discovery' },
+      dailyDriver && { ...dailyDriver, palette_role: 'Clean Daily Signature' }
+    ].filter(Boolean);
+
+    if (palette.length >= 3) {
+      return palette.map(f => ({
+        ...f,
+        best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+        match_score: 95
+      }));
+    }
+  } catch (err) {
+    console.warn('[Khushboo Discovery Palette] Fallback to standard query:', err.message);
+  }
+  return null;
+}
+
+/**
+ * --- "WHY THIS FITS YOU" SYNTHESIS WITH COMMUNITY REVIEWS & DELTA ---
+ */
+async function synthesizeWhys(chatHistory, matches, criteria, deltaInfo) {
   if (!matches || matches.length === 0) return [];
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
 
-  const prompt = `You are "Khushboo", a world-class fragrance sommelier.
-The user asked: "${lastUserMsg}".
+  const prompt = `You are "Khushboo", a world-class Indian fragrance sommelier, educator, and scent discovery consultant.
+The user is having a continuous dialogue with you:
+User's last message: "${lastUserMsg}"
 Query Intent: ${criteria.intent}
-Top Notes Focus: ${JSON.stringify(criteria.target_top_notes || [])}
-Base Notes Focus: ${JSON.stringify(criteria.target_base_notes || [])}
-Brand Filter: ${criteria.brand_filter || 'None'}
+${deltaInfo ? `\nOLFACTORY CONTRAST INSIGHT:\n${deltaInfo.summary}\nPrized notes in liked scent: ${JSON.stringify(deltaInfo.prizedAccords.map(a => a.name))}\nOffending notes in disliked scent: ${JSON.stringify(deltaInfo.offendingAccords.map(a => a.name))}\nReviewer warning on disliked scent: "${deltaInfo.consB?.[0] || 'harsh opening'}"\n` : ''}
 
-Here are the selected perfumes:
+Here are the curated fragrances for this user (including verified community review quotes, accords, pros, and cons):
 ${JSON.stringify(matches.map(m => ({
   id: m.id,
   brand: m.brand,
@@ -553,11 +757,22 @@ ${JSON.stringify(matches.map(m => ({
   inspiration: m.dna_inspiration,
   dna_type: m.dna_type,
   price: m.community_price ? `₹${m.community_price}` : (m.lowest_decant_price ? `Decant ₹${m.lowest_decant_price}` : 'Available'),
-  seller: m.best_seller
+  seller: m.best_seller,
+  palette_role: m.palette_role || 'Curated Match',
+  top_accords: (m.accords || []).slice(0, 4).map(a => `${a.name} (${a.score})`),
+  community_verdict: m.review_summary?.community_verdict || '',
+  top_quotes: (m.review_summary?.top_reviewer_quotes || []).slice(0, 2),
+  pros: (m.review_summary?.pros || []).slice(0, 2),
+  cons: (m.review_summary?.cons || []).slice(0, 1)
 })), null, 2)}
 
-For EACH perfume, write a personalized, knowledgeable 1-2 sentence "Why this fits you" explanation.
-Mention shared notes, brand reputation, or how it fulfills their request.
+For EACH perfume:
+Write an authentic, connoisseur 1-2 sentence "Why this fits you" sommelier explanation.
+CRITICAL GUIDELINES:
+1. Speak as a passionate sommelier, NOT a generic sales bot.
+2. If this is discovery mode or a contrast query, explain how this bottle expands their horizon beyond basic clones, avoids the harshness/sweetness they hated, and honors their loved notes.
+3. GROUND your explanation in what real community wearers say (cite their quotes, skin feel in Indian heat, longevity, or smooth opening).
+
 Return strictly raw JSON:
 {
   "whys": {
@@ -572,7 +787,7 @@ Return strictly raw JSON:
       const whys = parsed.whys || {};
       return matches.map(m => ({
         ...m,
-        why: whys[m.id] || generateFallbackWhy(m, criteria)
+        why: whys[m.id] || generateFallbackWhy(m, criteria, deltaInfo)
       }));
     }
   } catch (err) {
@@ -581,11 +796,15 @@ Return strictly raw JSON:
 
   return matches.map(m => ({
     ...m,
-    why: generateFallbackWhy(m, criteria)
+    why: generateFallbackWhy(m, criteria, deltaInfo)
   }));
 }
 
-function generateFallbackWhy(m, criteria) {
+function generateFallbackWhy(m, criteria, deltaInfo) {
+  if (m.palette_role) {
+    const quote = m.review_summary?.top_reviewer_quotes?.[0] || m.review_summary?.community_verdict;
+    return `${m.palette_role}: Highly praised by community wearers (${quote ? `"${quote.slice(0, 85)}..."` : 'superb mass appeal'}). Eliminates harsh sharpness with verified performance via ${m.best_seller}.`;
+  }
   if (criteria?.intent === 'brand_catalog') {
     return `One of ${m.brand}'s standout creations in community stock with verified ${m.rating_value ? `★ ${m.rating_value}` : 'high'} rating.`;
   }
@@ -602,11 +821,24 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const currentSessionId = sessionId || getOrCreateSessionId();
   const criteria = await analyzeConversationalIntent(chatHistory);
 
-  // Execute multi-query based on intent
-  const rawMatches = await executeMultiQuery(criteria);
-
   // Client-side strict filter to guarantee exclusions never slip through
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
+
+  // 1. Compute Olfactory Delta if contrast statement was detected
+  let deltaInfo = null;
+  if (criteria.contrast_liked && criteria.contrast_disliked) {
+    deltaInfo = await computeOlfactoryDelta(criteria.contrast_liked, criteria.contrast_disliked);
+  }
+
+  // 2. Select Candidates: Discovery Palette vs Standard Multi-Query
+  let rawMatches = null;
+  const isDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo);
+  if (isDiscovery) {
+    rawMatches = await buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes);
+  }
+  if (!rawMatches || rawMatches.length === 0) {
+    rawMatches = await executeMultiQuery(criteria);
+  }
 
   const safeMatches = (rawMatches || []).filter(m => {
     const insp = (m.dna_inspiration || '').toLowerCase();
@@ -651,7 +883,36 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     return true;
   });
 
-  const matchesWithWhys = await synthesizeWhys(chatHistory, safeMatches, criteria);
+  // 3. Enrich safeMatches with rich review summaries and accords if missing
+  const needsEnrichment = safeMatches.filter(m => !m.review_summary || !m.accords);
+  if (needsEnrichment.length > 0) {
+    try {
+      const { data: richRows } = await supabase
+        .from('fragrances')
+        .select('id, accords, seasons, review_summary, top_notes, middle_notes, base_notes')
+        .in('id', needsEnrichment.map(m => m.id));
+
+      if (richRows && richRows.length > 0) {
+        const richMap = new Map();
+        richRows.forEach(r => richMap.set(r.id, r));
+        safeMatches.forEach(m => {
+          const r = richMap.get(m.id);
+          if (r) {
+            m.accords = m.accords || r.accords;
+            m.seasons = m.seasons || r.seasons;
+            m.review_summary = m.review_summary || r.review_summary;
+            m.top_notes = m.top_notes || r.top_notes;
+            m.middle_notes = m.middle_notes || r.middle_notes;
+            m.base_notes = m.base_notes || r.base_notes;
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('[Khushboo Enrichment] Enrichment fallback:', err.message);
+    }
+  }
+
+  const matchesWithWhys = await synthesizeWhys(chatHistory, safeMatches, criteria, deltaInfo);
 
   const assistantResponse = {
     role: 'assistant',
