@@ -492,7 +492,8 @@ export async function fetchFragrancePriceTrend(fragranceId, fragranceName) {
     if (!supabase) return [];
     let query = supabase
       .from('price_trends')
-      .select('price, previous_price, price_change, seller_name, format, size, is_best_price, source, recorded_at');
+      .select('price, previous_price, price_change, seller_name, format, size, is_best_price, source, recorded_at')
+      .in('format', ['retail', 'bottle']);
 
     if (fragranceId) {
       query = query.eq('fragrance_id', fragranceId);
@@ -507,7 +508,18 @@ export async function fetchFragrancePriceTrend(fragranceId, fragranceName) {
       .limit(100);
 
     if (error) throw error;
-    return data || [];
+    
+    // Outlier filter: eliminate any historical record where price dropped by more than half (< 50% of median)
+    const valid = (data || []).filter(d => Number(d.price) > 0);
+    if (valid.length <= 1) return valid;
+
+    const sortedPrices = valid.map(d => Number(d.price)).sort((a, b) => a - b);
+    const median = sortedPrices[Math.floor(sortedPrices.length / 2)];
+
+    return valid.filter(d => {
+      const p = Number(d.price);
+      return p >= 0.5 * median && p <= 2.5 * median;
+    });
   } catch (e) {
     console.warn('Could not fetch price trends from Supabase:', e);
     return [];

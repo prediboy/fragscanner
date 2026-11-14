@@ -52,7 +52,13 @@ function PriceTrendIntelligence({ fragrance }) {
 
   // Aggregate and clean chronological bottle points
   const points = useMemo(() => {
-    const valid = (trends || []).filter(p => Number(p.price) > 0);
+    // Strictly isolate bottle/retail formats and exclude archived duplicates or outliers
+    const valid = (trends || []).filter(p => 
+      Number(p.price) > 0 && 
+      p.format !== 'decant' && 
+      p.format !== 'duplicate_archived' && 
+      p.format !== 'outlier_anomalous'
+    );
     if (valid.length === 0) {
       if (fragrance?.community_price) {
         return [{
@@ -69,9 +75,16 @@ function PriceTrendIntelligence({ fragrance }) {
     // Sort chronologically
     valid.sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
 
+    // Baseline median price filter to eliminate data entry typos or drops > 50%
+    const prices = valid.map(p => Number(p.price)).sort((a, b) => a - b);
+    const median = prices[Math.floor(prices.length / 2)];
+    const sanitized = median > 0 
+      ? valid.filter(p => Number(p.price) >= 0.5 * median && Number(p.price) <= 2.5 * median)
+      : valid;
+
     // Deduplicate consecutive identical prices on the same day for smoother sparkline
     const deduped = [];
-    valid.forEach(p => {
+    sanitized.forEach(p => {
       const day = (p.recorded_at || '').slice(0, 10);
       const last = deduped[deduped.length - 1];
       if (!last || last.day !== day || Number(last.price) !== Number(p.price)) {
