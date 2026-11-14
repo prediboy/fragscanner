@@ -4,6 +4,85 @@ const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 
 /**
+ * Deterministically extract all hated / disliked perfumes from chat history
+ */
+function extractDeterministicDislikes(chatHistory) {
+  const dislikes = new Set();
+  for (const m of (chatHistory || [])) {
+    if (m.role !== 'user') continue;
+    const text = (m.content || '').toLowerCase();
+
+    // 1. "hate / hated / dislike X and Y"
+    const hateMatches = text.matchAll(/(?:hate|hated|dislike|disliked|avoid|done with)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|$)/gi);
+    for (const match of hateMatches) {
+      const raw = match[1].trim();
+      const parts = raw.split(/\band\b|,/);
+      for (const p of parts) {
+        const term = p.trim();
+        if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
+          dislikes.add(term);
+        }
+      }
+    }
+
+    // 2. "tried / wore / bought X ... hated it"
+    const triedMatches = text.matchAll(/(?:tried|wore|bought|tested)\s+([a-z0-9\s]{3,35}?)(?:,|\.|\s+based on|\s+and\s+|\s+but\s+).*?(?:hated|disliked|didn't like)/gi);
+    for (const match of triedMatches) {
+      const term = match[1].trim();
+      if (term && term !== 'it' && term !== 'them') {
+        dislikes.add(term);
+      }
+    }
+  }
+  return Array.from(dislikes);
+}
+
+/**
+ * Universal Gemini Caller: Tries secure /api/concierge serverless route first,
+ * then falls back to direct client call if GEMINI_KEY is present.
+ */
+async function callGemini(systemInstruction) {
+  // 1. Serverless endpoint (/api/concierge)
+  try {
+    const res = await fetch('/api/concierge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ systemInstruction }),
+      signal: AbortSignal.timeout(9000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return text;
+    }
+  } catch {}
+
+  // 2. Direct client-side call
+  if (GEMINI_KEY) {
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: systemInstruction }] }],
+          generationConfig: { responseMimeType: 'application/json' }
+        }),
+        signal: AbortSignal.timeout(9000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) return text;
+      }
+    } catch (err) {
+      console.warn('[Khushboo] Direct Gemini call error:', err);
+    }
+  }
+
+  return null;
+}
+
+/**
  * --- SESSION & CONVERSATION PERSISTENCE ---
  */
 export function getOrCreateSessionId() {
@@ -99,11 +178,6 @@ export async function persistChatMessage(sessionId, msg) {
  * Analyzes conversational history and routes into the best query tool
  */
 export async function analyzeConversationalIntent(chatHistory) {
-  if (!GEMINI_KEY) {
-    const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
-    return fallbackExtractIntent(lastUserMsg);
-  }
-
   const systemInstruction = `You are "Khushboo", a world-class Indian fragrance sommelier, conversational consultant, and database query router.
 Analyze this ongoing conversation between a fragrance enthusiast and Khushboo:
 
@@ -159,22 +233,10 @@ Rules:
 - Return raw JSON only, no markdown.`;
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: systemInstruction }] }],
-        generationConfig: { responseMimeType: 'application/json' }
-      }),
-      signal: AbortSignal.timeout(9000)
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (text) {
-        const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
-        const wrap = arr => (arr || []).map(item => (typeof item === 'string' && !item.startsWith('%')) ? `%${item}%` : item);
+    const text = await callGemini(systemInstruction);
+    if (text) {
+      const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
+      const wrap = arr => (arr || []).map(item => (typeof item === 'string' && !item.startsWith('%')) ? `%${item}%` : item);
 
         // Normalize exclusions (strip "clones", "direct inspiration")
         const rawExclusions = wrap(parsed.exclude_inspirations);
@@ -217,7 +279,6 @@ Rules:
           ]
         };
       }
-    }
   } catch (err) {
     console.warn('[Khushboo] Router error, using fallback:', err.message);
   }
@@ -285,6 +346,8 @@ function fallbackExtractIntent(prompt) {
   const middleNotes = [];
   const baseNotes = [];
 
+  const deterministicDislikes = extractDeterministicDislikes([{ role: 'user', content: prompt }]);
+
   if (/raw/i.test(p)) {
     topNotes.push('%Watermelon%', '%Bergamot%');
     baseNotes.push('%Patchouli%', '%Sandalwood%');
@@ -292,16 +355,23 @@ function fallbackExtractIntent(prompt) {
   if (/not.*(?:bleu|bdc)|done with.*(?:bleu|bdc)/i.test(p)) {
     excludeInspirations.push('%Bleu de Chanel%');
   }
+  if (/summer/i.test(p)) {
+    topNotes.push('%Bergamot%', '%Lemon%', '%Sea Notes%');
+  }
+
+  const reply = deterministicDislikes.length > 0
+    ? `Understood! I'm completely steering clear of ${deterministicDislikes.join(', ')} and focusing on refreshing alternatives for you.`
+    : "I've analyzed your notes and preferences and curated selections honoring your opening and drydown tastes.";
 
   return {
     intent: 'olfactory_match',
     brand_filter: null,
-    conversational_reply: "I've analyzed your notes and preferences and curated selections honoring your opening and drydown tastes.",
+    conversational_reply: reply,
     taste_summary: `Profile based on: "${prompt.slice(0, 45)}..."`,
     target_inspirations: inspirations,
     exclude_inspirations: excludeInspirations,
-    exclude_terms: [],
-    target_accords: ['%Citrus%', '%Fresh%'],
+    exclude_terms: deterministicDislikes.map(d => `%${d}%`),
+    target_accords: ['%Citrus%', '%Fresh%', '%Aquatic%'],
     target_top_notes: topNotes,
     target_middle_notes: middleNotes,
     target_base_notes: baseNotes,
@@ -465,9 +535,6 @@ async function executeMultiQuery(criteria) {
  */
 async function synthesizeWhys(chatHistory, matches, criteria) {
   if (!matches || matches.length === 0) return [];
-  if (!GEMINI_KEY) {
-    return matches.map(m => ({ ...m, why: generateFallbackWhy(m, criteria) }));
-  }
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
 
@@ -499,27 +566,14 @@ Return strictly raw JSON:
 }`;
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json' }
-      }),
-      signal: AbortSignal.timeout(8000)
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (text) {
-        const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
-        const whys = parsed.whys || {};
-        return matches.map(m => ({
-          ...m,
-          why: whys[m.id] || generateFallbackWhy(m, criteria)
-        }));
-      }
+    const text = await callGemini(prompt);
+    if (text) {
+      const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
+      const whys = parsed.whys || {};
+      return matches.map(m => ({
+        ...m,
+        why: whys[m.id] || generateFallbackWhy(m, criteria)
+      }));
     }
   } catch (err) {
     console.warn('[Khushboo] synthesizeWhys error:', err.message);
@@ -552,20 +606,40 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const rawMatches = await executeMultiQuery(criteria);
 
   // Client-side strict filter to guarantee exclusions never slip through
+  const deterministicDislikes = extractDeterministicDislikes(chatHistory);
+
   const safeMatches = (rawMatches || []).filter(m => {
     const insp = (m.dna_inspiration || '').toLowerCase();
     const name = (m.name || '').toLowerCase();
 
-    for (const ex of (criteria.exclude_inspirations || [])) {
-      const clean = ex.replace(/%/g, '').toLowerCase().trim();
-      if (clean && insp.includes(clean)) return false;
-    }
-    for (const ex of (criteria.exclude_terms || [])) {
-      const clean = ex.replace(/%/g, '').toLowerCase().trim();
-      if (clean && (name.includes(clean) || insp.includes(clean))) return false;
+    const fullText = `${m.brand} ${m.name} ${m.dna_inspiration || ''}`.toLowerCase();
+
+    // Helper to check fuzzy/tokenized match against disliked phrases
+    const isMatchDisliked = (target, phrase) => {
+      const p = (phrase || '').replace(/%/g, '').toLowerCase().trim();
+      if (!p || p.length < 3) return false;
+      if (target.includes(p)) return true;
+      const words = p.split(/\s+/).filter(w => w.length > 2 && !['the', 'and', 'for', 'perfume', 'perfumes'].includes(w));
+      if (words.length > 1 && words.every(w => target.includes(w))) return true;
+      return false;
+    };
+
+    // 1. Check deterministic dislikes extracted directly from chat dialogue
+    for (const disliked of deterministicDislikes) {
+      if (isMatchDisliked(fullText, disliked)) {
+        return false;
+      }
     }
 
-    // Strict Bottle Budget: when user specifies "under X" and did NOT explicitly ask for decants,
+    // 2. Check LLM-extracted exclusions
+    for (const ex of (criteria.exclude_inspirations || [])) {
+      if (isMatchDisliked(fullText, ex)) return false;
+    }
+    for (const ex of (criteria.exclude_terms || [])) {
+      if (isMatchDisliked(fullText, ex)) return false;
+    }
+
+    // 3. Strict Bottle Budget: when user specifies "under X" and did NOT explicitly ask for decants,
     // only count retail/tester bottles (community_price <= max_price), NEVER decant prices!
     if (criteria.intent !== 'decant_finder' && criteria.max_price && criteria.max_price < 50000) {
       const bottlePrice = Number(m.community_price);
