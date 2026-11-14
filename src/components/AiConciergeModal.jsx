@@ -94,7 +94,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
       const errorMsg = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: "I had a momentary hiccup connecting to the fragrance catalog. Could you please rephrase or try again?",
+        content: "Looks like we have used our daily limit, this is not available right now. Please check back in a little while!",
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, errorMsg]);

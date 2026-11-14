@@ -454,10 +454,44 @@ Rules:
       };
     }
   } catch (err) {
-    console.warn('[Khushboo] Router error, using fallback:', err.message);
+    console.warn('[Khushboo] Router error:', err.message);
   }
 
-  return fallbackExtractIntent(chatHistory);
+  // If Gemini is unreachable or exhausted daily quota, inform the user cleanly
+  return {
+    intent: 'service_down',
+    is_service_down: true,
+    brand_filter: null,
+    search_term: null,
+    seller_filter: null,
+    contrast_liked: null,
+    contrast_disliked: null,
+    disliked_perfumes: [],
+    liked_perfumes: [],
+    is_discovery_mode: false,
+    conversational_reply: "Looks like we have used our daily limit for AI concierge, this is not available right now. Please check back in a little while!",
+    taste_summary: null,
+    semantic_search_prompt: "",
+    target_inspirations: [],
+    exclude_inspirations: [],
+    exclude_terms: [],
+    exclude_perfumes: [],
+    target_accords: [],
+    exclude_accords: [],
+    target_top_notes: [],
+    target_middle_notes: [],
+    target_base_notes: [],
+    target_notes: [],
+    exclude_notes: [],
+    target_season: 'all',
+    max_price: 15000,
+    min_rating: 3.8,
+    suggestions: [
+      "Browse top rated perfumes",
+      "Explore summer fresh decants",
+      "Check community sellers"
+    ]
+  };
 }
 
 /**
@@ -1318,6 +1352,23 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
   const criteria = await analyzeConversationalIntent(chatHistory);
   criteria.raw_prompt = lastUserMsg;
+
+  // If Gemini service is down or daily quota is exhausted, inform the user cleanly
+  if (criteria?.is_service_down || criteria?.intent === 'service_down') {
+    const assistantResponse = {
+      role: 'assistant',
+      content: criteria.conversational_reply || "Looks like we have used our daily limit for AI concierge, this is not available right now. Please check back in a little while!",
+      tasteSummary: null,
+      taste_summary: null,
+      criteria,
+      matches: [],
+      suggestions: criteria.suggestions || [],
+      intent: 'service_down',
+      isServiceDown: true
+    };
+    persistChatMessage(currentSessionId, assistantResponse);
+    return assistantResponse;
+  }
 
   // Client-side strict filter to guarantee exclusions never slip through
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
