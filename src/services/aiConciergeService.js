@@ -62,8 +62,19 @@ export function isMatchFuzzy(target, phrase) {
  * Deterministically extract all hated / disliked perfumes from chat history.
  * Resilient against typos like semicolons ("didn;t like"), curly apostrophes ("didn’t"), etc.
  */
-function extractDeterministicDislikes(chatHistory) {
+export function extractDeterministicDislikes(chatHistory) {
   const dislikes = new Set();
+  const genericDislikeWords = new Set([
+    'it', 'them', 'that', 'this', 'summer', 'winter', 'fragrance', 'fragrances',
+    'perfume', 'perfumes', 'notes', 'scents', 'ones', 'one', 'clones', 'anything',
+    'citrus', 'citruses', 'sweet', 'sweetness', 'vanilla', 'amber', 'aquatic',
+    'marine', 'oud', 'leather', 'floral', 'flowers', 'rose', 'lavender', 'mint',
+    'musk', 'fruits', 'fruity', 'gourmand', 'spices', 'spicy', 'cardamom',
+    'pepper', 'wood', 'woody', 'fresh', 'freshness', 'powdery', 'smoke', 'smoky',
+    'tobacco', 'heavy sweetness', 'overly sweet', 'too sweet', 'over citrusy',
+    'sweet fragrances', 'citrus fragrances', 'sweet perfumes', 'heavy fragrances'
+  ]);
+
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
     const rawContent = (m.content || '').toLowerCase();
@@ -72,36 +83,60 @@ function extractDeterministicDislikes(chatHistory) {
     const clean = normalized.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
 
     // 1. didn't like / don't like / hate / dislike / not a fan of / avoid
-    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with|sick\s+of)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi;
+    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with|sick\s+of)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\bsuggest\b|\bwant\b|\blooking\b|\?|!|$)/gi;
     for (const match of clean.matchAll(re1)) {
       const parts = match[1].split(/\band\b|,/);
       for (const p of parts) {
         let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
         term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done\s+with|didn'?t\s+like|don'?t\s+like)\s+/i, '').trim();
-        if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
+        if (term && !genericDislikeWords.has(term) && term.length > 2) {
           dislikes.add(term);
         }
       }
     }
 
     // 2. tried / wore / tested X and didn't like / hated / wasn't good / missed the mark
-    const re2 = /(?:tried|wore|bought|tested)\s+([a-z0-9\s]{3,35}?)(?:,|\.|\s+and\s+|\s+but\s+).*?(?:didn'?t\s+like|hated|disliked|not\s+good|missed\s+the\s+mark|didn'?t\s+work|disappointing)/gi;
+    const re2 = /(?:tried|wore|bought|tested)\s+([a-z0-9\s,]+?)(?:\s+(?:and\s+)?(?:hated|didn'?t\s+like|disliked|not\s+good|missed\s+the\s+mark|didn'?t\s+work|disappointing|wasn'?t)|\s+but\s+|\.|\?|!|$)/gi;
     for (const match of clean.matchAll(re2)) {
-      let term = match[1].trim().replace(/^(?:the|a|an)\s+/i, '');
-      if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
-        dislikes.add(term);
+      const parts = match[1].split(/\band\b|,/);
+      for (const p of parts) {
+        let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
+        if (term && !genericDislikeWords.has(term) && term.length > 2) {
+          dislikes.add(term);
+        }
       }
     }
 
     // 3. X missed the mark / X was disappointing / X was too sweet/heavy
-    const re3 = /([a-z0-9\s]{3,35}?)\s+(?:missed\s+the\s+mark|didn'?t\s+work|was\s+disappointing|was\s+too\s+(?:sweet|harsh|sharp|heavy))/gi;
+    const re3 = /(?:^|[,;]|\b(?:and|but|while|though)\b)\s*([a-z0-9\s,]+?)\s+(?:missed\s+the\s+mark|didn'?t\s+work|was\s+disappointing|was\s+too\s+(?:sweet|harsh|sharp|heavy))/gi;
     for (const match of clean.matchAll(re3)) {
-      let term = match[1].trim().replace(/^(?:the|a|an|but|and)\s+/i, '');
-      if (term && term !== 'it' && term !== 'them' && term !== 'that' && term.length > 2) {
-        dislikes.add(term);
+      const parts = match[1].split(/\band\b|,/);
+      for (const p of parts) {
+        let term = p.trim().replace(/^(?:the|a|an|but|and)\s+/i, '');
+        if (term && !genericDislikeWords.has(term) && term.length > 2) {
+          dislikes.add(term);
+        }
       }
     }
   }
+
+  // Remove any phrases containing positive sentiment words
+  for (const item of Array.from(dislikes)) {
+    if (/\b(?:love|loved|like|liked|favorite|own|wearing|best)\b/i.test(item)) {
+      dislikes.delete(item);
+    }
+  }
+
+  // Strictly ensure perfumes user loves are NEVER in dislikes
+  const likedArray = extractDeterministicLiked(chatHistory);
+  for (const likedItem of likedArray) {
+    for (const dis of Array.from(dislikes)) {
+      if (dis.includes(likedItem) || likedItem.includes(dis) || isMatchFuzzy(dis, likedItem)) {
+        dislikes.delete(dis);
+      }
+    }
+  }
+
   return Array.from(dislikes);
 }
 
@@ -109,7 +144,7 @@ function extractDeterministicDislikes(chatHistory) {
  * Deterministically extract all perfumes the user already owns or explicitly loves
  * so recommendation mode never echoes back bottles they already have.
  */
-function extractDeterministicLiked(chatHistory) {
+export function extractDeterministicLiked(chatHistory) {
   const liked = new Set();
   const genericWords = new Set([
     'it', 'them', 'that', 'this', 'summer', 'winter', 'fragrance', 'fragrances',
@@ -121,7 +156,7 @@ function extractDeterministicLiked(chatHistory) {
     if (m.role !== 'user') continue;
     const text = (m.content || '').toLowerCase().replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2");
 
-    const loveMatches = text.matchAll(/(?:love|loved|like|liked|own|have|wearing|favorite(?:\s+is)?)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\band\b|$)/gi);
+    const loveMatches = text.matchAll(/(?:love|loved|like|liked|own|have|wearing|favorite(?:\s+is)?)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\bsuggest\b|\bwant\b|\blooking\b|\?|!|$)/gi);
     for (const match of loveMatches) {
       const raw = match[1].trim();
       const parts = raw.split(/\band\b|,/);
@@ -134,6 +169,133 @@ function extractDeterministicLiked(chatHistory) {
     }
   }
   return Array.from(liked);
+}
+
+/**
+ * Resolves a perfume entity mentioned in chat against the Supabase database
+ * to retrieve verified Fragrantica note pyramids, inspirations, and accords.
+ */
+export async function resolvePerfumeDossier(phrase) {
+  const p = (phrase || '').trim().toLowerCase();
+  if (!p || p.length < 2) return null;
+
+  const clean = p.replace(/\b(?:i|love|loved|like|liked|tried|wore|tested|hate|hated|dislike|disliked|perfume|fragrance|the|a|an)\b/gi, '').trim();
+  if (!clean || clean.length < 2) return null;
+
+  try {
+    const { data } = await supabase.from('fragrances')
+      .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords')
+      .or(`name.ilike.%${clean}%,brand.ilike.%${clean}%,dna_inspiration.ilike.%${clean}%`)
+      .limit(10);
+
+    let candidates = data || [];
+
+    if (candidates.length === 0) {
+      const words = clean.split(/\s+/).filter(w => w.length >= 3);
+      if (words.length > 0) {
+        const orClauses = words.flatMap(w => {
+          const variants = [w];
+          if (w.includes('ei')) variants.push(w.replace('ei', 'e'));
+          if (w.includes('ie')) variants.push(w.replace('ie', 'e'));
+          return variants.map(v => `name.ilike.%${v}%,brand.ilike.%${v}%`);
+        });
+        const { data: fuzzyData } = await supabase.from('fragrances')
+          .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords')
+          .or(orClauses.join(','))
+          .limit(15);
+        candidates = fuzzyData || [];
+      }
+    }
+
+    if (candidates.length === 0) return null;
+
+    let best = null;
+    let bestScore = -1;
+
+    for (const c of candidates) {
+      const brand = (c.brand || '').toLowerCase();
+      const name = (c.name || '').toLowerCase();
+      const full = `${brand} ${name}`;
+      let score = 0;
+
+      if (name === clean) score += 100;
+      else if (name.includes(clean)) score += 60;
+      else if (full.includes(clean)) score += 50;
+
+      if (isMatchFuzzy(name, clean)) score += 40;
+      if (isMatchFuzzy(full, clean)) score += 30;
+
+      const cleanWords = clean.split(/\s+/);
+      if (cleanWords.length > 1) {
+        const matchesCount = cleanWords.filter(w => full.includes(w) || isMatchFuzzy(full, w)).length;
+        score += matchesCount * 25;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = c;
+      }
+    }
+
+    return bestScore > 20 ? best : candidates[0];
+  } catch (err) {
+    console.warn('[Khushboo] resolvePerfumeDossier error:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Builds a structured Fragrantica note pyramid dossier for all perfumes
+ * mentioned in the chat (both liked/owned and disliked/failed) to pass full context to Gemini.
+ */
+export async function buildMentionedPerfumesDossier(chatHistory) {
+  const likedNames = extractDeterministicLiked(chatHistory);
+  const dislikedNames = extractDeterministicDislikes(chatHistory);
+
+  if (likedNames.length === 0 && dislikedNames.length === 0) return '';
+
+  const likedDossiers = [];
+  for (const name of likedNames) {
+    const d = await resolvePerfumeDossier(name);
+    if (d && !likedDossiers.some(x => x.id === d.id)) likedDossiers.push(d);
+  }
+
+  const dislikedDossiers = [];
+  for (const name of dislikedNames) {
+    const d = await resolvePerfumeDossier(name);
+    if (d && !dislikedDossiers.some(x => x.id === d.id)) dislikedDossiers.push(d);
+  }
+
+  if (likedDossiers.length === 0 && dislikedDossiers.length === 0) return '';
+
+  let report = '### VERIFIED DATABASE NOTE PYRAMIDS & ACCORDS FOR PERFUMES INVOLVED IN THIS CONVERSATION:\n';
+  report += 'Use these ground-truth Fragrantica note pyramids to accurately diagnose why the user loved or hated them:\n';
+
+  if (likedDossiers.length > 0) {
+    report += '\n[LIKED / OWNED INSPIRATIONS (Analyze what note combinations the user loves)]:\n';
+    for (const d of likedDossiers) {
+      report += `- ${d.brand} - ${d.name}:\n`;
+      if (d.dna_inspiration) report += `  * Inspiration: ${d.dna_inspiration}\n`;
+      report += `  * Top Notes: ${(d.top_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Middle Notes: ${(d.middle_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Base Notes: ${(d.base_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Dominant Accords: ${(d.accords || []).slice(0, 5).map(a => `${a.name} (${a.score}%)`).join(', ') || 'N/A'}\n`;
+    }
+  }
+
+  if (dislikedDossiers.length > 0) {
+    report += '\n[DISLIKED / FAILED PERFUMES (Analyze what notes/accords caused the dislike to strictly avoid/penalize them)]:\n';
+    for (const d of dislikedDossiers) {
+      report += `- ${d.brand} - ${d.name}:\n`;
+      if (d.dna_inspiration) report += `  * Inspiration: ${d.dna_inspiration}\n`;
+      report += `  * Top Notes: ${(d.top_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Middle Notes: ${(d.middle_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Base Notes: ${(d.base_notes || []).join(', ') || 'N/A'}\n`;
+      report += `  * Dominant Accords: ${(d.accords || []).slice(0, 5).map(a => `${a.name} (${a.score}%)`).join(', ') || 'N/A'}\n`;
+    }
+  }
+
+  return report;
 }
 
 export function getAvailableGeminiKeys() {
@@ -300,40 +462,51 @@ export async function persistChatMessage(sessionId, msg) {
  * --- MULTI-QUERY INTENT ROUTER ---
  * Analyzes conversational history and routes into the best query tool
  */
-export async function analyzeConversationalIntent(chatHistory) {
+export async function analyzeConversationalIntent(chatHistory, externalDossier = null) {
+  const perfumesDossier = externalDossier !== null ? externalDossier : (await buildMentionedPerfumesDossier(chatHistory));
+
   const systemInstruction = `You are "Khushboo", a world-class Indian fragrance sommelier, conversational consultant, and database query router.
 Analyze this ongoing conversation between a fragrance enthusiast and Khushboo:
 
 ${JSON.stringify(chatHistory, null, 2)}
 
+${perfumesDossier}
+
 CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
-1. MULTI-TURN CUMULATIVE STATE:
+1. GROUND-TRUTH DATABASE NOTE REASONING:
+   - Carefully examine the verified database note pyramids and accords provided in the dossier above for both the liked and disliked fragrances!
+   - Understand WHY the user loved or hated them based on their exact chemical notes:
+     * LIKED SCENTS: Extract and prioritize the positive note synergies from the fragrances user loves (e.g. Spearmint, Lavender, Rosemary from Verge; Cardamom, Juniper, Cedarwood from Historic Olmeda; Watermelon, Violet from Raw).
+     * STRICT NEGATION OVERRIDES: If the user explicitly negates a note or accord (e.g. "hate citrus", "remove sweet", "no aquatic"), you MUST strictly ban and remove those notes/accords from all targets, EVEN IF they were present in a liked scent (e.g. strip Lemon, Bergamot, Grapefruit entirely)!
+     * DISLIKED SCENTS: Identify the clashing/heavy accords and notes that caused the negative experience (e.g. Zanzibar's heavy coconut and vanilla sweetness, Caprice's amber warmth), and ban them from recommendations.
+
+2. MULTI-TURN CUMULATIVE STATE:
    - Unless the user explicitly says "start over" or "new search", EVERY user message is an INCREMENTAL REFINEMENT on top of the conversation so far!
-   - ACCUMULATE PREFERENCES: If the user loved Raw/Verge (summer, fresh, mint, lavender) in Turn 1, asked for spicy mint & no sweet in Turn 2, and says they love Historic Olmeida in Turn 3:
+   - ACCUMULATE PREFERENCES: If the user loved Raw/Verge (summer, fresh, mint, lavender) in Turn 1, asked for spicy mint & no sweet in Turn 2, says they love Historic Olmeida in Turn 3, and hates citrus in Turn 4:
      * PRESERVE & ACCUMULATE: Summer season, mint, lavender, crisp aromatic freshness, spicy cardamom facet, and Historic Olmeida style.
-     * STRICT SWEET NEGATION: Strip out all sweet, gourmand, vanilla, tonka, and heavy fruit notes.
+     * STRICT NEGATION: Strip out all citrus (Lemon, Bergamot, Grapefruit, Orange), sweet, gourmand, vanilla, tonka, and heavy fruit notes.
      * SEPARATE LIKES FROM DISLIKES:
        - liked_perfumes: Fragrances user loves or owns (e.g. Raw, Verge, Historic Olmeida). NEVER recommend buying these exact bottles, but DO use them as positive inspiration!
        - disliked_perfumes: Fragrances user hated or disliked (e.g. Rare Reef, Zanzibar, Al Nashama Caprice). STRICTLY EXCLUDE & PENALIZE!
 
-2. TYPO-TOLERANT SENTIMENT & PERFUME ENTITY EXTRACTION:
+3. TYPO-TOLERANT SENTIMENT & PERFUME ENTITY EXTRACTION:
    - Users speak informally, make typos, miss letters, use semicolons instead of apostrophes (e.g. "didn;t like", "didnt like", "hated", "not a fan", "caprice missed the mark", "nashma caprice", "zanzibar", "rare reef").
    - Extract "disliked_perfumes": ONLY perfumes user explicitly disliked, hated, tried and failed, found disappointing, or said to avoid.
      Include canonical names AND user typo variants/nicknames (e.g. ["Lattafa Al Nashama Caprice", "Al Nashama Caprice", "Nashama Caprice", "Nashma Caprice", "Caprice", "Rare Reef", "Zanzibar", "Rare Reef Zanzibar", "Tres Nuit"]).
      NEVER put liked or owned perfumes in disliked_perfumes!
-   - Extract "liked_perfumes": ONLY fragrances user already loves, likes, or currently owns (e.g. ["Titan Skinn Raw", "Raw", "Titan Skinn Verge", "Verge", "Afnan Historic Olmeida", "Historic Olmeida"]). NEVER put these into disliked_perfumes!
+   - Extract "liked_perfumes": ONLY fragrances user already loves, likes, or currently owns (e.g. ["Titan Skinn Raw", "Raw", "Titan Skinn Verge", "Verge", "Afnan Historic Olmeda", "Historic Olmeida"]). NEVER put these into disliked_perfumes!
 
-3. AGENTIC OLFACTORY NOTE & ACCORD SYNTHESIS:
-   - Do NOT just repeat literal words. Translate natural descriptions into authentic perfumery note pyramids and accords:
-     * User: "minty and lavendery ones, specially the combo", "spicy mint", "only summer", "remove sweet fragrances", "love historic olmeida":
-     * target_top_notes: ["Mint", "Spearmint", "Peppermint", "Lavender", "Lemon", "Bergamot", "Grapefruit"]
-     * target_middle_notes: ["Lavender", "Mint", "Geranium", "Cardamom", "Ginger", "Rosemary", "Black Pepper"]
+4. AGENTIC OLFACTORY NOTE & ACCORD SYNTHESIS:
+   - Do NOT just repeat literal words. Translate natural descriptions and verified note pyramids into authentic perfumery note pyramids and accords:
+     * User: "minty and lavendery ones, specially the combo", "spicy mint", "only summer", "remove sweet fragrances", "love historic olmeida", "hate citrus":
+     * target_top_notes: ["Mint", "Spearmint", "Peppermint", "Lavender", "Cardamom"] (ZERO citrus!)
+     * target_middle_notes: ["Lavender", "Mint", "Geranium", "Cardamom", "Ginger", "Rosemary", "Black Pepper", "Cedar"]
      * target_base_notes: ["Cedarwood", "Vetiver", "Ambroxan", "White Musk"]
-     * target_accords: ["Aromatic", "Fresh Spicy", "Green", "Fresh", "Lavender", "Citrus"]
-     * exclude_accords: If user wants no sweet scents, strictly ban ["Sweet", "Vanilla", "Warm Spicy", "Gourmand", "Caramel", "Honey", "Amber"]
-     * exclude_notes: If user wants no sweet scents, strictly ban ["Vanilla", "Tonka Bean", "Sugar", "Caramel", "Praline", "Honey", "Chocolate", "Amber"]
+     * target_accords: ["Aromatic", "Fresh Spicy", "Green", "Fresh", "Lavender", "Woody"]
+     * exclude_accords: Strictly ban ["Citrus", "Sweet", "Vanilla", "Warm Spicy", "Gourmand", "Caramel", "Honey", "Amber"]
+     * exclude_notes: Strictly ban ["Lemon", "Bergamot", "Grapefruit", "Mandarin", "Orange", "Citrus", "Vanilla", "Tonka Bean", "Sugar", "Caramel", "Praline", "Honey", "Chocolate", "Amber"]
 
-4. CLASSIFY THE USER'S INTENT into ONE of these query modes:
+5. CLASSIFY THE USER'S INTENT into ONE of these query modes:
    - "brand_catalog": The user asks to list, explore, or see perfumes from a specific brand (e.g. "give me all ajmal perfumes", "show me lattafa perfumes", "what do you have from afnan?", "skinn by titan fragrances").
    - "direct_search": The user asks about a specific fragrance title or famous clone/line (e.g. "do you have hawas?", "show me khamrah", "kuro", "liquid brun", "aventus clones").
    - "decant_finder": The user specifically asks for decants, samplers, discovery vials, or budget decants (e.g. "show me cheap decants under 250", "summer decants").
@@ -342,11 +515,11 @@ CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
    - "olfactory_match": The user describes scent preferences, notes they love or hate (opening blast vs heart vs drydown), or asks for alternatives/inspirations (e.g. "i like raw, want citrus opening with woody drydown, no bdc clones").
    - "general_qa": The user asks a pure knowledge question (e.g. "what is ambroxan?", "what does maceration mean?", "how long does Kaaf last?", "what is the difference between EDT and EDP?") where NO product cards are needed.
 
-5. SEMANTIC SEARCH PROMPT:
-   - Generate a rich, descriptive query for pgvector dense vector embedding search that captures the CUMULATIVE profile (e.g. "summer fresh spicy mint lavender crisp aromatic aquatic non-sweet cooling masculine daytime").
+6. SEMANTIC SEARCH PROMPT:
+   - Generate a rich, descriptive query for pgvector dense vector embedding search that captures the CUMULATIVE profile (e.g. "summer fresh spicy mint lavender crisp aromatic non-sweet zero-citrus cooling masculine daytime woody").
 
-6. CONVERSATIONAL REPLY:
-   - Write Khushboo's warm, knowledgeable, charming 1-3 sentence response directly acknowledging the user's cumulative refinements (e.g. how we kept spicy mint, lavender, and Historic Olmeida's aromatic freshness while stripping out all sweetness and avoiding Caprice).
+7. CONVERSATIONAL REPLY:
+   - Write Khushboo's warm, knowledgeable, charming 1-3 sentence response directly acknowledging the user's cumulative refinements, contrasting the notes between what worked and what didn't (e.g. how we kept spicy mint, lavender, and Historic Olmeda's aromatic freshness while strictly banishing citrus and sweetness, steering clear of Caprice and Zanzibar).
 
 Return strictly raw JSON with this schema:
 {
@@ -1140,7 +1313,7 @@ async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes,
 /**
  * --- "WHY THIS FITS YOU" SYNTHESIS WITH COMMUNITY REVIEWS & DELTA ---
  */
-async function synthesizeWhys(chatHistory, matches, criteria, deltaInfo) {
+async function synthesizeWhys(chatHistory, matches, criteria, deltaInfo, perfumesDossier = '') {
   if (!matches || matches.length === 0) return [];
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
@@ -1150,7 +1323,7 @@ The user is having a continuous dialogue with you:
 User's last message: "${lastUserMsg}"
 Query Intent: ${criteria.intent}
 ${deltaInfo ? `\nOLFACTORY CONTRAST INSIGHT:\n${deltaInfo.summary}\nPrized notes in liked scent: ${JSON.stringify(deltaInfo.prizedAccords.map(a => a.name))}\nOffending notes in disliked scent: ${JSON.stringify(deltaInfo.offendingAccords.map(a => a.name))}\nReviewer warning on disliked scent: "${deltaInfo.consB?.[0] || 'harsh opening'}"\n` : ''}
-
+${perfumesDossier ? `\n${perfumesDossier}\n` : ''}
 Here are the curated fragrances for this user (including verified community review quotes, accords, pros, and cons):
 ${JSON.stringify(matches.map(m => ({
   id: m.id,
@@ -1220,7 +1393,7 @@ function generateFallbackWhy(m, criteria, deltaInfo) {
  * Supplies the candidate pool to Gemini to evaluate candidates against the cumulative conversation,
  * remove violating profiles, select the Top 10 best perfumes, and write authentic sommelier whys.
  */
-async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaInfo, allDislikes = new Set()) {
+async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaInfo, allDislikes = new Set(), perfumesDossier = '') {
   if (!Array.isArray(candidates) || candidates.length === 0) return [];
 
   // Sort by algorithmic score to present the most promising 20 candidates to Gemini
@@ -1228,7 +1401,7 @@ async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaI
   const candidatePool = candidates.slice(0, 20);
 
   if (candidatePool.length <= 10) {
-    return await synthesizeWhys(chatHistory, candidatePool, criteria, deltaInfo);
+    return await synthesizeWhys(chatHistory, candidatePool, criteria, deltaInfo, perfumesDossier);
   }
 
   const candidateSummaries = candidatePool.map(c => ({
@@ -1257,6 +1430,7 @@ Target Accords: ${JSON.stringify(criteria.target_accords || [])}
 Excluded Accords/Notes: ${JSON.stringify([...(criteria.exclude_accords || []), ...(criteria.exclude_notes || [])])}
 Forbidden/Disliked Fragrances: ${JSON.stringify(Array.from(allDislikes || []))}
 ${deltaInfo?.summary ? `\nOLFACTORY CONTRAST INSIGHT:\n${deltaInfo.summary}` : ''}
+${perfumesDossier ? `\n${perfumesDossier}\n` : ''}
 
 Here are ${candidateSummaries.length} available candidate perfumes in stock from verified community sellers:
 ${JSON.stringify(candidateSummaries, null, 2)}
@@ -1333,7 +1507,7 @@ Return strictly raw JSON with this schema:
   }
 
   // Fallback to top 10 by algorithmic match score
-  const fallbackList = await synthesizeWhys(chatHistory, candidatePool.slice(0, 10), criteria, deltaInfo);
+  const fallbackList = await synthesizeWhys(chatHistory, candidatePool.slice(0, 10), criteria, deltaInfo, perfumesDossier);
   return fallbackList.map((m, idx) => {
     const base = Number(m.match_score) || 85;
     const targetCap = 95 - (idx * 2.2);
@@ -1350,7 +1524,10 @@ Return strictly raw JSON with this schema:
 export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const currentSessionId = sessionId || getOrCreateSessionId();
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
-  const criteria = await analyzeConversationalIntent(chatHistory);
+
+  // Extract and build full ground-truth Fragrantica note pyramids for all mentioned perfumes (liked & disliked)
+  const perfumesDossier = await buildMentionedPerfumesDossier(chatHistory);
+  const criteria = await analyzeConversationalIntent(chatHistory, perfumesDossier);
   criteria.raw_prompt = lastUserMsg;
 
   // If Gemini service is down or daily quota is exhausted, inform the user cleanly
@@ -1564,7 +1741,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   }
 
   // 5. Agentic Sommelier Selection & Curated Whys
-  const matchesWithWhys = await curateMatchesWithGemini(chatHistory, safeMatches, criteria, deltaInfo, allDislikes);
+  const matchesWithWhys = await curateMatchesWithGemini(chatHistory, safeMatches, criteria, deltaInfo, allDislikes, perfumesDossier);
 
   const assistantResponse = {
     role: 'assistant',
