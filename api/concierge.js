@@ -32,7 +32,7 @@ async function fetchWithKeyFailover(buildUrl, buildOptions) {
         return res;
       }
 
-      // If rate limited (429) or forbidden (403), failover to next key immediately
+      // If rate limited (429) or forbidden (403) or 5xx server error, failover to next key immediately
       if (res.status === 429 || res.status === 403 || res.status >= 500) {
         console.warn(`[Concierge] Gemini API key index ${i} returned status ${res.status}. Attempting next available key...`);
         lastResponse = res;
@@ -83,25 +83,48 @@ export default async function handler(req) {
       });
     }
 
-    // 2. Chat / Reasoning Generation Endpoint (Gemini Flash)
+    // 2. Chat / Reasoning Generation Endpoint (Gemini Flash with multi-model failover)
     const { systemInstruction } = body;
-    const res = await fetchWithKeyFailover(
-      (key) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${key}`,
-      () => ({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: systemInstruction }] }],
-          generationConfig: { responseMimeType: 'application/json' }
-        })
-      })
-    );
+    const candidateModels = ['gemini-3.5-flash-lite', 'gemini-flash-latest'];
+    let lastRes = null;
+    let lastErr = null;
 
-    const data = await res.json();
-    return new Response(JSON.stringify(data), {
-      status: res.status,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    for (const model of candidateModels) {
+      try {
+        const res = await fetchWithKeyFailover(
+          (key) => `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+          () => ({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: systemInstruction }] }],
+              generationConfig: { responseMimeType: 'application/json' }
+            })
+          })
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        lastRes = res;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+
+    if (lastRes) {
+      const data = await lastRes.json().catch(() => ({}));
+      return new Response(JSON.stringify(data), {
+        status: lastRes.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    throw lastErr || new Error('All candidate models failed');
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
