@@ -508,7 +508,7 @@ async function executeMultiQuery(criteria) {
 
   // 7. NATIVE PGVECTOR SEMANTIC MATCHING (PRIMARY)
   try {
-    const semanticText = [
+    const semanticText = criteria.raw_prompt || [
       criteria.taste_summary,
       ...(criteria.target_top_notes || []),
       ...(criteria.target_base_notes || []),
@@ -627,6 +627,35 @@ async function computeOlfactoryDelta(likedQuery, dislikedQuery) {
   }
 }
 
+function isClashingProfile(fragrance, userPrompt) {
+  const p = (userPrompt || '').toLowerCase();
+  const accords = fragrance.accords || [];
+  
+  // If user requested summer / fresh / aquatic / citrus / cooling / mint
+  const wantsSummerFresh = /(?:summer|fresh|citrus|aquatic|marine|cooling|mint|clean)/i.test(p);
+  if (wantsSummerFresh) {
+    const leatherScore = accords.find(a => a.name.toLowerCase().includes('leather'))?.score || 0;
+    const oudScore = accords.find(a => a.name.toLowerCase().includes('oud') || a.name.toLowerCase().includes('animalic'))?.score || 0;
+    const heavySpicyScore = accords.find(a => a.name.toLowerCase().includes('warm spicy') || a.name.toLowerCase().includes('smoky'))?.score || 0;
+    
+    // Leather > 65 or Oud > 60 or Heavy Warm Spicy/Smoky > 75 directly clash with fresh summer mint/citrus
+    if (leatherScore > 65 || oudScore > 60 || heavySpicyScore > 75) {
+      return true;
+    }
+  }
+
+  // If user requested cozy / winter / gourmand / sweet / vanilla / boozy / dates
+  const wantsWinterGourmand = /(?:winter|warm|gourmand|sweet|vanilla|boozy|dates|praline|coffee)/i.test(p);
+  if (wantsWinterGourmand && !wantsSummerFresh) {
+    const aquaticScore = accords.find(a => a.name.toLowerCase().includes('marine') || a.name.toLowerCase().includes('aquatic'))?.score || 0;
+    if (aquaticScore > 75) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /**
  * --- CURATED DISCOVERY PALETTE (BEYOND CLONES) ---
  * Builds a balanced 4-quadrant discovery experience:
@@ -668,7 +697,7 @@ async function buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes)
       return false;
     };
 
-    const validPool = pool.filter(f => !isExcluded(f));
+    const validPool = pool.filter(f => !isExcluded(f) && !isClashingProfile(f, criteria.raw_prompt));
 
     // 1. Refined Sibling (if delta exists, pick sibling clone from dna_twins or inspiration that has LOW offending accord)
     let sibling = null;
@@ -837,7 +866,9 @@ function generateFallbackWhy(m, criteria, deltaInfo) {
  */
 export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   const currentSessionId = sessionId || getOrCreateSessionId();
+  const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
   const criteria = await analyzeConversationalIntent(chatHistory);
+  criteria.raw_prompt = lastUserMsg;
 
   // Client-side strict filter to guarantee exclusions never slip through
   const deterministicDislikes = extractDeterministicDislikes(chatHistory);
@@ -848,14 +879,13 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     deltaInfo = await computeOlfactoryDelta(criteria.contrast_liked, criteria.contrast_disliked);
   }
 
-  // 2. Select Candidates: Discovery Palette vs Standard Multi-Query
-  let rawMatches = null;
-  const isDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo);
-  if (isDiscovery) {
-    rawMatches = await buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes);
-  }
+  // 2. Select Candidates: Vector-First Native Search (Powered by 3,072-dim embeddings)
+  let rawMatches = await executeMultiQuery(criteria);
   if (!rawMatches || rawMatches.length === 0) {
-    rawMatches = await executeMultiQuery(criteria);
+    const isDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo);
+    if (isDiscovery) {
+      rawMatches = await buildDiscoveryPalette(criteria, deltaInfo, deterministicDislikes);
+    }
   }
 
   const safeMatches = (rawMatches || []).filter(m => {
@@ -898,6 +928,11 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       }
     }
 
+    // 4. Olfactory Clash Filter: Disqualify heavy leather/oud/warm spicy scents if user asked for summer fresh mint/aquatic
+    if (isClashingProfile(m, lastUserMsg)) {
+      return false;
+    }
+
     return true;
   });
 
@@ -931,7 +966,6 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   }
 
   // 4. Multi-Factor Olfactory & Semantic Review Algorithm Scoring (Gemini gemini-embedding-001)
-  const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
   const queryContext = `${lastUserMsg} ${criteria.taste_summary || ''}`;
 
   try {
