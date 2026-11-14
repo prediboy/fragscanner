@@ -1,25 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Sparkles, Send, Loader2, ArrowRight, ShieldCheck, Star, RotateCcw, Bot, User } from 'lucide-react';
-import { sendChatMessageToKhushboo } from '../services/aiConciergeService.js';
+import { sendChatMessageToKhushboo, getOrCreateSessionId, loadSessionHistory, persistChatMessage } from '../services/aiConciergeService.js';
 
 const INITIAL_MESSAGE = {
   id: 'welcome',
   role: 'assistant',
-  content: "Namaste! I'm Khushboo, your personal fragrance sommelier. Tell me about the perfumes you currently love, specific opening notes or drydowns you enjoy (or hate!), your budget, or what you're looking for.",
+  content: "Hi! I'm Khushboo, your fragrance assistant. Looking for a brand, a specific note, or a recommendation based on what you love or hate? Just ask!",
   suggestions: [
-    "I like Raw by Skinn & citrus, but hate Rare Reef & no direct BDC clones",
-    "Feminine fruity floral like J'adore and Celeste by Skinn",
-    "Warm boozy vanilla date night scent under ₹3,000",
-    "Clean office-safe aquatic with strong projection under ₹2,500"
+    "Give me all the Ajmal perfumes",
+    "I like Raw by Skinn & citrus, but no direct BDC clones",
+    "Show me cheap decants under ₹250",
+    "Do you have Hawas or Khamrah in stock?",
+    "Best rated winter date night scents under ₹2,500"
   ]
 };
 
 export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance }) {
+  const [sessionId] = useState(() => getOrCreateSessionId());
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPhase, setLoadingPhase] = useState('');
   const chatEndRef = useRef(null);
+
+  // Restore session history on mount/open
+  useEffect(() => {
+    if (isOpen) {
+      loadSessionHistory(sessionId).then(saved => {
+        if (saved && saved.length > 0) {
+          const hasWelcome = saved.some(m => m.id === 'welcome');
+          setMessages(hasWelcome ? saved : [INITIAL_MESSAGE, ...saved]);
+        }
+      });
+    }
+  }, [isOpen, sessionId]);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,26 +58,30 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
     setMessages(updatedMessages);
     setInput('');
     setIsLoading(true);
-    setLoadingPhase("Khushboo is analyzing note pyramids (top, heart, drydown)...");
+    setLoadingPhase("Khushboo is routing your query across catalog tools...");
+
+    // Persist user turn
+    persistChatMessage(sessionId, userMsg);
 
     const timer1 = setTimeout(() => {
-      setLoadingPhase("Matching notes & exclusions across 11 verified sellers...");
-    }, 900);
+      setLoadingPhase("Querying brand catalog, notes & verified sellers...");
+    }, 700);
 
     const timer2 = setTimeout(() => {
-      setLoadingPhase("Synthesizing tailored 'Why this fits you' sommelier reasoning...");
-    }, 1800);
+      setLoadingPhase("Synthesizing tailored recommendations & sommelier advice...");
+    }, 1500);
 
     try {
-      // Pass full conversation history for ongoing context
+      // Pass full conversation history for ongoing multi-turn context
       const response = await sendChatMessageToKhushboo(
-        updatedMessages.map(m => ({ role: m.role, content: m.content }))
+        updatedMessages.map(m => ({ role: m.role, content: m.content })),
+        sessionId
       );
 
       const assistantMsg = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: response.reply,
+        content: response.content,
         tasteSummary: response.tasteSummary,
         matches: response.matches || [],
         suggestions: response.suggestions || [],
@@ -76,7 +94,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
       const errorMsg = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: "I had a momentary hiccup connecting to the fragrance database. Could you please rephrase or try again?",
+        content: "I had a momentary hiccup connecting to the fragrance catalog. Could you please rephrase or try again?",
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, errorMsg]);
@@ -89,6 +107,11 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
   };
 
   const handleResetChat = () => {
+    try {
+      localStorage.removeItem(`khushboo_history_${sessionId}`);
+      const newSessionId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      localStorage.setItem('khushboo_session_id', newSessionId);
+    } catch {}
     setMessages([INITIAL_MESSAGE]);
     setInput('');
   };
@@ -111,14 +134,14 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                   Ask Khushboo
                 </h3>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                  AI Fragrance Sommelier
+                  AI Fragrance Assistant
                 </span>
                 <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hidden sm:inline-block">
-                  Live Chat
+                  Session Synced
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-mono">
-                Respecting Top, Heart & Drydown Notes • 11 Verified Sellers
+                Brand Catalogs • Note Pyramids • Decants • 11 Verified Sellers
               </p>
             </div>
           </div>
@@ -184,16 +207,16 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                     <div className="space-y-2 pt-1">
                       <div className="flex items-center justify-between px-1">
                         <span className="text-[11px] font-mono uppercase font-bold text-slate-400">
-                          Khushboo's Note-Aligned Picks ({msg.matches.length})
+                          Khushboo's Curated Matches ({msg.matches.length})
                         </span>
                         <span className="text-[10px] font-mono text-cyan-400">
-                          Top • Heart • Drydown matched
+                          Verified Community Stock
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {msg.matches.map((m, idx) => {
-                          const matchPct = Math.min(99, Math.max(70, Math.round(Number(m.match_score) || 85)));
+                          const matchPct = Math.min(99, Math.max(70, Math.round(Number(m.match_score) || 90)));
                           const rankLabel = idx === 0 ? "🏆 Top Match" : (idx === 1 ? "💎 Direct Twin" : `#${idx + 1} Pick`);
 
                           return (
@@ -231,7 +254,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                                   )}
                                 </div>
 
-                                {/* Why this fits you (Note Pyramid Alignment) */}
+                                {/* Why this fits you */}
                                 <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-950/40 via-slate-900 to-slate-900 border border-cyan-500/25 text-xs space-y-1">
                                   <div className="flex items-center gap-1 text-cyan-300 font-bold text-[10px] font-mono uppercase">
                                     <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
@@ -355,7 +378,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                 }
               }}
               rows={1}
-              placeholder="Message Khushboo (e.g. 'I want more watermelon in the opening', 'Keep it under ₹2,000')..."
+              placeholder="Ask for a brand (e.g. 'All Ajmal perfumes'), decants under ₹300, or describe notes..."
               className="w-full bg-[#131d31] border border-slate-700/80 focus:border-cyan-400 rounded-2xl px-4 py-3 pr-12 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none transition-colors resize-none font-sans"
             />
             <button
@@ -369,7 +392,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
           </form>
           <div className="mt-1.5 text-center">
             <span className="text-[10px] text-slate-500 font-mono">
-              Press Enter to send • Khushboo remembers your full chat context & exclusions
+              Press Enter to send • Session & memory persisted across visits
             </span>
           </div>
         </div>

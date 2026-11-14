@@ -4,8 +4,99 @@ const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 
 /**
- * 1. Multi-turn Conversational Olfactory Analyzer
- * Extracts cumulative preferences, exclusions, and strictly distinguishes Top, Middle, and Base notes.
+ * --- SESSION & CONVERSATION PERSISTENCE ---
+ */
+export function getOrCreateSessionId() {
+  const STORAGE_KEY = 'khushboo_session_id';
+  try {
+    let id = localStorage.getItem(STORAGE_KEY);
+    if (!id) {
+      id = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      localStorage.setItem(STORAGE_KEY, id);
+    }
+    return id;
+  } catch {
+    return `sess_${Date.now()}`;
+  }
+}
+
+export async function loadSessionHistory(sessionId) {
+  // 1. Try local storage cache first for instantaneous rendering
+  let localMsgs = [];
+  try {
+    const raw = localStorage.getItem(`khushboo_history_${sessionId}`);
+    if (raw) localMsgs = JSON.parse(raw);
+  } catch {
+    localMsgs = [];
+  }
+
+  // 2. Try loading remote history from Supabase if table exists
+  try {
+    const { data, error } = await supabase
+      .from('ai_chat_messages')
+      .select('*')
+      .eq('session_id', sessionId)
+      .order('created_at', { ascending: true });
+
+    if (!error && data && data.length > 0) {
+      return data.map(row => ({
+        id: row.id,
+        role: row.role,
+        content: row.content,
+        tasteSummary: row.taste_summary,
+        matches: row.matched_cards || [],
+        suggestions: row.suggestions || [],
+        timestamp: new Date(row.created_at).getTime()
+      }));
+    }
+  } catch {
+    // Supabase table may not exist yet; gracefully fallback
+  }
+
+  return localMsgs;
+}
+
+export async function persistChatMessage(sessionId, msg) {
+  // 1. Persist locally first
+  try {
+    const key = `khushboo_history_${sessionId}`;
+    const raw = localStorage.getItem(key);
+    const history = raw ? JSON.parse(raw) : [];
+    history.push(msg);
+    // Keep last 30 turns locally
+    localStorage.setItem(key, JSON.stringify(history.slice(-30)));
+  } catch (err) {
+    console.warn('[Khushboo Storage] Local save error:', err);
+  }
+
+  // 2. Save asynchronously to Supabase tables (session + message)
+  try {
+    // Upsert session
+    await supabase.from('ai_chat_sessions').upsert({
+      session_id: sessionId,
+      last_message: msg.content?.slice(0, 200) || '',
+      updated_at: new Date().toISOString()
+    });
+
+    // Insert message
+    await supabase.from('ai_chat_messages').insert({
+      session_id: sessionId,
+      role: msg.role,
+      content: msg.content,
+      taste_summary: msg.tasteSummary || null,
+      intent: msg.intent || 'chat',
+      matched_ids: (msg.matches || []).map(m => m.id),
+      matched_cards: msg.matches || [],
+      suggestions: msg.suggestions || []
+    });
+  } catch {
+    // Silently ignore if table has not been created yet in Supabase
+  }
+}
+
+/**
+ * --- MULTI-QUERY INTENT ROUTER ---
+ * Analyzes conversational history and routes into the best query tool
  */
 export async function analyzeConversationalIntent(chatHistory) {
   if (!GEMINI_KEY) {
@@ -13,28 +104,44 @@ export async function analyzeConversationalIntent(chatHistory) {
     return fallbackExtractIntent(lastUserMsg);
   }
 
-  const systemInstruction = `You are "Khushboo", a world-class Indian fragrance sommelier and database query analyzer.
-Analyze this ongoing conversation between a fragrance seeker and Khushboo:
+  const systemInstruction = `You are "Khushboo", a world-class Indian fragrance sommelier, conversational consultant, and database query router.
+Analyze this ongoing conversation between a fragrance enthusiast and Khushboo:
 
 ${JSON.stringify(chatHistory, null, 2)}
 
 Your task:
-1. Extract cumulative user preferences, strictly preserving any exclusions or dislikes mentioned throughout the chat.
-2. CRITICAL NOTE PYRAMID EXTRACTION:
-   - Carefully identify which phase of a fragrance the user cares about:
-     * TOP NOTES: Opening blast, initial spray, fresh burst (e.g. Watermelon, Bergamot, Lemon, Mandarin, Mint, Pink Pepper).
-     * MIDDLE / HEART NOTES: Transition floral/spicy heart (e.g. Jasmine, Rose, Geranium, Lavender, Cardamom, Violet Leaf).
-     * BASE NOTES: Drydown, skin scent, lingering sillage (e.g. Ambroxan, Sandalwood, Patchouli, Amber, Vanilla, Musk, Cedar, Oud).
-   - If user names perfumes they love (e.g. "Titan Skinn Raw", "J'adore", "Celeste", "Bleu de Chanel", "Sauvage"), infer their authentic, ground-truth note pyramid and populate target_top_notes, target_middle_notes, and target_base_notes accordingly.
-3. NEGATIONS & FATIGUE:
-   - If user says they hate, dislike, want to avoid, or are "done with" certain perfumes, clones, or genres (e.g. "hate rare reef", "done with bleu de chanel clones"), place them into "exclude_inspirations" or "exclude_terms".
-   - NEVER place excluded fragrances into target_inspirations!
-4. Write Khushboo's warm, conversational response acknowledging their specific note preferences (e.g. opening vs drydown) and budget.
+1. CLASSIFY THE USER'S INTENT into ONE of these query modes:
+   - "brand_catalog": The user asks to list, explore, or see perfumes from a specific brand (e.g. "give me all ajmal perfumes", "show me lattafa perfumes", "what do you have from afnan?", "skinn by titan fragrances").
+   - "direct_search": The user asks about a specific fragrance title or famous clone/line (e.g. "do you have hawas?", "show me khamrah", "kuro", "liquid brun", "aventus clones").
+   - "decant_finder": The user specifically asks for decants, samplers, discovery vials, or budget decants (e.g. "show me cheap decants under 250", "summer decants").
+   - "seller_stock": The user asks what a specific verified community seller has in stock (e.g. "what does Second Theory have?", "show Talib's stock", "darsh fragrances").
+   - "deals_and_top_rated": The user asks for best rated, biggest compliments, or price drops under a budget (e.g. "best winter perfumes under 2000", "top rated beast mode scents").
+   - "olfactory_match": The user describes scent preferences, notes they love or hate (opening blast vs heart vs drydown), or asks for alternatives/inspirations (e.g. "i like raw, want citrus opening with woody drydown, no bdc clones").
+   - "general_qa": The user asks a pure knowledge question (e.g. "what is ambroxan?", "what does maceration mean?", "how long does Kaaf last?", "what is the difference between EDT and EDP?") where NO product cards are needed.
+
+2. EXTRACT PARAMETERS:
+   - brand_filter: Extract brand name if brand_catalog (e.g. "Ajmal", "Lattafa", "Titan Skinn", "Afnan", "Rasasi", "Armaf").
+   - search_term: Extract search string if direct_search (e.g. "Hawas", "Khamrah", "Kuro", "Aventus").
+   - seller_filter: Extract seller name if seller_stock.
+   - max_price: Realistic budget limit if stated (default 15000). CRITICAL RULE: When user says "under 2500" or similar budget without explicitly asking for decants/samples, they ALWAYS mean retail/tester full bottles. Never count decant prices towards a bottle budget! Only use decant prices if intent is decant_finder.
+   - target_top_notes: Opening fresh blast notes (e.g. Watermelon, Bergamot, Lemon, Mint).
+   - target_middle_notes: Heart transition notes (e.g. Jasmine, Geranium, Lavender).
+   - target_base_notes: Drydown skin scent notes (e.g. Ambroxan, Sandalwood, Patchouli, Vanilla).
+   - target_notes: General notes.
+   - exclude_inspirations: Luxury archetypes user wants to avoid (e.g. ["%Bleu de Chanel%"]). NOTE: strip the word "clone", just use the bare perfume name!
+   - exclude_terms: Disliked perfumes (e.g. ["%Rare Reef%"]).
+
+3. CONVERSATIONAL REPLY:
+   Write Khushboo's warm, knowledgeable, charming 1-3 sentence response acknowledging their specific query, notes, or brand heritage.
 
 Return strictly raw JSON with this schema:
 {
-  "conversational_reply": "Khushboo's personalized 2-3 sentence conversational response explaining her curation strategy and noting the top/base notes she focused on.",
-  "taste_summary": "1-sentence summary of the current cumulative profile (e.g. 'Crisp watermelon-citrus opening with a warm sandalwood drydown under ₹3,000, excluding BDC clones.')",
+  "intent": "brand_catalog" | "direct_search" | "decant_finder" | "seller_stock" | "deals_and_top_rated" | "olfactory_match" | "general_qa",
+  "brand_filter": "Brand name or null",
+  "search_term": "Search title or null",
+  "seller_filter": "Seller name or null",
+  "conversational_reply": "Khushboo's warm personalized response",
+  "taste_summary": "1-sentence summary capsule of current criteria",
   "target_inspirations": ["%LuxuryBrand Or Perfume%"],
   "exclude_inspirations": ["%ExcludedInspiration%"],
   "exclude_terms": ["%ExcludedPerfumeOrBrand%"],
@@ -45,11 +152,10 @@ Return strictly raw JSON with this schema:
   "target_notes": ["%NoteName%"],
   "max_price": 5000,
   "min_rating": 3.8,
-  "suggestions": ["Follow-up question or refinement 1", "Refinement 2", "Refinement 3"]
+  "suggestions": ["Follow-up prompt 1", "Follow-up prompt 2", "Follow-up prompt 3"]
 }
 
 Rules:
-- Wrap all SQL target/exclude terms with % for ILIKE (e.g. "%Watermelon%", "%Bergamot%", "%Patchouli%").
 - Return raw JSON only, no markdown.`;
 
   try {
@@ -69,14 +175,14 @@ Rules:
       if (text) {
         const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
         const wrap = arr => (arr || []).map(item => (typeof item === 'string' && !item.startsWith('%')) ? `%${item}%` : item);
-        
-        // Clean exclusions: strip words like "clone", "clones", "direct inspiration" so SQL matches bare brand/fragrance names
+
+        // Normalize exclusions (strip "clones", "direct inspiration")
         const rawExclusions = wrap(parsed.exclude_inspirations);
         const cleanExclusions = rawExclusions.map(ex =>
           ex.replace(/clones?|direct|inspirations?|inspired by/gi, '').replace(/%+/g, '%').trim()
         ).filter(Boolean);
 
-        // Strip any excluded archetypes from positive target_inspirations
+        // Filter out excluded archetypes from positive target inspirations
         const rawTargets = wrap(parsed.target_inspirations);
         const safeTargets = rawTargets.filter(tgt => {
           const tClean = tgt.replace(/%/g, '').toLowerCase().trim();
@@ -87,7 +193,11 @@ Rules:
         });
 
         return {
-          conversational_reply: parsed.conversational_reply || "Here are tailored selections honoring your exact fragrance notes and style.",
+          intent: parsed.intent || 'olfactory_match',
+          brand_filter: parsed.brand_filter || null,
+          search_term: parsed.search_term || null,
+          seller_filter: parsed.seller_filter || null,
+          conversational_reply: parsed.conversational_reply || "Here is what I found across our verified catalog.",
           taste_summary: parsed.taste_summary || "Curated olfactory selections based on your conversation.",
           target_inspirations: safeTargets,
           exclude_inspirations: cleanExclusions,
@@ -100,16 +210,16 @@ Rules:
           max_price: parsed.max_price || 15000,
           min_rating: parsed.min_rating || 3.8,
           suggestions: parsed.suggestions || [
-            "Under ₹2,000 only",
-            "Show only full bottles",
-            "More woody in the drydown",
-            "Heavier citrus blast"
+            "Show only under ₹2,000",
+            "Show available decants",
+            "Tell me more about #1",
+            "Different brand options"
           ]
         };
       }
     }
   } catch (err) {
-    console.warn('[Khushboo] Conversational intent error, using fallback:', err.message);
+    console.warn('[Khushboo] Router error, using fallback:', err.message);
   }
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
@@ -117,132 +227,270 @@ Rules:
 }
 
 /**
- * Heuristic fallback with note-pyramid awareness
+ * Heuristic fallback router
  */
 function fallbackExtractIntent(prompt) {
   const p = (prompt || '').toLowerCase();
+  
+  // Brand intent
+  const brandMatch = p.match(/(?:all|show|give me|list)\s*(?:the\s*)?(ajmal|lattafa|afnan|rasasi|armaf|ahmed al maghribi|titan|skinn|paris corner|fragrance world|al haramain)/i);
+  if (brandMatch) {
+    const brand = brandMatch[1];
+    return {
+      intent: 'brand_catalog',
+      brand_filter: brand,
+      conversational_reply: `Here are the top-rated in-stock perfumes from ${brand} across verified community sellers.`,
+      taste_summary: `Browsing ${brand} collection`,
+      target_inspirations: [],
+      exclude_inspirations: [],
+      exclude_terms: [],
+      target_accords: [],
+      target_top_notes: [],
+      target_middle_notes: [],
+      target_base_notes: [],
+      target_notes: [],
+      max_price: 15000,
+      min_rating: 3.8,
+      suggestions: [`Under ₹2,500 from ${brand}`, `Best rated ${brand}`, `Decants of ${brand}`]
+    };
+  }
+
+  // Decants intent
+  if (/decant|sampler|vial/i.test(p)) {
+    const budgetMatch = p.match(/(?:under|below|budget|within|upto|up to|rs\.?|inr|₹)\s*(\d{3,5})/i);
+    const maxPrice = budgetMatch ? parseInt(budgetMatch[1], 10) : 500;
+    return {
+      intent: 'decant_finder',
+      brand_filter: null,
+      conversational_reply: `Here are verified community decants available under ₹${maxPrice}.`,
+      taste_summary: `Decants under ₹${maxPrice}`,
+      target_inspirations: [],
+      exclude_inspirations: [],
+      exclude_terms: [],
+      target_accords: [],
+      target_top_notes: [],
+      target_middle_notes: [],
+      target_base_notes: [],
+      target_notes: [],
+      max_price: maxPrice,
+      min_rating: 3.8,
+      suggestions: ["Under ₹200 only", "Summer fresh decants", "Full bottle alternatives"]
+    };
+  }
+
+  // Fallback to olfactory matching
   const inspirations = [];
   const excludeInspirations = [];
-  const excludeTerms = [];
-  const accords = [];
   const topNotes = [];
   const middleNotes = [];
   const baseNotes = [];
 
-  const hasBdcExclusion = /not.*(?:bleu|bdc)|done with.*(?:bleu|bdc)|hate.*(?:bleu|bdc)/i.test(p);
-  const hasRareReefExclusion = /hate.*rare reef|not.*rare reef|avoid.*rare reef/i.test(p);
-
-  if (hasBdcExclusion) {
+  if (/raw/i.test(p)) {
+    topNotes.push('%Watermelon%', '%Bergamot%');
+    baseNotes.push('%Patchouli%', '%Sandalwood%');
+  }
+  if (/not.*(?:bleu|bdc)|done with.*(?:bleu|bdc)/i.test(p)) {
     excludeInspirations.push('%Bleu de Chanel%');
-  } else if (/bleu de chanel|bdc/i.test(p)) {
-    inspirations.push('%Bleu de Chanel%');
   }
-
-  if (hasRareReefExclusion) {
-    excludeTerms.push('%Rare Reef%');
-    excludeInspirations.push('%Rare Reef%');
-  }
-
-  if (/raw|skinn raw/i.test(p)) {
-    accords.push('%Citrus%', '%Fresh Spicy%', '%Aquatic%');
-    topNotes.push('%Watermelon%', '%Bergamot%', '%Mandarin%');
-    middleNotes.push('%Geranium%', '%Violet Leaf%');
-    baseNotes.push('%Patchouli%', '%Sandalwood%', '%Amber%');
-  }
-
-  if (/aventus/i.test(p)) {
-    inspirations.push('%Aventus%');
-    accords.push('%Fruity%', '%Smoky%');
-    topNotes.push('%Pineapple%', '%Bergamot%');
-    baseNotes.push('%Birch%', '%Oakmoss%');
-  }
-
-  if (/j'?adore|jadore/i.test(p)) {
-    inspirations.push('%J\'adore%');
-    accords.push('%White Floral%', '%Fruity%');
-    topNotes.push('%Pear%', '%Melon%', '%Peach%');
-    middleNotes.push('%Jasmine%', '%Lily of the Valley%');
-    baseNotes.push('%Musk%', '%Vanilla%');
-  }
-
-  if (/celeste/i.test(p)) {
-    inspirations.push('%Celeste%');
-    accords.push('%White Floral%', '%Fruity%');
-    topNotes.push('%Peach%', '%Blood Orange%');
-    middleNotes.push('%Jasmine%', '%Water Lily%');
-    baseNotes.push('%Sandalwood%', '%Patchouli%');
-  }
-
-  if (/citrus|citrusy/i.test(p)) {
-    accords.push('%Citrus%');
-    topNotes.push('%Bergamot%', '%Grapefruit%', '%Lemon%');
-  }
-
-  if (/vanilla|sweet/i.test(p)) {
-    accords.push('%Vanilla%', '%Sweet%');
-    baseNotes.push('%Vanilla%', '%Amber%');
-  }
-
-  const budgetMatch = p.match(/(?:under|below|budget|within|upto|up to|rs\.?|inr|₹)\s*(\d{3,5})/i);
-  const maxPrice = budgetMatch ? parseInt(budgetMatch[1], 10) : 15000;
-
-  const allNotes = [...topNotes, ...middleNotes, ...baseNotes];
 
   return {
-    conversational_reply: `I've analyzed your notes preferences and curated recommendations respecting your opening, heart, and drydown preferences.`,
-    taste_summary: `Identified profile based on: "${prompt.slice(0, 50)}..."`,
+    intent: 'olfactory_match',
+    brand_filter: null,
+    conversational_reply: "I've analyzed your notes and preferences and curated selections honoring your opening and drydown tastes.",
+    taste_summary: `Profile based on: "${prompt.slice(0, 45)}..."`,
     target_inspirations: inspirations,
     exclude_inspirations: excludeInspirations,
-    exclude_terms: excludeTerms,
-    target_accords: accords,
+    exclude_terms: [],
+    target_accords: ['%Citrus%', '%Fresh%'],
     target_top_notes: topNotes,
     target_middle_notes: middleNotes,
     target_base_notes: baseNotes,
-    target_notes: allNotes,
-    max_price: maxPrice,
+    target_notes: [...topNotes, ...baseNotes],
+    max_price: 15000,
     min_rating: 3.8,
-    suggestions: [
-      "Show options under ₹2,000",
-      "More citrus opening",
-      "Heavier drydown",
-      "Full bottles only"
-    ]
+    suggestions: ["Under ₹2,000 only", "Heavier woody drydown", "Only full bottles"]
   };
 }
 
 /**
- * 2. Generate personalized "Why this fits you" sommelier reasoning
- * Explicitly breaks down Top opening vs Heart vs Base drydown harmony.
+ * --- MULTI-QUERY EXECUTOR ---
+ * Executes the targeted query according to classified intent
+ */
+async function executeMultiQuery(criteria) {
+  const intent = criteria.intent || 'olfactory_match';
+
+  // 1. BRAND CATALOG QUERY
+  if (intent === 'brand_catalog' && criteria.brand_filter) {
+    const cleanBrand = criteria.brand_filter.replace(/%/g, '').trim();
+    let query = supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants')
+      .ilike('brand', `%${cleanBrand}%`);
+
+    // Strict bottle budget: if user specified a budget and did NOT ask for decants, filter retail/tester bottle price only
+    if (criteria.max_price && criteria.max_price < 50000) {
+      query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
+    } else {
+      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+    }
+
+    const { data } = await query.order('rating_value', { ascending: false }).limit(10);
+    return (data || []).map(f => ({
+      ...f,
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+      match_score: 95
+    }));
+  }
+
+  // 2. DIRECT SEARCH QUERY
+  if (intent === 'direct_search' && criteria.search_term) {
+    const term = criteria.search_term.replace(/%/g, '').trim();
+    let query = supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants')
+      .or(`name.ilike.%${term}%,dna_inspiration.ilike.%${term}%,brand.ilike.%${term}%`);
+
+    if (criteria.max_price && criteria.max_price < 50000) {
+      query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
+    } else {
+      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+    }
+
+    const { data } = await query.order('rating_value', { ascending: false }).limit(8);
+
+    return (data || []).map(f => ({
+      ...f,
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+      match_score: 96
+    }));
+  }
+
+  // 3. DECANT FINDER QUERY
+  if (intent === 'decant_finder') {
+    const maxPrice = criteria.max_price || 500;
+    const { data } = await supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants')
+      .eq('has_decants', true)
+      .lte('lowest_decant_price', maxPrice)
+      .order('lowest_decant_price', { ascending: true })
+      .limit(8);
+
+    return (data || []).map(f => ({
+      ...f,
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Decanter',
+      match_score: 94
+    }));
+  }
+
+  // 4. SELLER INVENTORY QUERY
+  if (intent === 'seller_stock' && criteria.seller_filter) {
+    const seller = criteria.seller_filter.toLowerCase();
+    const { data } = await supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants')
+      .or('in_seller_stock.eq.true,has_decants.eq.true')
+      .limit(50);
+
+    const matches = (data || []).filter(f => {
+      const best = (f.best_bottle_seller || '').toLowerCase();
+      const sJson = JSON.stringify(f.community_sellers || []).toLowerCase();
+      return best.includes(seller) || sJson.includes(seller);
+    }).slice(0, 8);
+
+    return matches.map(f => ({
+      ...f,
+      best_seller: criteria.seller_filter,
+      match_score: 92
+    }));
+  }
+
+  // 5. DEALS & TOP RATED QUERY
+  if (intent === 'deals_and_top_rated') {
+    let query = supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants');
+
+    if (criteria.max_price && criteria.max_price < 50000) {
+      query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
+    } else {
+      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+    }
+
+    const { data } = await query.order('rating_value', { ascending: false }).limit(8);
+    return (data || []).map(f => ({
+      ...f,
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+      match_score: 90
+    }));
+  }
+
+  // 6. GENERAL QA (NO CARDS NEEDED)
+  if (intent === 'general_qa') {
+    return [];
+  }
+
+  // 7. OLFACTORY NOTE PYRAMID MATCHING (DEFAULT)
+  const allNotes = [
+    ...(criteria.target_top_notes || []),
+    ...(criteria.target_middle_notes || []),
+    ...(criteria.target_base_notes || []),
+    ...(criteria.target_notes || [])
+  ];
+
+  try {
+    const { data, error } = await supabase.rpc('match_fragrance_concierge', {
+      target_inspirations: criteria.target_inspirations || [],
+      target_accords: criteria.target_accords || [],
+      target_notes: allNotes,
+      max_price: criteria.max_price || 15000,
+      min_rating: criteria.min_rating || 3.8,
+      exclude_inspirations: criteria.exclude_inspirations || [],
+      exclude_names: criteria.exclude_terms || []
+    });
+
+    if (!error && data) return data;
+  } catch {
+    // Fallback to 5-param signature if needed
+    const { data } = await supabase.rpc('match_fragrance_concierge', {
+      target_inspirations: criteria.target_inspirations || [],
+      target_accords: criteria.target_accords || [],
+      target_notes: allNotes,
+      max_price: criteria.max_price || 15000,
+      min_rating: criteria.min_rating || 3.8
+    });
+    return data || [];
+  }
+
+  return [];
+}
+
+/**
+ * --- "WHY THIS FITS YOU" SYNTHESIS ---
  */
 async function synthesizeWhys(chatHistory, matches, criteria) {
   if (!matches || matches.length === 0) return [];
   if (!GEMINI_KEY) {
-    return matches.map(m => ({ ...m, why: generateFallbackWhy(m) }));
+    return matches.map(m => ({ ...m, why: generateFallbackWhy(m, criteria) }));
   }
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
 
-  const prompt = `You are "Khushboo", a world-class fragrance sommelier and scent curator.
+  const prompt = `You are "Khushboo", a world-class fragrance sommelier.
 The user asked: "${lastUserMsg}".
-User's Note Focus:
-- Top Notes (Opening): ${JSON.stringify(criteria.target_top_notes || [])}
-- Middle Notes (Heart): ${JSON.stringify(criteria.target_middle_notes || [])}
-- Base Notes (Drydown): ${JSON.stringify(criteria.target_base_notes || [])}
-- Exclusions: ${JSON.stringify(criteria.exclude_inspirations || [])}
+Query Intent: ${criteria.intent}
+Top Notes Focus: ${JSON.stringify(criteria.target_top_notes || [])}
+Base Notes Focus: ${JSON.stringify(criteria.target_base_notes || [])}
+Brand Filter: ${criteria.brand_filter || 'None'}
 
-Here are the selected perfumes from our verified database:
+Here are the selected perfumes:
 ${JSON.stringify(matches.map(m => ({
   id: m.id,
   brand: m.brand,
   name: m.name,
   inspiration: m.dna_inspiration,
   dna_type: m.dna_type,
-  price: m.community_price ? `₹${m.community_price}` : (m.lowest_decant_price ? `Decant from ₹${m.lowest_decant_price}` : 'Available'),
+  price: m.community_price ? `₹${m.community_price}` : (m.lowest_decant_price ? `Decant ₹${m.lowest_decant_price}` : 'Available'),
   seller: m.best_seller
 })), null, 2)}
 
-For EACH perfume, write a deeply personalized, knowledgeable 1-2 sentence "Why this fits you" explanation.
-Mention specifically how its notes align (e.g. "Shares the crisp watermelon/bergamot opening blast you love...", "Delivers that woody-patchouli drydown without the BDC clone baggage...").
+For EACH perfume, write a personalized, knowledgeable 1-2 sentence "Why this fits you" explanation.
+Mention shared notes, brand reputation, or how it fulfills their request.
 Return strictly raw JSON:
 {
   "whys": {
@@ -269,75 +517,41 @@ Return strictly raw JSON:
         const whys = parsed.whys || {};
         return matches.map(m => ({
           ...m,
-          why: whys[m.id] || generateFallbackWhy(m)
+          why: whys[m.id] || generateFallbackWhy(m, criteria)
         }));
       }
     }
   } catch (err) {
-    console.warn('[Khushboo] synthesizeWhys error, using fallback:', err.message);
+    console.warn('[Khushboo] synthesizeWhys error:', err.message);
   }
 
   return matches.map(m => ({
     ...m,
-    why: generateFallbackWhy(m)
+    why: generateFallbackWhy(m, criteria)
   }));
 }
 
-function generateFallbackWhy(m) {
+function generateFallbackWhy(m, criteria) {
+  if (criteria?.intent === 'brand_catalog') {
+    return `One of ${m.brand}'s standout creations in community stock with verified ${m.rating_value ? `★ ${m.rating_value}` : 'high'} rating.`;
+  }
   if (m.dna_inspiration && !m.dna_inspiration.toLowerCase().includes('original creation')) {
     return `Captures the ${m.dna_type || 'harmonious'} olfactory structure inspired by ${m.dna_inspiration}. Verified community price at ₹${m.community_price || m.lowest_decant_price}.`;
   }
-  return `Matches your requested notes profile across the top and base phases with verified ${m.rating_value ? `★ ${m.rating_value}` : 'community'} rating.`;
+  return `Matches your requested notes profile with verified community performance via ${m.best_seller || 'verified sellers'}.`;
 }
 
 /**
- * 3. End-to-end Chat Turn with Khushboo
- * Maintains ongoing conversation, queries Supabase, applies negative filters, and synthesizes results.
+ * --- MAIN ENTRYPOINT: SEND CHAT MESSAGE TO KHUSHBOO ---
  */
-export async function sendChatMessageToKhushboo(chatHistory) {
+export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
+  const currentSessionId = sessionId || getOrCreateSessionId();
   const criteria = await analyzeConversationalIntent(chatHistory);
 
-  let rawMatches = [];
+  // Execute multi-query based on intent
+  const rawMatches = await executeMultiQuery(criteria);
 
-  // Attempt RPC query with full note pyramid support
-  try {
-    const allNotes = [
-      ...(criteria.target_top_notes || []),
-      ...(criteria.target_middle_notes || []),
-      ...(criteria.target_base_notes || []),
-      ...(criteria.target_notes || [])
-    ];
-
-    const { data, error } = await supabase.rpc('match_fragrance_concierge', {
-      target_inspirations: criteria.target_inspirations || [],
-      target_accords: criteria.target_accords || [],
-      target_notes: allNotes,
-      max_price: criteria.max_price || 15000,
-      min_rating: criteria.min_rating || 3.8,
-      exclude_inspirations: criteria.exclude_inspirations || [],
-      exclude_names: criteria.exclude_terms || []
-    });
-
-    if (error) {
-      // Fallback to 5-param signature if needed
-      const fallbackRpc = await supabase.rpc('match_fragrance_concierge', {
-        target_inspirations: criteria.target_inspirations || [],
-        target_accords: criteria.target_accords || [],
-        target_notes: allNotes,
-        max_price: criteria.max_price || 15000,
-        min_rating: criteria.min_rating || 3.8
-      });
-      if (fallbackRpc.error) throw fallbackRpc.error;
-      rawMatches = fallbackRpc.data || [];
-    } else {
-      rawMatches = data || [];
-    }
-  } catch (err) {
-    console.error('[Khushboo] Supabase RPC error:', err);
-    throw err;
-  }
-
-  // Double-layer defense: Client-side strict filter to guarantee zero excluded items leak through
+  // Client-side strict filter to guarantee exclusions never slip through
   const safeMatches = (rawMatches || []).filter(m => {
     const insp = (m.dna_inspiration || '').toLowerCase();
     const name = (m.name || '').toLowerCase();
@@ -350,18 +564,35 @@ export async function sendChatMessageToKhushboo(chatHistory) {
       const clean = ex.replace(/%/g, '').toLowerCase().trim();
       if (clean && (name.includes(clean) || insp.includes(clean))) return false;
     }
+
+    // Strict Bottle Budget: when user specifies "under X" and did NOT explicitly ask for decants,
+    // only count retail/tester bottles (community_price <= max_price), NEVER decant prices!
+    if (criteria.intent !== 'decant_finder' && criteria.max_price && criteria.max_price < 50000) {
+      const bottlePrice = Number(m.community_price);
+      if (!bottlePrice || bottlePrice > criteria.max_price) {
+        return false;
+      }
+    }
+
     return true;
   });
 
   const matchesWithWhys = await synthesizeWhys(chatHistory, safeMatches, criteria);
 
-  return {
-    reply: criteria.conversational_reply,
+  const assistantResponse = {
+    role: 'assistant',
+    content: criteria.conversational_reply,
     tasteSummary: criteria.taste_summary,
     criteria,
     matches: matchesWithWhys,
-    suggestions: criteria.suggestions || []
+    suggestions: criteria.suggestions || [],
+    intent: criteria.intent
   };
+
+  // Persist assistant message in background
+  persistChatMessage(currentSessionId, assistantResponse);
+
+  return assistantResponse;
 }
 
 // Backward compatibility alias
