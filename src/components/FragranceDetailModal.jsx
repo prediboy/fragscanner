@@ -226,14 +226,47 @@ function PriceTrendIntelligence({ fragrance }) {
       {svgCoords.length >= 2 ? (
         <div className="space-y-1.5 pt-1">
           <div className="relative bg-[#090e1a] rounded-xl p-3 border border-slate-800/90 overflow-hidden">
+            {/* Live Hover Inspection Bar */}
+            <div className="flex items-center justify-between text-xs mb-2 px-1 pb-1.5 border-b border-slate-800/80">
+              {hoveredPoint ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
+                    <span className="font-mono font-extrabold text-white text-sm">
+                      ₹{Number(hoveredPoint.price).toLocaleString()}
+                    </span>
+                    <span className="text-slate-300 text-xs font-semibold">
+                      {hoveredPoint.seller_name}
+                    </span>
+                    <span className="text-[10px] text-slate-400 bg-slate-800 px-1.5 py-0.2 rounded font-mono">
+                      {hoveredPoint.size || hoveredPoint.format || 'Bottle'}
+                    </span>
+                  </div>
+                  <div className="text-[11px] font-mono text-emerald-400 font-bold">
+                    {(hoveredPoint.recorded_at || '').slice(0, 10)}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/60" />
+                    Hover points to inspect verified quotes over time
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">
+                    {points.length} verified quotes
+                  </span>
+                </>
+              )}
+            </div>
+
             <svg 
               viewBox={`0 0 ${svgWidth} ${svgHeight}`} 
-              className="w-full h-24 overflow-visible"
+              className="w-full h-24 overflow-visible block"
               preserveAspectRatio="none"
             >
               <defs>
                 <linearGradient id="priceTrendGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.45" />
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
                   <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
@@ -249,47 +282,90 @@ function PriceTrendIntelligence({ fragrance }) {
                 strokeWidth="2.5" 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
+                vectorEffect="non-scaling-stroke"
               />
 
-              {/* Interactive Dots */}
+              {/* Vertical Crosshair Guide */}
+              {hoveredPoint && (
+                <line
+                  x1={hoveredPoint.x}
+                  y1={4}
+                  x2={hoveredPoint.x}
+                  y2={svgHeight}
+                  stroke="#10b981"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 3"
+                  vectorEffect="non-scaling-stroke"
+                  opacity="0.8"
+                />
+              )}
+
+              {/* Interactive Dots and large hit areas */}
               {svgCoords.map((c, i) => {
                 const isHovered = hoveredPoint?.i === i;
                 const isLast = i === svgCoords.length - 1;
                 return (
                   <g key={i}>
+                    {/* Invisible enlarged hit area (no scaling blur) */}
                     <circle
                       cx={c.x}
                       cy={c.y}
-                      r={isHovered ? 6 : (isLast ? 4.5 : 3)}
-                      fill={isLast ? '#10b981' : '#38bdf8'}
-                      stroke="#0f172a"
-                      strokeWidth={2}
-                      className="cursor-pointer transition-all hover:scale-125"
+                      r={18}
+                      fill="transparent"
+                      className="cursor-pointer"
                       onMouseEnter={() => setHoveredPoint({ ...c.point, x: c.x, y: c.y, i })}
                       onMouseLeave={() => setHoveredPoint(null)}
+                    />
+                    {/* Outer glow ring for hovered point */}
+                    {isHovered && (
+                      <circle
+                        cx={c.x}
+                        cy={c.y}
+                        r={9}
+                        fill="none"
+                        stroke="#10b981"
+                        strokeWidth={1.5}
+                        vectorEffect="non-scaling-stroke"
+                        className="pointer-events-none opacity-80"
+                      />
+                    )}
+                    {/* Crisp vector point */}
+                    <circle
+                      cx={c.x}
+                      cy={c.y}
+                      r={isHovered ? 5.5 : (isLast ? 4.5 : 3.5)}
+                      fill={isHovered ? '#34d399' : (isLast ? '#10b981' : '#38bdf8')}
+                      stroke="#090e1a"
+                      strokeWidth={2}
+                      vectorEffect="non-scaling-stroke"
+                      className="pointer-events-none"
                     />
                   </g>
                 );
               })}
             </svg>
 
-            {/* Hover Tooltip Overlay */}
+            {/* Crisp Tooltip Card (Zero transition-all, zero subpixel blur) */}
             {hoveredPoint && (
               <div 
-                className="absolute z-20 pointer-events-none px-2.5 py-1.5 rounded-lg bg-slate-950/95 border border-emerald-500/50 shadow-xl text-left text-xs whitespace-nowrap transition-all"
+                className="absolute z-20 pointer-events-none px-2.5 py-1.5 rounded-lg bg-[#0d1527] border border-emerald-500/80 shadow-2xl text-left antialiased"
                 style={{
-                  left: `${Math.min(85, Math.max(15, (hoveredPoint.x / svgWidth) * 100))}%`,
-                  top: '12px',
-                  transform: 'translateX(-50%)'
+                  top: '42px',
+                  ...(hoveredPoint.x > svgWidth * 0.7
+                    ? { right: `${Math.round(100 - (hoveredPoint.x / svgWidth) * 100)}%` }
+                    : hoveredPoint.x < svgWidth * 0.3
+                    ? { left: `${Math.round((hoveredPoint.x / svgWidth) * 100)}%` }
+                    : { left: `${Math.round((hoveredPoint.x / svgWidth) * 100)}%`, transform: 'translateX(-50%)' }
+                  )
                 }}
               >
-                <div className="font-mono font-bold text-emerald-400 text-sm">
+                <div className="font-mono font-bold text-emerald-400 text-xs">
                   ₹{Number(hoveredPoint.price).toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-300 font-medium">
+                <div className="text-[10px] text-slate-200 font-semibold leading-tight">
                   {hoveredPoint.seller_name}
                 </div>
-                <div className="text-[9px] text-slate-400">
+                <div className="text-[9px] text-slate-400 font-mono">
                   {(hoveredPoint.recorded_at || '').slice(0, 10)}
                 </div>
               </div>
