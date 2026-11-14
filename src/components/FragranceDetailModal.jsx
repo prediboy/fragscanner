@@ -1,11 +1,356 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   X, Star, Sparkles, Wind, Sun, Moon, Calendar, 
   CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, Zap, Tag, Flame,
-  Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe 
+  Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe,
+  TrendingDown, TrendingUp, Activity, Clock, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { getFragranceRecommendations } from '../utils/recommender';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
+import { fetchFragrancePriceTrend } from '../services/inventoryApi';
+
+/**
+ * Price Trend & Deal Intelligence Component
+ * Renders interactive SVG price trendline, community lowest/avg metrics, and drop timestamps
+ */
+function PriceTrendIntelligence({ fragrance }) {
+  const [trends, setTrends] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showHistoryLog, setShowHistoryLog] = useState(false);
+  const [hoveredPoint, setHoveredPoint] = useState(null);
+
+  useEffect(() => {
+    if (!fragrance) return;
+    let active = true;
+    setLoading(true);
+
+    fetchFragrancePriceTrend(fragrance.id, fragrance.name)
+      .then(data => {
+        if (!active) return;
+        if (data && data.length > 0) {
+          setTrends(data);
+        } else if (Array.isArray(fragrance.price_history) && fragrance.price_history.length > 0) {
+          // Fallback to embedded price_history
+          setTrends(fragrance.price_history.map(ph => ({
+            price: Number(ph.price),
+            seller_name: ph.seller || ph.seller_name || fragrance.best_bottle_seller || 'Verified Seller',
+            format: 'retail',
+            size: ph.size || 'Bottle',
+            recorded_at: ph.timestamp || (ph.date ? `${ph.date}T${ph.time || '12:00:00'}Z` : fragrance.updated_at)
+          })));
+        } else {
+          setTrends([]);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => { active = false; };
+  }, [fragrance?.id]);
+
+  // Aggregate and clean chronological bottle points
+  const points = useMemo(() => {
+    const valid = (trends || []).filter(p => Number(p.price) > 0);
+    if (valid.length === 0) {
+      if (fragrance?.community_price) {
+        return [{
+          price: Number(fragrance.community_price),
+          seller_name: fragrance.best_bottle_seller || 'Verified Seller',
+          format: 'retail',
+          size: 'Bottle',
+          recorded_at: new Date().toISOString()
+        }];
+      }
+      return [];
+    }
+
+    // Sort chronologically
+    valid.sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
+
+    // Deduplicate consecutive identical prices on the same day for smoother sparkline
+    const deduped = [];
+    valid.forEach(p => {
+      const day = (p.recorded_at || '').slice(0, 10);
+      const last = deduped[deduped.length - 1];
+      if (!last || last.day !== day || Number(last.price) !== Number(p.price)) {
+        deduped.push({ ...p, day });
+      }
+    });
+
+    return deduped;
+  }, [trends, fragrance?.community_price, fragrance?.best_bottle_seller]);
+
+  const currentPrice = Number(fragrance?.community_price || (points[points.length - 1]?.price || 0));
+  const pricesList = points.map(p => Number(p.price)).filter(p => p > 0);
+  const minPrice = pricesList.length > 0 ? Math.min(...pricesList, currentPrice > 0 ? currentPrice : Infinity) : currentPrice;
+  const maxPrice = pricesList.length > 0 ? Math.max(...pricesList, currentPrice) : currentPrice;
+  const avgPrice = pricesList.length > 0 ? Math.round(pricesList.reduce((a, b) => a + b, 0) / pricesList.length) : currentPrice;
+  const spread = maxPrice > minPrice ? maxPrice - minPrice : 0;
+
+  const isPriceDrop = Boolean(fragrance?.is_price_drop || (fragrance?.price_change && Number(fragrance.price_change) < 0));
+  const dropAmount = Math.abs(Number(fragrance?.price_change || 0));
+  const dropPct = fragrance?.price_change_percentage || (fragrance?.previous_price ? Math.round((dropAmount / Number(fragrance.previous_price)) * 100) : 0);
+  const dropDate = fragrance?.price_change_date || 'Today';
+  const dropTime = fragrance?.price_change_time || '';
+
+  // SVG Sparkline Math (width 500, height 85)
+  const svgWidth = 500;
+  const svgHeight = 85;
+  const paddingX = 24;
+  const paddingY = 16;
+
+  const svgCoords = useMemo(() => {
+    if (points.length < 2) return [];
+    const minP = minPrice;
+    const maxP = maxPrice === minPrice ? minPrice + 100 : maxPrice;
+    const rangeP = maxP - minP;
+
+    return points.map((p, idx) => {
+      const x = paddingX + (idx / (points.length - 1)) * (svgWidth - paddingX * 2);
+      const normY = (Number(p.price) - minP) / rangeP;
+      // Invert Y so highest price is at top
+      const y = (svgHeight - paddingY) - normY * (svgHeight - paddingY * 2);
+      return { x, y, point: p };
+    });
+  }, [points, minPrice, maxPrice]);
+
+  const linePath = useMemo(() => {
+    if (svgCoords.length < 2) return '';
+    return svgCoords.reduce((acc, coord, idx) => {
+      return idx === 0 ? `M ${coord.x} ${coord.y}` : `${acc} L ${coord.x} ${coord.y}`;
+    }, '');
+  }, [svgCoords]);
+
+  const areaPath = useMemo(() => {
+    if (svgCoords.length < 2) return '';
+    const first = svgCoords[0];
+    const last = svgCoords[svgCoords.length - 1];
+    return `${linePath} L ${last.x} ${svgHeight} L ${first.x} ${svgHeight} Z`;
+  }, [linePath, svgCoords]);
+
+  if (!loading && points.length === 0) return null;
+
+  return (
+    <div className="rounded-2xl bg-gradient-to-br from-[#111c33] via-[#0d1527] to-[#090d18] border border-slate-700/80 p-4 sm:p-5 shadow-xl space-y-4">
+      {/* 1. Header with Live Drop Status */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-800/80">
+        <div className="flex items-center gap-2">
+          <span className="p-1.5 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            <Activity className="w-4 h-4" />
+          </span>
+          <div>
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <span>Price Trend & Deal Intelligence</span>
+              {points.length > 1 && (
+                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                  {points.length} Historical Points
+                </span>
+              )}
+            </h4>
+            <p className="text-[11px] text-slate-400">
+              Live price tracking across 11 verified community sellers
+            </p>
+          </div>
+        </div>
+
+        {isPriceDrop && dropAmount > 0 && (
+          <div className="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
+            <Flame className="w-4 h-4 text-emerald-400 animate-pulse shrink-0" />
+            <div className="text-right">
+              <span className="text-xs font-bold text-emerald-300 block">
+                Dropped ₹{dropAmount.toLocaleString()} ({dropPct}%)
+              </span>
+              <span className="text-[10px] text-slate-300 flex items-center justify-end gap-1">
+                <Clock className="w-3 h-3 text-emerald-400" />
+                {dropDate} {dropTime ? `at ${dropTime} IST` : ''}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 2. Key Metrics Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/90">
+          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            Current Best Deal
+          </span>
+          <strong className="text-sm sm:text-base font-mono font-extrabold text-emerald-400">
+            ₹{currentPrice > 0 ? currentPrice.toLocaleString() : 'N/A'}
+          </strong>
+          <span className="text-[10px] text-slate-400 block truncate">
+            via {fragrance?.best_bottle_seller || 'Verified Seller'}
+          </span>
+        </div>
+
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/90">
+          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            Lowest Recorded
+          </span>
+          <strong className="text-sm sm:text-base font-mono font-extrabold text-cyan-400">
+            ₹{minPrice > 0 ? minPrice.toLocaleString() : 'N/A'}
+          </strong>
+          <span className="text-[10px] text-slate-400 block truncate">
+            {minPrice === currentPrice ? '🔥 At All-Time Low' : 'Historical Best'}
+          </span>
+        </div>
+
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/90">
+          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            Community Average
+          </span>
+          <strong className="text-sm sm:text-base font-mono font-extrabold text-amber-400">
+            ₹{avgPrice > 0 ? avgPrice.toLocaleString() : 'N/A'}
+          </strong>
+          <span className="text-[10px] text-slate-400 block truncate">
+            {currentPrice < avgPrice ? `₹${avgPrice - currentPrice} below avg` : 'Market Baseline'}
+          </span>
+        </div>
+
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/90">
+          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            Seller Spread
+          </span>
+          <strong className="text-sm sm:text-base font-mono font-extrabold text-purple-300">
+            {spread > 0 ? `₹${spread.toLocaleString()}` : 'Best Price'}
+          </strong>
+          <span className="text-[10px] text-slate-400 block truncate">
+            {spread > 0 ? 'Max Seller Variance' : 'Unified Pricing'}
+          </span>
+        </div>
+      </div>
+
+      {/* 3. Interactive SVG Sparkline */}
+      {svgCoords.length >= 2 ? (
+        <div className="space-y-1.5 pt-1">
+          <div className="relative bg-[#090e1a] rounded-xl p-3 border border-slate-800/90 overflow-hidden">
+            <svg 
+              viewBox={`0 0 ${svgWidth} ${svgHeight}`} 
+              className="w-full h-24 overflow-visible"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="priceTrendGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Area under curve */}
+              <path d={areaPath} fill="url(#priceTrendGrad)" />
+
+              {/* Trendline */}
+              <path 
+                d={linePath} 
+                fill="none" 
+                stroke={isPriceDrop ? '#10b981' : '#38bdf8'} 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+              />
+
+              {/* Interactive Dots */}
+              {svgCoords.map((c, i) => {
+                const isHovered = hoveredPoint?.i === i;
+                const isLast = i === svgCoords.length - 1;
+                return (
+                  <g key={i}>
+                    <circle
+                      cx={c.x}
+                      cy={c.y}
+                      r={isHovered ? 6 : (isLast ? 4.5 : 3)}
+                      fill={isLast ? '#10b981' : '#38bdf8'}
+                      stroke="#0f172a"
+                      strokeWidth={2}
+                      className="cursor-pointer transition-all hover:scale-125"
+                      onMouseEnter={() => setHoveredPoint({ ...c.point, x: c.x, y: c.y, i })}
+                      onMouseLeave={() => setHoveredPoint(null)}
+                    />
+                  </g>
+                );
+              })}
+            </svg>
+
+            {/* Hover Tooltip Overlay */}
+            {hoveredPoint && (
+              <div 
+                className="absolute z-20 pointer-events-none px-2.5 py-1.5 rounded-lg bg-slate-950/95 border border-emerald-500/50 shadow-xl text-left text-xs whitespace-nowrap transition-all"
+                style={{
+                  left: `${Math.min(85, Math.max(15, (hoveredPoint.x / svgWidth) * 100))}%`,
+                  top: '12px',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div className="font-mono font-bold text-emerald-400 text-sm">
+                  ₹{Number(hoveredPoint.price).toLocaleString()}
+                </div>
+                <div className="text-[10px] text-slate-300 font-medium">
+                  {hoveredPoint.seller_name}
+                </div>
+                <div className="text-[9px] text-slate-400">
+                  {(hoveredPoint.recorded_at || '').slice(0, 10)}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Timeline X-Axis Labels */}
+          <div className="flex items-center justify-between text-[10px] text-slate-400 px-1 font-mono">
+            <span>{(points[0]?.recorded_at || '').slice(0, 10)}</span>
+            <span className="text-slate-400 font-sans">Timeline Progress</span>
+            <span className="text-emerald-400 font-bold">Today ({(points[points.length - 1]?.recorded_at || '').slice(0, 10)})</span>
+          </div>
+        </div>
+      ) : (
+        <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+          <span>Single verified community quote recorded. Price updates logged every 2 hours.</span>
+          <span className="text-emerald-400 font-mono font-bold">₹{currentPrice.toLocaleString()}</span>
+        </div>
+      )}
+
+      {/* 4. Collapsible Historical Price Shifts Log */}
+      {points.length > 1 && (
+        <div>
+          <button
+            onClick={() => setShowHistoryLog(!showHistoryLog)}
+            className="w-full py-1.5 px-3 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 text-xs font-semibold text-slate-300 transition-colors flex items-center justify-between"
+          >
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Verified Price Shifts Log ({points.length} observations)</span>
+            </span>
+            {showHistoryLog ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+          </button>
+
+          {showHistoryLog && (
+            <div className="mt-2 p-3 rounded-xl bg-slate-950/80 border border-slate-800 max-h-48 overflow-y-auto space-y-2 text-xs">
+              {[...points].reverse().slice(0, 8).map((pt, pIdx) => (
+                <div key={pIdx} className="flex items-center justify-between py-1 border-b border-slate-800/60 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400 font-mono text-[11px]">
+                      {(pt.recorded_at || '').slice(0, 10)}
+                    </span>
+                    <span className="text-slate-200 font-medium">
+                      {pt.seller_name}
+                    </span>
+                    <span className="text-[10px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+                      {pt.size || pt.format}
+                    </span>
+                  </div>
+                  <span className="font-mono font-bold text-emerald-400">
+                    ₹{Number(pt.price).toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther, selectedSeller = 'all' }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
@@ -266,6 +611,9 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     )}
                   </div>
                 </div>
+
+                {/* PRICE TREND & DEAL INTELLIGENCE WIDGET */}
+                <PriceTrendIntelligence fragrance={fragrance} />
 
                 {/* SECTION 1: FULL BOTTLES (BNIB) */}
                 <div className="space-y-3">
