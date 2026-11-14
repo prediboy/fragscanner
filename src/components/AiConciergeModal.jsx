@@ -196,9 +196,9 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
 
                   {/* Taste Summary Pill */}
                   {msg.tasteSummary && (
-                    <div className="px-3 py-1.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-[11px] font-mono text-cyan-300 flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>{msg.tasteSummary}</span>
+                    <div className="px-3 py-1.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-[11px] font-mono text-cyan-300 flex items-start gap-2 break-words whitespace-normal leading-relaxed">
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                      <span className="flex-1">{msg.tasteSummary}</span>
                     </div>
                   )}
 
