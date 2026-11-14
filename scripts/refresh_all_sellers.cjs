@@ -1650,8 +1650,13 @@ async function runMasterRefresh() {
       const todayDate = new Date().toISOString().split('T')[0];
       const nowIso = new Date().toISOString();
 
-      // Strict Full Bottle Verification: volume >= 30 and not a mini, partial, or decant
+      // Strict Full Bottle Verification: prefer retail full bottles (not mini, partial, decant, or tester)
       const bestFullBottleQuote = frag.community_sellers.find(s => {
+        const vol = s.volume_ml || parseInt(s.size, 10);
+        const isTester = Boolean(s.is_tester || (s.size && /tester/i.test(s.size)));
+        const isNotFull = s.is_partial || isTester || (s.size && (s.size.includes('Mini') || s.size.includes('Decant') || s.size.includes('Sample') || s.size.includes('Vial') || /partial/i.test(s.size))) || (vol && vol < 30);
+        return !isNotFull && s.price > 0;
+      }) || frag.community_sellers.find(s => {
         const vol = s.volume_ml || parseInt(s.size, 10);
         const isNotFull = s.is_partial || (s.size && (s.size.includes('Mini') || s.size.includes('Decant') || s.size.includes('Sample') || s.size.includes('Vial') || /partial/i.test(s.size))) || (vol && vol < 30);
         return !isNotFull && s.price > 0;
@@ -1775,8 +1780,10 @@ async function runMasterRefresh() {
         }
 
         // Strict 2-Day Rolling Window for Price Drops using consistent full-bottle reference:
+        // Exclude testers from ever capturing or triggering price drops
+        const isTesterQuote = Boolean(bestFullBottleQuote.is_tester || (bestFullBottleQuote.size && /tester/i.test(bestFullBottleQuote.size)));
         const comparePrice = Number(bestFullBottleQuote.price);
-        if (frag.previous_price && comparePrice < Number(frag.previous_price)) {
+        if (!isTesterQuote && frag.previous_price && comparePrice < Number(frag.previous_price)) {
           const dropDate = frag.price_change_date || frag.price_date;
           const dropTimeMs = new Date(dropDate).getTime();
           const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
@@ -1796,7 +1803,7 @@ async function runMasterRefresh() {
               drop_percentage: frag.price_change_percentage,
               seller: bestFullBottleQuote.seller_name,
               size: bestFullBottleQuote.size,
-              is_tester: !!bestFullBottleQuote.is_tester,
+              is_tester: false,
               drop_date: frag.price_change_date || todayDate,
             });
           } else {

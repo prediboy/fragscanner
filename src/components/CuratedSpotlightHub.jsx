@@ -31,12 +31,12 @@ export default function CuratedSpotlightHub({
 
     if (priceDrops && priceDrops.length > 0) {
       return [...priceDrops]
-        .filter(f => Number(f.community_price) > 0)
+        .filter(f => Number(f.community_price) > 0 && !f.is_tester)
         .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
         .slice(0, 6);
     }
     return (catalog || [])
-      .filter(f => f.is_price_drop && Number(f.community_price) > 0)
+      .filter(f => f.is_price_drop && Number(f.community_price) > 0 && !f.is_tester)
       .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
       .slice(0, 6);
   }, [catalog, priceDrops]);

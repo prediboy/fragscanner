@@ -142,7 +142,10 @@ function PriceTrendIntelligence({ fragrance }) {
   const avgPrice = pricesList.length > 0 ? Math.round(pricesList.reduce((a, b) => a + b, 0) / pricesList.length) : currentPrice;
   const spread = maxPrice > minPrice ? maxPrice - minPrice : 0;
 
-  const isPriceDrop = Boolean(fragrance?.is_price_drop || (fragrance?.price_change && Number(fragrance.price_change) < 0));
+  const isPriceDrop = Boolean(
+    !fragrance?.is_tester &&
+    (fragrance?.is_price_drop || (fragrance?.price_change && Number(fragrance.price_change) < 0))
+  );
   const dropAmount = Math.abs(Number(fragrance?.price_change || 0));
   const dropPct = fragrance?.price_change_percentage || (fragrance?.previous_price ? Math.round((dropAmount / Number(fragrance.previous_price)) * 100) : 0);
   const dropDate = fragrance?.price_change_date || 'Today';
@@ -714,7 +717,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>New Arrival (Last 4 Days)</span>
                         </span>
                       )}
-                      {fragrance.is_price_drop && (
+                      {fragrance.is_price_drop && !fragrance.is_tester && (
                         <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold flex items-center gap-1.5 shadow-xs">
                           <span className="relative flex h-1.5 w-1.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -753,7 +756,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     </h4>
                     {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
                       <div className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2 flex-wrap">
-                        {fragrance.is_price_drop && fragrance.previous_price && (
+                        {fragrance.is_price_drop && !fragrance.is_tester && fragrance.previous_price && (
                           <span className="text-slate-400 line-through text-[11px] font-normal">
                             ₹{Number(fragrance.previous_price).toLocaleString()}
                           </span>
@@ -766,7 +769,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                             ({fragrance.community_bottle_size.replace(' Retail Bottle', ' Bottle')})
                           </span>
                         )}
-                        {fragrance.is_price_drop && (
+                        {fragrance.is_price_drop && !fragrance.is_tester && (
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold shrink-0">
                             📉 -{fragrance.price_change_percentage || Math.round((Math.abs(fragrance.previous_price - fragrance.community_price) / fragrance.previous_price) * 100)}% Drop
                           </span>

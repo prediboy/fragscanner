@@ -324,7 +324,7 @@ export default function PowerFragranceCard({
                   <span>Tester</span>
                 </span>
               )}
-              {f.is_price_drop && !isSpecificSeller && (
+              {f.is_price_drop && !f.is_tester && !isSpecificSeller && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 flex items-center gap-1">
                   <TrendingDown className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                   <span>Price Drop</span>
@@ -385,12 +385,12 @@ export default function PowerFragranceCard({
 
               <div className="flex items-center gap-2 shrink-0">
                 <div className="text-right">
-                  {!isSpecificSeller && f.is_price_drop && f.previous_price && (
+                  {!isSpecificSeller && f.is_price_drop && !f.is_tester && f.previous_price && (
                     <div className="flex items-center justify-end gap-1 text-[9px] text-slate-400 line-through font-mono">
                       <span>₹{Number(f.previous_price).toLocaleString()}</span>
                     </div>
                   )}
-                  <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
+                  <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop && !f.is_tester ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
                     ₹{activeRetail.price.toLocaleString()}
                   </div>
                 </div>
