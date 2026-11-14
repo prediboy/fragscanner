@@ -9,6 +9,8 @@
  * Fragrantica/Reddit community reviews, pros, cons, and reviewer quotes.
  */
 
+import { supabase } from '../lib/supabaseTelemetry.js';
+
 function getGeminiKey() {
   return (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ||
          (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
@@ -218,3 +220,36 @@ export async function computeSemanticReviewMatchBatch(userQuery, candidateFragra
     };
   });
 }
+
+/**
+ * Searches the catalog in Supabase Postgres using native pgvector cosine similarity
+ */
+export async function searchFragrancesBySemanticEmbedding(queryText, limit = 12) {
+  if (!queryText || typeof queryText !== 'string') return [];
+
+  try {
+    const embeddings = await getBatchEmbeddings([queryText]);
+    const queryVector = embeddings[0];
+    if (!queryVector || !Array.isArray(queryVector)) return [];
+
+    const { data, error } = await supabase.rpc('match_fragrances_semantic', {
+      query_embedding: queryVector,
+      match_threshold: 0.35,
+      match_count: limit
+    });
+
+    if (error) {
+      console.warn('[SemanticSearch] RPC match error:', error.message);
+      return [];
+    }
+
+    return (data || []).map(f => ({
+      ...f,
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller'
+    }));
+  } catch (err) {
+    console.warn('[SemanticSearch] Search exception:', err.message);
+    return [];
+  }
+}
+

@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
 import { evaluateOlfactoryMatch, evaluateOlfactoryMatchWithVectors, calculateSeasonalProfile } from '../utils/olfactoryAlgorithm.js';
+import { searchFragrancesBySemanticEmbedding } from './semanticEmbeddingService.js';
 
 const GEMINI_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
@@ -505,7 +506,24 @@ async function executeMultiQuery(criteria) {
     return [];
   }
 
-  // 7. OLFACTORY NOTE PYRAMID MATCHING (DEFAULT)
+  // 7. NATIVE PGVECTOR SEMANTIC MATCHING (PRIMARY)
+  try {
+    const semanticText = [
+      criteria.taste_summary,
+      ...(criteria.target_top_notes || []),
+      ...(criteria.target_base_notes || []),
+      ...(criteria.target_accords || [])
+    ].filter(Boolean).map(s => String(s).replace(/%/g, '')).join(' ');
+
+    const semanticCandidates = await searchFragrancesBySemanticEmbedding(semanticText, 12);
+    if (semanticCandidates && semanticCandidates.length > 0) {
+      return semanticCandidates;
+    }
+  } catch (err) {
+    console.warn('[Concierge] Native pgvector search fallback:', err.message);
+  }
+
+  // 8. OLFACTORY NOTE PYRAMID RPC (FALLBACK)
   const allNotes = [
     ...(criteria.target_top_notes || []),
     ...(criteria.target_middle_notes || []),
