@@ -63,7 +63,16 @@ export const NOTE_SYNONYMS = {
   'pink peppercorn': 'pink pepper',
   'agarwood': 'oud',
   'agarwood (oud)': 'oud',
-  'oud wood': 'oud'
+  'oud wood': 'oud',
+  'minty': 'mint',
+  'lavendery': 'lavender',
+  'citrusy': 'citrus',
+  'lemony': 'lemon',
+  'peppery': 'pepper',
+  'woody': 'cedarwood',
+  'aquatic': 'sea notes',
+  'marine': 'sea notes',
+  'watery': 'sea notes'
 };
 
 export function normalizeNote(raw) {
@@ -414,25 +423,56 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
 
   // 2. Independent Tiered Notes Breakdown
   let notesRes;
-  if (typeof targetOrQuery === 'object' && targetOrQuery !== null) {
+  const isFragranceObj = typeof targetOrQuery === 'object' && targetOrQuery !== null && (targetOrQuery.top_notes || targetOrQuery.middle_notes || targetOrQuery.base_notes || targetOrQuery.notes);
+
+  if (isFragranceObj) {
     notesRes = calculateTieredNotesOverlap(targetOrQuery, candidate);
   } else {
-    const qTokens = String(targetOrQuery || '').split(/[,\s]+/).map(normalizeNote).filter(Boolean);
-    const candPyr = extractNotePyramid(candidate);
-    const topOverlap = calculateTierOverlap(qTokens, candPyr.top);
-    const midOverlap = calculateTierOverlap(qTokens, candPyr.middle);
-    const baseOverlap = calculateTierOverlap(qTokens, candPyr.base);
+    let qTokens = [];
+    if (typeof targetOrQuery === 'object' && Array.isArray(targetOrQuery?.target_notes) && targetOrQuery.target_notes.length > 0) {
+      qTokens = targetOrQuery.target_notes.map(normalizeNote).filter(Boolean);
+    } else {
+      const rawStr = typeof targetOrQuery === 'string' ? targetOrQuery : (targetOrQuery?.raw_prompt || '');
+      const words = rawStr.toLowerCase().replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/).filter(Boolean);
+      const STOP_WORDS = new Set(['so', 'i', 'love', 'raw', 'verge', 'hate', 'rare', 'reef', 'absolutely', 'zanzibar', 'summer', 'winter', 'fragrance', 'fragrances', 'perfume', 'perfumes', 'ones', 'they', 'are', 'best', 'specially', 'combo', 'the', 'and', 'for', 'a', 'in', 'of', 'to', 'with', 'person', 'query', 'suggestions', 'something', 'good', 'great', 'profile']);
+      qTokens = words
+        .map(w => NOTE_SYNONYMS[w] || w)
+        .filter(w => !STOP_WORDS.has(w) && (NOTE_TO_FAMILY[w] || NOTE_SYNONYMS[w] || ['mint', 'lavender', 'citrus', 'aquatic', 'vanilla', 'rose', 'marine', 'bergamot', 'lemon'].includes(w)));
+    }
 
-    notesRes = {
-      topNotesMatchPct: topOverlap.matchPct,
-      sharedTopNotes: topOverlap.sharedNotes,
-      midNotesMatchPct: midOverlap.matchPct,
-      sharedMidNotes: midOverlap.sharedNotes,
-      baseNotesMatchPct: baseOverlap.matchPct,
-      sharedBaseNotes: baseOverlap.sharedNotes,
-      overallNotesMatchPct: Math.round((baseOverlap.matchPct * 0.4) + (midOverlap.matchPct * 0.35) + (topOverlap.matchPct * 0.25)),
-      totalSharedNotes: Array.from(new Set([...topOverlap.sharedNotes, ...midOverlap.sharedNotes, ...baseOverlap.sharedNotes]))
-    };
+    const candPyr = extractNotePyramid(candidate);
+    if (qTokens.length === 0) {
+      notesRes = {
+        topNotesMatchPct: 75,
+        sharedTopNotes: [],
+        midNotesMatchPct: 75,
+        sharedMidNotes: [],
+        baseNotesMatchPct: 75,
+        sharedBaseNotes: [],
+        overallNotesMatchPct: 75,
+        totalSharedNotes: []
+      };
+    } else {
+      const topOverlap = calculateTierOverlap(qTokens, candPyr.top);
+      const midOverlap = calculateTierOverlap(qTokens, candPyr.middle);
+      const baseOverlap = calculateTierOverlap(qTokens, candPyr.base);
+
+      const allCand = candPyr.all;
+      const matchedTokens = qTokens.filter(t => allCand.some(c => c.includes(t) || t.includes(c)));
+      const hitRatio = matchedTokens.length / qTokens.length;
+      const overallPct = Math.round(Math.min(100, Math.max(30, 35 + (hitRatio * 60))));
+
+      notesRes = {
+        topNotesMatchPct: topOverlap.matchPct,
+        sharedTopNotes: topOverlap.sharedNotes,
+        midNotesMatchPct: midOverlap.matchPct,
+        sharedMidNotes: midOverlap.sharedNotes,
+        baseNotesMatchPct: baseOverlap.matchPct,
+        sharedBaseNotes: baseOverlap.sharedNotes,
+        overallNotesMatchPct: overallPct,
+        totalSharedNotes: Array.from(new Set([...topOverlap.sharedNotes, ...midOverlap.sharedNotes, ...baseOverlap.sharedNotes, ...matchedTokens]))
+      };
+    }
   }
 
   // 3. Semantic Review & Comment Match (from Vector Embedding Model)

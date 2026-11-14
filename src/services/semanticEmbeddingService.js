@@ -42,8 +42,12 @@ function hashString(str) {
  * Mathematical Vector Cosine Similarity
  * CosSim(A, B) = (A • B) / (||A|| * ||B||)
  */
-export function calculateCosineSimilarity(vecA, vecB) {
-  if (!vecA || !vecB || vecA.length !== vecB.length) return 0;
+export function calculateCosineSimilarity(rawA, rawB) {
+  let vecA = rawA;
+  let vecB = rawB;
+  try { if (typeof vecA === 'string') vecA = JSON.parse(vecA); } catch {}
+  try { if (typeof vecB === 'string') vecB = JSON.parse(vecB); } catch {}
+  if (!Array.isArray(vecA) || !Array.isArray(vecB) || vecA.length !== vecB.length) return 0;
 
   let dotProduct = 0;
   let normA = 0;
@@ -63,14 +67,15 @@ export function calculateCosineSimilarity(vecA, vecB) {
 }
 
 /**
- * Converts a raw cosine similarity (typically 0.35 - 0.88 for gemini-embedding-001)
- * into a calibrated 0-100% human-readable match score.
+ * Converts a raw cosine similarity (typically 0.40 - 0.75 for gemini-embedding-001)
+ * into a calibrated 50-99% human-readable match score with rich dynamic differentiation.
  */
 export function cosineToPercentage(cosine) {
-  // Baseline floor ~0.35 (uncorrelated/opposite), ceiling ~0.85 (near identical meaning)
-  const normalized = (cosine - 0.35) / 0.50;
-  const clamped = Math.max(0.20, Math.min(0.99, normalized));
-  return Math.round(clamped * 100);
+  if (typeof cosine !== 'number' || isNaN(cosine)) return 75;
+  // Baseline floor ~0.35 (60%), upper tier ~0.72 (98%)
+  const normalized = (cosine - 0.35) / 0.37;
+  const scaled = 60 + (normalized * 38);
+  return Math.min(99, Math.max(50, Math.round(scaled)));
 }
 
 /**
@@ -165,7 +170,7 @@ export async function getBatchEmbeddings(texts) {
 
 /**
  * Computes semantic vector cosine match between a user query and a list of candidates.
- * Embeds the user query once, embeds all candidates' community review texts in batch,
+ * Embeds the user query once, leverages precomputed `f.review_embedding` directly from candidates,
  * and calculates exact vector cosine similarities.
  */
 export async function computeSemanticReviewMatchBatch(userQuery, candidateFragrances) {
@@ -177,27 +182,51 @@ export async function computeSemanticReviewMatchBatch(userQuery, candidateFragra
     }));
   }
 
-  // Build review texts for each candidate
-  const reviewTexts = candidateFragrances.map(f => {
-    const rs = f.review_summary;
-    if (typeof rs === 'object' && rs !== null) {
-      const quotes = Array.isArray(rs.top_reviewer_quotes) ? rs.top_reviewer_quotes.join(' ') : '';
-      const pros = Array.isArray(rs.pros) ? rs.pros.join(' ') : '';
-      const verdict = rs.community_verdict || '';
-      return `${verdict} ${pros} ${quotes}`.trim() || f.description || f.name;
+  // 1. Fetch query vector (embed once)
+  let queryVector = null;
+  try {
+    const embeddings = await getBatchEmbeddings([userQuery]);
+    queryVector = embeddings[0];
+  } catch (err) {
+    console.warn('[SemanticBatch] Query embed error:', err.message);
+  }
+
+  // Identify any candidates missing review_embedding (fallback only)
+  const missingCandIndices = [];
+  const missingCandTexts = [];
+  candidateFragrances.forEach((f, idx) => {
+    if (!f.review_embedding) {
+      missingCandIndices.push(idx);
+      const rs = f.review_summary;
+      let text = '';
+      if (typeof rs === 'object' && rs !== null) {
+        const quotes = Array.isArray(rs.top_reviewer_quotes) ? rs.top_reviewer_quotes.join(' ') : '';
+        const pros = Array.isArray(rs.pros) ? rs.pros.join(' ') : '';
+        const verdict = rs.community_verdict || '';
+        text = `${verdict} ${pros} ${quotes}`.trim();
+      } else if (typeof rs === 'string' && rs.trim()) {
+        text = rs;
+      }
+      missingCandTexts.push(text || f.description || `${f.brand} ${f.name}`);
     }
-    if (typeof rs === 'string' && rs.trim()) return rs;
-    return f.description || `${f.brand} ${f.name} community favorite`;
   });
 
-  // Batch embed: [userQuery, ...candidateReviewTexts]
-  const allTextsToEmbed = [userQuery, ...reviewTexts];
-  const embeddings = await getBatchEmbeddings(allTextsToEmbed);
-
-  const queryVector = embeddings[0];
+  let fallbackMap = new Map();
+  if (missingCandTexts.length > 0) {
+    const missingVectors = await getBatchEmbeddings(missingCandTexts);
+    missingCandIndices.forEach((cIdx, i) => {
+      if (missingVectors[i]) fallbackMap.set(cIdx, missingVectors[i]);
+    });
+  }
 
   return candidateFragrances.map((f, idx) => {
-    const candVector = embeddings[idx + 1];
+    let candVector = f.review_embedding;
+    if (typeof candVector === 'string') {
+      try { candVector = JSON.parse(candVector); } catch { candVector = null; }
+    }
+    if (!candVector && fallbackMap.has(idx)) {
+      candVector = fallbackMap.get(idx);
+    }
 
     if (!queryVector || !candVector) {
       return {

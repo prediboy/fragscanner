@@ -1014,7 +1014,18 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   }
 
   // 4. Multi-Factor Olfactory & Semantic Review Algorithm Scoring (Gemini gemini-embedding-001)
-  const queryContext = `${lastUserMsg} ${criteria.taste_summary || ''}`;
+  const queryContext = {
+    raw_prompt: lastUserMsg,
+    taste_summary: criteria.taste_summary,
+    target_notes: [
+      ...(criteria.target_notes || []),
+      ...(criteria.target_top_notes || []),
+      ...(criteria.target_middle_notes || []),
+      ...(criteria.target_base_notes || [])
+    ],
+    target_accords: criteria.target_accords || [],
+    target_season: criteria.target_season || 'summer'
+  };
 
   try {
     const vectorEvaluations = await evaluateOlfactoryMatchWithVectors(safeMatches, queryContext, {

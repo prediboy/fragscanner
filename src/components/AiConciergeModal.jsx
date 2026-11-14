@@ -216,7 +216,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {msg.matches.map((m, idx) => {
-                          const matchPct = Math.min(99, Math.max(70, Math.round(Number(m.match_score) || 90)));
+                          const matchPct = Math.min(99, Math.max(50, Math.round(Number(m.match_score) || 88)));
                           const rankLabel = idx === 0 ? "🏆 Top Match" : (idx === 1 ? "💎 Direct Twin" : `#${idx + 1} Pick`);
 
                           return (
