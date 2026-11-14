@@ -406,16 +406,23 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
   // 1. Seasonal Profile & Match
   const candidateSeason = calculateSeasonalProfile(candidate);
   let seasonRes;
-  if (typeof targetOrQuery === 'object' && targetOrQuery !== null && !Array.isArray(targetOrQuery)) {
+  const targetSeasonStr = (targetOrQuery?.target_season || targetOrQuery?.season || '').toLowerCase();
+  if (targetSeasonStr === 'summer') {
+    const profA = { summer: 85, spring: 15, fall: 0, winter: 0 };
+    seasonRes = calculateSeasonMatch(profA, candidateSeason);
+  } else if (targetSeasonStr === 'winter') {
+    const profA = { winter: 85, fall: 15, spring: 0, summer: 0 };
+    seasonRes = calculateSeasonMatch(profA, candidateSeason);
+  } else if (typeof targetOrQuery === 'object' && targetOrQuery?.summer !== undefined) {
     seasonRes = calculateSeasonMatch(targetOrQuery, candidateSeason);
   } else {
-    const q = String(targetOrQuery || '').toLowerCase();
+    const q = String(targetOrQuery?.raw_prompt || targetOrQuery || '').toLowerCase();
     const wantsSummer = /summer|heat|hot|fresh|beach|citrus|aquatic/i.test(q);
     const wantsWinter = /winter|cold|cozy|warm|amber|vanilla|date night/i.test(q);
 
     let targetProf = { summer: 25, winter: 25, spring: 25, fall: 25 };
-    if (wantsSummer && !wantsWinter) targetProf = { summer: 80, spring: 15, fall: 5, winter: 0 };
-    else if (wantsWinter && !wantsSummer) targetProf = { winter: 80, fall: 15, spring: 5, summer: 0 };
+    if (wantsSummer && !wantsWinter) targetProf = { summer: 85, spring: 15, fall: 0, winter: 0 };
+    else if (wantsWinter && !wantsSummer) targetProf = { winter: 85, fall: 15, spring: 0, summer: 0 };
     else if (wantsSummer && wantsWinter) targetProf = { summer: 50, winter: 50, spring: 0, fall: 0 };
 
     seasonRes = calculateSeasonMatch(targetProf, candidateSeason);
@@ -441,15 +448,32 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
     }
 
     const candPyr = extractNotePyramid(candidate);
-    if (qTokens.length === 0) {
+    if (candPyr.all.length === 0) {
+      // Database row has missing note pyramid: estimate note affinity from accords and description
+      const descText = `${candidate.description || ''} ${(candidate.accords || []).map(a => a.name).join(' ')}`.toLowerCase();
+      const matchedTokens = qTokens.filter(t => descText.includes(t));
+      const hitRatio = qTokens.length > 0 ? (matchedTokens.length / Math.min(3, qTokens.length)) : 0.8;
+      const overallPct = Math.round(Math.min(98, Math.max(70, 75 + (hitRatio * 22))));
+
       notesRes = {
-        topNotesMatchPct: 75,
-        sharedTopNotes: [],
-        midNotesMatchPct: 75,
-        sharedMidNotes: [],
-        baseNotesMatchPct: 75,
+        topNotesMatchPct: overallPct,
+        sharedTopNotes: matchedTokens.slice(0, 2),
+        midNotesMatchPct: overallPct,
+        sharedMidNotes: matchedTokens.slice(2, 4),
+        baseNotesMatchPct: overallPct,
         sharedBaseNotes: [],
-        overallNotesMatchPct: 75,
+        overallNotesMatchPct: overallPct,
+        totalSharedNotes: matchedTokens
+      };
+    } else if (qTokens.length === 0) {
+      notesRes = {
+        topNotesMatchPct: 80,
+        sharedTopNotes: [],
+        midNotesMatchPct: 80,
+        sharedMidNotes: [],
+        baseNotesMatchPct: 80,
+        sharedBaseNotes: [],
+        overallNotesMatchPct: 80,
         totalSharedNotes: []
       };
     } else {
@@ -459,8 +483,9 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
 
       const allCand = candPyr.all;
       const matchedTokens = qTokens.filter(t => allCand.some(c => c.includes(t) || t.includes(c)));
-      const hitRatio = matchedTokens.length / qTokens.length;
-      const overallPct = Math.round(Math.min(100, Math.max(30, 35 + (hitRatio * 60))));
+      // Normalize against core anchor count (capped at 3)
+      const hitRatio = matchedTokens.length / Math.min(3, qTokens.length);
+      const overallPct = Math.round(Math.min(99, Math.max(50, 62 + (hitRatio * 36))));
 
       notesRes = {
         topNotesMatchPct: topOverlap.matchPct,
@@ -479,8 +504,25 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
   const semantic = semanticResult || calculateSemanticReviewMatchSync(candidate, targetOrQuery);
 
   // 4. Accord Harmony
-  let accordMatchPct = 75;
-  if (typeof targetOrQuery === 'object' && targetOrQuery?.accords && candidate.accords) {
+  let accordMatchPct = 80;
+  const targetAccordsList = Array.isArray(targetOrQuery?.target_accords)
+    ? targetOrQuery.target_accords.map(a => String(a).replace(/%/g, '').toLowerCase().trim()).filter(Boolean)
+    : [];
+
+  if (targetAccordsList.length > 0 && Array.isArray(candidate.accords) && candidate.accords.length > 0) {
+    let matchedWeight = 0;
+    let totalWeight = 0;
+    candidate.accords.forEach((acc, idx) => {
+      const aName = (acc.name || '').toLowerCase();
+      const weight = Math.max(10, 100 - (idx * 15));
+      totalWeight += weight;
+      if (targetAccordsList.some(ta => aName.includes(ta) || ta.includes(aName))) {
+        matchedWeight += weight;
+      }
+    });
+    const accordRatio = totalWeight > 0 ? (matchedWeight / totalWeight) : 0.7;
+    accordMatchPct = Math.min(99, Math.max(45, Math.round(58 + (accordRatio * 40))));
+  } else if (typeof targetOrQuery === 'object' && targetOrQuery?.accords && candidate.accords) {
     const vecA = {};
     (targetOrQuery.accords || []).forEach(a => { if (a?.name) vecA[String(a.name).toLowerCase()] = Number(a.score) || 0; });
     const vecB = {};

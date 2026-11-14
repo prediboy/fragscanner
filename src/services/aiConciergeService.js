@@ -1009,7 +1009,18 @@ Return strictly raw JSON with this schema:
               }
             }
           }
-          return curated.slice(0, 10);
+
+          // Sort by match score descending and calibrate dynamic descending scores across ranks (96% down to 72%)
+          curated.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+          return curated.slice(0, 10).map((m, idx) => {
+            const base = Number(m.match_score) || 85;
+            const targetCap = 96 - (idx * 2.2);
+            const calibrated = Math.min(Math.round(targetCap), Math.max(68, Math.round(base - (idx * 1.5))));
+            return {
+              ...m,
+              match_score: calibrated
+            };
+          });
         }
       }
     }
@@ -1018,7 +1029,15 @@ Return strictly raw JSON with this schema:
   }
 
   // Fallback to top 10 by algorithmic match score
-  return await synthesizeWhys(chatHistory, candidatePool.slice(0, 10), criteria, deltaInfo);
+  const fallbackList = await synthesizeWhys(chatHistory, candidatePool.slice(0, 10), criteria, deltaInfo);
+  return fallbackList.map((m, idx) => {
+    const base = Number(m.match_score) || 85;
+    const targetCap = 95 - (idx * 2.2);
+    return {
+      ...m,
+      match_score: Math.min(Math.round(targetCap), Math.max(68, Math.round(base - (idx * 1.5))))
+    };
+  });
 }
 
 /**

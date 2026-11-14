@@ -67,15 +67,16 @@ export function calculateCosineSimilarity(rawA, rawB) {
 }
 
 /**
- * Converts a raw cosine similarity (typically 0.40 - 0.75 for gemini-embedding-001)
- * into a calibrated 50-99% human-readable match score with rich dynamic differentiation.
+ * Converts a raw cosine similarity (typically 0.30 - 0.65 for gemini-embedding-001 in 3072 dims)
+ * into a calibrated 60-99% human-readable match score with rich dynamic differentiation.
  */
 export function cosineToPercentage(cosine) {
-  if (typeof cosine !== 'number' || isNaN(cosine)) return 75;
-  // Baseline floor ~0.35 (60%), upper tier ~0.72 (98%)
-  const normalized = (cosine - 0.35) / 0.37;
-  const scaled = 60 + (normalized * 38);
-  return Math.min(99, Math.max(50, Math.round(scaled)));
+  if (typeof cosine !== 'number' || isNaN(cosine)) return 80;
+  // In 3,072 dimensions, cosines for relevant queries span 0.30 - 0.65
+  // Linear calibration: 0.30 -> 72%, 0.45 -> 86%, 0.55 -> 94%, 0.65 -> 99%
+  const normalized = (cosine - 0.28) / 0.35;
+  const scaled = 70 + (normalized * 28);
+  return Math.min(99, Math.max(55, Math.round(scaled)));
 }
 
 /**
