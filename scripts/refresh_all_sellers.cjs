@@ -1994,6 +1994,36 @@ async function runMasterRefresh() {
     } else {
       console.warn(`  ⚠ Supabase sync finished with ${failedChunks} failed chunk(s)!`);
     }
+
+    // Record price changes into public.price_trends table for historical charting
+    try {
+      const trendRecords = [];
+      for (const f of allEnriched) {
+        if (f.in_seller_stock && f.community_price && (f.price_change !== 0 && f.price_change !== null || f.is_price_drop)) {
+          trendRecords.push({
+            fragrance_id: f.id,
+            fragrance_name: f.name,
+            brand: f.brand,
+            seller_name: f.best_bottle_seller || 'Verified Seller',
+            format: 'retail',
+            price: Number(f.community_price),
+            previous_price: f.previous_price ? Number(f.previous_price) : null,
+            price_change: f.price_change ? Number(f.price_change) : null,
+            is_best_price: true,
+            source: 'seller_sync',
+            recorded_at: new Date().toISOString()
+          });
+        }
+      }
+      if (trendRecords.length > 0) {
+        const { error: trendErr } = await supabase.from('price_trends').insert(trendRecords.slice(0, 250));
+        if (!trendErr) {
+          console.log(`  ✓ Recorded ${Math.min(trendRecords.length, 250)} live price trends to public.price_trends table.`);
+        }
+      }
+    } catch (trendEx) {
+      // Table may not exist yet; gracefully handled
+    }
     } catch (err) {
       console.error("  Warning: Supabase sync failed:", err.message);
     }

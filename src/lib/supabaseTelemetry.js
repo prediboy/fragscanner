@@ -216,19 +216,20 @@ export async function logWhatsAppClick({
       top_recommendations: []
     };
 
-    // 1. Try dedicated table if created
-    const { error } = await supabase.from('whatsapp_clicks').insert([{
-      session_id: sessionId,
-      seller_name: sellerName,
-      fragrance_name: fragranceName,
-      fragrance_brand: brand,
-      price: price,
-      format: format
-    }]);
+    // 1. Record lead event in wardrobe_logs
+    await supabase.from('wardrobe_logs').insert([payload]);
 
-    // 2. If table doesn't exist, store reliably in wardrobe_logs
-    if (error) {
-      await supabase.from('wardrobe_logs').insert([payload]);
+    // 2. Record structured price point in price_trends table for historical charting
+    if (price && !isNaN(Number(price))) {
+      await supabase.from('price_trends').insert([{
+        fragrance_name: fragranceName,
+        brand: brand,
+        seller_name: sellerName,
+        price: Number(price),
+        format: format || 'retail',
+        source: 'whatsapp_lead',
+        recorded_at: new Date().toISOString()
+      }]).catch(() => {});
     }
 
     console.log('[FragScanner Telemetry] WhatsApp lead logged:', sellerName, fragranceName, price);
