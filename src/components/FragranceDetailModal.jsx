@@ -142,8 +142,14 @@ function PriceTrendIntelligence({ fragrance }) {
   const avgPrice = pricesList.length > 0 ? Math.round(pricesList.reduce((a, b) => a + b, 0) / pricesList.length) : currentPrice;
   const spread = maxPrice > minPrice ? maxPrice - minPrice : 0;
 
+  const isTesterBottle = Boolean(
+    fragrance?.is_tester ||
+    (fragrance?.community_bottle_size && /tester/i.test(fragrance.community_bottle_size)) ||
+    (fragrance?.community_sellers && fragrance.community_sellers[0]?.is_tester)
+  );
+
   const isPriceDrop = Boolean(
-    !fragrance?.is_tester &&
+    !isTesterBottle &&
     (fragrance?.is_price_drop || (fragrance?.price_change && Number(fragrance.price_change) < 0))
   );
   const dropAmount = Math.abs(Number(fragrance?.price_change || 0));

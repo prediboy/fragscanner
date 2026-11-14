@@ -29,14 +29,19 @@ export default function CuratedSpotlightHub({
       return 0;
     };
 
+    const isTester = (item) => {
+      const best = (item.community_sellers || [])[0];
+      return Boolean(item.is_tester || best?.is_tester || (best?.size && /tester/i.test(best.size)));
+    };
+
     if (priceDrops && priceDrops.length > 0) {
       return [...priceDrops]
-        .filter(f => Number(f.community_price) > 0 && !f.is_tester)
+        .filter(f => Number(f.community_price) > 0 && !isTester(f))
         .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
         .slice(0, 6);
     }
     return (catalog || [])
-      .filter(f => f.is_price_drop && Number(f.community_price) > 0 && !f.is_tester)
+      .filter(f => f.is_price_drop && Number(f.community_price) > 0 && !isTester(f))
       .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
       .slice(0, 6);
   }, [catalog, priceDrops]);

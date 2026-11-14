@@ -183,9 +183,9 @@ export async function fetchInventoryPage({
 
     // 0. When search is active, the search is completely independent of the filters applied (searches entire catalog)
     if (!hasSearch) {
-      // 0a. Deals / New Arrivals Filter (Strictly retail full bottles in stock, never testers)
+      // 0a. Deals / New Arrivals Filter (Strictly retail full bottles in stock)
       if (dealsOnly === 'drops') {
-        query = query.eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0).neq('is_tester', true);
+        query = query.eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0);
       } else if (dealsOnly === 'new') {
         query = query.eq('is_new_arrival', true).eq('in_seller_stock', true).gt('community_price', 0);
       } else {
@@ -429,7 +429,7 @@ export async function fetchInventoryCounts() {
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('has_decants', true).gt('lowest_decant_price', 0),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_tester: true }])),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_partial: true }])),
-      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0).neq('is_tester', true),
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_new_arrival', true).eq('in_seller_stock', true).gt('community_price', 0)
     ]);
 
