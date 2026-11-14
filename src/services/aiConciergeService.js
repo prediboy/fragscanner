@@ -184,7 +184,7 @@ export async function resolvePerfumeDossier(phrase) {
 
   try {
     const { data } = await supabase.from('fragrances')
-      .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords')
+      .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords, in_seller_stock, has_decants')
       .or(`name.ilike.%${clean}%,brand.ilike.%${clean}%,dna_inspiration.ilike.%${clean}%`)
       .limit(10);
 
@@ -200,7 +200,7 @@ export async function resolvePerfumeDossier(phrase) {
           return variants.map(v => `name.ilike.%${v}%,brand.ilike.%${v}%`);
         });
         const { data: fuzzyData } = await supabase.from('fragrances')
-          .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords')
+          .select('id, name, brand, dna_inspiration, top_notes, middle_notes, base_notes, accords, in_seller_stock, has_decants')
           .or(orClauses.join(','))
           .limit(15);
         candidates = fuzzyData || [];
@@ -224,6 +224,10 @@ export async function resolvePerfumeDossier(phrase) {
 
       if (isMatchFuzzy(name, clean)) score += 40;
       if (isMatchFuzzy(full, clean)) score += 30;
+
+      if (c.in_seller_stock) score += 20;
+      if (c.has_decants) score += 10;
+      if (!clean.includes('oud') && name.includes('oud')) score -= 40;
 
       const cleanWords = clean.split(/\s+/);
       if (cleanWords.length > 1) {
@@ -283,6 +287,10 @@ export async function buildMentionedPerfumesDossier(chatHistory) {
     }
   }
 
+  const allLikedNotes = new Set(
+    likedDossiers.flatMap(d => [...(d.top_notes || []), ...(d.middle_notes || []), ...(d.base_notes || [])].map(n => n.toLowerCase().trim()))
+  );
+
   if (dislikedDossiers.length > 0) {
     report += '\n[DISLIKED / FAILED PERFUMES (Analyze what notes/accords caused the dislike to strictly avoid/penalize them)]:\n';
     for (const d of dislikedDossiers) {
@@ -292,6 +300,15 @@ export async function buildMentionedPerfumesDossier(chatHistory) {
       report += `  * Middle Notes: ${(d.middle_notes || []).join(', ') || 'N/A'}\n`;
       report += `  * Base Notes: ${(d.base_notes || []).join(', ') || 'N/A'}\n`;
       report += `  * Dominant Accords: ${(d.accords || []).slice(0, 5).map(a => `${a.name} (${a.score}%)`).join(', ') || 'N/A'}\n`;
+
+      if (allLikedNotes.size > 0) {
+        const dNotes = [...(d.top_notes || []), ...(d.middle_notes || []), ...(d.base_notes || [])].map(n => n.toLowerCase().trim());
+        const sharedWithLiked = dNotes.filter(n => allLikedNotes.has(n));
+        const offendingUnique = dNotes.filter(n => !allLikedNotes.has(n));
+        report += `  * RELATIVE NEGATION (Set Difference):\n`;
+        report += `    - Offending Distinct Notes (Disliked minus Liked): ${offendingUnique.join(', ') || 'overall density/weight'}\n`;
+        report += `    - PROTECTED Shared Notes (Present in Liked Scents - MUST NEVER BE BANNED): ${sharedWithLiked.join(', ') || 'none'}\n`;
+      }
     }
   }
 
@@ -473,12 +490,17 @@ ${JSON.stringify(chatHistory, null, 2)}
 ${perfumesDossier}
 
 CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
-1. GROUND-TRUTH DATABASE NOTE REASONING:
+1. GROUND-TRUTH DATABASE NOTE REASONING & RELATIVE NEGATION (SET DIFFERENCE):
    - Carefully examine the verified database note pyramids and accords provided in the dossier above for both the liked and disliked fragrances!
    - Understand WHY the user loved or hated them based on their exact chemical notes:
-     * LIKED SCENTS: Extract and prioritize the positive note synergies from the fragrances user loves (e.g. Spearmint, Lavender, Rosemary from Verge; Cardamom, Juniper, Cedarwood from Historic Olmeda; Watermelon, Violet from Raw).
-     * STRICT NEGATION OVERRIDES: If the user explicitly negates a note or accord (e.g. "hate citrus", "remove sweet", "no aquatic"), you MUST strictly ban and remove those notes/accords from all targets, EVEN IF they were present in a liked scent (e.g. strip Lemon, Bergamot, Grapefruit entirely)!
-     * DISLIKED SCENTS: Identify the clashing/heavy accords and notes that caused the negative experience (e.g. Zanzibar's heavy coconut and vanilla sweetness, Caprice's amber warmth), and ban them from recommendations.
+     * LIKED SCENTS: Extract and prioritize the positive note synergies from the fragrances user loves (e.g. Spearmint, Lavender, Rosemary from Verge; Cardamom, Juniper, Cedarwood from Historic Olmeda; Watermelon, Violet from Raw; Mint from Iconic).
+     * RELATIVE NEGATION LAW (Set Difference: Disliked minus Liked):
+       When a user says they love Perfume A but dislike Perfume B, you must ONLY consider (Notes in B MINUS Notes in A) as candidate negatives!
+       NEVER ban a note that exists in a liked perfume! For example, if a user loves Iconic (which has Mint) but dislikes Historic Olmeda:
+       - Mint is PRIZED because the user loves Iconic.
+       - Historic Olmeda's negative rating does NOT mean the user dislikes Mint or any note shared with Iconic.
+       - Only the unique differences (e.g. Olmeda's cardamom, juniper berries, ambergris, or heavier opening) can be considered offending!
+     * STRICT NEGATION OVERRIDES: Only if the user EXPLICITLY negates a note in their text message (e.g. "hate citrus", "remove sweet", "no aquatic"), do you ban that note across all targets.
 
 2. MULTI-TURN CUMULATIVE STATE:
    - Unless the user explicitly says "start over" or "new search", EVERY user message is an INCREMENTAL REFINEMENT on top of the conversation so far!
@@ -590,6 +612,56 @@ Rules:
         !allLikedPerfumes.some(l => l.includes(d) || d.includes(l) || isMatchFuzzy(l, d))
       );
 
+      // Programmatic Relative Negation Defense:
+      // A note that belongs to a liked/owned perfume must NEVER be placed into exclude_notes
+      // UNLESS the user explicitly stated "no X" or "hate X" in the conversation!
+      const explicitUserNegations = new Set();
+      const userText = chatHistory.filter(m => m.role === 'user').map(m => m.content || '').join(' ').toLowerCase();
+      const negationMatches = userText.matchAll(/(?:no|not|hate|hated|dislike|disliked|avoid|without|remove|stop)\s+([a-z0-9]+)/gi);
+      for (const nm of negationMatches) {
+        explicitUserNegations.add(nm[1].toLowerCase().trim());
+      }
+
+      const explicitlyHatesCitrus = /(?:hate|no|not|remove|avoid|without|stop)\s+(?:citrus|citruses|lemon|bergamot|orange|grapefruit)/i.test(userText);
+      const explicitlyHatesSweet = /(?:hate|no|not|remove|avoid|without|stop)\s+(?:sweet|sweetness|vanilla|gourmand|sugar)/i.test(userText);
+
+      // Collect notes and accords from all liked perfumes to protect them
+      const likedNamesList = extractDeterministicLiked(chatHistory);
+      const likedDossiersList = [];
+      for (const ln of likedNamesList) {
+        const d = await resolvePerfumeDossier(ln);
+        if (d) likedDossiersList.push(d);
+      }
+      const protectedLikedNotes = new Set(
+        likedDossiersList.flatMap(d => [...(d.top_notes || []), ...(d.middle_notes || []), ...(d.base_notes || [])].map(n => n.toLowerCase().trim()))
+      );
+
+      const rawExcludeNotes = unwrap(parsed.exclude_notes);
+      const safeExcludeNotes = rawExcludeNotes.filter(n => {
+        const cleanNote = n.toLowerCase().trim();
+        // If user explicitly negated this note/accord family in text, keep the negation!
+        if (explicitlyHatesCitrus && ['citrus', 'lemon', 'bergamot', 'grapefruit', 'orange', 'mandarin'].includes(cleanNote)) return true;
+        if (explicitlyHatesSweet && ['sweet', 'vanilla', 'sugar', 'caramel', 'tonka bean', 'honey', 'chocolate', 'praline', 'gourmand'].includes(cleanNote)) return true;
+        if (explicitUserNegations.has(cleanNote) || Array.from(explicitUserNegations).some(ex => ex.length >= 3 && cleanNote.includes(ex))) return true;
+
+        // If this note exists in a perfume the user likes/owns, protect it from being banned!
+        return !protectedLikedNotes.has(cleanNote);
+      });
+
+      const protectedLikedAccords = new Set(
+        likedDossiersList.flatMap(d => (d.accords || []).map(a => (a.name || '').toLowerCase().trim())).filter(Boolean)
+      );
+
+      const rawExcludeAccords = unwrap(parsed.exclude_accords);
+      const safeExcludeAccords = rawExcludeAccords.filter(a => {
+        const cleanAccord = a.toLowerCase().trim();
+        if (explicitlyHatesCitrus && cleanAccord.includes('citrus')) return true;
+        if (explicitlyHatesSweet && (cleanAccord.includes('sweet') || cleanAccord.includes('vanilla') || cleanAccord.includes('gourmand'))) return true;
+        if (explicitUserNegations.has(cleanAccord) || Array.from(explicitUserNegations).some(ex => ex.length >= 3 && cleanAccord.includes(ex))) return true;
+
+        return !protectedLikedAccords.has(cleanAccord);
+      });
+
       return {
         intent: parsed.intent || 'olfactory_match',
         is_refinement: Boolean(parsed.is_refinement),
@@ -609,12 +681,12 @@ Rules:
         exclude_terms: wrap(parsed.exclude_terms),
         exclude_perfumes: safeDislikedPerfumes,
         target_accords: wrap(parsed.target_accords),
-        exclude_accords: unwrap(parsed.exclude_accords),
+        exclude_accords: safeExcludeAccords,
         target_top_notes: wrap(parsed.target_top_notes),
         target_middle_notes: wrap(parsed.target_middle_notes),
         target_base_notes: wrap(parsed.target_base_notes),
         target_notes: wrap(parsed.target_notes),
-        exclude_notes: unwrap(parsed.exclude_notes),
+        exclude_notes: safeExcludeNotes,
         target_season: parsed.target_season || 'summer',
         max_price: parsed.max_price || 15000,
         min_rating: parsed.min_rating || 3.8,
@@ -1117,6 +1189,14 @@ async function computeOlfactoryDelta(likedQuery, dislikedQuery) {
       }
     }
 
+    // Note-level Set Difference (Relative Negation)
+    const notesA = new Set([...(perfumeA.top_notes || []), ...(perfumeA.middle_notes || []), ...(perfumeA.base_notes || [])].map(n => n.toLowerCase().trim()));
+    const notesB = new Set([...(perfumeB.top_notes || []), ...(perfumeB.middle_notes || []), ...(perfumeB.base_notes || [])].map(n => n.toLowerCase().trim()));
+
+    const sharedNotes = [...notesB].filter(n => notesA.has(n));
+    const offendingNotes = [...notesB].filter(n => !notesA.has(n));
+    const prizedNotes = [...notesA].filter(n => !notesB.has(n));
+
     const consB = perfumeB.review_summary?.cons || [];
     const prosA = perfumeA.review_summary?.pros || [];
     const quotesA = perfumeA.review_summary?.top_reviewer_quotes || [];
@@ -1128,10 +1208,18 @@ async function computeOlfactoryDelta(likedQuery, dislikedQuery) {
       dislikedName: `${perfumeB.brand} ${perfumeB.name}`,
       prizedAccords,
       offendingAccords,
+      sharedNotes,
+      offendingNotes,
+      prizedNotes,
       prosA,
       consB,
       quotesA,
-      summary: `Contrast Analysis: User loved ${perfumeA.brand} ${perfumeA.name} but disliked ${perfumeB.brand} ${perfumeB.name}. Key difference: ${perfumeA.name} is prized for ${prizedAccords.map(a => a.name).join(', ') || 'its smooth balanced drydown'}, whereas ${perfumeB.name} over-indexed on ${offendingAccords.map(a => a.name).join(', ') || 'harsh sharpness'} with reviewer concerns (${consB[0] || 'synthetic sharpness'}).`
+      summary: `Contrast Analysis: User loved ${perfumeA.brand} ${perfumeA.name} but disliked ${perfumeB.brand} ${perfumeB.name}.
+* RELATIVE NEGATION (Set Difference):
+  - OFFENDING CANDIDATE NOTES (Disliked minus Liked): ${offendingNotes.join(', ') || 'overall density/weight'}
+  - PROTECTED SHARED NOTES (Present in Liked Scents - NEVER BAN): ${sharedNotes.join(', ') || 'none'}
+  - PRIZED NOTES (Unique to Liked): ${prizedNotes.join(', ') || 'signature blend'}
+* Accord Contrast: ${perfumeA.name} is prized for ${prizedAccords.map(a => a.name).join(', ') || 'its smooth balance'}, whereas ${perfumeB.name} over-indexed on ${offendingAccords.map(a => a.name).join(', ') || 'harsh sharpness'} with reviewer warnings (${consB[0] || 'synthetic sharpness'}).`
     };
   } catch (err) {
     console.warn('[Khushboo Delta] Error computing delta:', err.message);
