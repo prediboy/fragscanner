@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { 
   X, Star, Sparkles, Wind, Sun, Moon, Calendar, 
-  CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, Zap, Tag, Flame,
+  CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, ArrowLeft, Zap, Tag, Flame,
   Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe,
   TrendingDown, TrendingUp, Activity, Clock, ChevronDown, ChevronUp
 } from 'lucide-react';
@@ -490,7 +490,7 @@ function PriceTrendIntelligence({ fragrance }) {
   );
 }
 
-export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther, selectedSeller = 'all' }) {
+export default function FragranceDetailModal({ fragrance, allFragrances = [], onClose, onSelectOther, selectedSeller = 'all', onBackToChat }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'recommendations'
   const [selectedDecantQuotes, setSelectedDecantQuotes] = useState({}); // { [size]: quoteIndex }
 
@@ -570,7 +570,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
   if (!fragrance) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl bg-[#0f172a] border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
         
         {/* Header Bar */}
@@ -611,12 +611,25 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onBackToChat && (
+              <button
+                onClick={onBackToChat}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 font-mono text-xs font-bold border border-cyan-500/40 transition-all shadow-sm"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Chat</span>
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+              title={onBackToChat ? "Back to Chat" : "Close"}
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Tab Switcher */}
@@ -1662,12 +1675,23 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
           <span className="text-xs text-slate-400">
             Ratings & review excerpts sourced from Fragrantica community data
           </span>
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
-          >
-            Close
-          </button>
+          <div className="flex items-center gap-2">
+            {onBackToChat && (
+              <button
+                onClick={onBackToChat}
+                className="px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 text-xs font-bold border border-cyan-500/40 transition-colors flex items-center gap-1.5"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Chat</span>
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+            >
+              Close
+            </button>
+          </div>
         </div>
 
       </div>

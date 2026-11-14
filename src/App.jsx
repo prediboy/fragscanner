@@ -69,6 +69,7 @@ export default function App() {
 
   // Modals state
   const [activeFragrance, setActiveFragrance] = useState(null);
+  const [isDetailFromConcierge, setIsDetailFromConcierge] = useState(false);
   const [syncStatsOpen, setSyncStatsOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState(null);
@@ -602,11 +603,21 @@ export default function App() {
 
       {/* FRAGRANCE DETAIL MODAL (Opens on Card Click) */}
       {activeFragrance && (
-        <ModalErrorBoundary resetKey={activeFragrance.id} onClose={() => setActiveFragrance(null)}>
+        <ModalErrorBoundary resetKey={activeFragrance.id} onClose={() => {
+          setActiveFragrance(null);
+          setIsDetailFromConcierge(false);
+        }}>
           <FragranceDetailModal
             fragrance={activeFragrance}
             allFragrances={pageItems}
-            onClose={() => setActiveFragrance(null)}
+            onClose={() => {
+              setActiveFragrance(null);
+              setIsDetailFromConcierge(false);
+            }}
+            onBackToChat={isDetailFromConcierge ? () => {
+              setActiveFragrance(null);
+              setIsDetailFromConcierge(false);
+            } : null}
             onSelectOther={async (other) => {
               setActiveFragrance(other);
               const detail = await fetchFragranceDetail(other.id);
@@ -631,9 +642,12 @@ export default function App() {
       {/* AI FRAGRANCE SOMMELIER MODAL */}
       <AiConciergeModal
         isOpen={isAiModalOpen}
-        onClose={() => setIsAiModalOpen(false)}
-        onSelectFragrance={async (selected) => {
+        onClose={() => {
           setIsAiModalOpen(false);
+          setIsDetailFromConcierge(false);
+        }}
+        onSelectFragrance={async (selected) => {
+          setIsDetailFromConcierge(true);
           setActiveFragrance(selected);
           const detail = await fetchFragranceDetail(selected.id);
           if (detail) setActiveFragrance(detail);
