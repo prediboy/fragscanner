@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabaseTelemetry.js';
 import { evaluateOlfactoryMatch, evaluateOlfactoryMatchWithVectors, calculateSeasonalProfile } from '../utils/olfactoryAlgorithm.js';
 import { searchFragrancesBySemanticEmbedding } from './semanticEmbeddingService.js';
+import { FragranticaRecommender } from './fragranticaRecommender.js';
 
 const GEMINI_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || (typeof process !== 'undefined' && (process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY)) || '';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
@@ -1676,8 +1677,44 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     deltaInfo = await computeOlfactoryDelta(criteria.contrast_liked, criteria.contrast_disliked);
   }
 
-  // 2. Select Candidates: Vector-First Native Search (Powered by 3,072-dim embeddings)
-  let rawMatches = await executeMultiQuery(criteria);
+  // 2. Select Candidates: Fragrantica HOG-AVF Engine (Hierarchical Olfactory Graph & Accord Vector Filtering)
+  let rawMatches = null;
+  const isOlfactoryDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo) || allLiked.size > 0 || allDislikes.size > 0 || (criteria.target_notes && criteria.target_notes.length > 0);
+
+  if (isOlfactoryDiscovery) {
+    try {
+      const { data: poolData } = await supabase.from('fragrances')
+        .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers, primary_season')
+        .or('in_seller_stock.eq.true,has_decants.eq.true')
+        .limit(350);
+
+      if (poolData && poolData.length > 0) {
+        const recommender = new FragranticaRecommender(poolData);
+        const hogResults = recommender.recommend({
+          lovedPerfumes: Array.from(allLiked),
+          hatedPerfumes: Array.from(allDislikes),
+          lovedNotes: criteria.target_notes || [],
+          hatedNotes: criteria.exclude_notes || [],
+          forbiddenAccords: criteria.exclude_accords || [],
+          targetSeason: criteria.target_season || (lastUserMsg.toLowerCase().includes('summer') ? 'Summer' : (lastUserMsg.toLowerCase().includes('winter') ? 'Winter' : null)),
+          allowDirectClones: false,
+          maxBudget: criteria.max_price || null,
+          limit: 15
+        });
+
+        if (hogResults && hogResults.length >= 3) {
+          rawMatches = hogResults;
+        }
+      }
+    } catch (hogErr) {
+      console.warn('[Khushboo HOG-AVF] Recommendation fallback:', hogErr.message);
+    }
+  }
+
+  if (!rawMatches || rawMatches.length === 0) {
+    rawMatches = await executeMultiQuery(criteria);
+  }
+
   if (!rawMatches || rawMatches.length === 0) {
     const isDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo);
     if (isDiscovery) {
