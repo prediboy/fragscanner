@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Store } from 'lucide-react';
-import { logWhatsAppClick } from '../lib/supabaseTelemetry';
+import { logWhatsAppClick, logFragranceCardClick } from '../lib/supabaseTelemetry';
 
 function getWhatsAppUrl(phone, message) {
   if (!phone) return null;
@@ -642,7 +642,17 @@ export default function PowerFragranceCard({
       <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
         <button
           type="button"
-          onClick={() => onToggleExpand && onToggleExpand(f.id)}
+          onClick={() => {
+            if (!isExpanded && f) {
+              logFragranceCardClick({
+                fragranceName: f.name,
+                brand: f.brand,
+                price: activeRetail ? activeRetail.price : null,
+                format: activeFormats.length === 1 && activeFormats[0] === 'decant' ? 'decant' : 'bottle'
+              });
+            }
+            onToggleExpand && onToggleExpand(f.id);
+          }}
           className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
           title="Compare rates from all community sellers"
         >
