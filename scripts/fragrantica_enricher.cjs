@@ -503,16 +503,57 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
 
       console.log(`   ✨ Creating NEW Flanker Catalog Entry: "${brandClean} - ${canonicalName}" [${cleanId}]`);
 
+      const vol = parseInt(size, 10) || 100;
+      const isTester = /tester/i.test(size || '') || /tester/i.test(nameRaw);
+      const pkgType = isTester ? 'Tester' : 'Retail Bottle';
+      const label = size || (isTester ? `${vol}ml Tester` : `${vol}ml Retail Bottle`);
+      const todayDate = new Date().toISOString().split('T')[0];
+      const nowIso = new Date().toISOString();
+
       // Check if it already exists by cleanId
       if (supabase) {
         const { data: existingEntry } = await supabase
           .from('fragrances')
-          .select('id, name, brand, aliases, community_sellers')
+          .select('id, name, brand, aliases, community_sellers, community_price, in_seller_stock')
           .eq('id', cleanId)
           .maybeSingle();
 
         if (existingEntry) {
           console.log(`   ✓ New flanker already exists in Supabase as [${cleanId}]. Attaching quote.`);
+          const existingAliases = Array.isArray(existingEntry.aliases) ? existingEntry.aliases : [];
+          const rawClean = nameRaw.toLowerCase().trim();
+          if (!existingAliases.includes(rawClean)) {
+            existingAliases.push(rawClean);
+          }
+          const sellers = Array.isArray(existingEntry.community_sellers) ? existingEntry.community_sellers : [];
+          sellers.push({
+            seller_id: sellerObj.id,
+            seller_name: sellerObj.seller_name,
+            price,
+            size: label,
+            volume_ml: vol,
+            whatsapp: sellerObj.whatsapp,
+            shipping: sellerObj.shipping,
+            dispatch: sellerObj.dispatch,
+            is_tester: isTester,
+            packaging_type: pkgType,
+            verified: true
+          });
+          existingEntry.aliases = existingAliases;
+          existingEntry.community_sellers = sellers;
+          existingEntry.in_seller_stock = true;
+          existingEntry.community_price = price;
+
+          try {
+            await supabase.from('fragrances').update({
+              aliases: existingAliases,
+              community_sellers: sellers,
+              in_seller_stock: true,
+              community_price: price
+            }).eq('id', cleanId);
+          } catch (upErr) {
+            console.warn(`   Warning updating existing flanker in Supabase:`, upErr.message);
+          }
           return existingEntry;
         }
       }
@@ -523,19 +564,11 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         color: '#10b981'
       }));
 
-      const todayDate = new Date().toISOString().split('T')[0];
-      const nowIso = new Date().toISOString();
-
       const aliasesList = [...new Set([
         nameRaw.toLowerCase().trim(),
         canonicalName.toLowerCase().trim(),
         `${brandClean.toLowerCase()} ${canonicalName.toLowerCase()}`
       ])].filter(a => a && a.length >= 2);
-
-      const vol = parseInt(size, 10) || 100;
-      const isTester = /tester/i.test(size || '') || /tester/i.test(nameRaw);
-      const pkgType = isTester ? 'Tester' : 'Retail Bottle';
-      const label = size || (isTester ? `${vol}ml Tester` : `${vol}ml Retail Bottle`);
 
       const newPerfume = {
         id: cleanId,

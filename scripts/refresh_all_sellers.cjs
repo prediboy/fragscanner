@@ -314,13 +314,19 @@ async function runMasterRefresh() {
   // Load catalog directly from Supabase (fallback to local if present)
   let fragrances = [];
   if (supabase) {
+    const CATALOG_SELECT_COLS = "id, name, brand, collection, rating_value, rating_count, concentration, primary_season, day_night, longevity, sillage, gender, dna_type, dna_inspiration, description, top_notes, middle_notes, base_notes, accords, aliases, in_seller_stock, community_price, has_decants, lowest_decant_price, community_sellers, community_decants, decant_comparison, best_bottle_seller, best_decant_seller, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, previous_price_date, price_history, is_new_arrival, new_arrival_date, discovered_at, price_updated_at, notes, review_summary, seasons, flankers, dna_twins, release_year";
     let page = 0;
     while (true) {
       const { data, error } = await supabase
         .from('fragrances')
-        .select('*')
+        .select(CATALOG_SELECT_COLS)
+        .order('id')
         .range(page * 1000, (page + 1) * 1000 - 1);
-      if (error || !data || data.length === 0) break;
+      if (error) {
+        console.error(`  ❌ Supabase catalog fetch error on page ${page}:`, error.message);
+        break;
+      }
+      if (!data || data.length === 0) break;
       fragrances.push(...data);
       if (data.length < 1000) break;
       page++;
