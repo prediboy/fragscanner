@@ -62,6 +62,7 @@ export function isMatchFuzzy(target, phrase) {
 /**
  * Deterministically extract all hated / disliked perfumes from chat history.
  * Resilient against typos like semicolons ("didn;t like"), curly apostrophes ("didn’t"), etc.
+ * Supports multiple comma-separated or "and"-separated perfume names in a single sentence.
  */
 export function extractDeterministicDislikes(chatHistory) {
   const dislikes = new Set();
@@ -73,48 +74,50 @@ export function extractDeterministicDislikes(chatHistory) {
     'musk', 'fruits', 'fruity', 'gourmand', 'spices', 'spicy', 'cardamom',
     'pepper', 'wood', 'woody', 'fresh', 'freshness', 'powdery', 'smoke', 'smoky',
     'tobacco', 'heavy sweetness', 'overly sweet', 'too sweet', 'over citrusy',
-    'sweet fragrances', 'citrus fragrances', 'sweet perfumes', 'heavy fragrances'
+    'sweet fragrances', 'citrus fragrances', 'sweet perfumes', 'heavy fragrances',
+    'either', 'both', 'all', 'any'
   ]);
+
+  const stopForHate = /(?:\b(?:but|however|though|although|while|whereas|love|loved|like|liked|favorite|own|suggest|recommend|give\s+me|find\s+me|show\s+me|looking|want|need)\b|[.!?;\n])/;
 
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
     const rawContent = (m.content || '').toLowerCase();
-    // Normalize semicolons or curly quotes inside contractions like didn;t -> didn't
-    const normalized = rawContent.replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2");
-    const clean = normalized.replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
+    const normalized = rawContent.replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2").replace(/\b(?:absolutely|completely|totally|really|truly|strongly)\s+/gi, '');
 
-    // 1. didn't like / don't like / hate / dislike / not a fan of / avoid
-    const re1 = /(?:didn'?t\s+like|did\s+not\s+like|don'?t\s+like|do\s+not\s+like|not\s+a\s+fan\s+of|wasn'?t\s+a\s+fan\s+of|hate|hated|dislike|disliked|avoid|done\s+with|sick\s+of)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\bsuggest\b|\bwant\b|\blooking\b|\?|!|$)/gi;
-    for (const match of clean.matchAll(re1)) {
-      const parts = match[1].split(/\band\b|,/);
+    // 1. Verb + Multi-Item List of perfumes (e.g. hate X, Y, and Z)
+    const re1 = new RegExp('\\b(?:didn\'?t\\s+like|did\\s+not\\s+like|don\'?t\\s+like|do\\s+not\\s+like|not\\s+a\\s+fan\\s+of|wasn\'?t\\s+a\\s+fan\\s+of|hate|hated|dislike|disliked|avoid|done\\s+with|sick\\s+of)\\b\\s+([\\s\\S]+?)(?=' + stopForHate.source + '|$)', 'gi');
+    for (const match of normalized.matchAll(re1)) {
+      const parts = match[1].split(/,|\band\b|&|\+/);
       for (const p of parts) {
-        let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
-        term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done\s+with|didn'?t\s+like|don'?t\s+like)\s+/i, '').trim();
+        let term = p.trim().replace(/^(?:the|a|an|also|both|all|i|and)\s+/gi, '').trim();
+        term = term.replace(/^(?:hate|hated|dislike|disliked|avoid|done\s+with|didn'?t\s+like|don'?t\s+like)\s+/gi, '').trim();
         if (term && !genericDislikeWords.has(term) && term.length > 2) {
           dislikes.add(term);
         }
       }
     }
 
-    // 2. tried / wore / tested X and didn't like / hated / wasn't good / missed the mark
-    const re2 = /(?:tried|wore|bought|tested)\s+([a-z0-9\s,]+?)(?:\s+(?:and\s+)?(?:hated|didn'?t\s+like|disliked|not\s+good|missed\s+the\s+mark|didn'?t\s+work|disappointing|wasn'?t)|\s+but\s+|\.|\?|!|$)/gi;
-    for (const match of clean.matchAll(re2)) {
-      const parts = match[1].split(/\band\b|,/);
+    // 2. [perfume] was too [adjective] / [perfume] is too [adjective]
+    const re2 = /\b([a-z0-9\s]+?)\s+(?:was|is|found)\s+(?:too|overly|a\s+bit|super)\s+(?:ambery|sweet|dry|harsh|sharp|fruity|cloying|heavy|synthetic|bitter)/gi;
+    for (const match of normalized.matchAll(re2)) {
+      const parts = match[1].split(/,|\band\b/);
       for (const p of parts) {
-        let term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
-        if (term && !genericDislikeWords.has(term) && term.length > 2) {
+        let term = p.trim().replace(/^(?:the|a|an|but|and|i\s+tried|tried)\s+/gi, '').trim();
+        if (term && !genericDislikeWords.has(term) && term.length > 2 && !term.includes('was ') && !term.includes('is ')) {
           dislikes.add(term);
         }
       }
     }
 
-    // 3. X missed the mark / X was disappointing / X was too sweet/heavy
-    const re3 = /(?:^|[,;]|\b(?:and|but|while|though)\b)\s*([a-z0-9\s,]+?)\s+(?:missed\s+the\s+mark|didn'?t\s+work|was\s+disappointing|was\s+too\s+(?:sweet|harsh|sharp|heavy))/gi;
-    for (const match of clean.matchAll(re3)) {
-      const parts = match[1].split(/\band\b|,/);
+    // 3. tried [X, Y, Z] ... hated / didn't like
+    const re3 = /(?:tried|wore|bought|tested)\s+([\s\S]+?)(?:\s+(?:and\s+)?(?:hated|didn'?t\s+like|disliked|not\s+good|missed\s+the\s+mark|didn'?t\s+work|disappointing|wasn'?t)|\s+but\s+|\.|\?|!|$)/gi;
+    for (const match of normalized.matchAll(re3)) {
+      const parts = match[1].split(/,|\band\b|&|\+/);
       for (const p of parts) {
-        let term = p.trim().replace(/^(?:the|a|an|but|and)\s+/i, '');
-        if (term && !genericDislikeWords.has(term) && term.length > 2) {
+        let term = p.trim().replace(/^(?:the|a|an|both|either|all)\s+/gi, '').trim();
+        if (term.includes('was ') || term.includes('is ') || term.includes('too ') || term.includes('found ')) continue;
+        if (term && !genericDislikeWords.has(term) && term.length > 2 && !/\b(?:on\s+this\s+list|of\s+these|from\s+this|options|samples|\d+)\b/i.test(term)) {
           dislikes.add(term);
         }
       }
@@ -144,6 +147,7 @@ export function extractDeterministicDislikes(chatHistory) {
 /**
  * Deterministically extract all perfumes the user already owns or explicitly loves
  * so recommendation mode never echoes back bottles they already have.
+ * Supports multiple comma-separated or "and"-separated perfume names in a single sentence.
  */
 export function extractDeterministicLiked(chatHistory) {
   const liked = new Set();
@@ -153,16 +157,18 @@ export function extractDeterministicLiked(chatHistory) {
     'minty and lavendery ones', 'minty', 'lavendery', 'fresh', 'fresh ones'
   ]);
 
+  const stopForLove = /(?:\b(?:but|however|though|although|while|whereas|hate|hated|dislike|disliked|didn'?t\s+like|don'?t\s+like|avoid|suggest|recommend|give\s+me|find\s+me|show\s+me|looking|want|need)\b|[.!?;\n])/;
+
   for (const m of (chatHistory || [])) {
     if (m.role !== 'user') continue;
     const text = (m.content || '').toLowerCase().replace(/([a-z])[;’`]+([a-z])/gi, "$1'$2");
 
-    const loveMatches = text.matchAll(/(?:love|loved|like|liked|own|have|wearing|favorite(?:\s+is)?)\s+([a-z0-9\s,]+?)(?:,|\.|\bbut\b|\bsuggest\b|\bwant\b|\blooking\b|\?|!|$)/gi);
-    for (const match of loveMatches) {
-      const raw = match[1].trim();
-      const parts = raw.split(/\band\b|,/);
+    const re = new RegExp('\\b(?:love|loved|like|liked|own|have|wearing|favorite(?:\\s+is)?)\\b\\s+([\\s\\S]+?)(?=' + stopForLove.source + '|$)', 'gi');
+    for (const match of text.matchAll(re)) {
+      const parts = match[1].split(/,|\band\b|&|\+/);
       for (const p of parts) {
-        const term = p.trim().replace(/^(?:the|a|an)\s+/i, '');
+        let term = p.trim().replace(/^(?:the|a|an|also|both|all|i|and)\s+/gi, '').trim();
+        term = term.replace(/^(?:love|loved|like|liked)\s+/gi, '').trim();
         if (term && !genericWords.has(term) && term.length > 2) {
           liked.add(term);
         }
