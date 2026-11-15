@@ -182,8 +182,25 @@ export class FragranticaRecommender {
     maxBudget = null,
     limit = 10
   }) {
-    const lovedSeeds = lovedPerfumes.map(p => typeof p === 'string' ? this.findFragrance(p) : p).filter(Boolean);
-    const hatedSeeds = hatedPerfumes.map(p => typeof p === 'string' ? this.findFragrance(p) : p).filter(Boolean);
+    const normalizeSeed = (p) => {
+      const f = typeof p === 'string' ? this.findFragrance(p) : p;
+      if (!f) return null;
+      const dna = f._dna || normalizeDNA(f.dna_inspiration);
+      return {
+        ...f,
+        _dna: dna,
+        _cluster: f._cluster || getWardrobeCluster(f, dna),
+        _accordMap: f._accordMap || buildAccordMap(f.accords),
+        _allNotes: f._allNotes || [
+          ...(f.top_notes || []),
+          ...(f.middle_notes || []),
+          ...(f.base_notes || [])
+        ].map(n => String(n || '').toLowerCase().trim())
+      };
+    };
+
+    const lovedSeeds = lovedPerfumes.map(normalizeSeed).filter(Boolean);
+    const hatedSeeds = hatedPerfumes.map(normalizeSeed).filter(Boolean);
 
     // 1. Purged DNA Set: Clones of ALL hated perfumes are hard banned
     const purgedDNAs = new Set();
@@ -202,15 +219,50 @@ export class FragranticaRecommender {
     const explicitLoved = new Set(lovedNotes.map(n => String(n).toLowerCase().trim()));
     const explicitHated = new Set(hatedNotes.map(n => String(n).toLowerCase().trim()));
 
+    // Auto-extract Prized Loved Notes from loved seeds if user gave no explicit notes
+    const effectiveLovedNotes = new Set(explicitLoved);
+    if (explicitLoved.size === 0 && lovedSeeds.length > 0) {
+      lovedSeeds.forEach(s => {
+        (s.top_notes || []).forEach(n => effectiveLovedNotes.add(String(n).toLowerCase().trim()));
+        (s.middle_notes || []).forEach(n => effectiveLovedNotes.add(String(n).toLowerCase().trim()));
+      });
+    }
+
     const activeHatedNotes = new Set(explicitHated);
     hatedSeeds.forEach(s => {
       s._allNotes.forEach(n => {
-        const isLoved = explicitLoved.has(n) || lovedSeeds.some(ls => ls._allNotes.includes(n));
+        const isLoved = effectiveLovedNotes.has(n) || lovedSeeds.some(ls => ls._allNotes?.includes(n));
         if (!isLoved) {
           activeHatedNotes.add(n);
         }
       });
     });
+
+    // Auto-detect Offending Accords (if an accord is prominent in hated seeds but absent/low in loved seeds)
+    const effectiveForbiddenAccords = new Set(forbiddenAccords.map(a => String(a).toLowerCase().trim()));
+    if (hatedSeeds.length > 0) {
+      for (const c of CANONICAL_ACCORDS) {
+        const maxInLoved = lovedSeeds.length > 0 ? Math.max(...lovedSeeds.map(ls => ls._accordMap?.[c] || 0)) : 0;
+        const maxInHated = Math.max(...hatedSeeds.map(hs => hs._accordMap?.[c] || 0));
+        if (maxInHated >= 65 && maxInLoved <= 35) {
+          effectiveForbiddenAccords.add(c);
+        }
+      }
+    }
+
+    // Auto-infer Season if user gave no season constraint
+    let effectiveSeason = targetSeason;
+    if (!effectiveSeason && lovedSeeds.length > 0) {
+      const isSummerDominant = lovedSeeds.every(s => {
+        const sSeason = String(s.primary_season || '').toLowerCase();
+        return sSeason === 'summer' || sSeason === 'spring' || sSeason === 'all year' || sSeason === 'all season';
+      });
+      if (isSummerDominant) effectiveSeason = 'Summer';
+    }
+
+    // Detect Gender profile from loved seeds (e.g. Masculine Blue / Feminine Floral)
+    const lovedGenders = new Set(lovedSeeds.map(s => String(s.gender || '').toLowerCase()).filter(Boolean));
+    const isMasculineTarget = lovedGenders.size > 0 && !lovedGenders.has('female') && !lovedGenders.has('women');
 
     // 4. Centroids for accord space
     const positiveCentroid = {};
@@ -268,7 +320,7 @@ export class FragranticaRecommender {
       // Gate D: Accord Ceiling Gate (No Amber / No Sweet / Forbidden Accords)
       let rejectedAccord = false;
       const topAccords = (candidate.accords || []).slice(0, 2).map(a => String(a.name || '').toLowerCase());
-      for (const fb of forbiddenAccords) {
+      for (const fb of effectiveForbiddenAccords) {
         const k = String(fb).toLowerCase().trim();
         if (topAccords.some(a => a.includes(k)) && (candidate._accordMap[k] || 0) > 65) {
           rejectedAccord = true;
@@ -282,9 +334,9 @@ export class FragranticaRecommender {
       if (rejectedAccord) continue;
 
       // Gate E: Seasonality Gate
-      if (targetSeason) {
+      if (effectiveSeason) {
         const s = String(candidate.primary_season || '').toLowerCase();
-        const t = String(targetSeason).toLowerCase();
+        const t = String(effectiveSeason).toLowerCase();
         if (t === 'summer') {
           if (s === 'winter' || s === 'fall') {
             const isFresh = candidate._accordMap['citrus'] > 50 || candidate._accordMap['aquatic'] > 50 || candidate._accordMap['fresh spicy'] > 50;
@@ -295,7 +347,13 @@ export class FragranticaRecommender {
         }
       }
 
-      // Gate F: Budget Filter
+      // Gate F: Gender Alignment (prevent feminine florals when user loved masculine freshies)
+      if (isMasculineTarget) {
+        const cGender = String(candidate.gender || '').toLowerCase();
+        if (cGender === 'female' || cGender === 'women') continue;
+      }
+
+      // Gate G: Budget Filter
       if (maxBudget && candidate.community_price) {
         if (Number(candidate.community_price) > maxBudget) continue;
       }
@@ -320,26 +378,26 @@ export class FragranticaRecommender {
         if (hateSim > 0.65) score -= (hateSim - 0.65) * 45;
       }
 
-      // 4. Loved Notes Hit Bonuses
-      for (const ln of lovedNotes) {
+      // 4. Loved Notes Hit Bonuses (Uses auto-extracted prized notes if user gave no notes)
+      for (const ln of effectiveLovedNotes) {
         const key = String(ln).toLowerCase().trim();
         const inTop = (candidate.top_notes || []).some(n => String(n || '').toLowerCase().includes(key));
         const inMid = (candidate.middle_notes || []).some(n => String(n || '').toLowerCase().includes(key));
         const inBase = (candidate.base_notes || []).some(n => String(n || '').toLowerCase().includes(key));
 
         if (inTop || inMid) {
-          score += 20;
+          score += 15;
           matchReasons.push(`Prominent ${ln} in opening/heart`);
         } else if (inBase) {
-          score += 8;
+          score += 5;
         }
       }
 
       // 5. Freshness / Warmth Quality Boost
-      if (targetSeason?.toLowerCase() === 'summer') {
+      if (effectiveSeason?.toLowerCase() === 'summer') {
         const freshScore = (candidate._accordMap['citrus'] || 0) + (candidate._accordMap['fresh spicy'] || 0) + (candidate._accordMap['aromatic'] || 0);
         score += Math.min(20, freshScore / 15);
-      } else if (targetSeason?.toLowerCase() === 'winter') {
+      } else if (effectiveSeason?.toLowerCase() === 'winter') {
         const warmScore = (candidate._accordMap['warm spicy'] || 0) + (candidate._accordMap['vanilla'] || 0) + (candidate._accordMap['sweet'] || 0);
         score += Math.min(20, warmScore / 15);
       }

@@ -1689,16 +1689,22 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
 
   if (isOlfactoryDiscovery) {
     try {
-      const { data: poolData } = await supabase.from('fragrances')
-        .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers, primary_season')
-        .or('in_seller_stock.eq.true,has_decants.eq.true')
-        .limit(350);
+      const [poolRes, resolvedLoved, resolvedDisliked] = await Promise.all([
+        supabase.from('fragrances')
+          .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers, primary_season, gender')
+          .or('in_seller_stock.eq.true,has_decants.eq.true')
+          .limit(350),
+        Promise.all(Array.from(allLiked).map(n => resolvePerfumeDossier(n))),
+        Promise.all(Array.from(allDislikes).map(n => resolvePerfumeDossier(n)))
+      ]);
+
+      const poolData = poolRes.data;
 
       if (poolData && poolData.length > 0) {
         const recommender = new FragranticaRecommender(poolData);
         const hogResults = recommender.recommend({
-          lovedPerfumes: Array.from(allLiked),
-          hatedPerfumes: Array.from(allDislikes),
+          lovedPerfumes: resolvedLoved.filter(Boolean),
+          hatedPerfumes: resolvedDisliked.filter(Boolean),
           lovedNotes: criteria.target_notes || [],
           hatedNotes: criteria.exclude_notes || [],
           forbiddenAccords: criteria.exclude_accords || [],
