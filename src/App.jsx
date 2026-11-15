@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import PowerFilterSidebar from './components/PowerFilterSidebar';
 import MobileFilterDrawer from './components/MobileFilterDrawer';
 import MobileBottomDock from './components/MobileBottomDock';
@@ -249,9 +249,16 @@ export default function App() {
   }, [currentPage, pageSize, searchQuery, filterState]);
 
   // Reset page to 1 whenever search, filter, or catalog mode changes
+  const prevFilterDepsRef = useRef({ searchQuery, filterState, showFullCatalog });
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, filterState, showFullCatalog]);
+    const prev = prevFilterDepsRef.current;
+    if (prev.searchQuery !== searchQuery || prev.filterState !== filterState || prev.showFullCatalog !== showFullCatalog) {
+      prevFilterDepsRef.current = { searchQuery, filterState, showFullCatalog };
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    }
+  }, [searchQuery, filterState, showFullCatalog, currentPage]);
 
   // Debounced search query telemetry
   useEffect(() => {
