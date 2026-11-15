@@ -1311,7 +1311,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <span className="text-xs text-slate-400 block mb-1">Longevity</span>
                   <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
                     <Zap className="w-4 h-4" />
-                    {fragrance.longevity || '8-10 Hours (Long Lasting)'}
+                    {fragrance.longevity || 'Moderate (5-6 hrs)'}
                   </span>
                 </div>
 
@@ -1380,7 +1380,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                 const pros = (fragrance.review_summary?.pros && fragrance.review_summary.pros.length > 0) 
                   ? fragrance.review_summary.pros 
                   : [
-                      `Exceptional performance and projection lasting ${fragrance.longevity || '8-10 Hours'}`,
+                      `Solid performance and projection lasting ${fragrance.longevity || '5-6 Hours'}`,
                       `High compliment pull in both casual and formal environments`,
                       `Smooth, layered drydown with zero synthetic harshness`,
                       `Unmatched price-to-performance ratio verified by community sellers`
