@@ -11,7 +11,7 @@ import AiConciergeModal from './components/AiConciergeModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
 import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata } from './services/inventoryApi.js';
-import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
+import { logSearchQuery, logSessionVisit, logFragranceCardClick } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
 
@@ -427,6 +427,14 @@ export default function App() {
                 selectedFormats={filterState.formats}
                 onSelectFragrance={async (selected) => {
                   setActiveFragrance(selected);
+                  if (selected) {
+                    logFragranceCardClick({
+                      fragranceName: selected.name,
+                      brand: selected.brand,
+                      price: selected.price,
+                      format: selected.format || 'bottle'
+                    });
+                  }
                   const detail = await fetchFragranceDetail(selected.id);
                   if (detail) setActiveFragrance(detail);
                 }}
@@ -538,6 +546,14 @@ export default function App() {
                         selectedFormats={filterState.formats}
                         onSelect={async (selected) => {
                           setActiveFragrance(selected);
+                          if (selected) {
+                            logFragranceCardClick({
+                              fragranceName: selected.name,
+                              brand: selected.brand,
+                              price: selected.price,
+                              format: selected.format || 'bottle'
+                            });
+                          }
                           const detail = await fetchFragranceDetail(selected.id);
                           if (detail) setActiveFragrance(detail);
                         }}

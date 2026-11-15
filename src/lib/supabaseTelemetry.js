@@ -290,3 +290,40 @@ export function logSearchQuery(query, resultsCount = 0) {
     }
   }, 1500);
 }
+
+/**
+ * Card Open / View Logger: records every time a buyer taps/clicks to open a fragrance detail card
+ */
+export async function logFragranceCardClick({
+  fragranceName = '',
+  brand = '',
+  price = null,
+  format = 'bottle'
+}) {
+  if (!supabase) return;
+  try {
+    const sessionId = getSessionId();
+    const acq = getAcquisitionInfo();
+    const payload = {
+      session_id: sessionId,
+      umbrella_title: 'EVENT:card_click',
+      umbrella_season: `${format}|source:${acq.source}`,
+      liked_perfumes: [{
+        event: 'card_click',
+        name: fragranceName,
+        brand: brand,
+        price: price,
+        format: format,
+        source: acq.source,
+        referrer: acq.referrer,
+        timestamp: new Date().toISOString()
+      }],
+      disliked_perfumes: [],
+      top_recommendations: []
+    };
+    await supabase.from('wardrobe_logs').insert([payload]);
+    console.log('[FragScanner Telemetry] Card view logged:', brand, fragranceName);
+  } catch (err) {
+    console.warn('[FragScanner Telemetry] Card view error:', err);
+  }
+}
