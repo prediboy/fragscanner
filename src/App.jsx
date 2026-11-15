@@ -10,10 +10,11 @@ import SyncStatsModal from './components/SyncStatsModal';
 import AiConciergeModal from './components/AiConciergeModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
+import SellerDashboard from './components/SellerDashboard';
 import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
-import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
+import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2, BarChart3 } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
   { id: 'all', name: 'All 11 Verified Sellers' },
@@ -39,6 +40,27 @@ export default function App() {
       return true;
     }
   });
+
+  // Top-level View Mode: 'store' (Live Arbitrage Storefront) | 'sellers' (Seller Demand & Audience Insights Dashboard)
+  const [viewMode, setViewMode] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search).get('view');
+      return p === 'sellers' || window.location.pathname === '/sellers' ? 'sellers' : 'store';
+    } catch {
+      return 'store';
+    }
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      try {
+        const p = new URLSearchParams(window.location.search).get('view');
+        setViewMode(p === 'sellers' || window.location.pathname === '/sellers' ? 'sellers' : 'store');
+      } catch {}
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     try {
@@ -264,6 +286,14 @@ export default function App() {
   }, [searchQuery, totalMatching]);
 
   const resetAllFilters = () => {
+    setViewMode('store');
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('view');
+      url.searchParams.delete('range');
+      url.searchParams.delete('seller');
+      window.history.pushState({}, '', url.pathname + (url.search ? url.search : ''));
+    } catch {}
     setSearchQuery('');
     setQuickFilterTab('all');
     setShowFullCatalog(false);
@@ -339,6 +369,39 @@ export default function App() {
           {/* Right Action Controls */}
           <div className="flex items-center gap-2 sm:gap-3">
             
+            {/* Seller Insights & Demand Dashboard Button */}
+            <button
+              onClick={() => {
+                if (viewMode === 'sellers') {
+                  setViewMode('store');
+                  try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('view');
+                    url.searchParams.delete('range');
+                    url.searchParams.delete('seller');
+                    window.history.pushState({}, '', url.pathname + (url.search ? url.search : ''));
+                  } catch {}
+                } else {
+                  setViewMode('sellers');
+                  try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('view', 'sellers');
+                    window.history.pushState({}, '', url.toString());
+                  } catch {}
+                }
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all shadow-2xs ${
+                viewMode === 'sellers'
+                  ? 'border-cyan-500 bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 ring-2 ring-cyan-500/20'
+                  : 'border-slate-200 dark:border-slate-800 hover:border-cyan-400 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300'
+              }`}
+              title="Audience Search Demand & Seller Insights"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-cyan-500" />
+              <span className="hidden sm:inline">Seller Insights</span>
+              <span className="sm:hidden">Insights</span>
+            </button>
+
             {/* Ask Khushboo AI Button */}
             <button
               onClick={() => setIsAiModalOpen(true)}
@@ -375,8 +438,24 @@ export default function App() {
         </div>
       </header>
 
-      {/* MAIN PAGE WRAPPER */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7 pb-24 md:pb-8 w-full max-w-full min-w-0">
+      {viewMode === 'sellers' ? (
+        <SellerDashboard
+          isDark={isDark}
+          onBackToStore={() => {
+            setViewMode('store');
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('view');
+              url.searchParams.delete('range');
+              url.searchParams.delete('seller');
+              window.history.pushState({}, '', url.pathname + (url.search ? url.search : ''));
+            } catch {}
+          }}
+        />
+      ) : (
+        <>
+          {/* MAIN PAGE WRAPPER */}
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7 pb-24 md:pb-8 w-full max-w-full min-w-0">
         
         {/* Search, Lenses & Sorting Bar */}
         <MarketPulseBar
@@ -583,6 +662,8 @@ export default function App() {
         counts={catalogCounts}
         isCuratedActive={isUnfiltered}
       />
+      </>
+      )}
 
       {/* MOBILE BOTTOM SHEET DRAWER */}
       <MobileFilterDrawer
