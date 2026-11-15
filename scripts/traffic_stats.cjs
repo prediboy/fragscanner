@@ -16,9 +16,14 @@ async function fullTrafficReport() {
   while (true) {
     const { data, error } = await supabase
       .from('wardrobe_logs')
-      .select('*')
+      .select('id, created_at, session_id, umbrella_title, liked_perfumes')
+      .order('id')
       .range(page * pageSize, (page + 1) * pageSize - 1);
-    if (error || !data || data.length === 0) break;
+    if (error) {
+      console.error(`  ❌ Supabase error on page ${page}:`, error.message);
+      break;
+    }
+    if (!data || data.length === 0) break;
     allLogs = allLogs.concat(data);
     if (data.length < pageSize) break;
     page++;

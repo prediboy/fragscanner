@@ -31,6 +31,7 @@ async function backfillPriceTrends() {
     const { data, error } = await supabase
       .from('fragrances')
       .select('id, name, brand, community_price, best_bottle_seller, price_history, community_sellers, community_decants, updated_at')
+      .order('id')
       .range(page * 1000, (page + 1) * 1000 - 1);
     if (error || !data || data.length === 0) break;
     allFrags = allFrags.concat(data);

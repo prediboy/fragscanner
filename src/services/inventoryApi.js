@@ -464,6 +464,8 @@ export async function fetchInventoryCounts() {
   }
 }
 
+const FRAGRANCE_DETAIL_COLS = 'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, day_night, longevity, sillage, gender, description, accords, top_notes, middle_notes, base_notes, notes, review_summary, seasons, flankers, dna_twins, dna_type, dna_inspiration, similarity_percentage, release_year, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, decant_comparison, best_bottle_seller, best_decant_seller, is_price_drop, previous_price, price_change, price_change_percentage, price_history, is_new_arrival, new_arrival_date, price_updated_at, aliases, updated_at';
+
 /**
  * Fetch full fragrance record for the modal view on demand directly from Supabase
  */
@@ -472,7 +474,7 @@ export async function fetchFragranceDetail(id) {
     if (!supabase) throw new Error("Supabase client not initialized");
     const { data, error } = await supabase
       .from('fragrances')
-      .select('*')
+      .select(FRAGRANCE_DETAIL_COLS)
       .eq('id', id)
       .single();
 

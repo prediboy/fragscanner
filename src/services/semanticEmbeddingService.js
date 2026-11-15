@@ -279,10 +279,13 @@ export async function searchFragrancesBySemanticEmbedding(queryText, limit = 20)
       return [];
     }
 
-    return (data || []).map(f => ({
-      ...f,
-      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller'
-    }));
+    return (data || []).map(f => {
+      const { review_embedding, ...cleanFrag } = f;
+      return {
+        ...cleanFrag,
+        best_seller: cleanFrag.community_sellers?.[0]?.seller_name || cleanFrag.best_bottle_seller || 'Verified Seller'
+      };
+    });
   } catch (err) {
     console.warn('[SemanticSearch] Search exception:', err.message);
     return [];

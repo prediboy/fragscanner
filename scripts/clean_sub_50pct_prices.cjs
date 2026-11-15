@@ -23,6 +23,7 @@ async function cleanSub50() {
   while (true) {
     const { data } = await sb.from('fragrances')
       .select('id, name, brand, community_price, in_seller_stock, community_sellers')
+      .order('id')
       .range(from, from + 999);
     if (!data || data.length === 0) break;
     frags.push(...data);

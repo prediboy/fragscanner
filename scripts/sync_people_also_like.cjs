@@ -195,8 +195,13 @@ async function syncPeopleAlsoLike() {
     const { data, error } = await supabase
       .from('fragrances')
       .select('id, name, brand, dna_inspiration, collection, dna_twins, flankers')
+      .order('id')
       .range(page * 1000, (page + 1) * 1000 - 1);
-    if (error || !data || data.length === 0) break;
+    if (error) {
+      console.error(`  ❌ Supabase fetch error on page ${page}:`, error.message);
+      break;
+    }
+    if (!data || data.length === 0) break;
     all = all.concat(data);
     if (data.length < 1000) break;
     page++;

@@ -142,7 +142,11 @@ async function scrapeAARMIddleEast() {
       const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       let page = 0;
       while (true) {
-        const { data, error } = await supabase.from('fragrances').select('id, name, brand, aliases').range(page * 1000, (page + 1) * 1000 - 1);
+        const { data, error } = await supabase
+          .from('fragrances')
+          .select('id, name, brand, aliases')
+          .order('id')
+          .range(page * 1000, (page + 1) * 1000 - 1);
         if (error || !data || data.length === 0) {
           if (error) console.warn("Supabase query error:", error.message);
           break;
