@@ -245,13 +245,13 @@ async function recordEnrichmentReport(reportEntry) {
   try {
     const { error } = await supabase.from('enriched_perfumes').upsert(reportEntry, { onConflict: 'id' });
     if (error) {
-      console.warn("  [Supabase] Note on logging to 'enriched_perfumes':", error.message);
+      if (!error.message.includes('schema cache')) {
+        console.warn("  [Supabase] Note on logging to 'enriched_perfumes':", error.message);
+      }
     } else {
       console.log(`  ✓ Logged enrichment report to Supabase table 'enriched_perfumes'!`);
     }
-  } catch (err) {
-    console.error('  Warning: Supabase report sync error:', err.message);
-  }
+  } catch (err) {}
 }
 
 /**
