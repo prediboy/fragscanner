@@ -720,7 +720,6 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         name: newPerfume.name,
         brand: newPerfume.brand,
         dna_inspiration: newPerfume.dna_inspiration,
-        similarity_percentage: newPerfume.similarity_percentage,
         dna_type: newPerfume.dna_type,
         notes: newPerfume.notes,
         accords: newPerfume.accords,

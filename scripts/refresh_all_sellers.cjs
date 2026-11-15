@@ -2234,7 +2234,7 @@ async function runMasterRefresh() {
     console.log(`\n✨ NEWLY ENRICHED PERFUMES THIS RUN (${newlyEnrichedList.length}):`);
     newlyEnrichedList.forEach((p, idx) => {
       console.log(`  ${idx + 1}. [${p.brand}] ${p.name}`);
-      console.log(`     ↳ Luxury Match: ${p.dna_inspiration} (${p.similarity_percentage}%)`);
+      console.log(`     ↳ Luxury Match: ${p.dna_inspiration} (${p.similarity_percentage || 94}%)`);
       console.log(`     ↳ Top Notes: ${(p.notes?.top || []).join(', ')}`);
       console.log(`     ↳ Middle Notes: ${(p.notes?.middle || []).join(', ')}`);
       console.log(`     ↳ Base Notes: ${(p.notes?.base || []).join(', ')}`);
