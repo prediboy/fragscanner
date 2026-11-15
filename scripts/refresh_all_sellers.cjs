@@ -558,6 +558,36 @@ async function runMasterRefresh() {
     return null;
   }
 
+  function calculateLongevityFromNotes(concentration, accords, notes) {
+    let baseScore = 5.2; // Moderate EDP anchor
+    const conc = (concentration || '').toLowerCase();
+    if (conc.includes('extrait') || conc.includes('elixir')) baseScore = 7.8;
+    else if (conc.includes('parfum')) baseScore = 6.8;
+    else if (conc.includes('edp') || conc.includes('eau de parfum')) baseScore = 5.6;
+    else if (conc.includes('edt') || conc.includes('eau de toilette')) baseScore = 4.2;
+    else if (conc.includes('cologne') || conc.includes('edc')) baseScore = 3.2;
+
+    const accNames = (accords || []).map(a => (typeof a === 'string' ? a : a.name || '').toLowerCase());
+    const heavyAccords = ['amber', 'oud', 'woody', 'leather', 'vanilla', 'tobacco', 'sweet', 'warm spicy'];
+    const lightAccords = ['citrus', 'aquatic', 'fresh', 'green', 'floral', 'ozonic'];
+
+    const heavyCount = accNames.filter(a => heavyAccords.some(h => a.includes(h))).length;
+    const lightCount = accNames.filter(a => lightAccords.some(l => a.includes(l))).length;
+
+    baseScore += (heavyCount * 0.45) - (lightCount * 0.25);
+    baseScore = Math.max(2.5, Math.min(10.5, baseScore));
+    const rounded = Math.round(baseScore * 10) / 10;
+
+    let label;
+    if (rounded < 3.5) label = 'Weak';
+    else if (rounded < 5.8) label = 'Moderate';
+    else if (rounded < 7.8) label = 'Long Lasting';
+    else if (rounded < 9.5) label = 'Very Long Lasting';
+    else label = 'Eternal';
+
+    return `${rounded.toFixed(1)}h (${label})`;
+  }
+
   // Helper: Find best fragrance match in catalog (100% database & alias driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "", options = {}) {
     const allowDesigner = !!options.allowDesigner;
@@ -1948,8 +1978,8 @@ async function runMasterRefresh() {
         concentration: f.concentration || '',
         primary_season: f.primary_season || '',
         day_night: f.day_night || '',
-        longevity: f.longevity || '',
-        sillage: f.sillage || '',
+        longevity: (f.longevity && f.longevity.includes('h')) ? f.longevity : calculateLongevityFromNotes(f.concentration, f.accords, f.notes),
+        sillage: f.sillage || 'Moderate',
         gender: f.gender || '',
         dna_type: f.dna_type || '',
         dna_inspiration: f.dna_inspiration || '',

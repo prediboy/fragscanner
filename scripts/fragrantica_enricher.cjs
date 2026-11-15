@@ -25,6 +25,71 @@ const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY)
   : null;
 
 /**
+ * Calculate realistic longevity in hours based on formula code [1, 2, 4, 8, 16] with weak-skew penalty
+ */
+function calculateLongevityFromNotes(concentration, accords, notes) {
+  let baseScore = 5.2; // Moderate EDP anchor
+  const conc = (concentration || '').toLowerCase();
+  if (conc.includes('extrait') || conc.includes('elixir')) baseScore = 7.8;
+  else if (conc.includes('parfum')) baseScore = 6.8;
+  else if (conc.includes('edp') || conc.includes('eau de parfum')) baseScore = 5.6;
+  else if (conc.includes('edt') || conc.includes('eau de toilette')) baseScore = 4.2;
+  else if (conc.includes('cologne') || conc.includes('edc')) baseScore = 3.2;
+
+  const accNames = (accords || []).map(a => (typeof a === 'string' ? a : a.name || '').toLowerCase());
+  const heavyAccords = ['amber', 'oud', 'woody', 'leather', 'vanilla', 'tobacco', 'sweet', 'warm spicy'];
+  const lightAccords = ['citrus', 'aquatic', 'fresh', 'green', 'floral', 'ozonic'];
+
+  const heavyCount = accNames.filter(a => heavyAccords.some(h => a.includes(h))).length;
+  const lightCount = accNames.filter(a => lightAccords.some(l => a.includes(l))).length;
+
+  baseScore += (heavyCount * 0.45) - (lightCount * 0.25);
+  baseScore = Math.max(2.5, Math.min(10.5, baseScore));
+  const rounded = Math.round(baseScore * 10) / 10;
+
+  let label;
+  if (rounded < 3.5) label = 'Weak';
+  else if (rounded < 5.8) label = 'Moderate';
+  else if (rounded < 7.8) label = 'Long Lasting';
+  else if (rounded < 9.5) label = 'Very Long Lasting';
+  else label = 'Eternal';
+
+  return `${rounded.toFixed(1)}h (${label})`;
+}
+
+function calculateSillage(longevityLabel) {
+  if (!longevityLabel) return 'Moderate';
+  if (longevityLabel.includes('Weak')) return 'Intimate';
+  if (longevityLabel.includes('Moderate')) return 'Moderate';
+  if (longevityLabel.includes('Long Lasting')) return 'Strong';
+  if (longevityLabel.includes('Very Long Lasting') || longevityLabel.includes('Eternal') || longevityLabel.includes('Beast Mode')) return 'Enormous';
+  return 'Moderate';
+}
+
+async function generateGeminiEmbedding(text) {
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+  if (!geminiKey || !text) return null;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${geminiKey}`;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'models/gemini-embedding-001',
+        content: { parts: [{ text: text.slice(0, 1800) }] }
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return data.embedding?.values || null;
+    }
+  } catch (err) {
+    console.warn('  [AI-Enrich] Warning generating embedding for new perfume:', err.message);
+  }
+  return null;
+}
+
+/**
  * Perform a web search to fetch Fragrantica listing snippets (fallback when needed)
  */
 async function searchWeb(query) {
@@ -570,6 +635,12 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         `${brandClean.toLowerCase()} ${canonicalName.toLowerCase()}`
       ])].filter(a => a && a.length >= 2);
 
+      const calcLongevity = calculateLongevityFromNotes(nf.concentration || 'Eau de Parfum', accordsList, nf.notes);
+      const calcSillage = calculateSillage(calcLongevity);
+
+      const embeddingText = `${brandClean} ${canonicalName}. An authentic release from ${brandClean}. Inspiration: ${nf.clone_inspiration || 'Original Creation'}. Accords: ${accordsList.map(a => a.name).join(', ')}`;
+      const reviewEmbedding = await generateGeminiEmbedding(embeddingText);
+
       const newPerfume = {
         id: cleanId,
         name: canonicalName,
@@ -579,11 +650,10 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         rating_count: nf.rating_count || 350,
         gender: nf.gender || 'Unisex',
         release_year: nf.release_year || new Date().getFullYear(),
-        concentration: 'Eau de Parfum',
+        concentration: nf.concentration || 'Eau de Parfum',
         primary_season: nf.primary_season || 'Fall',
         dna_inspiration: nf.clone_inspiration || 'Original Creation',
         dna_type: (nf.accords || []).slice(0, 3).join(' ') || 'Aromatic',
-        similarity_percentage: nf.clone_inspiration && nf.clone_inspiration !== 'Original Creation' ? 92 : 85,
         accords: accordsList,
         top_notes: nf.notes?.top || [],
         middle_notes: nf.notes?.middle || [],
@@ -591,9 +661,10 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         notes: nf.notes || { top: [], middle: [], base: [] },
         seasons: { winter: 25, fall: 25, spring: 25, summer: 25 },
         day_night: { day: 50, night: 50 },
-        longevity: 'Long Lasting (8+ hrs)',
-        sillage: 'Strong',
+        longevity: calcLongevity,
+        sillage: calcSillage,
         review_summary: `A standout release from ${brandClean}.`,
+        review_embedding: reviewEmbedding || null,
         flankers: [],
         dna_twins: [],
         aliases: aliasesList,
