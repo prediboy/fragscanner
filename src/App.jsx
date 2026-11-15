@@ -438,8 +438,8 @@ export default function App() {
                     logFragranceCardClick({
                       fragranceName: selected.name,
                       brand: selected.brand,
-                      price: selected.price,
-                      format: selected.format || 'bottle'
+                      price: selected.community_price || selected.price,
+                      format: selected.format || (selected.has_decants && !selected.in_seller_stock ? 'decant' : 'bottle')
                     });
                   }
                   const detail = await fetchFragranceDetail(selected.id);
@@ -557,8 +557,8 @@ export default function App() {
                             logFragranceCardClick({
                               fragranceName: selected.name,
                               brand: selected.brand,
-                              price: selected.price,
-                              format: selected.format || 'bottle'
+                              price: selected.community_price || selected.price,
+                              format: selected.format || (selected.has_decants && !selected.in_seller_stock ? 'decant' : 'bottle')
                             });
                           }
                           const detail = await fetchFragranceDetail(selected.id);

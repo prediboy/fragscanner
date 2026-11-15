@@ -2,6 +2,8 @@ import { supabase } from '../lib/supabaseTelemetry.js';
 
 // In-memory LRU cache to make repeat page visits 0ms instant
 const pageCache = new Map();
+const decantsDatasetCache = new Map();
+const priceTrendsCache = new Map();
 
 const ACRONYMS = {
   cdnim: 'club de nuit intense man',
@@ -272,18 +274,27 @@ export async function fetchInventoryPage({
       items = scored.slice(from, from + pageSize).map(x => x.item);
     } else {
       if (isDecantOnly && (sortBy === 'price_asc' || sortBy === 'price_desc')) {
-        // For decants, fetch all pages (bypass PostgREST 1000-row cap) and sort by price per ml
-        let list = [];
-        for (let offset = 0; offset < 5000; offset += 1000) {
-          const { data, error } = await query.range(offset, offset + 999);
-          if (error) {
-            console.warn('Supabase decants query error:', error.message);
-            throw error;
+        // For decants, fetch or read from decantsDatasetCache and sort by price per ml
+        const decantDatasetKey = `${seller || 'all'}_${brand || 'all'}_${maxBudget}`;
+        let list;
+        const cached = decantsDatasetCache.get(decantDatasetKey);
+        if (cached && Date.now() - cached.timestamp < 300000) {
+          list = cached.list;
+        } else {
+          list = [];
+          for (let offset = 0; offset < 5000; offset += 1000) {
+            const { data, error } = await query.range(offset, offset + 999);
+            if (error) {
+              console.warn('Supabase decants query error:', error.message);
+              throw error;
+            }
+            if (!data || data.length === 0) break;
+            list.push(...data);
+            if (data.length < 1000) break;
           }
-          if (!data || data.length === 0) break;
-          list.push(...data);
-          if (data.length < 1000) break;
+          decantsDatasetCache.set(decantDatasetKey, { list, timestamp: Date.now() });
         }
+
         if (sortBy === 'price_asc') {
           list.sort((a, b) => (getBestDecantRate(a)?.perMl || 99999) - (getBestDecantRate(b)?.perMl || 99999));
         } else {
@@ -492,6 +503,11 @@ export async function fetchFragranceDetail(id) {
 export async function fetchFragrancePriceTrend(fragranceId, fragranceName) {
   try {
     if (!supabase) return [];
+    const cacheKey = `${fragranceId || ''}_${fragranceName || ''}`;
+    if (priceTrendsCache.has(cacheKey)) {
+      return priceTrendsCache.get(cacheKey);
+    }
+
     let query = supabase
       .from('price_trends')
       .select('price, previous_price, price_change, seller_name, format, size, is_best_price, source, recorded_at')
@@ -513,15 +529,21 @@ export async function fetchFragrancePriceTrend(fragranceId, fragranceName) {
     
     // Outlier filter: eliminate any historical record where price dropped by more than half (< 50% of median)
     const valid = (data || []).filter(d => Number(d.price) > 0);
-    if (valid.length <= 1) return valid;
+    if (valid.length <= 1) {
+      priceTrendsCache.set(cacheKey, valid);
+      return valid;
+    }
 
     const sortedPrices = valid.map(d => Number(d.price)).sort((a, b) => a - b);
     const median = sortedPrices[Math.floor(sortedPrices.length / 2)];
 
-    return valid.filter(d => {
+    const cleaned = valid.filter(d => {
       const p = Number(d.price);
       return p >= 0.5 * median && p <= 2.5 * median;
     });
+
+    priceTrendsCache.set(cacheKey, cleaned);
+    return cleaned;
   } catch (e) {
     console.warn('Could not fetch price trends from Supabase:', e);
     return [];
