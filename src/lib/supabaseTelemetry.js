@@ -117,9 +117,9 @@ export async function logSessionVisit() {
     };
 
     await supabase.from('wardrobe_logs').insert([payload]);
-    console.log('[FragScanner Telemetry] Visit logged with acquisition:', acq.source, acq.referrer);
+    console.log('[FragSeeker Telemetry] Visit logged with acquisition:', acq.source, acq.referrer);
   } catch (err) {
-    console.warn('[FragScanner Telemetry] Visit log error:', err);
+    console.warn('[FragSeeker Telemetry] Visit log error:', err);
   }
 }
 
@@ -173,12 +173,12 @@ export function logWardrobeSelection({
         .insert([payload]);
 
       if (error) {
-        console.warn('[FragScanner Telemetry] Log skipped:', error.message);
+        console.warn('[FragSeeker Telemetry] Log skipped:', error.message);
       } else {
-        console.log('[FragScanner Telemetry] Preference logged successfully:', payload);
+        console.log('[FragSeeker Telemetry] Preference logged successfully:', payload);
       }
     } catch (err) {
-      console.warn('[FragScanner Telemetry] Error:', err);
+      console.warn('[FragSeeker Telemetry] Error:', err);
     }
   }, 2500);
 }
@@ -232,9 +232,9 @@ export async function logWhatsAppClick({
       }]).catch(() => {});
     }
 
-    console.log('[FragScanner Telemetry] WhatsApp lead logged:', sellerName, fragranceName, price);
+    console.log('[FragSeeker Telemetry] WhatsApp lead logged:', sellerName, fragranceName, price);
   } catch (err) {
-    console.warn('[FragScanner Telemetry] WhatsApp log error:', err);
+    console.warn('[FragSeeker Telemetry] WhatsApp log error:', err);
   }
 }
 
@@ -284,9 +284,9 @@ export function logSearchQuery(query, resultsCount = 0) {
         await supabase.from('wardrobe_logs').insert([payload]);
       }
 
-      console.log('[FragScanner Telemetry] Search query logged:', cleanQ, `(${resultsCount} results)`);
+      console.log('[FragSeeker Telemetry] Search query logged:', cleanQ, `(${resultsCount} results)`);
     } catch (err) {
-      console.warn('[FragScanner Telemetry] Search log error:', err);
+      console.warn('[FragSeeker Telemetry] Search log error:', err);
     }
   }, 1500);
 }
@@ -322,8 +322,8 @@ export async function logFragranceCardClick({
       top_recommendations: []
     };
     await supabase.from('wardrobe_logs').insert([payload]);
-    console.log('[FragScanner Telemetry] Card view logged:', brand, fragranceName);
+    console.log('[FragSeeker Telemetry] Card view logged:', brand, fragranceName);
   } catch (err) {
-    console.warn('[FragScanner Telemetry] Card view error:', err);
+    console.warn('[FragSeeker Telemetry] Card view error:', err);
   }
 }

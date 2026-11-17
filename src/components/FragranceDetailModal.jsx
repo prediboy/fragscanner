@@ -798,7 +798,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           const isLowest = sIdx === 0 && filteredSellers.length > 1;
                           const isCurrentSelected = selectedSeller !== 'all' && seller.seller_id === selectedSeller;
                           const bottleLabel = seller.size || 'Bottle';
-                          const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (${bottleLabel}) quoted at ₹${priceNum.toLocaleString()} on FragScanner. Is this in stock?`;
+                          const waMessage = `Hi ${seller.seller_name}, saw your price for ${modalDisplayName} (${bottleLabel}) quoted at ₹${priceNum.toLocaleString()} on FragSeeker. Is this in stock?`;
                           const waUrl = `https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(waMessage)}`;
 
                           return (
@@ -914,7 +914,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       </p>
                       <div className="flex items-center gap-2 flex-wrap pt-1">
                         <a
-                          href={`https://wa.me/918076851481?text=${encodeURIComponent(`Hi Second Theory, saw your seller profile on FragScanner. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
+                          href={`https://wa.me/918076851481?text=${encodeURIComponent(`Hi Second Theory, saw your seller profile on FragSeeker. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
@@ -922,7 +922,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Ask Second Theory</span>
                         </a>
                         <a
-                          href={`https://wa.me/919716764787?text=${encodeURIComponent(`Hi FragFever, saw your seller profile on FragScanner. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
+                          href={`https://wa.me/919716764787?text=${encodeURIComponent(`Hi FragFever, saw your seller profile on FragSeeker. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
@@ -930,7 +930,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Ask FragFever</span>
                         </a>
                         <a
-                          href={`https://wa.me/919456411103?text=${encodeURIComponent(`Hi Apex Aroma, saw your seller profile on FragScanner. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
+                          href={`https://wa.me/919456411103?text=${encodeURIComponent(`Hi Apex Aroma, saw your seller profile on FragSeeker. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
@@ -1009,7 +1009,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         const currentPrice = Number(currentQuote.price);
                         const lowestPrice = Number(validQuotes[0]?.price);
 
-                        const waMsg = `Hi ${currentQuote.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${currentPrice.toLocaleString()} on FragScanner. Is this in stock?`;
+                        const waMsg = `Hi ${currentQuote.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${currentPrice.toLocaleString()} on FragSeeker. Is this in stock?`;
                         const cleanedNum = String(currentQuote.whatsapp || '').replace(/\D/g, '');
                         const waUrl = cleanedNum ? `https://wa.me/${cleanedNum.startsWith('91') ? cleanedNum : `91${cleanedNum}`}?text=${encodeURIComponent(waMsg)}` : null;
 
@@ -1032,7 +1032,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                 {validQuotes.map((q, qIdx) => {
                                   const isSelected = qIdx === selectedIdx;
                                   const isWinning = qIdx === 0;
-                                  const rowMsg = `Hi ${q.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${Number(q.price).toLocaleString()} on FragScanner. Is this in stock?`;
+                                  const rowMsg = `Hi ${q.seller_name}, saw your price for ${modalDisplayName} (${size} Decant) quoted at ₹${Number(q.price).toLocaleString()} on FragSeeker. Is this in stock?`;
                                   const rowCleaned = String(q.whatsapp || '').replace(/\D/g, '');
                                   const rowWa = rowCleaned ? `https://wa.me/${rowCleaned.startsWith('91') ? rowCleaned : `91${rowCleaned}`}?text=${encodeURIComponent(rowMsg)}` : null;
 
@@ -1142,7 +1142,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       </p>
                       <div className="flex items-center gap-2 flex-wrap pt-1">
                         <a
-                          href={`https://wa.me/917982410620?text=${encodeURIComponent(`Hi Enigma Perfumes, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          href={`https://wa.me/917982410620?text=${encodeURIComponent(`Hi Enigma Perfumes, saw your decant catalog on FragSeeker. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
@@ -1151,7 +1151,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Ask Enigma Perfumes</span>
                         </a>
                         <a
-                          href={`https://wa.me/919899401419?text=${encodeURIComponent(`Hi Blue Wings, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          href={`https://wa.me/919899401419?text=${encodeURIComponent(`Hi Blue Wings, saw your decant catalog on FragSeeker. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"
@@ -1160,7 +1160,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Ask Blue Wings</span>
                         </a>
                         <a
-                          href={`https://wa.me/919811377357?text=${encodeURIComponent(`Hi Whiff Culture, saw your decant catalog on FragScanner. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
+                          href={`https://wa.me/919811377357?text=${encodeURIComponent(`Hi Whiff Culture, saw your decant catalog on FragSeeker. Do you have decants available for ${fragrance.brand} ${fragrance.name}?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-slate-700 transition-colors"

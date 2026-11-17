@@ -397,12 +397,12 @@ export default function PowerFragranceCard({
 
                 {getWhatsAppUrl(
                   activeRetail.whatsapp || f.community_whatsapp,
-                  `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                  `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragSeeker. Is this in stock?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
                       activeRetail.whatsapp || f.community_whatsapp,
-                      `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragScanner. Is this in stock?`
+                      `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragSeeker. Is this in stock?`
                     )}
                     target="_blank"
                     rel="noreferrer"
@@ -446,12 +446,12 @@ export default function PowerFragranceCard({
 
                 {getWhatsAppUrl(
                   activeTester.whatsapp || f.community_whatsapp,
-                  `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragScanner. Is this available?`
+                  `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragSeeker. Is this available?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
                       activeTester.whatsapp || f.community_whatsapp,
-                      `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragScanner. Is this available?`
+                      `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragSeeker. Is this available?`
                     )}
                     target="_blank"
                     rel="noreferrer"
@@ -495,12 +495,12 @@ export default function PowerFragranceCard({
 
                 {getWhatsAppUrl(
                   activePartial.whatsapp || f.community_whatsapp,
-                  `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                  `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragSeeker. Can you share level pictures?`
                 ) && (
                   <a
                     href={getWhatsAppUrl(
                       activePartial.whatsapp || f.community_whatsapp,
-                      `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragScanner. Can you share level pictures?`
+                      `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragSeeker. Can you share level pictures?`
                     )}
                     target="_blank"
                     rel="noreferrer"
@@ -573,12 +573,12 @@ export default function PowerFragranceCard({
 
                   {getWhatsAppUrl(
                     activeDecant.whatsapp || f.community_whatsapp,
-                    `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragScanner. Is this available?`
+                    `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragSeeker. Is this available?`
                   ) && (
                     <a
                       href={getWhatsAppUrl(
                         activeDecant.whatsapp || f.community_whatsapp,
-                        `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragScanner. Is this available?`
+                        `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragSeeker. Is this available?`
                       )}
                       target="_blank"
                       rel="noreferrer"
@@ -778,7 +778,7 @@ export default function PowerFragranceCard({
                       {q.whatsapp ? (
                         <a
                           href={`https://wa.me/${String(q.whatsapp).replace(/\D/g, '').startsWith('91') ? String(q.whatsapp).replace(/\D/g, '') : `91${String(q.whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
-                            `Hi ${q.seller_name}, saw your quote for ${displayName} (${q.label}) at ₹${q.price.toLocaleString()} on FragScanner. Is this available?`
+                            `Hi ${q.seller_name}, saw your quote for ${displayName} (${q.label}) at ₹${q.price.toLocaleString()} on FragSeeker. Is this available?`
                           )}`}
                           target="_blank"
                           rel="noreferrer"

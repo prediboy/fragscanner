@@ -12,7 +12,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('[FragScanner ErrorBoundary Caught]:', error, errorInfo);
+    console.error('[FragSeeker ErrorBoundary Caught]:', error, errorInfo);
   }
 
   handleReset = () => {

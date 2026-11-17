@@ -331,7 +331,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-heading font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
-                  FragScanner
+                  FragSeeker
                 </span>
                 <span className="hidden sm:inline text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 font-bold">
                   LIVE ARBITRAGE
