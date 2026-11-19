@@ -200,9 +200,9 @@ export async function fetchInventoryPage({
           currentPage: page
         };
       } else if (dealsOnly === 'drops') {
-        query = query.or('is_price_drop.eq.true,price_change.lt.0').eq('in_seller_stock', true).gt('community_price', 0);
+        query = query.eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0);
       } else if (dealsOnly === 'new') {
-        query = query.or('is_new_arrival.eq.true,discovered_at.not.is.null,new_arrival_date.not.is.null').eq('in_seller_stock', true).gt('community_price', 0);
+        query = query.eq('is_new_arrival', true).eq('in_seller_stock', true).gt('community_price', 0);
       } else {
         // 1. Format Filtering
         if (formats.length === 1 && formats[0] === 'retail') {
@@ -453,8 +453,8 @@ export async function fetchInventoryCounts() {
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('has_decants', true).gt('lowest_decant_price', 0),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_tester: true }])),
       supabase.from('fragrances').select('id', { count: 'exact', head: true }).contains('community_sellers', JSON.stringify([{ is_partial: true }])),
-      supabase.from('fragrances').select('id', { count: 'exact', head: true }).or('is_price_drop.eq.true,price_change.lt.0').eq('in_seller_stock', true).gt('community_price', 0),
-      supabase.from('fragrances').select('id', { count: 'exact', head: true }).or('is_new_arrival.eq.true,discovered_at.not.is.null,new_arrival_date.not.is.null').eq('in_seller_stock', true).gt('community_price', 0)
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_price_drop', true).eq('in_seller_stock', true).gt('community_price', 0),
+      supabase.from('fragrances').select('id', { count: 'exact', head: true }).eq('is_new_arrival', true).eq('in_seller_stock', true).gt('community_price', 0)
     ]);
 
     cachedCounts = {

@@ -163,8 +163,8 @@ export default function App() {
     testers: 18,
     partial: 1,
     partials: 1,
-    drops: 23,
-    newArrivals: 17
+    drops: 0,
+    newArrivals: 29
   }));
 
   useEffect(() => {
@@ -466,14 +466,16 @@ export default function App() {
             ) : !isLoadingPage && pageItems.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-xl font-mono">
-                  ∅
+                  {filterState.dealsOnly === 'drops' ? '📉' : '∅'}
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-lg text-slate-800 dark:text-slate-200">
-                    No matching fragrances found
+                    {filterState.dealsOnly === 'drops' ? 'No Active Price Drops Right Now' : 'No matching fragrances found'}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
-                    Try relaxing your budget, clearing specific seller filters, or searching for a broader fragrance term.
+                    {filterState.dealsOnly === 'drops'
+                      ? 'All community seller price sheets are currently at their baseline rates. Active drops are flagged automatically whenever sellers update their sheets!'
+                      : 'Try relaxing your budget, clearing specific seller filters, or searching for a broader fragrance term.'}
                   </p>
                 </div>
                 <button
