@@ -324,6 +324,12 @@ export default function PowerFragranceCard({
                   <span>Tester</span>
                 </span>
               )}
+              {f.trendingRank && (
+                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-rose-50 text-rose-900 border border-rose-300 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-700/80 flex items-center gap-1" title={`${f.weeklyClicks || ''} clicks in the last 7 days`}>
+                  <span>🔥</span>
+                  <span>#{f.trendingRank} Preferred</span>
+                </span>
+              )}
               {f.is_price_drop && !lowestTester && !isSpecificSeller && (
                 <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 flex items-center gap-1">
                   <TrendingDown className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />

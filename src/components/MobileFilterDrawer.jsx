@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Filter, X, RotateCcw, TrendingDown, Sparkles, Search } from 'lucide-react';
+import { Filter, X, RotateCcw, TrendingDown, Sparkles, Search, Flame } from 'lucide-react';
 
 export default function MobileFilterDrawer({
   isOpen: controlledIsOpen,
@@ -320,11 +320,23 @@ export default function MobileFilterDrawer({
             </select>
           </div>
 
-          {/* Deals Highlight */}
+          {/* Deals & Trending Highlight */}
           <div className="mt-4 space-y-1.5">
             <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block">
-              Special Deals
+              Curated & Special Deals
             </span>
+            <button
+              type="button"
+              onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'preferred' ? null : 'preferred' }))}
+              className={`w-full p-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all text-xs font-mono mb-2 active:scale-98 ${
+                dealsOnly === 'preferred'
+                  ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
+                  : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
+              }`}
+            >
+              <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
+              <span>🔥 Most Preferred (Top 12 Trending)</span>
+            </button>
             <div className="flex items-center gap-2 text-xs font-mono">
               <button
                 type="button"

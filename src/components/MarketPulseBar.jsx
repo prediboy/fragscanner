@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X, TrendingDown, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { Search, X, TrendingDown, Sparkles, SlidersHorizontal, Flame } from 'lucide-react';
 
 export default function MarketPulseBar({
   searchQuery,
@@ -73,7 +73,7 @@ export default function MarketPulseBar({
     if (dealsOnly) {
       activeChips.push({
         id: 'deals',
-        label: dealsOnly === 'drops' ? '📉 Price Drops' : '✨ New Arrivals',
+        label: dealsOnly === 'drops' ? '📉 Price Drops' : (dealsOnly === 'preferred' ? '🔥 Most Preferred (Top 12)' : '✨ New Arrivals'),
         onRemove: () => setFilterState(p => ({ ...p, dealsOnly: null }))
       });
     }
@@ -148,6 +148,22 @@ export default function MarketPulseBar({
         >
           <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
           <span>Curated Highlights</span>
+        </button>
+
+        {/* Toggle: Most Preferred (Top 12) */}
+        <button
+          onClick={() => {
+            setQuickFilterTab('preferred');
+            setFilterState(prev => ({ ...prev, dealsOnly: 'preferred', formats: ['retail'] }));
+          }}
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+            dealsOnly === 'preferred'
+              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
+          <span>Most Preferred ({counts.preferred ?? 12})</span>
         </button>
 
         {/* Toggle 2: Price Drops */}

@@ -10,7 +10,7 @@ import SyncStatsModal from './components/SyncStatsModal';
 import AiConciergeModal from './components/AiConciergeModal';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
-import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata } from './services/inventoryApi.js';
+import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata, fetchMostPreferredFragrances } from './services/inventoryApi.js';
 import { logSearchQuery, logSessionVisit, logFragranceCardClick } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2 } from 'lucide-react';
@@ -136,6 +136,7 @@ export default function App() {
   const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [spotlightDrops, setSpotlightDrops] = useState([]);
   const [spotlightNew, setSpotlightNew] = useState([]);
+  const [spotlightPreferred, setSpotlightPreferred] = useState([]);
 
   // Live brand list loaded directly from Supabase DB, pre-sorted A-Z
   const [brandsList, setBrandsList] = useState([]);
@@ -202,6 +203,12 @@ export default function App() {
         }
       })
       .catch(e => console.warn('Spotlight new arrivals error:', e));
+
+    fetchMostPreferredFragrances(12)
+      .then(res => {
+        setSpotlightPreferred(res || []);
+      })
+      .catch(e => console.warn('Spotlight preferred error:', e));
   }, []);
 
   // Compute live seller inventory count list from Supabase sync metadata
@@ -426,6 +433,8 @@ export default function App() {
           <div className="flex-1 min-w-0">
             {isUnfiltered ? (
               <CuratedSpotlightHub
+                mostPreferred={spotlightPreferred}
+                totalPreferredCount={12}
                 priceDrops={spotlightDrops}
                 newArrivals={spotlightNew}
                 totalDropsCount={catalogCounts.drops || 23}
@@ -505,8 +514,16 @@ export default function App() {
                           </span>
                         )}
                         {filterState.dealsOnly && (
-                          <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                            {filterState.dealsOnly === 'drops' ? '📉 Price Drops (Latest First)' : '✨ New Stock'}
+                          <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full border ${
+                            filterState.dealsOnly === 'preferred'
+                              ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                              : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                          }`}>
+                            {filterState.dealsOnly === 'drops'
+                              ? '📉 Price Drops (Latest First)'
+                              : filterState.dealsOnly === 'preferred'
+                              ? '🔥 Most Preferred (Top 12 Trending)'
+                              : '✨ New Stock'}
                           </span>
                         )}
                         {filterState.maxBudget < 15000 && (

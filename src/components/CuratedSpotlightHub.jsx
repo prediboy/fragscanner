@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
-import { TrendingDown, Sparkles, ArrowRight } from 'lucide-react';
+import { TrendingDown, Sparkles, ArrowRight, Flame } from 'lucide-react';
 import PowerFragranceCard from './PowerFragranceCard';
 
 export default function CuratedSpotlightHub({
   catalog = [],
   priceDrops = [],
   newArrivals: customNewArrivals = [],
+  mostPreferred = [],
   totalDropsCount,
   totalNewArrivalsCount,
+  totalPreferredCount = 12,
   onSelectFragrance,
   onApplyFilter,
   expandedCardId,
@@ -17,6 +19,14 @@ export default function CuratedSpotlightHub({
   catalogCount = 965,
   selectedFormats = ['retail']
 }) {
+  // 0. Top Preferred / Most Clicked in Last 7 Days
+  const topPreferred = useMemo(() => {
+    if (mostPreferred && mostPreferred.length > 0) {
+      return mostPreferred.slice(0, 6);
+    }
+    return [];
+  }, [mostPreferred]);
+
   // 1. Top Verified Price Drops (strictly sorted by latest price drop timestamp, matching Price Drops tab)
   const topPriceDrops = useMemo(() => {
     const getDropTimestamp = (item) => {
@@ -73,6 +83,54 @@ export default function CuratedSpotlightHub({
   return (
     <div className="space-y-8 animate-in fade-in duration-200 w-full max-w-full min-w-0">
       
+      {/* SHELF 0: MOST PREFERRED THIS WEEK (TOP 12 TRENDING) */}
+      {topPreferred.length > 0 && (
+        <section className="space-y-3.5 w-full max-w-full min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="flex items-start gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center text-amber-500 dark:text-amber-400 shrink-0 mt-0.5">
+                <Flame className="w-4 h-4 fill-amber-500/20" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white">
+                    Most Preferred This Week
+                  </h3>
+                  <span className="text-xs font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
+                    🔥 Top 12 Trending
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Most clicked & inquired community fragrances over the last 7 days
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onApplyFilter({ dealsOnly: 'preferred' })}
+              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+            >
+              <span>View all {totalPreferredCount || mostPreferred.length || 12} trending</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-full min-w-0">
+            {topPreferred.map(f => (
+              <PowerFragranceCard
+                key={`pref-${f.id}`}
+                fragrance={f}
+                selectedFormats={selectedFormats}
+                onSelect={onSelectFragrance}
+                isExpanded={expandedCardId === f.id}
+                onToggleExpand={onToggleExpand}
+                selectedSeller="all"
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* SHELF 1: TODAY'S VERIFIED ARBITRAGE PRICE DROPS */}
       {topPriceDrops.length > 0 && (
         <section className="space-y-3.5 w-full max-w-full min-w-0">

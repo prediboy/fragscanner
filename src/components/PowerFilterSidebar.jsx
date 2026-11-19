@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Filter, RotateCcw, TrendingDown, Sparkles, Tag } from 'lucide-react';
+import { Filter, RotateCcw, TrendingDown, Sparkles, Tag, Flame } from 'lucide-react';
 
 export default function PowerFilterSidebar({
   filterState,
@@ -287,8 +287,19 @@ export default function PowerFilterSidebar({
       {/* Deal Status Filters */}
       <div className="space-y-1.5 pt-3 border-t border-slate-200 dark:border-slate-800">
         <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block">
-          Special Deal Velocity
+          Curated & Trending Velocity
         </span>
+        <button
+          onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'preferred' ? null : 'preferred' }))}
+          className={`w-full p-2 rounded-xl border flex items-center justify-center gap-1.5 transition-all text-xs font-mono mb-1.5 ${
+            dealsOnly === 'preferred'
+              ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
+              : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-500'
+          }`}
+        >
+          <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
+          <span>🔥 Most Preferred (Top 12)</span>
+        </button>
         <div className="flex items-center gap-1.5 text-xs font-mono">
           <button
             onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'drops' ? null : 'drops' }))}
