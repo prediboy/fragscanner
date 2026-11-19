@@ -164,7 +164,7 @@ export default function App() {
     partial: 1,
     partials: 1,
     drops: 0,
-    newArrivals: 29
+    newArrivals: 0
   }));
 
   useEffect(() => {
@@ -466,21 +466,27 @@ export default function App() {
             ) : !isLoadingPage && pageItems.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-xl font-mono">
-                  {filterState.dealsOnly === 'drops' ? '📉' : '∅'}
+                  {filterState.dealsOnly === 'drops' ? '📉' : filterState.dealsOnly === 'new' ? '✨' : '∅'}
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-lg text-slate-800 dark:text-slate-200">
-                    {filterState.dealsOnly === 'drops' ? 'No Active Price Drops Right Now' : 'No matching fragrances found'}
+                    {filterState.dealsOnly === 'drops'
+                      ? 'No Active Price Drops Right Now'
+                      : filterState.dealsOnly === 'new'
+                      ? 'No New Arrivals in the Last 4 Days'
+                      : 'No matching fragrances found'}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
                     {filterState.dealsOnly === 'drops'
                       ? 'All community seller price sheets are currently at their baseline rates. Active drops are flagged automatically whenever sellers update their sheets!'
+                      : filterState.dealsOnly === 'new'
+                      ? 'The catalog strictly adheres to the 4-day rolling window for new stock. As soon as sellers release new sheets, fresh arrivals will appear here!'
                       : 'Try relaxing your budget, clearing specific seller filters, or searching for a broader fragrance term.'}
                   </p>
                 </div>
                 <button
                   onClick={resetAllFilters}
-                  className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all shadow-xs cursor-pointer"
                 >
                   Back to Curated Highlights
                 </button>

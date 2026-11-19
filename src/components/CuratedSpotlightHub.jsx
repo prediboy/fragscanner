@@ -19,10 +19,10 @@ export default function CuratedSpotlightHub({
   catalogCount = 965,
   selectedFormats = ['retail']
 }) {
-  // 0. Top Preferred / Most Clicked in Last 7 Days
+  // 0. Top Preferred / Most Clicked in Last 7 Days (Top 12)
   const topPreferred = useMemo(() => {
     if (mostPreferred && mostPreferred.length > 0) {
-      return mostPreferred.slice(0, 6);
+      return mostPreferred.slice(0, 12);
     }
     return [];
   }, [mostPreferred]);
