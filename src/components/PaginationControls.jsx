@@ -124,10 +124,10 @@ export default function PaginationControls({
                 <button
                   key={`page-${p}`}
                   onClick={() => handlePageSelect(p)}
-                  className={`min-w-[32px] h-8 px-2 rounded-lg font-mono text-xs font-bold transition-all ${
+                  className={`min-w-[32px] h-8 px-2 rounded-lg font-mono text-xs font-semibold transition-all ${
                     isCurrent
-                      ? 'bg-cyan-600 text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-cyan-400'
+                      ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-zinc-600'
                   }`}
                 >
                   {p}

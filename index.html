@@ -2,7 +2,7 @@
 <html lang="en" class="dark theme-night">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23E5A93C%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M9 3h6v3H9z%22/><path d=%22M6 8h12a2 2 0 0 1 2 2v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-9a2 2 0 0 1 2-2z%22/><circle cx=%2212%22 cy=%2214%22 r=%222%22/></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FragSeeker — Fragrance Matcher & Community Sellers Price Engine</title>
     <script>
@@ -28,8 +28,8 @@
                 textMuted: 'var(--glacier-text-muted)',
                 accent: 'var(--glacier-accent)',
                 accentLight: 'var(--glacier-accent-light)',
-                accentDark: '#0369A1',
-                cyan: '#06B6D4',
+                accentDark: '#B45309',
+                gold: '#E5A93C',
                 success: '#10B981',
                 danger: '#EF4444'
               }
@@ -47,31 +47,31 @@
       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
       
       :root, [data-theme="fresh"], .theme-fresh {
-        --glacier-bg: #F1F5F9;
+        --glacier-bg: #F8FAFC;
         --glacier-surface: #FFFFFF;
         --glacier-card: #FFFFFF;
-        --glacier-subtle: #E2E8F0;
-        --glacier-border: #CBD5E1;
-        --glacier-border-dark: #94A3B8;
+        --glacier-subtle: #F1F5F9;
+        --glacier-border: #E2E8F0;
+        --glacier-border-dark: #CBD5E1;
         --glacier-text: #0F172A;
         --glacier-text-muted: #64748B;
         --glacier-header: rgba(255, 255, 255, 0.95);
-        --glacier-accent: #0284C7;
-        --glacier-accent-light: #E0F2FE;
+        --glacier-accent: #D97706;
+        --glacier-accent-light: #FEF3C7;
       }
 
       [data-theme="night"], .theme-night, .dark {
-        --glacier-bg: #070B14;
-        --glacier-surface: #0E1626;
-        --glacier-card: #111C2E;
-        --glacier-subtle: #17243B;
-        --glacier-border: #23354E;
-        --glacier-border-dark: #3B5270;
+        --glacier-bg: #090A0F;
+        --glacier-surface: #11131A;
+        --glacier-card: #141722;
+        --glacier-subtle: #1C202F;
+        --glacier-border: #232738;
+        --glacier-border-dark: #32374D;
         --glacier-text: #F8FAFC;
         --glacier-text-muted: #94A3B8;
-        --glacier-header: rgba(14, 22, 38, 0.95);
-        --glacier-accent: #38BDF8;
-        --glacier-accent-light: rgba(56, 189, 248, 0.15);
+        --glacier-header: rgba(17, 19, 26, 0.95);
+        --glacier-accent: #E5A93C;
+        --glacier-accent-light: rgba(229, 169, 60, 0.12);
       }
 
       body {
@@ -100,11 +100,7 @@
         background: var(--glacier-border-dark);
       }
 
-      /* ======================================================== */
-      /* MIDNIGHT FROST DARK THEME OVERRIDES                      */
-      /* ======================================================== */
-      
-      /* 1. SELLER NAMES & SELLER CHIPS (Vibrant, high-contrast) */
+      /* Refined dark theme text contrast */
       .theme-night .text-glacier-text {
         color: #F8FAFC !important;
       }
@@ -114,12 +110,9 @@
       .theme-night .text-slate-900 {
         color: #F8FAFC !important;
       }
-      /* 1.1 PRICING & RATES (Luminous Mint Emerald, Never Stark/Bleached White) */
       .theme-night .price-rate,
-      .dark .price-rate,
-      .theme-night .font-mono.price-rate,
-      .dark .font-mono.price-rate {
-        color: #34D399 !important;
+      .dark .price-rate {
+        color: #10B981 !important;
         font-weight: 800 !important;
       }
       .theme-night .price-rate-drop,
@@ -137,217 +130,34 @@
         color: #94A3B8 !important;
       }
       .theme-night .text-slate-500 {
-        color: #8899B5 !important;
-      }
-
-      /* Hero Seller Filter Chips */
-      .theme-night button.bg-white {
-        background-color: var(--glacier-card) !important;
-        border-color: var(--glacier-border) !important;
-        color: #F8FAFC !important;
-      }
-      .theme-night button.bg-white:hover {
-        background-color: #17263E !important;
-        border-color: #38BDF8 !important;
-      }
-      .theme-night button.bg-white span {
-        color: inherit !important;
-      }
-      .theme-night .bg-glacier-subtle {
-        background-color: #1B2B44 !important;
-        color: #93C5FD !important;
-        border-color: #24354D !important;
-      }
-
-      /* 2. BRAND BADGES (Vivid Ice Cyan on dark frosted glass) */
-      .theme-night .bg-cyan-50,
-      .theme-night .bg-cyan-100\/70,
-      .theme-night .bg-cyan-100 {
-        background-color: rgba(6, 182, 212, 0.18) !important;
-        border-color: rgba(56, 189, 248, 0.5) !important;
-      }
-      .theme-night .text-cyan-800,
-      .theme-night .text-cyan-700,
-      .theme-night .text-cyan-900,
-      .theme-night .text-cyan-600 {
-        color: #38BDF8 !important;
-        font-weight: 700 !important;
-      }
-      .theme-night .border-cyan-200,
-      .theme-night .border-cyan-300 {
-        border-color: rgba(56, 189, 248, 0.45) !important;
-      }
-
-      /* 3. SURFACES & SECTIONS */
-      .theme-night .bg-white {
-        background-color: var(--glacier-card) !important;
-      }
-      .theme-night .bg-white\/95 {
-        background-color: rgba(14, 22, 38, 0.94) !important;
-      }
-      .theme-night .bg-glacier-bg {
-        background-color: var(--glacier-bg) !important;
-      }
-      .theme-night .border-glacier-border,
-      .theme-night .border-glacier-subtle {
-        border-color: var(--glacier-border) !important;
-      }
-
-      /* 4. COMPARE RATES DRAWER & QUOTE ITEMS */
-      .theme-night .bg-glacier-bg\/60 {
-        background-color: #0A111E !important;
-        border-color: var(--glacier-border) !important;
-      }
-      .theme-night .bg-slate-50 {
-        background-color: #0C1422 !important;
-        border-color: #1F3047 !important;
-      }
-      .theme-night .bg-glacier-bg\/60 .bg-white {
-        background-color: #132034 !important;
-        border-color: #23354E !important;
-      }
-      .theme-night .bg-glacier-bg\/60 .bg-white:hover {
-        border-color: #38BDF8 !important;
-      }
-
-      /* 5. STATUS PILLS & BADGES (High-contrast, frosted glow) */
-      .theme-night .bg-emerald-50,
-      .dark .bg-emerald-50 {
-        background-color: rgba(16, 185, 129, 0.18) !important;
-        border-color: rgba(16, 185, 129, 0.55) !important;
-      }
-      .theme-night .text-emerald-950,
-      .theme-night .text-emerald-900,
-      .theme-night .text-emerald-800,
-      .theme-night .text-emerald-700,
-      .theme-night .text-emerald-600,
-      .dark .text-emerald-950,
-      .dark .text-emerald-900,
-      .dark .text-emerald-800,
-      .dark .text-emerald-700,
-      .dark .text-emerald-600 {
-        color: #34D399 !important;
-        font-weight: 700 !important;
-      }
-      .theme-night .border-emerald-200,
-      .theme-night .border-emerald-300,
-      .dark .border-emerald-200,
-      .dark .border-emerald-300 {
-        border-color: rgba(16, 185, 129, 0.55) !important;
-      }
-
-      /* Amber & Closest Match Badges (Luminous Gold on Dark) */
-      .theme-night .bg-amber-50,
-      .theme-night .bg-amber-100,
-      .dark .bg-amber-50,
-      .dark .bg-amber-100 {
-        background-color: rgba(245, 158, 11, 0.22) !important;
-        border-color: rgba(245, 158, 11, 0.6) !important;
-      }
-      .theme-night .text-amber-950,
-      .theme-night .text-amber-900,
-      .theme-night .text-amber-800,
-      .theme-night .text-amber-700,
-      .theme-night .text-amber-600,
-      .dark .text-amber-950,
-      .dark .text-amber-900,
-      .dark .text-amber-800,
-      .dark .text-amber-700,
-      .dark .text-amber-600 {
-        color: #FCD34D !important;
-        font-weight: 700 !important;
-      }
-      .theme-night .border-amber-200,
-      .theme-night .border-amber-300,
-      .dark .border-amber-200,
-      .dark .border-amber-300 {
-        border-color: rgba(245, 158, 11, 0.6) !important;
-      }
-
-      /* Quick Deal Sub-Filter Buttons in Dark Mode */
-      .theme-night button.from-amber-50,
-      .dark button.from-amber-50 {
-        background-image: none !important;
-        background-color: rgba(245, 158, 11, 0.18) !important;
-        border-color: rgba(245, 158, 11, 0.55) !important;
-        color: #FCD34D !important;
-      }
-      .theme-night button.from-amber-50:hover,
-      .dark button.from-amber-50:hover {
-        background-color: rgba(245, 158, 11, 0.28) !important;
-        border-color: rgba(245, 158, 11, 0.8) !important;
-      }
-      .theme-night button.from-emerald-50,
-      .dark button.from-emerald-50 {
-        background-image: none !important;
-        background-color: rgba(16, 185, 129, 0.18) !important;
-        border-color: rgba(16, 185, 129, 0.55) !important;
-        color: #34D399 !important;
-      }
-      .theme-night button.from-emerald-50:hover,
-      .dark button.from-emerald-50:hover {
-        background-color: rgba(16, 185, 129, 0.28) !important;
-        border-color: rgba(16, 185, 129, 0.8) !important;
-      }
-
-      /* Red / Avoid Badges */
-      .theme-night .bg-red-50,
-      .dark .bg-red-50 {
-        background-color: rgba(239, 68, 68, 0.16) !important;
-        border-color: rgba(239, 68, 68, 0.45) !important;
-      }
-      .theme-night .text-red-950,
-      .theme-night .text-red-900,
-      .theme-night .text-red-800,
-      .theme-night .text-red-700,
-      .theme-night .text-red-600,
-      .dark .text-red-950,
-      .dark .text-red-900,
-      .dark .text-red-800,
-      .dark .text-red-700,
-      .dark .text-red-600 {
-        color: #F87171 !important;
-      }
-      .theme-night .border-red-200,
-      .theme-night .border-red-300,
-      .dark .border-red-200,
-      .dark .border-red-300 {
-        border-color: rgba(239, 68, 68, 0.45) !important;
-      }
-
-      /* Slate borders in dark mode */
-      .theme-night .border-slate-200,
-      .dark .border-slate-200 {
-        border-color: #1F3047 !important;
-      }
-      .theme-night .border-slate-100,
-      .dark .border-slate-100 {
-        border-color: #17243B !important;
-      }
-
-      /* 6. INPUTS & SEARCH DROPDOWN */
-      .theme-night input[type="text"] {
-        background-color: #0C1422 !important;
-        color: #F8FAFC !important;
-        border-color: #23354E !important;
-      }
-      .theme-night input[type="text"]::placeholder {
         color: #64748B !important;
       }
-      .theme-night .hover\:bg-slate-50:hover {
-        background-color: #15243B !important;
+
+      .theme-night input[type="text"],
+      .dark input[type="text"] {
+        background-color: #11131A !important;
+        color: #F8FAFC !important;
+        border-color: #232738 !important;
       }
-      .theme-night .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
-        border-color: #1E2E44 !important;
+      .theme-night input[type="text"]::placeholder,
+      .dark input[type="text"]::placeholder {
+        color: #64748B !important;
       }
+      .theme-night select,
+      .dark select {
+        background-color: #11131A !important;
+        color: #F8FAFC !important;
+        border-color: #232738 !important;
+      }
+
       .theme-night .shadow-2xs,
       .theme-night .shadow-xs,
       .theme-night .shadow-sm {
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4) !important;
       }
     </style>
   </head>
-  <body class="min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden">
+  <body class="min-h-screen selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

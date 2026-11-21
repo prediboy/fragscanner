@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Store } from 'lucide-react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Flame, MessageCircle, ExternalLink, Check } from 'lucide-react';
 import { logWhatsAppClick, logFragranceCardClick } from '../lib/supabaseTelemetry';
 
 function getWhatsAppUrl(phone, message) {
@@ -176,7 +176,6 @@ export default function PowerFragranceCard({
     const filtered = base.filter(q => activeFormats.includes(q.type));
     const quotes = (filtered.length > 0 ? filtered : base).slice();
 
-    // For decants, sort by price per ml (lowest rate first)
     if (activeFormats.length === 1 && activeFormats[0] === 'decant') {
       quotes.sort((a, b) => (a.pricePerMl || a.price) - (b.pricePerMl || b.price));
     } else {
@@ -193,621 +192,266 @@ export default function PowerFragranceCard({
   const activePartial = quoteOverrides['partial'] || lowestPartial;
   const activeDecant = quoteOverrides['decant'] || lowestDecant;
 
-  // Available decant sizes for the active decant seller
-  const availableSizes = useMemo(() => {
-    if (!activeDecant || !f || !Array.isArray(f.community_decants)) return [];
-    const sellerEntry = f.community_decants.find(d => d.seller_id === activeDecant.seller_id) || f.community_decants[0];
-    if (!sellerEntry) return [];
+  // Available format options for this fragrance card
+  const availableFormatTabs = useMemo(() => {
+    const tabs = [];
+    if (lowestRetail) tabs.push({ id: 'retail', label: 'Bottle', quote: activeRetail });
+    if (lowestTester) tabs.push({ id: 'tester', label: 'Tester', quote: activeTester });
+    if (lowestPartial) tabs.push({ id: 'partial', label: 'Partial', quote: activePartial });
+    if (lowestDecant) tabs.push({ id: 'decant', label: 'Decant', quote: activeDecant });
+    return tabs;
+  }, [lowestRetail, lowestTester, lowestPartial, lowestDecant, activeRetail, activeTester, activePartial, activeDecant]);
 
-    const list = [];
-    if (sellerEntry.sizes && typeof sellerEntry.sizes === 'object') {
-      for (const [sz, val] of Object.entries(sellerEntry.sizes)) {
-        const p = Number(val);
-        if (!p || isNaN(p) || p <= 0) continue;
-        const match = sz.match(/(\d+)\s*ml/i);
-        const ml = match ? parseInt(match[1], 10) : null;
-        const perMl = ml ? Math.round(p / ml) : null;
-        const isTarget = ml && ml >= 8 && ml <= 12;
-
-        const quoteObj = {
-          seller_id: sellerEntry.seller_id,
-          seller_name: sellerEntry.seller_name,
-          label: `${sz} Decant`,
-          price: p,
-          ml,
-          pricePerMl: perMl,
-          isTargetRange: isTarget,
-          whatsapp: sellerEntry.whatsapp,
-          shipping: sellerEntry.shipping || 'Pan-India Delivery',
-          dispatch: sellerEntry.dispatch || '24-48 hrs',
-          isBottle: false,
-          type: 'decant'
-        };
-
-        list.push({
-          size: sz,
-          ml: ml || 0,
-          price: p,
-          perMl,
-          isTargetRange: isTarget,
-          quote: quoteObj
-        });
-      }
-    } else {
-      const p = Number(sellerEntry.lowest_price || sellerEntry.price_10ml || sellerEntry.price_5ml || sellerEntry.price);
-      if (p && !isNaN(p) && p > 0) {
-        const ml = sellerEntry.price_10ml ? 10 : (sellerEntry.price_5ml ? 5 : null);
-        const perMl = ml ? Math.round(p / ml) : null;
-        list.push({
-          size: ml ? `${ml}ml` : 'Decant',
-          ml: ml || 0,
-          price: p,
-          perMl,
-          isTargetRange: ml && ml >= 8 && ml <= 12,
-          quote: {
-            seller_id: sellerEntry.seller_id,
-            seller_name: sellerEntry.seller_name,
-            label: ml ? `${ml}ml Decant` : 'Decant',
-            price: p,
-            ml,
-            pricePerMl: perMl,
-            isTargetRange: ml && ml >= 8 && ml <= 12,
-            whatsapp: sellerEntry.whatsapp,
-            shipping: sellerEntry.shipping || 'Pan-India Delivery',
-            dispatch: sellerEntry.dispatch || '24-48 hrs',
-            isBottle: false,
-            type: 'decant'
-          }
-        });
-      }
+  // Active selected format on the card
+  const [cardFormat, setCardFormat] = useState(() => {
+    if (activeFormats.length === 1 && availableFormatTabs.some(t => t.id === activeFormats[0])) {
+      return activeFormats[0];
     }
+    if (lowestRetail) return 'retail';
+    return availableFormatTabs[0]?.id || 'retail';
+  });
 
-    list.sort((a, b) => a.ml - b.ml);
-    return list;
-  }, [activeDecant?.seller_id, f.community_decants]);
+  useEffect(() => {
+    if (activeFormats.length === 1 && availableFormatTabs.some(t => t.id === activeFormats[0])) {
+      setCardFormat(activeFormats[0]);
+    } else if (!availableFormatTabs.some(t => t.id === cardFormat) && availableFormatTabs.length > 0) {
+      setCardFormat(availableFormatTabs[0].id);
+    }
+  }, [activeFormats, availableFormatTabs, cardFormat]);
 
-  // What format pods should render on the card?
-  let showRetail = activeFormats.includes('retail') && !!lowestRetail;
-  let showTester = activeFormats.includes('tester') && !!lowestTester;
-  let showPartial = activeFormats.includes('partial') && !!lowestPartial;
-  let showDecant = activeFormats.includes('decant') && !!lowestDecant;
+  const activeTab = availableFormatTabs.find(t => t.id === cardFormat) || availableFormatTabs[0];
+  const primaryQuote = activeTab?.quote || activeRetail || lowestRetail || formatQuotes[0];
 
-  // Fallback: If none of the selected formats have an offer in this perfume, show lowest available offer
-  if (!showRetail && !showTester && !showPartial && !showDecant) {
-    if (lowestRetail) showRetail = true;
-    else if (lowestTester) showTester = true;
-    else if (lowestPartial) showPartial = true;
-    else if (lowestDecant) showDecant = true;
-  }
-
-  const bottleDisplaySize = activeRetail 
-    ? activeRetail.label.replace(' Retail Bottle', ' Bottle') 
+  const bottleDisplaySize = primaryQuote?.label
+    ? primaryQuote.label.replace(' Retail Bottle', ' Bottle')
     : (f?.community_bottle_size ? f.community_bottle_size.replace(' Retail Bottle', ' Bottle') : 'Bottle');
 
   const displayName = f?.brand && !f?.name?.toLowerCase().includes(f.brand.toLowerCase())
     ? `${f.brand} ${f.name}`
     : (f?.name || '');
 
-  if (!f || relevantQuotes.length === 0) return null;
+  if (!f || relevantQuotes.length === 0 || !primaryQuote) return null;
+
+  const whatsappMessage = primaryQuote.type === 'decant'
+    ? `Hi ${primaryQuote.seller_name || 'there'}, saw your decant quote for ${displayName} (${primaryQuote.label}) quoted at ₹${primaryQuote.price.toLocaleString()} on FragSeeker. Is this available?`
+    : primaryQuote.type === 'tester'
+    ? `Hi ${primaryQuote.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${primaryQuote.price.toLocaleString()} on FragSeeker. Is this in stock?`
+    : primaryQuote.type === 'partial'
+    ? `Hi ${primaryQuote.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${primaryQuote.price.toLocaleString()} on FragSeeker. Can you share level pictures?`
+    : `Hi ${primaryQuote.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${primaryQuote.price.toLocaleString()} on FragSeeker. Is this in stock?`;
+
+  const whatsappUrl = getWhatsAppUrl(primaryQuote.whatsapp || f.community_whatsapp, whatsappMessage);
 
   return (
     <div 
-      className={`bg-white dark:bg-slate-900/95 rounded-2xl border ${f.is_price_drop && !isSpecificSeller ? 'border-emerald-400 dark:border-emerald-500/50 ring-1 ring-emerald-500/20 shadow-sm' : 'border-slate-200 dark:border-slate-800'} hover:border-cyan-500 dark:hover:border-cyan-400 shadow-xs hover:shadow-md transition-all p-3.5 sm:p-4 flex flex-col justify-between space-y-3 relative w-full`}
+      className="bg-white dark:bg-[#12141C] rounded-2xl border border-slate-200/90 dark:border-[#232738] hover:border-slate-300 dark:hover:border-[#383E54] shadow-xs hover:shadow-md transition-all p-4 flex flex-col justify-between space-y-3.5 relative w-full"
     >
-      <div>
-        {/* Clickable Header Area: Badges & Rating */}
+      <div className="space-y-3">
+        {/* Clickable Header Area: Brand, Rating & Deal Flag */}
         <div 
           onClick={() => onSelect && onSelect(f)} 
-          className="cursor-pointer space-y-2 group"
-          title="Click to view full notes, longevity & reviews"
+          className="cursor-pointer space-y-1.5 group"
+          title="Click to view notes, longevity & reviews"
         >
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/70 px-2 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-800/80">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-wrap">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-slate-500 dark:text-zinc-400 font-semibold truncate">
                 {f.brand}
               </span>
-              {activeFormats.length === 1 && activeFormats[0] === 'decant' && activeDecant?.pricePerMl && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-cyan-50 text-cyan-900 border border-cyan-300 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-700/80 flex items-center gap-1" title="Lowest decant rate in 8-12ml travel size">
-                  <span>💧</span>
-                  <span>Lowest: ₹{activeDecant.pricePerMl}/ml</span>
+
+              {f.trendingRank ? (
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                  <Flame className="w-3 h-3 text-amber-500 fill-amber-500/30" />
+                  <span>#{f.trendingRank} Trending</span>
                 </span>
-              )}
-              {lowestPartial && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 flex items-center gap-1" title="Authentic opened partial bottle">
-                  <span>🏷️</span>
-                  <span>Partial</span>
-                </span>
-              )}
-              {lowestTester && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-purple-50 text-purple-900 border border-purple-300 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-700/80 flex items-center gap-1" title="Authentic tester packaging">
-                  <span>🧪</span>
-                  <span>Tester</span>
-                </span>
-              )}
-              {f.trendingRank && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-rose-50 text-rose-900 border border-rose-300 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-700/80 flex items-center gap-1" title={`${f.weeklyClicks || ''} clicks in the last 7 days`}>
-                  <span>🔥</span>
-                  <span>#{f.trendingRank} Preferred</span>
-                </span>
-              )}
-              {f.is_price_drop && !lowestTester && !isSpecificSeller && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 flex items-center gap-1">
+              ) : f.is_price_drop && !isSpecificSeller ? (
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                   <TrendingDown className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                   <span>Price Drop</span>
                 </span>
-              )}
-              {f.is_new_arrival && f.in_seller_stock && (
-                <span className="text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 flex items-center gap-1">
-                  <span>✨</span>
+              ) : f.is_new_arrival && f.in_seller_stock ? (
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700">
+                  <Sparkles className="w-3 h-3 text-amber-500" />
                   <span>New</span>
                 </span>
-              )}
-              {f._semanticReason && (
-                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-cyan-50 text-cyan-900 border border-cyan-300 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-700/80 flex items-center gap-1" title="Semantic match explanation">
-                  <Sparkles className="w-3 h-3 text-cyan-500 shrink-0" />
-                  <span className="truncate max-w-[150px]">{f._semanticReason}</span>
-                </span>
-              )}
+              ) : null}
             </div>
 
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/50 text-amber-800 dark:text-amber-300 font-mono text-[11px] font-bold shrink-0 self-start">
-              <Star className="w-3 h-3 fill-amber-500 text-amber-500 dark:fill-amber-400 dark:text-amber-400" />
+            <div className="flex items-center gap-1 font-mono text-xs font-semibold text-slate-700 dark:text-zinc-300 shrink-0">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               <span>{(Number(f.rating_value) || 4.2).toFixed(1)}</span>
             </div>
           </div>
 
-          {/* Name & Cloned DNA */}
+          {/* Fragrance Name & Cloned DNA */}
           <div>
-            <h3 className="font-heading font-bold text-base text-slate-900 dark:text-slate-100 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors truncate">
+            <h3 className="font-heading font-semibold text-base text-slate-900 dark:text-zinc-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
               {f.name}
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 truncate">
               {f.dna_inspiration ? (
                 <span>
-                  Clones: <strong className="font-semibold text-slate-700 dark:text-slate-200">{f.dna_inspiration}</strong>
+                  Inspiration: <strong className="font-medium text-slate-700 dark:text-zinc-300">{f.dna_inspiration}</strong>
                 </span>
               ) : (
-                f.dna_type || 'Community Verified Stock'
+                f.dna_type || 'Verified Community Stock'
               )}
             </p>
           </div>
         </div>
 
-        {/* Filter-Driven Dynamic Pods (Driven directly by Format checkboxes) */}
-        <div className="mt-3 space-y-2">
-          
-          {/* POD 1: Full Retail Bottle (Rendered when Retail is ticked or active) */}
-          {showRetail && activeRetail && (
-            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="text-xs">🍾</span>
-                  <span className="font-medium truncate">{bottleDisplaySize}</span>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeRetail.seller_name}>{activeRetail.seller_name}</strong>
-                </div>
-              </div>
+        {/* Clean Format Selector (Only shown if multiple formats exist) */}
+        {availableFormatTabs.length > 1 && (
+          <div className="flex items-center gap-1 p-0.5 bg-slate-100 dark:bg-[#181B26] rounded-xl border border-slate-200/80 dark:border-[#262B3D] text-[11px] font-mono">
+            {availableFormatTabs.map(tab => {
+              const isActive = cardFormat === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setCardFormat(tab.id)}
+                  className={`flex-1 py-1 px-2 rounded-lg text-center transition-all cursor-pointer font-medium ${
+                    isActive
+                      ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+                      : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="text-right">
-                  {!isSpecificSeller && f.is_price_drop && !lowestTester && f.previous_price && (
-                    <div className="flex items-center justify-end gap-1 text-[9px] text-slate-400 line-through font-mono">
-                      <span>₹{Number(f.previous_price).toLocaleString()}</span>
-                    </div>
-                  )}
-                  <div className={`font-mono text-sm font-extrabold ${!isSpecificSeller && f.is_price_drop && !lowestTester ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
-                    ₹{activeRetail.price.toLocaleString()}
-                  </div>
-                </div>
-
-                {getWhatsAppUrl(
-                  activeRetail.whatsapp || f.community_whatsapp,
-                  `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragSeeker. Is this in stock?`
-                ) && (
-                  <a
-                    href={getWhatsAppUrl(
-                      activeRetail.whatsapp || f.community_whatsapp,
-                      `Hi ${activeRetail.seller_name || 'there'}, saw your price for ${displayName} (${bottleDisplaySize}) quoted at ₹${activeRetail.price.toLocaleString()} on FragSeeker. Is this in stock?`
-                    )}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => logWhatsAppClick({
-                      sellerName: activeRetail.seller_name,
-                      fragranceName: f.name,
-                      brand: f.brand,
-                      price: activeRetail.price,
-                      format: 'retail'
-                    })}
-                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${activeRetail.seller_name} on WhatsApp`}
-                  >
-                    <span>WA</span>
-                    <span className="text-[9px]">↗</span>
-                  </a>
+        {/* Streamlined Single Price & Seller Block */}
+        <div className="pt-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <div>
+              <div className="flex items-baseline gap-2">
+                <span className={`font-mono text-xl font-bold tracking-tight ${f.is_price_drop && !isSpecificSeller ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-zinc-100'}`}>
+                  ₹{primaryQuote.price.toLocaleString()}
+                </span>
+                {f.is_price_drop && f.previous_price && (
+                  <span className="text-xs text-slate-400 line-through font-mono">
+                    ₹{Number(f.previous_price).toLocaleString()}
+                  </span>
+                )}
+                {primaryQuote.type === 'decant' && primaryQuote.pricePerMl && (
+                  <span className="text-[11px] font-mono text-slate-500 dark:text-zinc-400">
+                    (₹{primaryQuote.pricePerMl}/ml)
+                  </span>
                 )}
               </div>
+              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 truncate">
+                {primaryQuote.label} · <strong className="font-medium text-slate-700 dark:text-zinc-300">{primaryQuote.seller_name}</strong>
+              </p>
             </div>
-          )}
-
-          {/* POD 2: Tester Unit Box (Rendered when Tester is ticked) */}
-          {showTester && activeTester && (
-            <div className="p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/60 flex items-center justify-between gap-2 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-purple-900 dark:text-purple-300">
-                  <span className="text-xs">🧪</span>
-                  <span className="font-medium truncate">{activeTester.label || 'Tester Unit Box'}</span>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeTester.seller_name}>{activeTester.seller_name}</strong>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="text-right">
-                  <div className="font-mono text-sm font-extrabold text-purple-700 dark:text-purple-300">
-                    ₹{activeTester.price.toLocaleString()}
-                  </div>
-                </div>
-
-                {getWhatsAppUrl(
-                  activeTester.whatsapp || f.community_whatsapp,
-                  `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragSeeker. Is this available?`
-                ) && (
-                  <a
-                    href={getWhatsAppUrl(
-                      activeTester.whatsapp || f.community_whatsapp,
-                      `Hi ${activeTester.seller_name || 'there'}, saw your tester quote for ${displayName} quoted at ₹${activeTester.price.toLocaleString()} on FragSeeker. Is this available?`
-                    )}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => logWhatsAppClick({
-                      sellerName: activeTester.seller_name,
-                      fragranceName: f.name,
-                      brand: f.brand,
-                      price: activeTester.price,
-                      format: 'tester'
-                    })}
-                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${activeTester.seller_name} on WhatsApp`}
-                  >
-                    <span>WA</span>
-                    <span className="text-[9px]">↗</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* POD 3: Partial Bottle (Rendered when Partial is ticked) */}
-          {showPartial && activePartial && (
-            <div className="p-2.5 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 flex items-center justify-between gap-2 hover:border-amber-300 dark:hover:border-amber-700 transition-colors">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-amber-900 dark:text-amber-300">
-                  <span className="text-xs">🏷️</span>
-                  <span className="font-medium truncate">{activePartial.label || 'Partial Bottle'}</span>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                  via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activePartial.seller_name}>{activePartial.seller_name}</strong>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="text-right">
-                  <div className="font-mono text-sm font-extrabold text-amber-700 dark:text-amber-300">
-                    ₹{activePartial.price.toLocaleString()}
-                  </div>
-                </div>
-
-                {getWhatsAppUrl(
-                  activePartial.whatsapp || f.community_whatsapp,
-                  `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragSeeker. Can you share level pictures?`
-                ) && (
-                  <a
-                    href={getWhatsAppUrl(
-                      activePartial.whatsapp || f.community_whatsapp,
-                      `Hi ${activePartial.seller_name || 'there'}, saw your partial bottle for ${displayName} quoted at ₹${activePartial.price.toLocaleString()} on FragSeeker. Can you share level pictures?`
-                    )}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => logWhatsAppClick({
-                      sellerName: activePartial.seller_name,
-                      fragranceName: f.name,
-                      brand: f.brand,
-                      price: activePartial.price,
-                      format: 'partial'
-                    })}
-                    className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                    title={`Contact ${activePartial.seller_name} on WhatsApp`}
-                  >
-                    <span>WA</span>
-                    <span className="text-[9px]">↗</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* POD 4: Decants Ready (Rendered when Decants is ticked) */}
-          {showDecant && activeDecant && (
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-cyan-400/30 dark:border-cyan-500/30 shadow-xs hover:border-cyan-400 transition-all space-y-2.5">
-              {!activeFormats.includes('decant') && !lowestRetail && (
-                <div className="text-[10px] font-mono font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/70 px-2 py-0.5 rounded-md">
-                  Full bottle currently unlisted • Decants available
-                </div>
-              )}
-              
-              {/* Main Decant Info Row */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-xs">💧</span>
-                    <span className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate">
-                      {activeDecant.ml ? `${activeDecant.ml}ml Decant` : activeDecant.label}
-                    </span>
-                    {activeDecant.isTargetRange && (
-                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 dark:bg-cyan-950/80 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-700/60 shrink-0">
-                        8–12ml Sweet-Spot
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-1">
-                    via <strong className="font-semibold text-slate-800 dark:text-slate-200" title={activeDecant.seller_name}>{activeDecant.seller_name}</strong>
-                    <span className="mx-1 text-slate-400">•</span>
-                    <span>{activeDecant.dispatch}</span>
-                  </div>
-                </div>
-
-                {/* Hero Rate & Total Badge */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="text-right">
-                    {activeDecant.pricePerMl ? (
-                      <div className="flex flex-col items-end">
-                        <div className="font-mono text-base font-black text-cyan-600 dark:text-cyan-400 tracking-tight leading-none">
-                          ₹{activeDecant.pricePerMl}<span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 font-sans">/ml</span>
-                        </div>
-                        <div className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-200/70 dark:bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700/80 mt-1">
-                          ₹{activeDecant.price.toLocaleString()} total
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="font-mono text-base font-extrabold text-cyan-600 dark:text-cyan-400">
-                        ₹{activeDecant.price.toLocaleString()}
-                      </div>
-                    )}
-                  </div>
-
-                  {getWhatsAppUrl(
-                    activeDecant.whatsapp || f.community_whatsapp,
-                    `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragSeeker. Is this available?`
-                  ) && (
-                    <a
-                      href={getWhatsAppUrl(
-                        activeDecant.whatsapp || f.community_whatsapp,
-                        `Hi ${activeDecant.seller_name || 'there'}, saw your quote for ${displayName} (${activeDecant.label}) at ₹${activeDecant.price.toLocaleString()}${activeDecant.pricePerMl ? ` (₹${activeDecant.pricePerMl}/ml)` : ''} on FragSeeker. Is this available?`
-                      )}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => logWhatsAppClick({
-                        sellerName: activeDecant.seller_name,
-                        fragranceName: f.name,
-                        brand: f.brand,
-                        price: activeDecant.price,
-                        format: 'decant'
-                      })}
-                      className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[11px] font-mono font-bold transition-all shadow-xs flex items-center justify-center gap-1 shrink-0"
-                      title={`Order ${activeDecant.label} from ${activeDecant.seller_name} on WhatsApp`}
-                    >
-                      <span>WA</span>
-                      <span className="text-[9px]">↗</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Quick Size Switcher Chips (When seller offers multiple sizes) */}
-              {availableSizes.length > 1 && (
-                <div className="pt-2 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center gap-1.5 flex-wrap py-0.5">
-                  <span className="text-[9px] font-mono uppercase text-slate-400 dark:text-slate-500 font-bold shrink-0">Sizes:</span>
-                  {availableSizes.map((s, sIdx) => {
-                    const isActive = (activeDecant.ml && activeDecant.ml === s.ml) || activeDecant.label.startsWith(s.size);
-                    return (
-                      <button
-                        key={sIdx}
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setQuoteOverrides(prev => ({ ...prev, decant: s.quote }));
-                        }}
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-mono transition-all shrink-0 flex items-center gap-1 cursor-pointer active:scale-95 ${
-                          isActive
-                            ? 'bg-cyan-500 text-slate-950 font-black shadow-xs ring-1 ring-cyan-400'
-                            : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
-                        }`}
-                        title={`${s.size} Decant for ₹${s.price} (${s.perMl ? `₹${s.perMl}/ml` : ''})`}
-                      >
-                        <span>{s.size}</span>
-                        <span className={isActive ? 'text-slate-950 font-extrabold' : 'text-slate-400'}>
-                          ₹{s.price}
-                        </span>
-                        {s.isTargetRange && !isActive && (
-                          <span className="text-[8px] text-cyan-500 font-black" title="Sweet-spot rate">★</span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
-
+          </div>
         </div>
       </div>
 
-      {/* Footer Toolbar: Compare Rates & Notes/Reviews */}
-      <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
-        <button
-          type="button"
-          onClick={() => {
-            if (!isExpanded && f) {
-              logFragranceCardClick({
-                fragranceName: f.name,
-                brand: f.brand,
-                price: activeRetail ? activeRetail.price : null,
-                format: activeFormats.length === 1 && activeFormats[0] === 'decant' ? 'decant' : 'bottle'
-              });
-            }
-            onToggleExpand && onToggleExpand(f.id);
-          }}
-          className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg border border-slate-200 dark:border-slate-700/90 hover:border-cyan-500 dark:hover:border-cyan-400 text-[10px] font-mono font-medium transition-colors bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
-          title="Compare rates from all community sellers"
-        >
-          <span>Compare Rates ({formatQuotes.length})</span>
-          {isExpanded ? <ChevronUp className="w-3 h-3 text-cyan-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
-        </button>
+      {/* Prominent, Unmissable CTA Button */}
+      <div className="space-y-2 pt-1">
+        {whatsappUrl ? (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => logWhatsAppClick({
+              sellerName: primaryQuote.seller_name,
+              fragranceName: f.name,
+              brand: f.brand,
+              price: primaryQuote.price,
+              format: primaryQuote.type
+            })}
+            className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+            title={`Contact ${primaryQuote.seller_name} on WhatsApp`}
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Inquire on WhatsApp</span>
+            <ExternalLink className="w-3 h-3 opacity-80" />
+          </a>
+        ) : null}
 
-        <button
-          type="button"
-          onClick={() => onSelect && onSelect(f)}
-          className="px-2.5 py-1.5 sm:py-1 min-h-[32px] rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 text-[10px] font-medium text-slate-500 hover:text-cyan-600 dark:text-slate-400 dark:hover:text-cyan-400 transition-colors flex items-center gap-1 cursor-pointer active:scale-98"
-          title="View olfactory notes, longevity, and reviews"
-        >
-          <span>Notes & Details</span>
-          <span className="text-[9px]">→</span>
-        </button>
+        {/* Light Sub-Toolbar: Compare Rates & Notes */}
+        <div className="flex items-center justify-between gap-2 pt-1 text-xs">
+          <button
+            type="button"
+            onClick={() => {
+              if (!isExpanded && f) {
+                logFragranceCardClick({
+                  fragranceName: f.name,
+                  brand: f.brand,
+                  price: primaryQuote.price,
+                  format: primaryQuote.type
+                });
+              }
+              onToggleExpand && onToggleExpand(f.id);
+            }}
+            className="text-[11px] font-mono text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <span>Compare {formatQuotes.length} quotes</span>
+            {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSelect && onSelect(f)}
+            className="text-[11px] font-mono text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <span>Notes & Review →</span>
+          </button>
+        </div>
       </div>
 
-      {/* Expanded Multi-Seller Quotes Accordion */}
+      {/* Expanded Direct Quotes Drawer */}
       {isExpanded && (
-        <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5 bg-slate-50 dark:bg-slate-950/80 p-2.5 rounded-xl animate-in fade-in duration-150">
-          <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 font-bold">
-            <span>Direct Quotes ({formatQuotes.length}) — Click to Select:</span>
-            <span className="text-cyan-500 dark:text-cyan-400 font-bold">
-              {activeFormats.length === 1 && activeFormats[0] === 'decant' ? 'Ranked by Rate (₹/ml) ↑' : 'Ranked by Price ↑'}
-            </span>
+        <div className="mt-2 pt-2 border-t border-slate-200 dark:border-[#232738] space-y-1.5 bg-slate-50 dark:bg-[#0E1017] p-2.5 rounded-xl animate-in fade-in duration-150">
+          <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 dark:text-zinc-500 font-semibold">
+            <span>Direct Quotes ({formatQuotes.length})</span>
+            <span>Ranked by Price ↑</span>
           </div>
 
-          <div className="space-y-1 max-h-56 overflow-y-auto pr-0.5">
-            {formatQuotes.length === 0 ? (
-              <div className="text-xs text-slate-400 py-2 text-center">
-                No active quotes found for this selection.
-              </div>
-            ) : (
-              formatQuotes.map((q, qIdx) => {
-                const isSelectedSellerQuote = isSpecificSeller && q.seller_id === selectedSeller;
-                const activeQuoteForType = q.type === 'retail' ? activeRetail
-                  : q.type === 'tester' ? activeTester
-                  : q.type === 'partial' ? activePartial
-                  : activeDecant;
-                const isSelected = activeQuoteForType?.seller_id === q.seller_id && activeQuoteForType?.price === q.price && (!activeQuoteForType?.label || activeQuoteForType?.label === q.label);
+          <div className="space-y-1 max-h-52 overflow-y-auto pr-0.5">
+            {formatQuotes.map((q, qIdx) => {
+              const isSelected = primaryQuote.seller_id === q.seller_id && primaryQuote.price === q.price;
 
-                return (
-                  <div 
-                    key={qIdx}
-                    onClick={() => setQuoteOverrides(prev => ({ ...prev, [q.type]: q }))}
-                    className={`p-2 rounded-lg cursor-pointer transition-all ${
+              return (
+                <div 
+                  key={qIdx}
+                  onClick={() => setQuoteOverrides(prev => ({ ...prev, [q.type]: q }))}
+                  className={`p-2 rounded-lg cursor-pointer transition-all flex items-center justify-between text-xs ${
+                    isSelected
+                      ? 'bg-white dark:bg-[#1C202F] border border-slate-300 dark:border-[#383E54] shadow-2xs'
+                      : 'hover:bg-white/60 dark:hover:bg-[#161822] border border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 min-w-0 pr-1">
+                    <span className={`w-4 h-4 rounded-full ${
                       isSelected
-                        ? 'bg-cyan-50 dark:bg-cyan-950/70 border border-cyan-400 dark:border-cyan-500 ring-2 ring-cyan-500/30 shadow-xs'
-                        : isSelectedSellerQuote
-                          ? 'bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-400 dark:border-cyan-600 ring-1 ring-cyan-500/20'
-                          : qIdx === 0
-                            ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 hover:border-emerald-400'
-                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-cyan-400/50'
-                    } flex items-center justify-between text-xs`}
-                  >
-                    <div className="flex items-center gap-2 min-w-0 pr-1">
-                      <span className={`w-4 h-4 rounded-full ${
-                        isSelected
-                          ? 'bg-cyan-600 text-white font-black'
-                          : isSelectedSellerQuote
-                            ? 'bg-cyan-600 text-white font-black'
-                            : qIdx === 0 
-                              ? 'bg-emerald-600 text-white font-black' 
-                              : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                      } text-[9px] font-mono flex items-center justify-center shrink-0`}>
-                        {isSelected ? '✓' : qIdx + 1}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="font-bold text-[11px] text-slate-900 dark:text-white flex items-center gap-1 truncate">
-                          <span className="truncate">{q.seller_name}</span>
-                          {qIdx === 0 && (
-                            <span className="text-[8px] font-mono text-emerald-700 dark:text-emerald-300 font-black bg-emerald-100 dark:bg-emerald-950 px-1 rounded shrink-0">
-                              {q.type === 'decant' ? (q.isTargetRange ? 'Lowest (8–12ml)' : 'Lowest Rate') : 'Lowest'}
-                            </span>
-                          )}
-                          {isSelected && (
-                            <span className="text-[8px] font-mono text-cyan-700 dark:text-cyan-300 font-black bg-cyan-100 dark:bg-cyan-950 px-1 rounded shrink-0">
-                              Selected
-                            </span>
-                          )}
-                          {!isSelected && qIdx !== 0 && q.isTargetRange && q.type === 'decant' && (
-                            <span className="text-[8px] font-mono text-cyan-700 dark:text-cyan-300 font-bold bg-cyan-100 dark:bg-cyan-950 px-1 rounded shrink-0">
-                              8–12ml
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate">
-                          {q.label} • {q.dispatch}
-                        </div>
+                        ? 'bg-slate-900 dark:bg-zinc-100 text-white dark:text-slate-900 font-bold'
+                        : 'bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'
+                    } text-[9px] font-mono flex items-center justify-center shrink-0`}>
+                      {isSelected ? <Check className="w-2.5 h-2.5" /> : qIdx + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <div className="font-semibold text-[11px] text-slate-900 dark:text-zinc-200 truncate">
+                        {q.seller_name}
                       </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <div className="text-right">
-                        {q.pricePerMl ? (
-                          <div className="flex flex-col items-end">
-                            <span className={`font-mono text-xs font-black ${
-                              isSelected || isSelectedSellerQuote
-                                ? 'text-cyan-600 dark:text-cyan-400 font-black'
-                                : qIdx === 0 
-                                  ? 'text-emerald-600 dark:text-emerald-400 font-black' 
-                                  : 'text-slate-800 dark:text-slate-200'
-                            }`}>
-                              ₹{q.pricePerMl}<span className="text-[9px] font-normal text-slate-400 font-sans">/ml</span>
-                            </span>
-                            <span className="text-[8px] font-mono text-slate-400">
-                              ₹{q.price.toLocaleString()} total
-                            </span>
-                          </div>
-                        ) : (
-                          <span className={`font-mono text-xs font-bold ${
-                            isSelected || isSelectedSellerQuote
-                              ? 'text-cyan-600 dark:text-cyan-400 font-black'
-                              : qIdx === 0 
-                                ? 'text-emerald-600 dark:text-emerald-400 font-black' 
-                                : 'text-slate-800 dark:text-slate-200'
-                          }`}>
-                            ₹{q.price.toLocaleString()}
-                          </span>
-                        )}
+                      <div className="text-[10px] text-slate-500 dark:text-zinc-400 truncate">
+                        {q.label} • {q.dispatch}
                       </div>
-                      {q.whatsapp ? (
-                        <a
-                          href={`https://wa.me/${String(q.whatsapp).replace(/\D/g, '').startsWith('91') ? String(q.whatsapp).replace(/\D/g, '') : `91${String(q.whatsapp).replace(/\D/g, '')}`}?text=${encodeURIComponent(
-                            `Hi ${q.seller_name}, saw your quote for ${displayName} (${q.label}) at ₹${q.price.toLocaleString()} on FragSeeker. Is this available?`
-                          )}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            logWhatsAppClick({
-                              sellerName: q.seller_name,
-                              fragranceName: f.name,
-                              brand: f.brand,
-                              price: q.price,
-                              format: q.isBottle ? 'bottle' : 'decant'
-                            });
-                          }}
-                          className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[9px] font-bold"
-                        >
-                          Order ↗
-                        </a>
-                      ) : null}
                     </div>
                   </div>
-                );
-              })
-            )}
+
+                  <div className="text-right shrink-0">
+                    <span className="font-mono text-xs font-bold text-slate-900 dark:text-zinc-100">
+                      ₹{q.price.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

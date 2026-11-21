@@ -80,7 +80,7 @@ export default function PowerFilterSidebar({
                 type="checkbox"
                 checked={formats.includes('retail')}
                 onChange={() => toggleFormat('retail')}
-                className="rounded border-slate-300 dark:border-slate-700 text-cyan-600 focus:ring-0"
+                className="rounded border-slate-300 dark:border-slate-700 text-slate-900 dark:text-zinc-100 focus:ring-0"
               />
               <span>Full Retail Bottle</span>
             </span>
@@ -93,12 +93,9 @@ export default function PowerFilterSidebar({
                 type="checkbox"
                 checked={formats.includes('tester')}
                 onChange={() => toggleFormat('tester')}
-                className="rounded border-slate-300 dark:border-slate-700 text-purple-600 focus:ring-0"
+                className="rounded border-slate-300 dark:border-slate-700 text-slate-900 dark:text-zinc-100 focus:ring-0"
               />
-              <span className="flex items-center gap-1">
-                <span>🧪</span>
-                <span>Tester Unit</span>
-              </span>
+              <span>Tester Unit</span>
             </span>
             <span className="font-mono text-[10px] text-slate-400">{counts.tester ?? counts.testers ?? 18}</span>
           </label>
@@ -109,12 +106,9 @@ export default function PowerFilterSidebar({
                 type="checkbox"
                 checked={formats.includes('partial')}
                 onChange={() => toggleFormat('partial')}
-                className="rounded border-slate-300 dark:border-slate-700 text-amber-600 focus:ring-0"
+                className="rounded border-slate-300 dark:border-slate-700 text-slate-900 dark:text-zinc-100 focus:ring-0"
               />
-              <span className="flex items-center gap-1">
-                <span>🏷️</span>
-                <span>Partial Bottle</span>
-              </span>
+              <span>Partial Bottle</span>
             </span>
             <span className="font-mono text-[10px] text-slate-400">{counts.partial ?? counts.partials ?? 1}</span>
           </label>
@@ -125,12 +119,9 @@ export default function PowerFilterSidebar({
                 type="checkbox"
                 checked={formats.includes('decant')}
                 onChange={() => toggleFormat('decant')}
-                className="rounded border-slate-300 dark:border-slate-700 text-cyan-600 focus:ring-0"
+                className="rounded border-slate-300 dark:border-slate-700 text-slate-900 dark:text-zinc-100 focus:ring-0"
               />
-              <span className="flex items-center gap-1">
-                <span>💧</span>
-                <span>Decants In Stock</span>
-              </span>
+              <span>Decants In Stock</span>
             </span>
             <span className="font-mono text-[10px] text-slate-400">{counts.decant || 808}</span>
           </label>
@@ -261,19 +252,19 @@ export default function PowerFilterSidebar({
         </span>
         <div className="grid grid-cols-2 gap-1 text-[11px] font-mono">
           {[
-            { id: 'fresh', label: '☀️ Summer Fresh' },
-            { id: 'beastmode', label: '🔥 Beastmode' },
-            { id: 'gourmand', label: '🍫 Boozy Sweet' },
-            { id: 'office', label: '💼 Office Clean' }
+            { id: 'fresh', label: 'Summer Fresh' },
+            { id: 'beastmode', label: 'Beastmode' },
+            { id: 'gourmand', label: 'Boozy Sweet' },
+            { id: 'office', label: 'Office Clean' }
           ].map(v => {
             const isSelected = selectedVibe === v.id;
             return (
               <button
                 key={v.id}
                 onClick={() => toggleVibe(v.id)}
-                className={`p-1.5 rounded-lg text-left truncate transition-colors ${
+                className={`p-1.5 rounded-lg text-left truncate transition-colors font-medium ${
                   isSelected
-                    ? 'bg-cyan-950 text-cyan-300 border border-cyan-700 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
@@ -293,19 +284,19 @@ export default function PowerFilterSidebar({
           onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'preferred' ? null : 'preferred' }))}
           className={`w-full p-2 rounded-xl border flex items-center justify-center gap-1.5 transition-all text-xs font-mono mb-1.5 ${
             dealsOnly === 'preferred'
-              ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
-              : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-500'
+              ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 font-medium border-slate-900 dark:border-zinc-100 shadow-sm'
+              : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600'
           }`}
         >
           <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
-          <span>🔥 Most Preferred (Top 12)</span>
+          <span>Most Preferred (Top 12)</span>
         </button>
         <div className="flex items-center gap-1.5 text-xs font-mono">
           <button
             onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'drops' ? null : 'drops' }))}
             className={`flex-1 p-2 rounded-xl border flex items-center justify-center gap-1.5 transition-all ${
               dealsOnly === 'drops'
-                ? 'bg-emerald-950 text-emerald-300 border-emerald-700 font-bold'
+                ? 'bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950 font-medium border-emerald-600 shadow-sm'
                 : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-emerald-500'
             }`}
           >
@@ -317,8 +308,8 @@ export default function PowerFilterSidebar({
             onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'new' ? null : 'new' }))}
             className={`flex-1 p-2 rounded-xl border flex items-center justify-center gap-1.5 transition-all ${
               dealsOnly === 'new'
-                ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
-                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-500'
+                ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 font-medium border-slate-900 dark:border-zinc-100 shadow-sm'
+                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />

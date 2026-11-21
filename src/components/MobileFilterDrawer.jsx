@@ -77,7 +77,7 @@ export default function MobileFilterDrawer({
             <div>
               <h4 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Refine Catalog</span>
-                <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-2 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-800 font-bold">
+                <span className="text-[10px] font-mono text-slate-700 dark:text-zinc-300 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-zinc-700 font-medium">
                   11 Sellers
                 </span>
               </h4>
@@ -113,11 +113,11 @@ export default function MobileFilterDrawer({
                 onClick={() => toggleFormat('retail')}
                 className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all active:scale-98 ${
                   formats.includes('retail')
-                    ? 'bg-cyan-950 text-cyan-300 border-cyan-600 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>🍾 Full Bottle</span>
+                <span>Full Bottle</span>
                 <span className="text-[10px] text-slate-400">{counts.retail || 921}</span>
               </button>
 
@@ -126,11 +126,11 @@ export default function MobileFilterDrawer({
                 onClick={() => toggleFormat('tester')}
                 className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all active:scale-98 ${
                   formats.includes('tester')
-                    ? 'bg-purple-950 text-purple-300 border-purple-600 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>🧪 Tester Box</span>
+                <span>Tester Box</span>
                 <span className="text-[10px] text-slate-400">{counts.tester ?? counts.testers ?? 18}</span>
               </button>
 
@@ -139,11 +139,11 @@ export default function MobileFilterDrawer({
                 onClick={() => toggleFormat('partial')}
                 className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all active:scale-98 ${
                   formats.includes('partial')
-                    ? 'bg-amber-950 text-amber-300 border-amber-600 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>🏷️ Partial Bottle</span>
+                <span>Partial Bottle</span>
                 <span className="text-[10px] text-slate-400">{counts.partial ?? counts.partials ?? 1}</span>
               </button>
 
@@ -152,11 +152,11 @@ export default function MobileFilterDrawer({
                 onClick={() => toggleFormat('decant')}
                 className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all active:scale-98 ${
                   formats.includes('decant')
-                    ? 'bg-cyan-950 text-cyan-300 border-cyan-600 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>💧 Decant Ready</span>
+                <span>Decants Ready</span>
                 <span className="text-[10px] text-slate-400">{counts.decant || 808}</span>
               </button>
             </div>
@@ -330,12 +330,12 @@ export default function MobileFilterDrawer({
               onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'preferred' ? null : 'preferred' }))}
               className={`w-full p-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all text-xs font-mono mb-2 active:scale-98 ${
                 dealsOnly === 'preferred'
-                  ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
+                  ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                   : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
               }`}
             >
               <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
-              <span>🔥 Most Preferred (Top 12 Trending)</span>
+              <span>Most Preferred (Top 12 Trending)</span>
             </button>
             <div className="flex items-center gap-2 text-xs font-mono">
               <button
@@ -343,7 +343,7 @@ export default function MobileFilterDrawer({
                 onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'drops' ? null : 'drops' }))}
                 className={`flex-1 p-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all active:scale-98 ${
                   dealsOnly === 'drops'
-                    ? 'bg-emerald-950 text-emerald-300 border-emerald-700 font-bold'
+                    ? 'bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950 border-emerald-600 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
@@ -356,7 +356,7 @@ export default function MobileFilterDrawer({
                 onClick={() => setFilterState(prev => ({ ...prev, dealsOnly: prev.dealsOnly === 'new' ? null : 'new' }))}
                 className={`flex-1 p-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all active:scale-98 ${
                   dealsOnly === 'new'
-                    ? 'bg-amber-950 text-amber-300 border-amber-700 font-bold'
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 border-slate-900 dark:border-zinc-100 font-medium shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
@@ -372,7 +372,7 @@ export default function MobileFilterDrawer({
           <button
             type="button"
             onClick={handleClose}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-600 to-emerald-500 text-white font-mono font-bold text-sm flex items-center justify-center gap-2 shadow-xl active:scale-98 cursor-pointer"
+            className="w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-slate-950 font-mono font-medium text-sm flex items-center justify-center gap-2 shadow-lg active:scale-98 cursor-pointer"
           >
             <span>Show {resultCount.toLocaleString()} Matching Fragrances</span>
             <span>→</span>

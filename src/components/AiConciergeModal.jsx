@@ -217,7 +217,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {msg.matches.map((m, idx) => {
                           const matchPct = Math.min(99, Math.max(50, Math.round(Number(m.match_score) || 88)));
-                          const rankLabel = idx === 0 ? "🏆 Top Match" : (idx === 1 ? "💎 Direct Twin" : `#${idx + 1} Pick`);
+                          const rankLabel = idx === 0 ? "Top Match" : (idx === 1 ? "Direct Twin" : `#${idx + 1} Pick`);
 
                           return (
                             <div
@@ -313,9 +313,9 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                           key={idx}
                           type="button"
                           onClick={() => handleSend(sug)}
-                          className="text-[11px] font-sans px-2.5 py-1 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 transition-all text-left"
+                          className="text-[11px] font-sans px-2.5 py-1 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white transition-all text-left"
                         >
-                          💬 {sug}
+                          {sug}
                         </button>
                       ))}
                     </div>
