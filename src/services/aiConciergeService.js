@@ -2215,6 +2215,32 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       return false;
     }
 
+    // 8. Strict Seasonal Guard: Season match has primary weight; NEVER recommend heavy winter/fall scents for summer or fleeting citrus for deep winter
+    const wantsSummer = criteria.target_season === 'summer' || /(?:summer|high heat|beach|hot weather|humid|warm weather)/i.test(lastUserMsg);
+    const wantsWinter = criteria.target_season === 'winter' || /(?:winter|cold weather|cozy|snow|fireplace|chilly)/i.test(lastUserMsg);
+
+    if (wantsSummer && !wantsWinter) {
+      const candSeason = calculateSeasonalProfile(m);
+      if (candSeason.winter > 40 && candSeason.winter > candSeason.summer) return false;
+      if (['winter', 'fall'].includes((m.primary_season || '').toLowerCase()) && (candSeason.summer < 30)) return false;
+    } else if (wantsWinter && !wantsSummer) {
+      const candSeason = calculateSeasonalProfile(m);
+      if (candSeason.summer > 55 && candSeason.summer > candSeason.winter) return false;
+    }
+
+    // 9. Strict Watery / Aquatic Guard: If user explicitly asks for watery/marine notes, require verified aquatic elements
+    const wantsWatery = /(?:watery|marine|aquatic|sea notes|ocean|calone)/i.test(lastUserMsg);
+    if (wantsWatery) {
+      const mAccords = (m.accords || []).map(a => (a.name || '').toLowerCase());
+      const allNotesText = [...(m.top_notes || []), ...(m.middle_notes || []), ...(m.base_notes || [])].join(' ').toLowerCase();
+      const hasAquaticAccord = mAccords.some(a => ['aquatic', 'marine', 'watery', 'ozonic'].some(k => a.includes(k)));
+      const hasAquaticNote = /(?:sea|water|marine|calone|ocean|salt|algae|driftwood)/i.test(allNotesText);
+      const hasAquaticDna = /(?:aquatic|marine|watery|cool water|acqua di gi[oò]|profondo)/i.test(`${m.name} ${m.dna_inspiration || ''} ${m.dna_type || ''}`);
+      if (!hasAquaticAccord && !hasAquaticNote && !hasAquaticDna) {
+        return false;
+      }
+    }
+
     return true;
   });
 
@@ -2268,10 +2294,10 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
 
   try {
     const vectorEvaluations = await evaluateOlfactoryMatchWithVectors(safeMatches, queryContext, {
-      semantic: 0.35,
+      season: 0.40,
       notes: 0.30,
-      season: 0.20,
-      accord: 0.15
+      accord: 0.20,
+      semantic: 0.10
     });
 
     safeMatches.forEach((m, idx) => {
