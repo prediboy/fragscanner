@@ -338,12 +338,16 @@ export class FragranticaRecommender {
         const s = String(candidate.primary_season || '').toLowerCase();
         const t = String(effectiveSeason).toLowerCase();
         if (t === 'summer') {
-          if (s === 'winter' || s === 'fall') {
-            const isFresh = candidate._accordMap['citrus'] > 50 || candidate._accordMap['aquatic'] > 50 || candidate._accordMap['fresh spicy'] > 50;
-            if (!isFresh) continue;
+          if (s.includes('winter') || s.includes('fall')) {
+            const isPureFresh = (candidate._accordMap['citrus'] > 75 || candidate._accordMap['aquatic'] > 75) && (candidate._accordMap['warm spicy'] || 0) < 40 && (candidate._accordMap['amber'] || 0) < 50;
+            if (!isPureFresh) continue;
+          }
+          // Strictly reject heavy warm-spicy, tobacco, oud or heavy amber scents in summer
+          if ((candidate._accordMap['warm spicy'] || 0) > 65 || (candidate._accordMap['tobacco'] || 0) > 40) {
+            continue;
           }
         } else if (t === 'winter') {
-          if (s === 'summer' && candidate._accordMap['aquatic'] > 70 && candidate._accordMap['warm spicy'] < 30) continue;
+          if (s.includes('summer') && candidate._accordMap['aquatic'] > 70 && (candidate._accordMap['warm spicy'] || 0) < 30) continue;
         }
       }
 
@@ -395,16 +399,21 @@ export class FragranticaRecommender {
 
       // 5. Freshness / Warmth Quality Boost
       if (effectiveSeason?.toLowerCase() === 'summer') {
-        const freshScore = (candidate._accordMap['citrus'] || 0) + (candidate._accordMap['fresh spicy'] || 0) + (candidate._accordMap['aromatic'] || 0);
-        score += Math.min(20, freshScore / 15);
+        const aquaticScore = (candidate._accordMap['aquatic'] || 0) + (candidate._accordMap['marine'] || 0);
+        const citrusScore = (candidate._accordMap['citrus'] || 0);
+        const freshScore = aquaticScore * 1.5 + citrusScore + (candidate._accordMap['fresh spicy'] || 0) * 0.5;
+        score += Math.min(25, freshScore / 12);
+
+        if (candidate.primary_season === 'Summer') score += 10;
       } else if (effectiveSeason?.toLowerCase() === 'winter') {
         const warmScore = (candidate._accordMap['warm spicy'] || 0) + (candidate._accordMap['vanilla'] || 0) + (candidate._accordMap['sweet'] || 0);
-        score += Math.min(20, warmScore / 15);
+        score += Math.min(25, warmScore / 12);
+        if (candidate.primary_season === 'Winter') score += 10;
       }
 
       candidates.push({
         ...candidate,
-        match_score: Math.min(98, Math.max(68, Math.round(score))),
+        match_score: Math.min(98, Math.max(30, Math.round(score))),
         palette_role: matchReasons[0] || 'Curated Match',
         best_seller: candidate.community_sellers?.[0]?.seller_name || candidate.best_bottle_seller || 'Verified Seller'
       });
