@@ -473,6 +473,24 @@ export async function persistChatMessage(sessionId, msg) {
       updated_at: new Date().toISOString()
     });
 
+    // Attach criteria / semantic search metadata to cards so admin dashboard can inspect exact vector queries fired
+    let cardsToSave = msg.matches || [];
+    if (msg.criteria && cardsToSave.length > 0) {
+      cardsToSave = cardsToSave.map((c, i) => {
+        if (i === 0) {
+          return {
+            ...c,
+            _semantic_search_prompt: msg.criteria.semantic_search_prompt || null,
+            _target_notes: msg.criteria.target_notes || [],
+            _target_accords: msg.criteria.target_accords || [],
+            _target_season: msg.criteria.target_season || null,
+            _max_price: msg.criteria.max_price || null
+          };
+        }
+        return c;
+      });
+    }
+
     // Insert message
     await supabase.from('ai_chat_messages').insert({
       session_id: sessionId,
@@ -481,7 +499,7 @@ export async function persistChatMessage(sessionId, msg) {
       taste_summary: msg.tasteSummary || null,
       intent: msg.intent || 'chat',
       matched_ids: (msg.matches || []).map(m => m.id),
-      matched_cards: msg.matches || [],
+      matched_cards: cardsToSave,
       suggestions: msg.suggestions || []
     });
   } catch {
