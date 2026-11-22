@@ -278,24 +278,6 @@ export default function App() {
     }
   }, [searchQuery, totalMatching]);
 
-  // Debounced catalog filter telemetry (captures applied formats, budget, seller, brand, vibe, DNA, sort, tabs)
-  useEffect(() => {
-    if (!isUnfiltered || quickFilterTab !== 'all') {
-      logFilterApplied({
-        formats: filterState.formats,
-        maxBudget: filterState.maxBudget,
-        seller: filterState.selectedSeller,
-        brand: filterState.selectedBrand,
-        sortBy: filterState.sortBy,
-        dealsOnly: filterState.dealsOnly,
-        selectedDna: filterState.selectedDna,
-        selectedVibe: filterState.selectedVibe,
-        quickFilterTab: quickFilterTab,
-        resultsCount: totalMatching
-      });
-    }
-  }, [filterState, quickFilterTab, isUnfiltered, totalMatching]);
-
   const resetAllFilters = () => {
     setSearchQuery('');
     setQuickFilterTab('all');
@@ -326,6 +308,24 @@ export default function App() {
       filterState.maxBudget >= 15000 &&
       isDefaultFormat;
   }, [showFullCatalog, searchQuery, filterState]);
+
+  // Debounced catalog filter telemetry (captures applied formats, budget, seller, brand, vibe, DNA, sort, tabs)
+  useEffect(() => {
+    if (!isUnfiltered || quickFilterTab !== 'all') {
+      logFilterApplied({
+        formats: filterState.formats,
+        maxBudget: filterState.maxBudget,
+        seller: filterState.selectedSeller,
+        brand: filterState.selectedBrand,
+        sortBy: filterState.sortBy,
+        dealsOnly: filterState.dealsOnly,
+        selectedDna: filterState.selectedDna,
+        selectedVibe: filterState.selectedVibe,
+        quickFilterTab: quickFilterTab,
+        resultsCount: totalMatching
+      });
+    }
+  }, [filterState, quickFilterTab, isUnfiltered, totalMatching]);
 
   // Active filter count for mobile badge
   const activeFiltersCount = useMemo(() => {

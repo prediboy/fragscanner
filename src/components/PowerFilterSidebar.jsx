@@ -147,7 +147,7 @@ export default function PowerFilterSidebar({
           onChange={(e) => setBudget(Number(e.target.value))}
           className="w-full accent-emerald-500 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
         />
-        <div class="grid grid-cols-4 gap-1 text-[10px] font-mono pt-1">
+        <div className="grid grid-cols-4 gap-1 text-[10px] font-mono pt-1">
           <button
             onClick={() => setBudget(1500)}
             className={`py-1 rounded text-center transition-colors ${maxBudget === 1500 ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
