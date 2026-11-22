@@ -107,22 +107,23 @@ export function getFragranceRecommendations(targetId, allFragrances, limit = 6) 
     // - Independent Top, Middle, Base note match percentages
     // - Notes percentage overlap
     // - Semantic match on user community comments
-    const matchAnalysis = evaluateOlfactoryMatch(candidate, target, {
+    const matchAnalysis = evaluateOlfactoryMatch(candidate, target, null, {
       accord: 0.25,
       notes: 0.35,
       season: 0.20,
       semantic: 0.20
     });
 
-    const targetAccordsArr = Array.isArray(target.accords) ? target.accords : [];
-    const candAccordsArr = Array.isArray(candidate.accords) ? candidate.accords : [];
-    const sharedAccords = candAccordsArr
-      .filter(ca => ca?.name && targetAccordsArr.some(ta => ta?.name && String(ta.name).toLowerCase() === String(ca.name).toLowerCase()))
-      .map(a => a.name);
+    const getAccordName = a => (typeof a === 'string' ? a : (a?.name || '')).trim();
+    const targetAccordsArr = (Array.isArray(target.accords) ? target.accords : []).map(getAccordName).filter(Boolean);
+    const candAccordsArr = (Array.isArray(candidate.accords) ? candidate.accords : []).map(getAccordName).filter(Boolean);
+    const sharedAccords = candAccordsArr.filter(ca => 
+      targetAccordsArr.some(ta => ta.toLowerCase() === ca.toLowerCase())
+    );
 
     scoredMatches.push({
       fragrance: candidate,
-      matchPercentage: matchAnalysis.finalMatchPercentage,
+      matchPercentage: Number.isFinite(Number(matchAnalysis.finalMatchPercentage)) ? Math.round(Number(matchAnalysis.finalMatchPercentage)) : 80,
       season: matchAnalysis.season,
       notes: matchAnalysis.notes,
       semantic: matchAnalysis.semantic,

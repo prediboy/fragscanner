@@ -688,12 +688,23 @@ export function calculateTaxonomyMatch(queryOrTarget, candidate) {
  * Evaluates candidate using pre-computed semantic vector match or sync fallback
  */
 export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult = null, weights = {}) {
+  // Gracefully handle if weights was passed as the 3rd argument (semanticResult)
+  let effectiveSemantic = semanticResult;
+  let effectiveWeights = weights;
+
+  if (semanticResult && typeof semanticResult === 'object' && semanticResult.semanticMatchPct === undefined) {
+    if (semanticResult.notes !== undefined || semanticResult.season !== undefined || semanticResult.accord !== undefined || semanticResult.semantic !== undefined) {
+      effectiveWeights = semanticResult;
+      effectiveSemantic = null;
+    }
+  }
+
   // Season & Edwards Wheel Subfamily Taxonomy have highest priority
-  const wSeason = weights.season ?? 0.35;
-  const wTaxonomy = weights.taxonomy ?? 0.20;
-  const wNotes = weights.notes ?? 0.25;
-  const wAccord = weights.accord ?? 0.12;
-  const wSemantic = weights.semantic ?? 0.08;
+  const wSeason = effectiveWeights.season ?? 0.35;
+  const wTaxonomy = effectiveWeights.taxonomy ?? 0.20;
+  const wNotes = effectiveWeights.notes ?? 0.25;
+  const wAccord = effectiveWeights.accord ?? 0.12;
+  const wSemantic = effectiveWeights.semantic ?? 0.08;
 
   // 0. Michael Edwards Fragrance Wheel Taxonomy Match
   const taxonomyRes = calculateTaxonomyMatch(targetOrQuery, candidate);
@@ -796,7 +807,8 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
   }
 
   // 3. Semantic Review & Comment Match (from Vector Embedding Model)
-  const semantic = semanticResult || calculateSemanticReviewMatchSync(candidate, targetOrQuery);
+  const semantic = effectiveSemantic || calculateSemanticReviewMatchSync(candidate, targetOrQuery) || { semanticMatchPct: 75 };
+  const semanticPct = Number.isFinite(Number(semantic?.semanticMatchPct)) ? Number(semantic.semanticMatchPct) : 75;
 
   // 4. Accord Harmony
   let accordMatchPct = 80;
@@ -840,14 +852,16 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
 
   // 5. Composite Final Score (Season 35%, Notes 25%, Taxonomy/Edwards Subfamily 20%, Accords 12%, Semantic 8%)
   const compositeScore = (
-    (seasonRes.matchPct * wSeason) +
-    (taxonomyRes.matchPct * wTaxonomy) +
-    (notesRes.overallNotesMatchPct * wNotes) +
-    (accordMatchPct * wAccord) +
-    (semantic.semanticMatchPct * wSemantic)
+    ((Number(seasonRes?.matchPct) || 75) * wSeason) +
+    ((Number(taxonomyRes?.matchPct) || 75) * wTaxonomy) +
+    ((Number(notesRes?.overallNotesMatchPct) || 75) * wNotes) +
+    ((Number(accordMatchPct) || 75) * wAccord) +
+    (semanticPct * wSemantic)
   );
 
-  const finalMatchPercentage = Math.min(99, Math.max(35, Math.round(compositeScore)));
+  const finalMatchPercentage = Number.isFinite(compositeScore)
+    ? Math.min(99, Math.max(35, Math.round(compositeScore)))
+    : 75;
 
   return {
     finalMatchPercentage,
