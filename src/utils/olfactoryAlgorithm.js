@@ -49,31 +49,179 @@ export const NOTE_SYNONYMS = {
   'ambrox': 'ambroxan',
   'cetalox': 'ambroxan',
   'ambergris': 'ambroxan',
-  'virginian cedar': 'cedarwood',
-  'atlas cedar': 'cedarwood',
-  'cedar': 'cedarwood',
-  'mysore sandalwood': 'sandalwood',
-  'white musk': 'musk',
-  'french lavender': 'lavender',
-  'guatemalan cardamom': 'cardamom',
-  'tonka': 'tonka bean',
   'bourbon vanilla': 'vanilla',
   'madagascar vanilla': 'vanilla',
-  'indonesian patchouli': 'patchouli',
-  'pink peppercorn': 'pink pepper',
+  'vanille': 'vanilla',
+  'tonka': 'tonka bean',
   'agarwood': 'oud',
-  'agarwood (oud)': 'oud',
-  'oud wood': 'oud',
-  'minty': 'mint',
-  'lavendery': 'lavender',
-  'citrusy': 'citrus',
-  'lemony': 'lemon',
-  'peppery': 'pepper',
-  'woody': 'cedarwood',
-  'aquatic': 'sea notes',
-  'marine': 'sea notes',
-  'watery': 'sea notes'
+  'cedarwood': 'cedar',
+  'sandal': 'sandalwood'
 };
+
+// ---------------------------------------------------------------------------
+// MICHAEL EDWARDS FRAGRANCE WHEEL & SUBFAMILY TAXONOMY
+// ---------------------------------------------------------------------------
+
+export const EDWARDS_SUBFAMILIES = {
+  WATERY: {
+    keywords: ['aquatic', 'marine', 'sea notes', 'watery', 'calone', 'sea water', 'driftwood', 'salty', 'ocean', 'ozonic', 'melon', 'cucumber', 'lotus', 'algae', 'seaweed'],
+    primaryFamily: 'AROMATIC FOUGERE',
+    antagonists: ['TOBACCO', 'LEATHER', 'GOURMAND'],
+    summerWeight: 1.0,
+    winterWeight: 0.1,
+    dayWeight: 0.9
+  },
+  CITRUS: {
+    keywords: ['citrus', 'bergamot', 'lemon', 'grapefruit', 'mandarin', 'lime', 'yuzu', 'orange', 'petitgrain', 'neroli'],
+    primaryFamily: 'CITRUS',
+    antagonists: ['TOBACCO', 'LEATHER'],
+    summerWeight: 0.95,
+    winterWeight: 0.15,
+    dayWeight: 0.95
+  },
+  GREEN: {
+    keywords: ['green', 'grass', 'galbanum', 'violet leaf', 'mint', 'tea', 'herbal', 'sage', 'basil', 'vetiver', 'cypress'],
+    primaryFamily: 'WOODY',
+    antagonists: ['GOURMAND'],
+    summerWeight: 0.8,
+    winterWeight: 0.25,
+    dayWeight: 0.85
+  },
+  FRUITY: {
+    keywords: ['fruity', 'apple', 'peach', 'plum', 'pineapple', 'mango', 'berries', 'blackcurrant', 'watermelon', 'passionfruit', 'fig', 'pear'],
+    primaryFamily: 'FLORAL',
+    antagonists: ['LEATHER', 'TOBACCO'],
+    summerWeight: 0.75,
+    winterWeight: 0.35,
+    dayWeight: 0.8
+  },
+  AROMATIC_FOUGERE: {
+    keywords: ['aromatic', 'lavender', 'fougere', 'coumarin', 'geranium', 'rosemary', 'clary sage', 'barbershop', 'oakmoss'],
+    primaryFamily: 'AROMATIC FOUGERE',
+    antagonists: [],
+    summerWeight: 0.65,
+    winterWeight: 0.45,
+    dayWeight: 0.75
+  },
+  FLORAL: {
+    keywords: ['floral', 'white floral', 'rose', 'jasmine', 'iris', 'orris', 'tuberose', 'ylang-ylang', 'magnolia', 'peony', 'orange blossom'],
+    primaryFamily: 'FLORAL',
+    antagonists: ['TOBACCO'],
+    summerWeight: 0.6,
+    winterWeight: 0.4,
+    dayWeight: 0.7
+  },
+  GOURMAND: {
+    keywords: ['vanilla', 'sweet', 'caramel', 'chocolate', 'praline', 'coffee', 'honey', 'tonka', 'dates', 'sugar', 'cacao', 'marshmallow', 'almond'],
+    primaryFamily: 'AMBERY (ORIENTAL)',
+    antagonists: ['WATERY', 'CITRUS'],
+    summerWeight: 0.1,
+    winterWeight: 0.95,
+    dayWeight: 0.3
+  },
+  SPICY: {
+    keywords: ['warm spicy', 'cinnamon', 'cardamom', 'clove', 'nutmeg', 'pepper', 'ginger', 'saffron', 'star anise', 'pimento', 'cumin'],
+    primaryFamily: 'AMBERY (ORIENTAL)',
+    antagonists: ['WATERY'],
+    summerWeight: 0.2,
+    winterWeight: 0.9,
+    dayWeight: 0.4
+  },
+  AMBERY: {
+    keywords: ['amber', 'amberwood', 'ambergris', 'resinous', 'balsamic', 'benzoin', 'myrrh', 'frankincense', 'incense', 'labdanum'],
+    primaryFamily: 'AMBERY (ORIENTAL)',
+    antagonists: [],
+    summerWeight: 0.25,
+    winterWeight: 0.9,
+    dayWeight: 0.35
+  },
+  WOODY: {
+    keywords: ['woody', 'cedar', 'sandalwood', 'patchouli', 'guaiac', 'cashmeran', 'iso e super', 'pine', 'ebony'],
+    primaryFamily: 'WOODY',
+    antagonists: [],
+    summerWeight: 0.45,
+    winterWeight: 0.75,
+    dayWeight: 0.6
+  },
+  TOBACCO: {
+    keywords: ['tobacco', 'tobacco leaf', 'smoky', 'smoke', 'ash', 'cigar'],
+    primaryFamily: 'WOODY',
+    antagonists: ['WATERY', 'CITRUS', 'GREEN'],
+    summerWeight: 0.05,
+    winterWeight: 0.98,
+    dayWeight: 0.2
+  },
+  LEATHER: {
+    keywords: ['leather', 'suede', 'birch tar', 'castoreum', 'animalic'],
+    primaryFamily: 'LEATHER',
+    antagonists: ['WATERY', 'CITRUS'],
+    summerWeight: 0.05,
+    winterWeight: 0.95,
+    dayWeight: 0.25
+  }
+};
+
+export function classifyFragranceTaxonomy(fragrance) {
+  if (!fragrance) {
+    return { primarySubfamily: 'AROMATIC_FOUGERE', primaryFamily: 'AROMATIC FOUGERE', texture: 'Balanced' };
+  }
+
+  // 1. Direct match if already tagged
+  if (fragrance.subfamily && EDWARDS_SUBFAMILIES[fragrance.subfamily.toUpperCase()]) {
+    const sfKey = fragrance.subfamily.toUpperCase();
+    return {
+      primarySubfamily: sfKey,
+      primaryFamily: fragrance.family || EDWARDS_SUBFAMILIES[sfKey].primaryFamily,
+      texture: 'Curated'
+    };
+  }
+
+  // 2. Score subfamilies based on accords, notes, dna_type, description
+  const textBag = [
+    ...(fragrance.top_notes || []),
+    ...(fragrance.middle_notes || []),
+    ...(fragrance.base_notes || []),
+    ...(fragrance.accords || []).map(a => `${a.name} ${a.name}`),
+    fragrance.dna_type || '',
+    fragrance.dna_inspiration || '',
+    fragrance.description || ''
+  ].join(' ').toLowerCase();
+
+  const scores = {};
+  for (const [subfamily, config] of Object.entries(EDWARDS_SUBFAMILIES)) {
+    let score = 0;
+    for (const kw of config.keywords) {
+      if (textBag.includes(kw)) {
+        // Boost accord score if prominent
+        const accordHit = (fragrance.accords || []).find(a => (a.name || '').toLowerCase().includes(kw));
+        if (accordHit) {
+          score += (accordHit.score || 50) * 1.5;
+        } else {
+          score += 40;
+        }
+      }
+    }
+    scores[subfamily] = score;
+  }
+
+  // Sort subfamilies by score
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const primarySubfamily = ranked[0] && ranked[0][1] > 20 ? ranked[0][0] : 'AROMATIC_FOUGERE';
+  const config = EDWARDS_SUBFAMILIES[primarySubfamily] || EDWARDS_SUBFAMILIES.AROMATIC_FOUGERE;
+
+  let texture = 'Balanced';
+  if (primarySubfamily === 'WATERY' || primarySubfamily === 'CITRUS') texture = 'Crisp Water / Fresher Citrus';
+  else if (primarySubfamily === 'GREEN') texture = 'Crisp Green';
+  else if (primarySubfamily === 'GOURMAND' || primarySubfamily === 'SPICY') texture = 'Warm Rich Amber';
+  else if (primarySubfamily === 'TOBACCO' || primarySubfamily === 'LEATHER') texture = 'Deep Smoky Leather';
+
+  return {
+    primarySubfamily,
+    primaryFamily: config.primaryFamily,
+    texture,
+    scores
+  };
+}
 
 export function normalizeNote(raw) {
   if (!raw || typeof raw !== 'string') return '';
@@ -458,15 +606,97 @@ export const calculateSemanticReviewMatch = calculateSemanticReviewMatchSync;
 // 5. MASTER OLFACTORY MATCH EVALUATOR
 // ---------------------------------------------------------------------------
 
+export function calculateTaxonomyMatch(queryOrTarget, candidate) {
+  const candTax = classifyFragranceTaxonomy(candidate);
+  const qStr = typeof queryOrTarget === 'string'
+    ? queryOrTarget.toLowerCase()
+    : (queryOrTarget?.raw_prompt || queryOrTarget?.taste_summary || '').toLowerCase();
+
+  // Determine target subfamilies and antagonists from query
+  const targetSubfamilies = new Map();
+  const bannedSubfamilies = new Set();
+
+  if (/water|marine|sea|aquatic|ocean|calone|driftwood/i.test(qStr)) {
+    targetSubfamilies.set('WATERY', 1.0);
+    targetSubfamilies.set('CITRUS', 0.8);
+    bannedSubfamilies.add('TOBACCO');
+    bannedSubfamilies.add('LEATHER');
+    bannedSubfamilies.add('GOURMAND');
+  }
+
+  if (/summer|heat|beach|freshe?r?|crisp/i.test(qStr)) {
+    if (!targetSubfamilies.has('WATERY')) targetSubfamilies.set('WATERY', 0.85);
+    targetSubfamilies.set('CITRUS', 0.95);
+    targetSubfamilies.set('GREEN', 0.8);
+    bannedSubfamilies.add('TOBACCO');
+    bannedSubfamilies.add('LEATHER');
+  }
+
+  if (/winter|cold|cozy|warm|vanilla|sweet|caramel|gourmand|dates|cacao/i.test(qStr)) {
+    targetSubfamilies.set('GOURMAND', 1.0);
+    targetSubfamilies.set('AMBERY', 0.85);
+    targetSubfamilies.set('SPICY', 0.8);
+    bannedSubfamilies.add('WATERY');
+    bannedSubfamilies.add('CITRUS');
+  }
+
+  if (/office|daily|barbershop|soapy|clean|lavender|fougere/i.test(qStr)) {
+    targetSubfamilies.set('AROMATIC_FOUGERE', 1.0);
+    targetSubfamilies.set('CITRUS', 0.85);
+    targetSubfamilies.set('GREEN', 0.8);
+    bannedSubfamilies.add('TOBACCO');
+    bannedSubfamilies.add('GOURMAND');
+  }
+
+  if (/smoky|smoke|tobacco|cigar|leather|dark|mysterious|suede|night/i.test(qStr)) {
+    targetSubfamilies.set('TOBACCO', 1.0);
+    targetSubfamilies.set('LEATHER', 0.95);
+    targetSubfamilies.set('WOODY', 0.85);
+    bannedSubfamilies.add('WATERY');
+  }
+
+  if (/floral|rose|jasmine|iris|tuberose|neroli/i.test(qStr)) {
+    targetSubfamilies.set('FLORAL', 1.0);
+    targetSubfamilies.set('FRUITY', 0.7);
+  }
+
+  let matchPct = 75;
+  if (targetSubfamilies.size > 0) {
+    if (bannedSubfamilies.has(candTax.primarySubfamily)) {
+      matchPct = 35; // Heavy penalty for antagonistic subfamily
+    } else if (targetSubfamilies.has(candTax.primarySubfamily)) {
+      matchPct = Math.round(85 + (targetSubfamilies.get(candTax.primarySubfamily) * 14)); // 96-99%
+    } else {
+      const candScore = candTax.scores?.[Array.from(targetSubfamilies.keys())[0]] || 0;
+      if (candScore > 50) {
+        matchPct = 82;
+      } else {
+        matchPct = 60;
+      }
+    }
+  }
+
+  return {
+    matchPct,
+    primarySubfamily: candTax.primarySubfamily,
+    primaryFamily: candTax.primaryFamily,
+    texture: candTax.texture
+  };
+}
+
 /**
  * Evaluates candidate using pre-computed semantic vector match or sync fallback
  */
 export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult = null, weights = {}) {
-  // Season has highest priority, followed by Notes and Accords. Marketing description has the lowest weight.
-  const wSeason = weights.season ?? 0.40;
-  const wNotes = weights.notes ?? 0.30;
-  const wAccord = weights.accord ?? 0.20;
-  const wSemantic = weights.semantic ?? 0.10;
+  // Season & Edwards Wheel Subfamily Taxonomy have highest priority
+  const wSeason = weights.season ?? 0.35;
+  const wTaxonomy = weights.taxonomy ?? 0.20;
+  const wNotes = weights.notes ?? 0.25;
+  const wAccord = weights.accord ?? 0.12;
+  const wSemantic = weights.semantic ?? 0.08;
+
+  // 0. Michael Edwards Fragrance Wheel Taxonomy Match
+  const taxonomyRes = calculateTaxonomyMatch(targetOrQuery, candidate);
 
   // 1. Seasonal Profile & Match
   const candidateSeason = calculateSeasonalProfile(candidate);
@@ -608,18 +838,20 @@ export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult 
     accordMatchPct = Math.min(99, Math.max(30, Math.round(accordSim * 100)));
   }
 
-  // 5. Composite Final Score
+  // 5. Composite Final Score (Season 35%, Notes 25%, Taxonomy/Edwards Subfamily 20%, Accords 12%, Semantic 8%)
   const compositeScore = (
-    (semantic.semanticMatchPct * wSemantic) +
-    (notesRes.overallNotesMatchPct * wNotes) +
     (seasonRes.matchPct * wSeason) +
-    (accordMatchPct * wAccord)
+    (taxonomyRes.matchPct * wTaxonomy) +
+    (notesRes.overallNotesMatchPct * wNotes) +
+    (accordMatchPct * wAccord) +
+    (semantic.semanticMatchPct * wSemantic)
   );
 
-  const finalMatchPercentage = Math.min(99, Math.max(40, Math.round(compositeScore)));
+  const finalMatchPercentage = Math.min(99, Math.max(35, Math.round(compositeScore)));
 
   return {
     finalMatchPercentage,
+    taxonomy: taxonomyRes,
     season: {
       summerPct: candidateSeason.summer,
       winterPct: candidateSeason.winter,

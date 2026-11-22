@@ -2330,10 +2330,11 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
 
   try {
     const vectorEvaluations = await evaluateOlfactoryMatchWithVectors(safeMatches, queryContext, {
-      season: 0.40,
-      notes: 0.30,
-      accord: 0.20,
-      semantic: 0.10
+      season: 0.35,
+      taxonomy: 0.20,
+      notes: 0.25,
+      accord: 0.12,
+      semantic: 0.08
     });
 
     safeMatches.forEach((m, idx) => {
@@ -2343,16 +2344,24 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
         m.season_match = analysis.season;
         m.notes_match = analysis.notes;
         m.semantic_match = analysis.semantic;
+        m.taxonomy = analysis.taxonomy;
       }
     });
   } catch (err) {
     console.warn('[Concierge Scoring] Vector evaluation fallback:', err.message);
     safeMatches.forEach(m => {
-      const analysis = evaluateOlfactoryMatch(m, queryContext);
+      const analysis = evaluateOlfactoryMatch(m, queryContext, null, {
+        season: 0.35,
+        taxonomy: 0.20,
+        notes: 0.25,
+        accord: 0.12,
+        semantic: 0.08
+      });
       m.match_score = analysis.finalMatchPercentage;
       m.season_match = analysis.season;
       m.notes_match = analysis.notes;
       m.semantic_match = analysis.semantic;
+      m.taxonomy = analysis.taxonomy;
     });
   }
 
