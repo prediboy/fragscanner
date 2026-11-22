@@ -452,12 +452,14 @@ export async function loadSessionHistory(sessionId) {
 export async function persistChatMessage(sessionId, msg) {
   // 1. Persist locally first
   try {
-    const key = `khushboo_history_${sessionId}`;
-    const raw = localStorage.getItem(key);
-    const history = raw ? JSON.parse(raw) : [];
-    history.push(msg);
-    // Keep last 30 turns locally
-    localStorage.setItem(key, JSON.stringify(history.slice(-30)));
+    if (typeof localStorage !== 'undefined' && localStorage && typeof localStorage.getItem === 'function') {
+      const key = `khushboo_history_${sessionId}`;
+      const raw = localStorage.getItem(key);
+      const history = raw ? JSON.parse(raw) : [];
+      history.push(msg);
+      // Keep last 30 turns locally
+      localStorage.setItem(key, JSON.stringify(history.slice(-30)));
+    }
   } catch (err) {
     console.warn('[Khushboo Storage] Local save error:', err);
   }
@@ -1452,7 +1454,7 @@ CRITICAL GUIDELINES:
 1. Speak as a passionate sommelier, NOT a generic sales bot.
 2. If this is discovery mode or a contrast query, explain how this bottle expands their horizon beyond basic clones, avoids the harshness/sweetness they hated, and honors their loved notes.
 3. GROUND your explanation in what real community wearers say (cite their quotes, skin feel in Indian heat, longevity, or smooth opening).
-4. If mentioning longevity or staying power, STRICTLY use the exact verified longevity rating provided (e.g., "${m.longevity || '6-7 hrs'}") and NEVER state "8-10 hours" unless the data explicitly says so.
+4. If mentioning longevity or staying power, STRICTLY use the exact verified longevity rating provided (e.g., "6-7 hrs") and NEVER state "8-10 hours" unless the data explicitly says so.
 
 Return strictly raw JSON:
 {
