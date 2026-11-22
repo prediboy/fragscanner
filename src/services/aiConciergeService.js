@@ -1468,19 +1468,27 @@ Return strictly raw JSON:
     if (text) {
       const parsed = JSON.parse(text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, ''));
       const whys = parsed.whys || {};
-      return matches.map(m => ({
-        ...m,
-        why: whys[m.id] || m.why || generateFallbackWhy(m, criteria, deltaInfo)
-      }));
+      return matches.map(m => {
+        const text = whys[m.id] || m.why_this_fits || m.why || generateFallbackWhy(m, criteria, deltaInfo);
+        return {
+          ...m,
+          why: text,
+          why_this_fits: text
+        };
+      });
     }
   } catch (err) {
     console.warn('[Khushboo] synthesizeWhys error:', err.message);
   }
 
-  return matches.map(m => ({
-    ...m,
-    why: m.why || generateFallbackWhy(m, criteria, deltaInfo)
-  }));
+  return matches.map(m => {
+    const text = m.why_this_fits || m.why || generateFallbackWhy(m, criteria, deltaInfo);
+    return {
+      ...m,
+      why: text,
+      why_this_fits: text
+    };
+  });
 }
 
 function generateFallbackWhy(m, criteria, deltaInfo) {
@@ -1522,18 +1530,22 @@ async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaI
     return await synthesizeWhys(chatHistory, candidatePool, criteria, deltaInfo, perfumesDossier);
   }
 
-  const candidateSummaries = candidatePool.map(c => ({
-    id: c.id,
-    brand: c.brand,
-    name: c.name,
-    dna_inspiration: c.dna_inspiration,
-    accords: (c.accords || []).slice(0, 4).map(a => a.name).join(', '),
-    top_notes: (c.top_notes || []).join(', '),
-    middle_notes: (c.middle_notes || []).join(', '),
-    base_notes: (c.base_notes || []).join(', '),
-    season: c.primary_season || 'Summer',
-    price: c.community_price ? `₹${c.community_price}` : (c.lowest_decant_price ? `Decant ₹${c.lowest_decant_price}` : 'In Stock')
-  }));
+  const candidateSummaries = candidatePool.map(c => {
+    const sProf = calculateSeasonalProfile(c);
+    return {
+      id: c.id,
+      brand: c.brand,
+      name: c.name,
+      dna_inspiration: c.dna_inspiration,
+      accords: (c.accords || []).slice(0, 4).map(a => a.name).join(', '),
+      top_notes: (c.top_notes || []).join(', '),
+      middle_notes: (c.middle_notes || []).join(', '),
+      base_notes: (c.base_notes || []).join(', '),
+      season_breakdown: `${sProf.primary} (${sProf.summer}% Summer, ${sProf.winter}% Winter)`,
+      day_night: `${sProf.day}% Day, ${sProf.night}% Night`,
+      price: c.community_price ? `₹${c.community_price}` : (c.lowest_decant_price ? `Decant ₹${c.lowest_decant_price}` : 'In Stock')
+    };
+  });
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
 
@@ -1558,6 +1570,7 @@ TASK:
 2. STRICT DISQUALIFICATION: Never, under any circumstances, select or recommend a perfume the user disliked, tried and failed, found disappointing, or said missed the mark (including ${Array.from(allDislikes || []).join(', ')}). Reject them immediately.
 3. Select and rank the TOP 10 best perfumes that strictly fulfill all user requirements (e.g. if user said "remove sweet", reject any sweet/vanilla/gourmand scent; if user wants spicy mint and lavender for summer, prioritize scents that hit those notes without sweetness).
 4. For each selected perfume, write a passionate, connoisseur 1-2 sentence "why_this_fits" sommelier explanation explaining specifically how it captures the user's refined preferences.
+5. SEASON & DAYTIME STRICTNESS: When the user requests summer, heat, or fresh, strongly prioritize perfumes with verified high Summer % and high Daytime % (e.g. 70%+ Day). NEVER rank perfumes that have warm spicy mids (like cinnamon/cardamom) or evening/night-leaning profiles above pure daytime aquatic freshies.
 
 Return strictly raw JSON with this schema:
 {
@@ -1579,9 +1592,11 @@ Return strictly raw JSON with this schema:
         for (const s of selections) {
           const match = candidatePool.find(c => c.id === s.id);
           if (match) {
+            const whyText = s.why_this_fits || generateFallbackWhy(match, criteria, deltaInfo);
             curated.push({
               ...match,
-              why: s.why_this_fits || generateFallbackWhy(match, criteria, deltaInfo)
+              why: whyText,
+              why_this_fits: whyText
             });
           }
         }
@@ -1606,9 +1621,11 @@ Return strictly raw JSON with this schema:
                 });
                 if (violatesAccord) continue;
 
+                const whyFallback = generateFallbackWhy(cand, criteria, deltaInfo);
                 curated.push({
                   ...cand,
-                  why: generateFallbackWhy(cand, criteria, deltaInfo)
+                  why: whyFallback,
+                  why_this_fits: whyFallback
                 });
                 addedIds.add(cand.id);
               }
@@ -2094,13 +2111,15 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
   // 2. Select Candidates: Fragrantica HOG-AVF Engine (Hierarchical Olfactory Graph & Accord Vector Filtering)
   const isOlfactoryDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo) || allLiked.size > 0 || allDislikes.size > 0 || (criteria.target_notes && criteria.target_notes.length > 0);
 
+  let hogMatches = [];
   if (!rawMatches && isOlfactoryDiscovery) {
     try {
       const [poolRes, resolvedLoved, resolvedDisliked] = await Promise.all([
         supabase.from('fragrances')
-          .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers, primary_season, gender')
+          .select('id, name, brand, accords, top_notes, middle_notes, base_notes, review_summary, dna_inspiration, dna_type, rating_value, rating_count, community_price, lowest_decant_price, in_seller_stock, has_decants, best_bottle_seller, community_sellers, primary_season, seasons, day_night, gender')
           .or('in_seller_stock.eq.true,has_decants.eq.true')
-          .limit(350),
+          .order('rating_count', { ascending: false, nullsFirst: false })
+          .limit(400),
         Promise.all(Array.from(allLiked).map(n => resolvePerfumeDossier(n))),
         Promise.all(Array.from(allDislikes).map(n => resolvePerfumeDossier(n)))
       ]);
@@ -2121,8 +2140,8 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
           limit: 15
         });
 
-        if (hogResults && hogResults.length >= 3) {
-          rawMatches = hogResults;
+        if (hogResults && hogResults.length > 0) {
+          hogMatches = hogResults;
         }
       }
     } catch (hogErr) {
@@ -2130,8 +2149,25 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     }
   }
 
-  if (!rawMatches || rawMatches.length === 0) {
-    rawMatches = await executeMultiQuery(criteria);
+  // Always augment candidate pool with direct multi-query (semantic embeddings + notes + accords)
+  let multiMatches = [];
+  try {
+    multiMatches = await executeMultiQuery(criteria);
+  } catch (mErr) {
+    console.warn('[Khushboo MultiQuery] MultiQuery fallback:', mErr.message);
+  }
+
+  if (hogMatches.length > 0 || (multiMatches && multiMatches.length > 0)) {
+    const combinedMap = new Map();
+    // Prioritize direct multi-query hits for precise notes/watery queries
+    (multiMatches || []).forEach(m => combinedMap.set(m.id, m));
+    // Add HOG graph recommendations
+    hogMatches.forEach(m => {
+      if (!combinedMap.has(m.id)) {
+        combinedMap.set(m.id, m);
+      }
+    });
+    rawMatches = Array.from(combinedMap.values());
   }
 
   if (!rawMatches || rawMatches.length === 0) {
@@ -2319,6 +2355,9 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       m.semantic_match = analysis.semantic;
     });
   }
+
+  // Strictly rank candidates by match_score descending before sommelier selection
+  safeMatches.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
 
   // 5. Agentic Sommelier Selection & Curated Whys
   const matchesWithWhys = await curateMatchesWithGemini(chatHistory, safeMatches, criteria, deltaInfo, allDislikes, perfumesDossier);

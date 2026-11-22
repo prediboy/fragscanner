@@ -131,7 +131,50 @@ export const WINTER_ACCORD_KEYWORDS = ['amber', 'vanilla', 'warm spicy', 'woody'
 
 export function calculateSeasonalProfile(fragrance) {
   if (!fragrance) {
-    return { summer: 25, winter: 25, spring: 25, fall: 25, primary: 'All Year', isDerived: false };
+    return { summer: 25, winter: 25, spring: 25, fall: 25, day: 50, night: 50, primary: 'All Year', isDerived: false };
+  }
+
+  // Parse day / night
+  let dayPct = 50;
+  let nightPct = 50;
+  const dnRaw = fragrance.day_night;
+  if (dnRaw) {
+    if (typeof dnRaw === 'object') {
+      dayPct = Number(dnRaw.day) || 50;
+      nightPct = Number(dnRaw.night) || (100 - dayPct);
+    } else if (typeof dnRaw === 'string') {
+      const trimmed = dnRaw.trim();
+      if (trimmed.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          dayPct = Number(parsed.day) || 50;
+          nightPct = Number(parsed.night) || (100 - dayPct);
+        } catch {}
+      } else if (trimmed.toLowerCase().includes('day')) {
+        dayPct = 85;
+        nightPct = 15;
+      } else if (trimmed.toLowerCase().includes('night') || trimmed.toLowerCase().includes('evening')) {
+        dayPct = 20;
+        nightPct = 80;
+      }
+    }
+  } else {
+    // Derive from accords if missing
+    const accords = Array.isArray(fragrance.accords) ? fragrance.accords : [];
+    let lightCount = 0;
+    let darkCount = 0;
+    accords.forEach(a => {
+      const n = (a?.name || '').toLowerCase();
+      if (['citrus', 'aquatic', 'marine', 'fresh', 'green', 'fruity'].some(k => n.includes(k))) lightCount++;
+      if (['amber', 'oud', 'leather', 'tobacco', 'warm spicy', 'smoky', 'vanilla'].some(k => n.includes(k))) darkCount++;
+    });
+    if (lightCount > darkCount) {
+      dayPct = 75;
+      nightPct = 25;
+    } else if (darkCount > lightCount) {
+      dayPct = 30;
+      nightPct = 70;
+    }
   }
 
   // 1. Direct votes / percentages in `seasons` column
@@ -159,6 +202,8 @@ export function calculateSeasonalProfile(fragrance) {
         winter: winterPct,
         spring: springPct,
         fall: fallPct,
+        day: dayPct,
+        night: nightPct,
         primary,
         isDerived: false
       };
@@ -200,6 +245,8 @@ export function calculateSeasonalProfile(fragrance) {
     winter: winterPct,
     spring: springPct,
     fall: fallPct,
+    day: dayPct,
+    night: nightPct,
     primary: fragrance.primary_season || (summerPct > winterPct ? 'Summer' : 'Winter'),
     isDerived: true
   };
@@ -215,7 +262,22 @@ export function calculateSeasonMatch(profileA, profileB) {
   const dFall = (profA.fall - profB.fall) / 100;
 
   const distance = Math.sqrt((dSummer * dSummer + dWinter * dWinter + dSpring * dSpring + dFall * dFall) / 4);
-  const matchPct = Math.min(99, Math.max(30, Math.round((1 - distance) * 100)));
+  let matchPct = Math.min(99, Math.max(30, Math.round((1 - distance) * 100)));
+
+  // Day / Night & Summer Purity Adjustments:
+  // When looking for summer / heat, daytime freshness is crucial!
+  if (profA.summer >= 60) {
+    if (profB.day >= 70) matchPct += 8; // High daytime freshness boost
+    if (profB.primary === 'Summer') matchPct += 6; // Verified Summer primary boost
+    if (profB.night >= 70) matchPct -= 12; // Heavy evening/night penalty for summer
+    if (profB.primary === 'Winter' || profB.winter >= 40) matchPct -= 15; // Winter penalty
+  } else if (profA.winter >= 60) {
+    if (profB.night >= 65) matchPct += 6; // Cozy night boost
+    if (profB.primary === 'Winter') matchPct += 6;
+    if (profB.summer >= 50) matchPct -= 15;
+  }
+
+  matchPct = Math.min(99, Math.max(25, matchPct));
 
   return {
     matchPct,
@@ -223,6 +285,8 @@ export function calculateSeasonMatch(profileA, profileB) {
     winterPct: profB.winter,
     springPct: profB.spring,
     fallPct: profB.fall,
+    dayPct: profB.day,
+    nightPct: profB.night,
     profileA: profA,
     profileB: profB
   };
