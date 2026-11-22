@@ -29,12 +29,12 @@ export default function MobileBottomDock({
           onClick={onResetFilters}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             isCuratedActive
-              ? 'text-cyan-600 dark:text-cyan-400 font-bold'
+              ? 'text-slate-900 dark:text-zinc-100 font-semibold'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <div className="relative">
-            <Sparkles className={`w-4 h-4 ${isCuratedActive ? 'text-cyan-500 fill-cyan-500/20' : ''}`} />
+            <Sparkles className={`w-4 h-4 ${isCuratedActive ? 'text-amber-500 fill-amber-500/20' : ''}`} />
           </div>
           <span className="text-[10px] font-mono font-medium mt-0.5">Highlights</span>
         </button>
@@ -50,7 +50,7 @@ export default function MobileBottomDock({
           }}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             isDropsActive
-              ? 'text-emerald-600 dark:text-emerald-400 font-bold'
+              ? 'text-emerald-600 dark:text-emerald-400 font-semibold'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -75,7 +75,7 @@ export default function MobileBottomDock({
           }}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             isDecantsActive
-              ? 'text-cyan-600 dark:text-cyan-400 font-bold'
+              ? 'text-slate-900 dark:text-zinc-100 font-semibold'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -93,14 +93,14 @@ export default function MobileBottomDock({
           onClick={onOpenFilters}
           className={`flex-1 flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
             activeFilterCount > 0
-              ? 'text-cyan-600 dark:text-cyan-400 font-bold'
+              ? 'text-slate-900 dark:text-zinc-100 font-semibold'
               : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <div className="relative">
             <SlidersHorizontal className="w-4 h-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-cyan-500 text-slate-950 text-[9px] font-black flex items-center justify-center shadow-xs">
+              <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 text-[9px] font-bold flex items-center justify-center shadow-xs">
                 {activeFilterCount}
               </span>
             )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X, TrendingDown, Sparkles, SlidersHorizontal, Flame } from 'lucide-react';
+import { Search, X, TrendingDown, Sparkles, Flame, Droplets, TestTube, Tag, Package } from 'lucide-react';
 
 export default function MarketPulseBar({
   searchQuery,
@@ -32,13 +32,13 @@ export default function MarketPulseBar({
   if (hasSearch) {
     activeChips.push({
       id: 'search-query',
-      label: `🔍 "${searchQuery.trim()}" (Global Search)`,
+      label: `"${searchQuery.trim()}" (Search)`,
       onRemove: () => setSearchQuery('')
     });
   } else {
     if (formats.length > 0 && formats.length < 4) {
       formats.forEach(f => {
-        const label = f === 'retail' ? '🍾 Full Retail Bottle' : f === 'tester' ? '🧪 Tester Unit' : f === 'partial' ? '🏷️ Partial Bottle' : '💧 Decants In Stock';
+        const label = f === 'retail' ? 'Full Bottle' : f === 'tester' ? 'Tester Unit' : f === 'partial' ? 'Partial Bottle' : 'Decants Ready';
         activeChips.push({
           id: `fmt-${f}`,
           label,
@@ -73,7 +73,7 @@ export default function MarketPulseBar({
     if (dealsOnly) {
       activeChips.push({
         id: 'deals',
-        label: dealsOnly === 'drops' ? '📉 Price Drops' : (dealsOnly === 'preferred' ? '🔥 Most Preferred (Top 12)' : '✨ New Arrivals'),
+        label: dealsOnly === 'drops' ? 'Price Drops' : (dealsOnly === 'preferred' ? 'Most Preferred' : 'New Arrivals'),
         onRemove: () => setFilterState(p => ({ ...p, dealsOnly: null }))
       });
     }
@@ -94,25 +94,25 @@ export default function MarketPulseBar({
   }
 
   return (
-    <div className="space-y-3.5 mb-6 w-full max-w-full min-w-0">
+    <div className="space-y-3 mb-6 w-full max-w-full min-w-0">
       
-      {/* Top Search & Sorting Bar */}
-      <div className="bg-white dark:bg-slate-900/90 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 w-full max-w-full min-w-0">
+      {/* Top Search Bar */}
+      <div className="bg-white dark:bg-[#12141C] rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 dark:border-[#232738] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 w-full max-w-full min-w-0">
         
         {/* Fast Universal Search Input */}
         <div className="relative w-full sm:max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+          <Search className="w-4 h-4 text-slate-400 dark:text-zinc-500 absolute left-3.5 top-3" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search Hawas, Khamrah, Aventus, Sauvage, notes..."
-            className="w-full pl-10 pr-9 py-2 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors font-medium"
+            className="w-full pl-10 pr-9 py-2 bg-slate-50 dark:bg-[#0B0D13] rounded-xl border border-slate-200 dark:border-[#262B3D] text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:border-slate-400 dark:focus:border-zinc-500 transition-colors font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-white p-0.5"
+              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 p-0.5 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -121,158 +121,155 @@ export default function MarketPulseBar({
 
         {/* Right Match Count Status */}
         <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto text-xs font-mono">
-          <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">
+          <div className="text-[11px] font-mono text-slate-500 dark:text-zinc-400 whitespace-nowrap">
             {isCuratedActive ? (
-              <span className="text-cyan-600 dark:text-cyan-400 font-bold">Curated Deals</span>
+              <span className="font-semibold text-slate-700 dark:text-zinc-300">Curated Spotlight</span>
             ) : (
-              <><strong className="text-slate-900 dark:text-white font-bold">{totalMatching}</strong> matches</>
+              <><strong className="text-slate-900 dark:text-zinc-100 font-bold">{totalMatching}</strong> in-stock</>
             )}
           </div>
         </div>
 
       </div>
 
-      {/* Mutually Exclusive Mode Toggle Bar */}
-      <div className="bg-slate-100 dark:bg-slate-900/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1 overflow-x-auto hide-scrollbar text-xs font-mono shadow-2xs w-full max-w-full">
+      {/* Unified Minimal Segmented Filter Bar */}
+      <div className="bg-slate-100 dark:bg-[#12141C] p-1 rounded-2xl border border-slate-200/80 dark:border-[#232738] flex items-center gap-1 overflow-x-auto hide-scrollbar text-xs font-mono shadow-2xs w-full max-w-full">
         
         {/* Toggle 1: Curated Highlights */}
         <button
           onClick={() => {
             onResetFilters();
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             isCuratedActive
-              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+          <Sparkles className="w-3.5 h-3.5 opacity-70" />
           <span>Curated Highlights</span>
         </button>
 
-        {/* Toggle: Most Preferred (Top 12) */}
+        {/* Toggle 2: Most Preferred */}
         <button
           onClick={() => {
             setQuickFilterTab('preferred');
             setFilterState(prev => ({ ...prev, dealsOnly: 'preferred', formats: ['retail'] }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             dealsOnly === 'preferred'
-              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
           <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
           <span>Most Preferred ({counts.preferred ?? 12})</span>
         </button>
 
-        {/* Toggle 2: Price Drops */}
+        {/* Toggle 3: Price Drops */}
         <button
           onClick={() => {
             setQuickFilterTab('drops');
             setFilterState(prev => ({ ...prev, dealsOnly: 'drops', formats: ['retail'] }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             dealsOnly === 'drops'
-              ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
           <TrendingDown className="w-3.5 h-3.5 text-emerald-500" />
           <span>Price Drops ({counts.drops ?? 0})</span>
-          {(counts.drops ?? 0) > 0 && (
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          )}
         </button>
 
-        {/* Toggle 3: New Arrivals */}
+        {/* Toggle 4: New Arrivals */}
         <button
           onClick={() => {
             setQuickFilterTab('new');
             setFilterState(prev => ({ ...prev, dealsOnly: 'new', formats: ['retail'] }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             dealsOnly === 'new'
-              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
-          <span>✨</span>
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
           <span>New Arrivals ({counts.newArrivals ?? 0})</span>
         </button>
 
-        {/* Toggle 4: Decants Ready */}
+        {/* Toggle 5: Decants */}
         <button
           onClick={() => {
             setQuickFilterTab('decants');
             setFilterState(prev => ({ ...prev, formats: ['decant'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             formats.length === 1 && formats.includes('decant') && !dealsOnly
-              ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
-          <span>💧</span>
+          <Droplets className="w-3.5 h-3.5 opacity-70" />
           <span>Decants Ready ({counts.decants || 808})</span>
         </button>
 
-        {/* Toggle 5: Testers */}
+        {/* Toggle 6: Testers */}
         <button
           onClick={() => {
             setQuickFilterTab('testers');
             setFilterState(prev => ({ ...prev, formats: ['tester'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             formats.length === 1 && formats.includes('tester') && !dealsOnly
-              ? 'bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
-          <span>🧪</span>
+          <TestTube className="w-3.5 h-3.5 opacity-70" />
           <span>Testers ({counts.testers ?? counts.tester ?? 18})</span>
         </button>
 
-        {/* Toggle 6: Partials */}
+        {/* Toggle 7: Partials */}
         <button
           onClick={() => {
             setQuickFilterTab('partials');
             setFilterState(prev => ({ ...prev, formats: ['partial'], dealsOnly: null }));
           }}
-          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium ${
+          className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 font-medium cursor-pointer ${
             formats.length === 1 && formats.includes('partial') && !dealsOnly
-              ? 'bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-300 font-bold shadow-xs border border-slate-200/80 dark:border-slate-700'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 border border-transparent'
+              ? 'bg-white dark:bg-[#232738] text-slate-900 dark:text-white font-bold shadow-2xs'
+              : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-200/50 dark:hover:bg-[#181B26]'
           }`}
         >
-          <span>🏷️</span>
+          <Tag className="w-3.5 h-3.5 opacity-70" />
           <span>Partials ({counts.partials ?? counts.partial ?? 1})</span>
         </button>
       </div>
 
       {/* Active Dismissible Chips Row */}
       {activeChips.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs font-mono">
-          <span className="text-[11px] text-slate-400 font-medium mr-1">Active:</span>
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-xs font-mono">
+          <span className="text-[11px] text-slate-400 dark:text-zinc-500 font-medium mr-1">Filtered by:</span>
           {activeChips.map(c => (
             <span
               key={c.id}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-50 dark:bg-cyan-950/70 border border-cyan-200 dark:border-cyan-800 text-cyan-800 dark:text-cyan-300 text-[11px]"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-[#181B26] border border-slate-200 dark:border-[#262B3D] text-slate-700 dark:text-zinc-300 text-[11px]"
             >
               <span>{c.label}</span>
               <button
                 onClick={c.onRemove}
-                className="hover:text-red-500 dark:hover:text-red-400 ml-0.5"
+                className="hover:text-red-500 dark:hover:text-red-400 ml-0.5 cursor-pointer p-0.5"
                 title="Remove filter"
               >
-                ✕
+                <X className="w-3 h-3" />
               </button>
             </span>
           ))}
 
           <button
             onClick={onResetFilters}
-            className="text-[11px] text-slate-400 hover:text-cyan-500 underline ml-2 cursor-pointer"
+            className="text-[11px] text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300 underline ml-2 cursor-pointer"
           >
             Clear all
           </button>

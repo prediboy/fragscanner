@@ -3,7 +3,7 @@ import {
   X, Star, Sparkles, Wind, Sun, Moon, Calendar, 
   CheckCircle2, AlertCircle, Quote, Layers, ArrowRight, ArrowLeft, Zap, Tag, Flame,
   Store, ShieldCheck, Truck, ExternalLink, ShoppingBag, FlaskConical, Globe,
-  TrendingDown, TrendingUp, Activity, Clock, ChevronDown, ChevronUp
+  TrendingDown, TrendingUp, Activity, Clock, ChevronDown, ChevronUp, Check
 } from 'lucide-react';
 import { getFragranceRecommendations, calculateSeasonalProfile } from '../utils/recommender';
 import { logWhatsAppClick } from '../lib/supabaseTelemetry';
@@ -255,7 +255,7 @@ function PriceTrendIntelligence({ fragrance }) {
             ₹{minPrice > 0 ? minPrice.toLocaleString() : 'N/A'}
           </strong>
           <span className="text-[10px] text-slate-400 block truncate">
-            {minPrice === currentPrice ? '🔥 At All-Time Low' : 'Historical Best'}
+            {minPrice === currentPrice ? 'At All-Time Low' : 'Historical Best'}
           </span>
         </div>
 
@@ -763,7 +763,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 shrink-0">
                       <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
-                      <span>🍾 Bottles & Retail Packs</span>
+                      <span>Bottles & Retail Packs</span>
                     </h4>
                     {fragrance.community_price && !isNaN(Number(fragrance.community_price)) && Number(fragrance.community_price) > 0 && (
                       <div className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2 flex-wrap">
@@ -782,7 +782,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         )}
                         {fragrance.is_price_drop && !fragrance.is_tester && (
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold shrink-0">
-                            📉 -{fragrance.price_change_percentage || Math.round((Math.abs(fragrance.previous_price - fragrance.community_price) / fragrance.previous_price) * 100)}% Drop
+                            -{fragrance.price_change_percentage || Math.round((Math.abs(fragrance.previous_price - fragrance.community_price) / fragrance.previous_price) * 100)}% Drop
                           </span>
                         )}
                       </div>
@@ -819,18 +819,15 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                       <h5 className="font-bold text-sm text-white">{seller.seller_name}</h5>
                                       {isCurrentSelected && (
                                         <span className="text-[10px] px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-500 font-mono font-bold flex items-center gap-1">
-                                          <span>🎯</span>
                                           <span>Selected Seller</span>
                                         </span>
                                       )}
                                       {seller.is_partial || (seller.size && /partial/i.test(seller.size)) ? (
                                         <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-300 border border-amber-500 font-mono font-bold flex items-center gap-1">
-                                          <span>🏷️</span>
                                           <span>{seller.size || 'Partial'}</span>
                                         </span>
                                       ) : seller.is_tester || (seller.size && /tester/i.test(seller.size)) ? (
                                         <span className="text-[10px] px-2 py-0.5 rounded-md bg-purple-950/80 text-purple-300 border border-purple-500 font-mono font-bold flex items-center gap-1">
-                                          <span>🧪</span>
                                           <span>{seller.size || 'Tester'}</span>
                                         </span>
                                       ) : (
@@ -840,7 +837,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                       )}
                                       {isLowest && (
                                         <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold flex items-center gap-0.5 shrink-0 whitespace-nowrap">
-                                          ★ Best Deal
+                                          Best Deal
                                         </span>
                                       )}
                                     </div>
@@ -948,7 +945,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
                         <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>🧪 Decants & Samples (4ml • 5ml • 8ml • 10ml • 20ml • 30ml)</span>
+                        <span>Decants & Samples (4ml • 5ml • 8ml • 10ml • 20ml • 30ml)</span>
                       </h4>
                       <p className="text-[11px] text-slate-400">
                         Comparing live decant rates from verified community sellers:
@@ -1053,7 +1050,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                             ? 'bg-cyan-500 text-slate-950 font-black'
                                             : 'border border-slate-700 text-slate-400'
                                         }`}>
-                                          {isSelected ? '✓' : qIdx + 1}
+                                          {isSelected ? <Check className="w-2.5 h-2.5" /> : qIdx + 1}
                                         </span>
                                         <span className="font-semibold truncate">{q.seller_name}</span>
                                         {isWinning && !isSelected && (
@@ -1087,10 +1084,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                                                 format: 'decant'
                                               });
                                             }}
-                                            className="px-1.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[9px] font-bold"
+                                            className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[9px] font-bold"
                                             title={`Direct WhatsApp order to ${q.seller_name}`}
                                           >
-                                            WA ↗
+                                            Inquire
                                           </a>
                                         )}
                                       </div>
@@ -1323,7 +1320,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       <div>
                         <span className="text-sm font-bold text-cyan-400 flex items-center gap-1.5">
                           <Calendar className="w-4 h-4 text-cyan-400" />
-                          <span>☀️ {sp.summer}% / ❄️ {sp.winter}%</span>
+                          <span>Warm {sp.summer}% / Cool {sp.winter}%</span>
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
                           {sp.primary} Fit (Spring {sp.spring}%, Fall {sp.fall}%)
@@ -1428,7 +1425,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         <ul className="space-y-1.5">
                           {pros.map((pro, idx) => (
                             <li key={idx} className="text-xs text-slate-200 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 flex items-start gap-2">
-                              <span className="text-emerald-400 font-bold mt-0.5">✓</span>
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
                               <span className="leading-snug">{pro}</span>
                             </li>
                           ))}
@@ -1444,7 +1441,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         <ul className="space-y-1.5">
                           {cons.map((con, idx) => (
                             <li key={idx} className="text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 flex items-start gap-2">
-                              <span className="text-rose-400 font-bold mt-0.5">⚠</span>
+                              <AlertCircle className="w-3.5 h-3.5 text-rose-400 mt-0.5 shrink-0" />
                               <span className="leading-snug">{con}</span>
                             </li>
                           ))}
@@ -1554,7 +1551,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                       >
                         <div className="flex items-center justify-between text-xs mb-1">
                           <span className="font-bold text-emerald-400">{twin.brand}</span>
-                          <span className="text-amber-400 font-bold">★ {(Number(twin.rating_value) || 4.2).toFixed(2)}</span>
+                          <span className="text-amber-400 font-medium">Rating: {(Number(twin.rating_value) || 4.2).toFixed(1)}</span>
                         </div>
                         <h4 className="font-bold text-slate-100 group-hover:text-emerald-300 transition-colors">
                           {twin.name}
@@ -1609,7 +1606,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                         </h4>
 
                         <p className="text-xs text-slate-400 mb-2">
-                          {match.fragrance.collection} • <span className="text-emerald-400 font-bold font-mono">{match.fragrance.community_price ? `₹${match.fragrance.community_price}` : `₹${match.fragrance.estimated_community_price || '2,450'}`}</span> • ★ {(Number(match.fragrance.rating_value) || 4.2).toFixed(2)}
+                          {match.fragrance.collection} • <span className="text-emerald-400 font-bold font-mono">{match.fragrance.community_price ? `₹${match.fragrance.community_price}` : `₹${match.fragrance.estimated_community_price || '2,450'}`}</span> • Rating: {(Number(match.fragrance.rating_value) || 4.2).toFixed(1)}
                         </p>
 
                         {/* Shared Accords */}

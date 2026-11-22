@@ -88,19 +88,19 @@ export default function CuratedSpotlightHub({
         <section className="space-y-3.5 w-full max-w-full min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div className="flex items-start gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center text-amber-500 dark:text-amber-400 shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#181B26] border border-slate-200 dark:border-[#262B3D] flex items-center justify-center text-amber-500 shrink-0 mt-0.5">
                 <Flame className="w-4 h-4 fill-amber-500/20" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white">
+                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-zinc-100">
                     Most Preferred This Week
                   </h3>
-                  <span className="text-xs font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
-                    🔥 Top 12 Trending
+                  <span className="text-xs font-mono font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                    Top 12 Trending
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
                   Most clicked & inquired community fragrances over the last 7 days
                 </p>
               </div>
@@ -108,7 +108,7 @@ export default function CuratedSpotlightHub({
 
             <button
               onClick={() => onApplyFilter({ dealsOnly: 'preferred' })}
-              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+              className="text-xs font-mono font-medium text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
             >
               <span>View all {totalPreferredCount || mostPreferred.length || 12} trending</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -136,19 +136,19 @@ export default function CuratedSpotlightHub({
         <section className="space-y-3.5 w-full max-w-full min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div className="flex items-start gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#181B26] border border-slate-200 dark:border-[#262B3D] flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
                 <TrendingDown className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white">
+                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-zinc-100">
                     Verified Arbitrage Price Drops
                   </h3>
-                  <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                    Hot Deals
+                  <span className="text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    Price Drops
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
                   Bottles discounted by community sellers compared to previous price sheets
                 </p>
               </div>
@@ -156,7 +156,7 @@ export default function CuratedSpotlightHub({
 
             <button
               onClick={() => onApplyFilter({ dealsOnly: 'drops' })}
-              className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+              className="text-xs font-mono font-medium text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
             >
               <span>View all {totalDropsCount ?? (priceDrops.length || topPriceDrops.length)} drops</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -181,22 +181,22 @@ export default function CuratedSpotlightHub({
 
       {/* SHELF 2: FRESH COMMUNITY ARRIVALS */}
       {newArrivals.length > 0 && (
-        <section className="space-y-3.5 pt-2 border-t border-slate-200 dark:border-slate-800 w-full max-w-full min-w-0">
+        <section className="space-y-3.5 pt-2 border-t border-slate-200 dark:border-[#232738] w-full max-w-full min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div className="flex items-start gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/70 border border-amber-300 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#181B26] border border-slate-200 dark:border-[#262B3D] flex items-center justify-center text-amber-500 shrink-0 mt-0.5">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white">
+                  <h3 className="font-heading font-bold text-base text-slate-900 dark:text-zinc-100">
                     New Stock Arrivals
                   </h3>
-                  <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                  <span className="text-xs font-mono font-semibold text-slate-700 dark:text-zinc-300 bg-slate-100 dark:bg-[#181B26] px-2 py-0.5 rounded-full border border-slate-200 dark:border-[#262B3D]">
                     Recently Added
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
                   Fresh listings scraped from verified seller catalogs
                 </p>
               </div>
@@ -204,7 +204,7 @@ export default function CuratedSpotlightHub({
 
             <button
               onClick={() => onApplyFilter({dealsOnly: 'new' })}
-              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+              className="text-xs font-mono font-medium text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
             >
               <span>View all {totalNewArrivalsCount ?? (customNewArrivals.length || newArrivals.length)} arrivals</span>
               <ArrowRight className="w-3.5 h-3.5" />

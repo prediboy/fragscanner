@@ -291,6 +291,85 @@ export function logSearchQuery(query, resultsCount = 0) {
   }, 1500);
 }
 
+let filterDebounceTimer = null;
+
+/**
+ * Debounced Filter Logger: captures active catalog filters applied by shoppers
+ */
+export function logFilterApplied({
+  formats = [],
+  maxBudget = null,
+  seller = 'all',
+  brand = 'all',
+  sortBy = 'price_asc',
+  dealsOnly = null,
+  selectedDna = null,
+  selectedVibe = null,
+  quickFilterTab = 'all',
+  resultsCount = 0
+}) {
+  if (!supabase) return;
+
+  // Build summary list of active non-default filters
+  const activeFilters = [];
+  if (seller && seller !== 'all') activeFilters.push(`seller:${seller}`);
+  if (brand && brand !== 'all') activeFilters.push(`brand:${brand}`);
+  if (formats && formats.length > 0 && !(formats.length === 1 && formats[0] === 'retail')) {
+    activeFilters.push(`formats:${formats.join(',')}`);
+  }
+  if (maxBudget && maxBudget < 15000) activeFilters.push(`budget:<=₹${maxBudget}`);
+  if (dealsOnly) activeFilters.push(`deals:${dealsOnly}`);
+  if (selectedDna) activeFilters.push(`dna:${selectedDna}`);
+  if (selectedVibe) activeFilters.push(`vibe:${selectedVibe}`);
+  if (quickFilterTab && quickFilterTab !== 'all') activeFilters.push(`tab:${quickFilterTab}`);
+  if (sortBy && sortBy !== 'price_asc') activeFilters.push(`sort:${sortBy}`);
+
+  // Don't log if completely unfiltered / default state
+  if (activeFilters.length === 0) return;
+
+  const summary = activeFilters.join(' | ');
+
+  if (filterDebounceTimer) {
+    clearTimeout(filterDebounceTimer);
+  }
+
+  filterDebounceTimer = setTimeout(async () => {
+    try {
+      const sessionId = getSessionId();
+      const acq = getAcquisitionInfo();
+      const payload = {
+        session_id: sessionId,
+        umbrella_title: 'EVENT:filter_applied',
+        umbrella_season: `${summary}|source:${acq.source}`,
+        liked_perfumes: [{
+          event: 'filter_applied',
+          summary,
+          seller: seller !== 'all' ? seller : null,
+          brand: brand !== 'all' ? brand : null,
+          formats: formats || [],
+          max_budget: maxBudget < 15000 ? maxBudget : null,
+          deals_only: dealsOnly || null,
+          dna: selectedDna || null,
+          vibe: selectedVibe || null,
+          quick_tab: quickFilterTab !== 'all' ? quickFilterTab : null,
+          sort_by: sortBy || 'price_asc',
+          results_count: resultsCount,
+          source: acq.source,
+          referrer: acq.referrer,
+          timestamp: new Date().toISOString()
+        }],
+        disliked_perfumes: [],
+        top_recommendations: []
+      };
+
+      await supabase.from('wardrobe_logs').insert([payload]);
+      console.log('[FragSeeker Telemetry] Filter applied logged:', summary, `(${resultsCount} results)`);
+    } catch (err) {
+      console.warn('[FragSeeker Telemetry] Filter log error:', err);
+    }
+  }, 1800);
+}
+
 /**
  * Card Open / View Logger: records every time a buyer taps/clicks to open a fragrance detail card
  */
