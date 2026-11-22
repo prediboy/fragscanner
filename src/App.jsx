@@ -8,6 +8,7 @@ import FragranceDetailModal from './components/FragranceDetailModal';
 import ModalErrorBoundary from './components/ModalErrorBoundary';
 import SyncStatsModal from './components/SyncStatsModal';
 import AiConciergeModal from './components/AiConciergeModal';
+import DraggableKhushbooFab from './components/DraggableKhushbooFab';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
 import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata, fetchMostPreferredFragrances } from './services/inventoryApi.js';
@@ -702,15 +703,8 @@ export default function App() {
         }}
       />
 
-      {/* FLOATING ASK KHUSHBOO ACTION PILL */}
-      <button
-        onClick={() => setIsAiModalOpen(true)}
-        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40 flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 text-white font-mono text-xs font-bold shadow-xl shadow-cyan-600/30 hover:shadow-cyan-500/50 hover:scale-105 transition-all group"
-        title="Ask Khushboo — AI Fragrance Sommelier"
-      >
-        <Sparkles className="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform" />
-        <span className="tracking-wide">Ask Khushboo</span>
-      </button>
+      {/* DRAGGABLE & REPOSITIONABLE ASK KHUSHBOO ACTION PILL */}
+      <DraggableKhushbooFab onOpen={() => setIsAiModalOpen(true)} />
 
       <Analytics />
     </div>
