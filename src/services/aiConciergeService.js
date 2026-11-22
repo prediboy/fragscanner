@@ -1085,21 +1085,30 @@ async function executeMultiQuery(criteria) {
 
   // 5. DEALS & TOP RATED QUERY
   if (intent === 'deals_and_top_rated') {
-    let query = supabase.from('fragrances')
-      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants');
+    // If user specified an olfactory profile (e.g. blue, fresh, aquatic, vanilla, oud),
+    // do NOT do a blind price filter; let native vector & olfactory matching retrieve matching candidates!
+    const hasOlfactoryTarget = (criteria.target_accords && criteria.target_accords.length > 0) ||
+                               (criteria.target_notes && criteria.target_notes.length > 0) ||
+                               (criteria.target_inspirations && criteria.target_inspirations.length > 0) ||
+                               (criteria.semantic_search_prompt && /(?:blue|aquatic|fresh|marine|citrus|vanilla|gourmand|woody|sweet|spicy|leather|tobacco)/i.test(criteria.semantic_search_prompt));
 
-    if (criteria.max_price && criteria.max_price < 50000) {
-      query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
-    } else {
-      query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+    if (!hasOlfactoryTarget) {
+      let query = supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants');
+
+      if (criteria.max_price && criteria.max_price < 50000) {
+        query = query.eq('in_seller_stock', true).lte('community_price', criteria.max_price);
+      } else {
+        query = query.or('in_seller_stock.eq.true,has_decants.eq.true');
+      }
+
+      const { data } = await query.order('rating_value', { ascending: false }).limit(8);
+      return (data || []).map(f => ({
+        ...f,
+        best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+        match_score: 90
+      }));
     }
-
-    const { data } = await query.order('rating_value', { ascending: false }).limit(8);
-    return (data || []).map(f => ({
-      ...f,
-      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
-      match_score: 90
-    }));
   }
 
   // 6. GENERAL QA (NO CARDS NEEDED)
