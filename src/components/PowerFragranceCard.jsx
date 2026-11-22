@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Star, ChevronDown, ChevronUp, Sparkles, TrendingDown, Flame, MessageCircle, ExternalLink, Check } from 'lucide-react';
 import { logWhatsAppClick, logFragranceCardClick } from '../lib/supabaseTelemetry';
 
@@ -170,20 +170,6 @@ export default function PowerFragranceCard({
     ? selectedFormats
     : ['retail'];
 
-  // Filter quotes strictly matching active formats for both display and Compare Rates
-  const formatQuotes = useMemo(() => {
-    const base = isSpecificSeller ? currentSellerQuotes : allQuotes;
-    const filtered = base.filter(q => activeFormats.includes(q.type));
-    const quotes = (filtered.length > 0 ? filtered : base).slice();
-
-    if (activeFormats.length === 1 && activeFormats[0] === 'decant') {
-      quotes.sort((a, b) => (a.pricePerMl || a.price) - (b.pricePerMl || b.price));
-    } else {
-      quotes.sort((a, b) => a.price - b.price);
-    }
-    return quotes;
-  }, [allQuotes, currentSellerQuotes, activeFormats, isSpecificSeller]);
-
   // Quote overrides selected by user from the Compare Rates accordion
   const [quoteOverrides, setQuoteOverrides] = useState({});
 
@@ -202,6 +188,9 @@ export default function PowerFragranceCard({
     return tabs;
   }, [lowestRetail, lowestTester, lowestPartial, lowestDecant, activeRetail, activeTester, activePartial, activeDecant]);
 
+  const activeFormatsKey = (activeFormats || []).slice().sort().join(',');
+  const prevActiveFormatsKeyRef = useRef(activeFormatsKey);
+
   // Active selected format on the card
   const [cardFormat, setCardFormat] = useState(() => {
     if (activeFormats.length === 1 && availableFormatTabs.some(t => t.id === activeFormats[0])) {
@@ -211,16 +200,37 @@ export default function PowerFragranceCard({
     return availableFormatTabs[0]?.id || 'retail';
   });
 
+  // Only sync cardFormat when the parent's filter format explicitly changes, or if current selection is invalid
   useEffect(() => {
-    if (activeFormats.length === 1 && availableFormatTabs.some(t => t.id === activeFormats[0])) {
-      setCardFormat(activeFormats[0]);
-    } else if (!availableFormatTabs.some(t => t.id === cardFormat) && availableFormatTabs.length > 0) {
+    if (prevActiveFormatsKeyRef.current !== activeFormatsKey) {
+      prevActiveFormatsKeyRef.current = activeFormatsKey;
+      if (activeFormats.length === 1 && availableFormatTabs.some(t => t.id === activeFormats[0])) {
+        setCardFormat(activeFormats[0]);
+        return;
+      }
+    }
+    if (!availableFormatTabs.some(t => t.id === cardFormat) && availableFormatTabs.length > 0) {
       setCardFormat(availableFormatTabs[0].id);
     }
-  }, [activeFormats, availableFormatTabs, cardFormat]);
+  }, [activeFormatsKey, availableFormatTabs, cardFormat, activeFormats]);
+
+  // Filter quotes strictly matching active card format for display and Compare Rates
+  const formatQuotes = useMemo(() => {
+    const base = isSpecificSeller ? currentSellerQuotes : allQuotes;
+    const targetFormat = cardFormat;
+    const matching = base.filter(q => q.type === targetFormat);
+    const quotes = (matching.length > 0 ? matching : base).slice();
+
+    if (targetFormat === 'decant') {
+      quotes.sort((a, b) => (a.pricePerMl || a.price) - (b.pricePerMl || b.price));
+    } else {
+      quotes.sort((a, b) => a.price - b.price);
+    }
+    return quotes;
+  }, [allQuotes, currentSellerQuotes, cardFormat, isSpecificSeller]);
 
   const activeTab = availableFormatTabs.find(t => t.id === cardFormat) || availableFormatTabs[0];
-  const primaryQuote = activeTab?.quote || activeRetail || lowestRetail || formatQuotes[0];
+  const primaryQuote = activeTab?.quote || formatQuotes[0] || lowestRetail;
 
   const bottleDisplaySize = primaryQuote?.label
     ? primaryQuote.label.replace(' Retail Bottle', ' Bottle')
