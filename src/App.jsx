@@ -12,7 +12,7 @@ import DraggableKhushbooFab from './components/DraggableKhushbooFab';
 import CuratedSpotlightHub from './components/CuratedSpotlightHub';
 import PaginationControls from './components/PaginationControls';
 import { fetchInventoryPage, fetchFragranceDetail, fetchCatalogBrands, fetchInventoryCounts, fetchSyncMetadata, fetchMostPreferredFragrances } from './services/inventoryApi.js';
-import { logSearchQuery, logSessionVisit, logFragranceCardClick } from './lib/supabaseTelemetry';
+import { logSearchQuery, logSessionVisit, logFragranceCardClick, logFilterApplied } from './lib/supabaseTelemetry';
 import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2, Search, TrendingDown, Flame } from 'lucide-react';
 
@@ -277,6 +277,24 @@ export default function App() {
       return () => clearTimeout(t);
     }
   }, [searchQuery, totalMatching]);
+
+  // Debounced catalog filter telemetry (captures applied formats, budget, seller, brand, vibe, DNA, sort, tabs)
+  useEffect(() => {
+    if (!isUnfiltered || quickFilterTab !== 'all') {
+      logFilterApplied({
+        formats: filterState.formats,
+        maxBudget: filterState.maxBudget,
+        seller: filterState.selectedSeller,
+        brand: filterState.selectedBrand,
+        sortBy: filterState.sortBy,
+        dealsOnly: filterState.dealsOnly,
+        selectedDna: filterState.selectedDna,
+        selectedVibe: filterState.selectedVibe,
+        quickFilterTab: quickFilterTab,
+        resultsCount: totalMatching
+      });
+    }
+  }, [filterState, quickFilterTab, isUnfiltered, totalMatching]);
 
   const resetAllFilters = () => {
     setSearchQuery('');
