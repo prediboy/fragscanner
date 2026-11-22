@@ -85,7 +85,12 @@ export default async function handler(req) {
 
     // 2. Chat / Reasoning Generation Endpoint (Gemini Flash with multi-model failover)
     const { systemInstruction } = body;
-    const candidateModels = ['gemini-3.5-flash-lite', 'gemini-flash-latest'];
+    const candidateModels = [
+      'gemini-3.5-flash-lite',
+      'gemini-3.5-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-flash-lite-latest'
+    ];
     let lastRes = null;
     let lastErr = null;
 

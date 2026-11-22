@@ -74,7 +74,12 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
     try {
       // Pass full conversation history for ongoing multi-turn context
       const response = await sendChatMessageToKhushboo(
-        updatedMessages.map(m => ({ role: m.role, content: m.content })),
+        updatedMessages.map(m => ({
+          role: m.role,
+          content: m.content,
+          matches: m.matches,
+          tasteSummary: m.tasteSummary
+        })),
         sessionId
       );
 
@@ -94,10 +99,18 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
       const errorMsg = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: "Looks like we have used our daily limit, this is not available right now. Please check back in a little while!",
-        timestamp: Date.now()
+        content: "Looks like we have used our daily limit for AI concierge, this is not available right now. Please check back in a little while!",
+        timestamp: Date.now(),
+        intent: 'service_down',
+        matches: []
       };
       setMessages(prev => [...prev, errorMsg]);
+      // Persist error response to Supabase to prevent orphaned user turns
+      try {
+        persistChatMessage(sessionId, errorMsg);
+      } catch (persistErr) {
+        console.warn('[Khushboo] Error response persistence fallback:', persistErr);
+      }
     } finally {
       clearTimeout(timer1);
       clearTimeout(timer2);

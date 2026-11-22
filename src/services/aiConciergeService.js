@@ -362,7 +362,12 @@ async function callGemini(systemInstruction) {
 
   // 2. Direct client-side call with multi-key and multi-model failover
   const candidateKeys = getAvailableGeminiKeys();
-  const candidateModels = ['gemini-3.5-flash-lite', 'gemini-flash-latest'];
+  const candidateModels = [
+    'gemini-3.5-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-3.1-flash-lite',
+    'gemini-flash-lite-latest'
+  ];
 
   for (const model of candidateModels) {
     for (const key of candidateKeys) {
@@ -542,7 +547,8 @@ CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
    - "seller_stock": The user asks what a specific verified community seller has in stock (e.g. "what does Second Theory have?", "show Talib's stock", "darsh fragrances").
    - "deals_and_top_rated": The user asks for best rated, biggest compliments, or price drops under a budget (e.g. "best winter perfumes under 2000", "top rated beast mode scents").
    - "olfactory_match": The user describes scent preferences, notes they love or hate (opening blast vs heart vs drydown), or asks for alternatives/inspirations (e.g. "i like raw, want citrus opening with woody drydown, no bdc clones").
-   - "general_qa": The user asks a pure knowledge question (e.g. "what is ambroxan?", "what does maceration mean?", "how long does Kaaf last?", "what is the difference between EDT and EDP?") where NO product cards are needed.
+   - "comparison_or_review": The user asks to compare, review, or evaluate specific perfumes or notes (e.g. "Compare Turathi Blue to Bleu de Chanel", "Liquid Brun vs Althair", "What are the notes in Liquid Brun?", "Turathi blue review"). Extract the perfume names into mentioned_fragrances.
+   - "general_qa": The user asks a pure knowledge question (e.g. "what is ambroxan?", "what does maceration mean?", "what is the difference between EDT and EDP?") where NO product cards are needed.
 
 6. SEMANTIC SEARCH PROMPT:
    - Generate a rich, descriptive query for pgvector dense vector embedding search that captures the CUMULATIVE profile (e.g. "summer fresh spicy mint lavender crisp aromatic non-sweet zero-citrus cooling masculine daytime woody").
@@ -552,11 +558,12 @@ CRITICAL AGENTIC EXTRACTION & OLFACORY PROFILING RULES:
 
 Return strictly raw JSON with this schema:
 {
-  "intent": "brand_catalog" | "direct_search" | "decant_finder" | "seller_stock" | "deals_and_top_rated" | "olfactory_match" | "general_qa",
+  "intent": "brand_catalog" | "direct_search" | "decant_finder" | "seller_stock" | "deals_and_top_rated" | "olfactory_match" | "comparison_or_review" | "general_qa",
   "is_refinement": true | false,
   "brand_filter": "Brand name or null",
   "search_term": "Search title or null",
   "seller_filter": "Seller name or null",
+  "mentioned_fragrances": ["Perfume name 1", "Perfume name 2"],
   "contrast_liked": "Perfume title or null",
   "contrast_disliked": "Perfume title or null",
   "disliked_perfumes": ["Perfume name or variant 1", "variant 2"],
@@ -675,6 +682,7 @@ Rules:
         brand_filter: parsed.brand_filter || null,
         search_term: parsed.search_term || null,
         seller_filter: parsed.seller_filter || null,
+        mentioned_fragrances: unwrap(parsed.mentioned_fragrances) || [],
         contrast_liked: parsed.contrast_liked || null,
         contrast_disliked: parsed.contrast_disliked || null,
         disliked_perfumes: safeDislikedPerfumes,
@@ -1058,7 +1066,7 @@ async function executeMultiQuery(criteria) {
     const { data } = await supabase.from('fragrances')
       .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants')
       .or('in_seller_stock.eq.true,has_decants.eq.true')
-      .limit(50);
+      .limit(400);
 
     const matches = (data || []).filter(f => {
       const best = (f.best_bottle_seller || '').toLowerCase();
@@ -1460,7 +1468,7 @@ Return strictly raw JSON:
       const whys = parsed.whys || {};
       return matches.map(m => ({
         ...m,
-        why: whys[m.id] || generateFallbackWhy(m, criteria, deltaInfo)
+        why: whys[m.id] || m.why || generateFallbackWhy(m, criteria, deltaInfo)
       }));
     }
   } catch (err) {
@@ -1469,7 +1477,7 @@ Return strictly raw JSON:
 
   return matches.map(m => ({
     ...m,
-    why: generateFallbackWhy(m, criteria, deltaInfo)
+    why: m.why || generateFallbackWhy(m, criteria, deltaInfo)
   }));
 }
 
@@ -1617,6 +1625,229 @@ Return strictly raw JSON with this schema:
 }
 
 /**
+ * Deterministically extract perfume names mentioned in comparisons, evaluations, or review questions.
+ */
+export function extractComparisonOrReviewPerfumes(text, agenticMentions = []) {
+  const found = new Set((agenticMentions || []).map(s => String(s || '').trim()).filter(Boolean));
+  const t = (text || '').trim();
+  if (!t) return Array.from(found);
+
+  // 1. Compare A to / and / vs B
+  const compareMatch = t.match(/compare\s+(.+?)\s+(?:to|and|vs|versus)\s+(.+?)(?:\s+performance|\s+longevity|\s+notes|\.|\?|$)/i);
+  if (compareMatch) {
+    found.add(compareMatch[1].trim());
+    found.add(compareMatch[2].trim());
+  }
+
+  // 2. A vs B
+  const vsMatch = t.match(/([a-z0-9\s]+?)\s+(?:vs|versus)\s+([a-z0-9\s]+)/i);
+  if (vsMatch) {
+    found.add(vsMatch[1].trim());
+    found.add(vsMatch[2].trim());
+  }
+
+  // 3. Notes in X / about X / review of X / how is X
+  const reviewMatch = t.match(/(?:notes\s+in|review\s+of|tell\s+me\s+about|thoughts\s+on|how\s+is)\s+([a-z0-9\s]+?)(?:\.|\?|$)/i);
+  if (reviewMatch) {
+    found.add(reviewMatch[1].trim());
+  }
+
+  // 4. X and Y review
+  const pairMatch = t.match(/([a-z0-9\s]+?)\s+and\s+([a-z0-9\s]+?)\s+review/i);
+  if (pairMatch) {
+    found.add(pairMatch[1].trim());
+    found.add(pairMatch[2].trim());
+  }
+
+  const stopWords = new Set(['perfume', 'perfumes', 'fragrance', 'fragrances', 'review', 'performance', 'notes', 'longevity', 'clones', 'clone', 'the', 'a', 'an']);
+  return Array.from(found).map(s => {
+    return s.split(/\s+/).filter(w => !stopWords.has(w.toLowerCase())).join(' ').trim();
+  }).filter(s => s.length >= 3);
+}
+
+/**
+ * Fetch dedicated cards for perfumes mentioned in a comparison, review, or direct question.
+ */
+export async function fetchCardsForComparison(names) {
+  if (!Array.isArray(names) || names.length === 0) return [];
+  const cards = [];
+  const seenIds = new Set();
+
+  for (const raw of names) {
+    const clean = raw.toLowerCase().trim();
+    if (!clean || clean.length < 2) continue;
+
+    // 1. Direct name match
+    const { data: nameData } = await supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+      .or('in_seller_stock.eq.true,has_decants.eq.true')
+      .ilike('name', `%${clean}%`)
+      .limit(2);
+
+    let found = nameData || [];
+
+    // 2. DNA inspiration match (e.g. Bleu de Chanel, Althair)
+    if (found.length === 0) {
+      const { data: dnaData } = await supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+        .or('in_seller_stock.eq.true,has_decants.eq.true')
+        .ilike('dna_inspiration', `%${clean}%`)
+        .limit(2);
+      found = dnaData || [];
+    }
+
+    for (const f of found) {
+      if (!seenIds.has(f.id)) {
+        seenIds.add(f.id);
+        cards.push({
+          ...f,
+          palette_role: 'Comparison Feature',
+          why: `Directly featured in your inquiry (${raw}). In stock via ${f.best_bottle_seller || f.community_sellers?.[0]?.seller_name || 'verified community sellers'}.`,
+          match_score: Math.max(90, 96 - (cards.length * 2))
+        });
+      }
+    }
+  }
+
+  return cards;
+}
+
+/**
+ * Intelligent Multi-Stage Relaxation Fallback for Zero-Match Queries.
+ * Prevents empty card states when filters are over-constrained, sellers are missing, or user asks follow-up explanations.
+ */
+export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, allLiked, allDislikes) {
+  const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
+  const lowerMsg = lastUserMsg.toLowerCase();
+
+  // 1. Follow-up why / recap intent: retain previous cards so they don't vanish from the screen
+  const isFollowUpWhy = /(?:why\s+are\s+you\s+suggesting|why\s+is\s+it\s+there|why\s+did\s+you\s+suggest|tell\s+me\s+again|can\s+you\s+tell\s+me|recap|show\s+me\s+again|what\s+was\s+my\s+last)/i.test(lowerMsg);
+  if (isFollowUpWhy) {
+    const lastAssistantWithCards = [...chatHistory].reverse().find(m => m.role === 'assistant' && Array.isArray(m.matches) && m.matches.length > 0);
+    if (lastAssistantWithCards && lastAssistantWithCards.matches.length > 0) {
+      return lastAssistantWithCards.matches.map(m => ({
+        ...m,
+        palette_role: 'Retained Context',
+        why: m.why || `Previously recommended based on your stated scent preferences.`
+      }));
+    }
+  }
+
+  // 2. Direct comparison / specific perfume mentions
+  const comparisonMentions = extractComparisonOrReviewPerfumes(lastUserMsg, criteria.mentioned_fragrances || []);
+  if (comparisonMentions.length > 0) {
+    const compCards = await fetchCardsForComparison(comparisonMentions);
+    if (compCards.length > 0) return compCards;
+  }
+
+  // 3. Seller stock query where seller is unknown (e.g. "Iram Perfumes")
+  if (criteria.intent === 'seller_stock' && criteria.seller_filter) {
+    const { data: topBestsellers } = await supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+      .or('in_seller_stock.eq.true,has_decants.eq.true')
+      .order('rating_value', { ascending: false })
+      .limit(8);
+
+    const verifiedSellerNames = 'FragFever, Aromatic Rabbit, Second Theory, AAR Fragrances, Enigma Perfumes, Apex Aroma, Whiff Culture, GRYV Scents, Sovereign Scents, Blue Wings Fragrances';
+    criteria.conversational_reply = `Note: "${criteria.seller_filter}" is not currently in our network of verified community sellers (${verifiedSellerNames}). To make sure you find something extraordinary, here are the top-rated community bestsellers in stock right now across our verified sellers:`;
+
+    return (topBestsellers || []).map((f, idx) => ({
+      ...f,
+      palette_role: 'Community Bestseller',
+      best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+      why: `Community favorite with ★ ${f.rating_value || '4.5+'} rating, available via ${f.best_bottle_seller || 'verified sellers'}.`,
+      match_score: Math.max(80, 95 - (idx * 2))
+    }));
+  }
+
+  // 4. Over-Constrained Multi-Facet Relaxation (e.g. BDC clones + Watermelon, or tight accord negations)
+  const relaxedPool = [];
+  const seenIds = new Set();
+
+  // Facet A: Target Inspirations (e.g. BDC, Aventus)
+  if (criteria.target_inspirations && criteria.target_inspirations.length > 0) {
+    for (const rawInsp of criteria.target_inspirations) {
+      const cleanInsp = rawInsp.replace(/%/g, '').trim();
+      if (!cleanInsp) continue;
+      const { data: inspData } = await supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+        .or('in_seller_stock.eq.true,has_decants.eq.true')
+        .ilike('dna_inspiration', `%${cleanInsp}%`)
+        .order('rating_value', { ascending: false })
+        .limit(4);
+      for (const d of (inspData || [])) {
+        if (!seenIds.has(d.id)) {
+          seenIds.add(d.id);
+          relaxedPool.push({
+            ...d,
+            palette_role: `${cleanInsp} Style`,
+            why: `Selected for your appreciation of ${cleanInsp} DNA. In stock via ${d.best_bottle_seller || 'verified sellers'}.`,
+            match_score: 94
+          });
+        }
+      }
+    }
+  }
+
+  // Facet B: Target notes (e.g. Watermelon, Lavender, Mint)
+  const targetNotes = [...(criteria.target_notes || []), ...(criteria.target_top_notes || [])].map(n => n.replace(/%/g, '').trim()).filter(Boolean);
+  if (targetNotes.length > 0) {
+    const { data: catalogSlice } = await supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, top_notes, middle_notes, base_notes, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+      .or('in_seller_stock.eq.true,has_decants.eq.true')
+      .limit(300);
+
+    for (const tn of targetNotes) {
+      const tnLower = tn.toLowerCase();
+      const noteMatches = (catalogSlice || []).filter(p => {
+        const notes = [...(p.top_notes || []), ...(p.middle_notes || []), ...(p.base_notes || [])].join(' ').toLowerCase();
+        return notes.includes(tnLower);
+      }).slice(0, 3);
+
+      for (const m of noteMatches) {
+        if (!seenIds.has(m.id)) {
+          seenIds.add(m.id);
+          relaxedPool.push({
+            ...m,
+            palette_role: `${tn} Highlight`,
+            why: `Features the prominent ${tn} notes you love. In stock via ${m.best_bottle_seller || 'verified sellers'}.`,
+            match_score: 91
+          });
+        }
+      }
+    }
+  }
+
+  if (relaxedPool.length > 0) {
+    if (!criteria.conversational_reply.includes('fuses every') && !criteria.conversational_reply.includes('fuses both')) {
+      criteria.conversational_reply += ` While we don't have a single bottle that fuses every specific note together simultaneously, I've curated standout bottles that capture each facet of your preferences!`;
+    }
+    return relaxedPool.slice(0, 8);
+  }
+
+  // 5. Budget or General Community Top-Rated Fallback
+  let fallbackQuery = supabase.from('fragrances')
+    .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+    .or('in_seller_stock.eq.true,has_decants.eq.true');
+
+  if (criteria.max_price && criteria.max_price < 2500) {
+    fallbackQuery = fallbackQuery.lte('community_price', Math.max(criteria.max_price, 2500));
+  }
+
+  const { data: topGeneral } = await fallbackQuery
+    .order('rating_value', { ascending: false })
+    .limit(6);
+
+  return (topGeneral || []).map((f, idx) => ({
+    ...f,
+    palette_role: 'Curated Alternative',
+    best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
+    why: `Top-rated community favorite (★ ${f.rating_value || '4.5+'}) aligned with your seasonal fresh preferences.`,
+    match_score: Math.max(75, 92 - (idx * 2))
+  }));
+}
+
+/**
  * --- MAIN ENTRYPOINT: SEND CHAT MESSAGE TO KHUSHBOO ---
  */
 export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
@@ -1686,11 +1917,20 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     deltaInfo = await computeOlfactoryDelta(criteria.contrast_liked, criteria.contrast_disliked);
   }
 
-  // 2. Select Candidates: Fragrantica HOG-AVF Engine (Hierarchical Olfactory Graph & Accord Vector Filtering)
+  // 1.5 Direct Comparison / Review Mentions
+  const comparisonMentions = extractComparisonOrReviewPerfumes(lastUserMsg, criteria.mentioned_fragrances || []);
   let rawMatches = null;
+  if (criteria.intent === 'comparison_or_review' || (comparisonMentions.length > 0 && !criteria.is_discovery_mode)) {
+    const compCards = await fetchCardsForComparison(comparisonMentions);
+    if (compCards.length > 0) {
+      rawMatches = compCards;
+    }
+  }
+
+  // 2. Select Candidates: Fragrantica HOG-AVF Engine (Hierarchical Olfactory Graph & Accord Vector Filtering)
   const isOlfactoryDiscovery = criteria.intent === 'olfactory_match' || criteria.is_discovery_mode || Boolean(deltaInfo) || allLiked.size > 0 || allDislikes.size > 0 || (criteria.target_notes && criteria.target_notes.length > 0);
 
-  if (isOlfactoryDiscovery) {
+  if (!rawMatches && isOlfactoryDiscovery) {
     try {
       const [poolRes, resolvedLoved, resolvedDisliked] = await Promise.all([
         supabase.from('fragrances')
@@ -1737,7 +1977,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     }
   }
 
-  const safeMatches = (rawMatches || []).filter(m => {
+  let safeMatches = (rawMatches || []).filter(m => {
     const fullText = `${m.brand} ${m.name} ${m.dna_inspiration || ''}`.toLowerCase();
 
     // 1. Strict Disqualification: Disliked / Tried & Failed / Hated perfumes (with Levenshtein fuzzy matching)
@@ -1751,7 +1991,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     }
 
     // 3. Already Loved/Owned Exclusion (Never recommend bottles user already has/loves)
-    if (criteria.intent !== 'direct_search') {
+    if (criteria.intent !== 'direct_search' && criteria.intent !== 'comparison_or_review') {
       for (const likedName of allLiked) {
         if (isMatchFuzzy(fullText, likedName)) return false;
       }
@@ -1808,6 +2048,11 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
 
     return true;
   });
+
+  // 2.5 Relaxed Fallback Cascade: If strict filtering yielded zero candidates, activate relaxed fallback
+  if (safeMatches.length === 0) {
+    safeMatches = await resolveRelaxedFallback(chatHistory, criteria, deltaInfo, allLiked, allDislikes);
+  }
 
   // 3. Enrich safeMatches with rich review summaries and accords if missing
   const needsEnrichment = safeMatches.filter(m => !m.review_summary || !m.accords);
