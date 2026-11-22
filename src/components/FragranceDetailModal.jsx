@@ -1597,7 +1597,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                             {match.fragrance.brand}
                           </span>
                           <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                            {match.matchPercentage}% Match
+                            {Number.isFinite(Number(match.matchPercentage)) ? Math.round(Number(match.matchPercentage)) : 80}% Match
                           </span>
                         </div>
 
@@ -1611,14 +1611,18 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
 
                         {/* Shared Accords */}
                         <div className="space-y-1.5 text-xs">
-                          <div className="text-[11px] text-slate-400 font-medium">Shared Accords:</div>
-                          <div className="flex flex-wrap gap-1">
-                            {match.sharedAccords.slice(0, 4).map((acc, aIdx) => (
-                              <span key={aIdx} className="text-[10px] bg-slate-900 text-amber-300/90 px-2 py-0.5 rounded-md border border-slate-800">
-                                {acc}
-                              </span>
-                            ))}
-                          </div>
+                          {(match.sharedAccords?.length || 0) > 0 && (
+                            <>
+                              <div className="text-[11px] text-slate-400 font-medium">Shared Accords:</div>
+                              <div className="flex flex-wrap gap-1">
+                                {match.sharedAccords.slice(0, 4).map((acc, aIdx) => (
+                                  <span key={aIdx} className="text-[10px] bg-slate-900 text-amber-300/90 px-2 py-0.5 rounded-md border border-slate-800">
+                                    {acc}
+                                  </span>
+                                ))}
+                              </div>
+                            </>
+                          )}
 
                           {/* Shared Notes */}
                           {match.sharedNotes.length > 0 && (
