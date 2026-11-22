@@ -24,5 +24,6 @@ data/fragrances.json
 data/cache_*.json
 data/sync_meta.json
 data/refresh_logs/
+data/flankers/
 *.csv
 *.xlsx

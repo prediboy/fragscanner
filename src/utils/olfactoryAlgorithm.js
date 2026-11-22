@@ -398,10 +398,11 @@ export const calculateSemanticReviewMatch = calculateSemanticReviewMatchSync;
  * Evaluates candidate using pre-computed semantic vector match or sync fallback
  */
 export function evaluateOlfactoryMatch(candidate, targetOrQuery, semanticResult = null, weights = {}) {
-  const wSemantic = weights.semantic ?? 0.35;
+  // Season has highest priority, followed by Notes and Accords. Marketing description has the lowest weight.
+  const wSeason = weights.season ?? 0.40;
   const wNotes = weights.notes ?? 0.30;
-  const wSeason = weights.season ?? 0.20;
-  const wAccord = weights.accord ?? 0.15;
+  const wAccord = weights.accord ?? 0.20;
+  const wSemantic = weights.semantic ?? 0.10;
 
   // 1. Seasonal Profile & Match
   const candidateSeason = calculateSeasonalProfile(candidate);
