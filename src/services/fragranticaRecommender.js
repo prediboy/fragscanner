@@ -178,7 +178,7 @@ export class FragranticaRecommender {
     hatedNotes = [],
     forbiddenAccords = [],
     targetSeason = null,
-    allowDirectClones = false,
+    allowDirectClones = true,
     maxBudget = null,
     limit = 10
   }) {
@@ -353,9 +353,9 @@ export class FragranticaRecommender {
         if (cGender === 'female' || cGender === 'women') continue;
       }
 
-      // Gate G: Budget Filter
-      if (maxBudget && candidate.community_price) {
-        if (Number(candidate.community_price) > maxBudget) continue;
+      // Gate G: Budget Filter (require verified in-stock bottle <= maxBudget; never return bottles with null price as budget options)
+      if (maxBudget) {
+        if (!candidate.community_price || Number(candidate.community_price) > maxBudget) continue;
       }
 
       // --- SCORING ---

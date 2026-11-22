@@ -1504,9 +1504,19 @@ function generateFallbackWhy(m, criteria, deltaInfo) {
 async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaInfo, allDislikes = new Set(), perfumesDossier = '') {
   if (!Array.isArray(candidates) || candidates.length === 0) return [];
 
+  // Strictly filter candidates upfront by budget if budget/cheaper was requested (never show decants or over-budget bottles)
+  let eligibleCandidates = candidates;
+  if (criteria.max_price && criteria.max_price < 50000) {
+    eligibleCandidates = candidates.filter(c => c.community_price && Number(c.community_price) <= criteria.max_price);
+    // If strict budget filtering left too few items, only fallback to items with verified community_price
+    if (eligibleCandidates.length === 0) {
+      eligibleCandidates = candidates.filter(c => Boolean(c.community_price));
+    }
+  }
+
   // Sort by algorithmic score to present the most promising 20 candidates to Gemini
-  candidates.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
-  const candidatePool = candidates.slice(0, 20);
+  eligibleCandidates.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+  const candidatePool = eligibleCandidates.slice(0, 20);
 
   if (candidatePool.length <= 10) {
     return await synthesizeWhys(chatHistory, candidatePool, criteria, deltaInfo, perfumesDossier);
@@ -1582,6 +1592,12 @@ Return strictly raw JSON with this schema:
             for (const cand of candidatePool) {
               if (curated.length >= 10) break;
               if (!addedIds.has(cand.id)) {
+                // Ensure backfilled item doesn't violate budget
+                if (criteria.max_price && criteria.max_price < 50000) {
+                  const bPrice = Number(cand.community_price);
+                  if (!bPrice || bPrice > criteria.max_price) continue;
+                }
+
                 // Ensure backfilled item doesn't violate excluded accords or notes
                 const accords = cand.accords || [];
                 const violatesAccord = (criteria.exclude_accords || []).some(fa => {
@@ -1670,23 +1686,39 @@ export function extractComparisonOrReviewPerfumes(text, agenticMentions = []) {
 /**
  * Fetch dedicated cards for perfumes mentioned in a comparison, review, or direct question.
  */
-export async function fetchCardsForComparison(names) {
+export async function fetchCardsForComparison(names, isCloneRequested = false) {
   if (!Array.isArray(names) || names.length === 0) return [];
   const cards = [];
   const seenIds = new Set();
 
   for (const raw of names) {
-    const clean = raw.toLowerCase().trim();
+    const clean = raw.toLowerCase().replace(/\b(?:clones?|alternatives?|dupes?|dna)\b/gi, '').trim();
     if (!clean || clean.length < 2) continue;
 
-    // 1. Direct name match
-    const { data: nameData } = await supabase.from('fragrances')
-      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
-      .or('in_seller_stock.eq.true,has_decants.eq.true')
-      .ilike('name', `%${clean}%`)
-      .limit(2);
+    let found = [];
 
-    let found = nameData || [];
+    // If user explicitly asked for clones/alternatives, prioritize clone houses under dna_inspiration first!
+    if (isCloneRequested) {
+      const { data: cloneData } = await supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+        .ilike('dna_inspiration', `%${clean}%`)
+        .not('dna_inspiration', 'ilike', '%original creation%')
+        .not('community_price', 'is', null)
+        .order('rating_value', { ascending: false })
+        .limit(3);
+
+      found = (cloneData || []).filter(f => !clean.includes(f.brand.toLowerCase()));
+    }
+
+    // 1. Direct name match (if not a clone request or if clone query returned nothing)
+    if (found.length === 0) {
+      const { data: nameData } = await supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+        .or('in_seller_stock.eq.true,has_decants.eq.true')
+        .ilike('name', `%${clean}%`)
+        .limit(2);
+      found = nameData || [];
+    }
 
     // 2. DNA inspiration match (e.g. Bleu de Chanel, Althair)
     if (found.length === 0) {
@@ -1703,7 +1735,7 @@ export async function fetchCardsForComparison(names) {
         seenIds.add(f.id);
         cards.push({
           ...f,
-          palette_role: 'Comparison Feature',
+          palette_role: isCloneRequested ? `${clean} Clone` : 'Comparison Feature',
           why: `Directly featured in your inquiry (${raw}). In stock via ${f.best_bottle_seller || f.community_sellers?.[0]?.seller_name || 'verified community sellers'}.`,
           match_score: Math.max(90, 96 - (cards.length * 2))
         });
@@ -1721,6 +1753,9 @@ export async function fetchCardsForComparison(names) {
 export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, allLiked, allDislikes) {
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === 'user')?.content || '';
   const lowerMsg = lastUserMsg.toLowerCase();
+  const isCheaper = /(?:cheaper|less expensive|lower price|budget|affordable|under \d+|cheap)/i.test(lowerMsg);
+  const isDecants = /(?:decant|decants|sample|samples|sampler|vials?|discovery set)/i.test(lowerMsg);
+  const isClone = /(?:clone|clones|alternative|alternatives|dupe|dupes|inspired)/i.test(lowerMsg);
 
   // 1. Follow-up why / recap intent: retain previous cards so they don't vanish from the screen
   const isFollowUpWhy = /(?:why\s+are\s+you\s+suggesting|why\s+is\s+it\s+there|why\s+did\s+you\s+suggest|tell\s+me\s+again|can\s+you\s+tell\s+me|recap|show\s+me\s+again|what\s+was\s+my\s+last)/i.test(lowerMsg);
@@ -1738,7 +1773,7 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
   // 2. Direct comparison / specific perfume mentions
   const comparisonMentions = extractComparisonOrReviewPerfumes(lastUserMsg, criteria.mentioned_fragrances || []);
   if (comparisonMentions.length > 0) {
-    const compCards = await fetchCardsForComparison(comparisonMentions);
+    const compCards = await fetchCardsForComparison(comparisonMentions, isClone);
     if (compCards.length > 0) return compCards;
   }
 
@@ -1771,19 +1806,28 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
     for (const rawInsp of criteria.target_inspirations) {
       const cleanInsp = rawInsp.replace(/%/g, '').trim();
       if (!cleanInsp) continue;
-      const { data: inspData } = await supabase.from('fragrances')
+
+      let inspQuery = supabase.from('fragrances')
         .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
-        .or('in_seller_stock.eq.true,has_decants.eq.true')
-        .ilike('dna_inspiration', `%${cleanInsp}%`)
-        .order('rating_value', { ascending: false })
+        .ilike('dna_inspiration', `%${cleanInsp}%`);
+
+      if (isCheaper && !isDecants) {
+        inspQuery = inspQuery.not('community_price', 'is', null).lte('community_price', criteria.max_price || 3000);
+      } else {
+        inspQuery = inspQuery.or('in_seller_stock.eq.true,has_decants.eq.true');
+      }
+
+      const { data: inspData } = await inspQuery
+        .order(isCheaper ? 'community_price' : 'rating_value', { ascending: isCheaper })
         .limit(4);
+
       for (const d of (inspData || [])) {
         if (!seenIds.has(d.id)) {
           seenIds.add(d.id);
           relaxedPool.push({
             ...d,
             palette_role: `${cleanInsp} Style`,
-            why: `Selected for your appreciation of ${cleanInsp} DNA. In stock via ${d.best_bottle_seller || 'verified sellers'}.`,
+            why: `Selected for your appreciation of ${cleanInsp} DNA. In stock via ${d.best_bottle_seller || d.community_sellers?.[0]?.seller_name || 'verified sellers'}.`,
             match_score: 94
           });
         }
@@ -1794,10 +1838,16 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
   // Facet B: Target notes (e.g. Watermelon, Lavender, Mint)
   const targetNotes = [...(criteria.target_notes || []), ...(criteria.target_top_notes || [])].map(n => n.replace(/%/g, '').trim()).filter(Boolean);
   if (targetNotes.length > 0) {
-    const { data: catalogSlice } = await supabase.from('fragrances')
-      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, top_notes, middle_notes, base_notes, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
-      .or('in_seller_stock.eq.true,has_decants.eq.true')
-      .limit(300);
+    let sliceQuery = supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, top_notes, middle_notes, base_notes, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season');
+
+    if (isCheaper && !isDecants) {
+      sliceQuery = sliceQuery.not('community_price', 'is', null).lte('community_price', criteria.max_price || 3000);
+    } else {
+      sliceQuery = sliceQuery.or('in_seller_stock.eq.true,has_decants.eq.true');
+    }
+
+    const { data: catalogSlice } = await sliceQuery.limit(300);
 
     for (const tn of targetNotes) {
       const tnLower = tn.toLowerCase();
@@ -1812,7 +1862,7 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
           relaxedPool.push({
             ...m,
             palette_role: `${tn} Highlight`,
-            why: `Features the prominent ${tn} notes you love. In stock via ${m.best_bottle_seller || 'verified sellers'}.`,
+            why: `Features the prominent ${tn} notes you love. In stock via ${m.best_bottle_seller || m.community_sellers?.[0]?.seller_name || 'verified sellers'}.`,
             match_score: 91
           });
         }
@@ -1829,22 +1879,26 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
 
   // 5. Budget or General Community Top-Rated Fallback
   let fallbackQuery = supabase.from('fragrances')
-    .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
-    .or('in_seller_stock.eq.true,has_decants.eq.true');
+    .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season');
 
-  if (criteria.max_price && criteria.max_price < 2500) {
-    fallbackQuery = fallbackQuery.lte('community_price', Math.max(criteria.max_price, 2500));
+  if (isCheaper && !isDecants) {
+    fallbackQuery = fallbackQuery.not('community_price', 'is', null).lte('community_price', criteria.max_price || 2500);
+  } else {
+    fallbackQuery = fallbackQuery.or('in_seller_stock.eq.true,has_decants.eq.true');
+    if (criteria.max_price && criteria.max_price < 2500) {
+      fallbackQuery = fallbackQuery.lte('community_price', Math.max(criteria.max_price, 2500));
+    }
   }
 
   const { data: topGeneral } = await fallbackQuery
-    .order('rating_value', { ascending: false })
+    .order(isCheaper ? 'community_price' : 'rating_value', { ascending: isCheaper })
     .limit(6);
 
   return (topGeneral || []).map((f, idx) => ({
     ...f,
     palette_role: 'Curated Alternative',
     best_seller: f.community_sellers?.[0]?.seller_name || f.best_bottle_seller || 'Verified Seller',
-    why: `Top-rated community favorite (★ ${f.rating_value || '4.5+'}) aligned with your seasonal fresh preferences.`,
+    why: `Top-rated community favorite (★ ${f.rating_value || '4.5+'}) in a full retail bottle at ₹${f.community_price || 'affordable'}.`,
     match_score: Math.max(75, 92 - (idx * 2))
   }));
 }
@@ -1919,13 +1973,121 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     deltaInfo = await computeOlfactoryDelta(criteria.contrast_liked, criteria.contrast_disliked);
   }
 
-  // 1.5 Direct Comparison / Review Mentions
-  const comparisonMentions = extractComparisonOrReviewPerfumes(lastUserMsg, criteria.mentioned_fragrances || []);
+  const isCheaperRequested = /(?:cheaper|less expensive|lower price|budget|affordable|under \d+|cheap)/i.test(lastUserMsg);
+  const isDecantsRequested = /(?:decant|decants|sample|samples|sampler|vials?|discovery set)/i.test(lastUserMsg);
+  const isCloneRequested = /(?:clone|clones|alternative|alternatives|dupe|dupes|inspired)/i.test(lastUserMsg);
+
   let rawMatches = null;
-  if (criteria.intent === 'comparison_or_review' || (comparisonMentions.length > 0 && !criteria.is_discovery_mode)) {
-    const compCards = await fetchCardsForComparison(comparisonMentions);
-    if (compCards.length > 0) {
-      rawMatches = compCards;
+
+  // 1.2 Contextual Anchor Memory: Resolve "this" / "cheaper than this" against previous turn
+  const lastAssistantWithCards = [...chatHistory].reverse().find(m => m.role === 'assistant' && Array.isArray(m.matches) && m.matches.length > 0);
+  if (isCheaperRequested && lastAssistantWithCards && lastAssistantWithCards.matches.length > 0) {
+    const anchor = lastAssistantWithCards.matches[0];
+    const rawAnchorDna = anchor.dna_inspiration || anchor.name || '';
+    const cleanDna = rawAnchorDna
+      .split(/[/,-]/)[0]
+      .replace(/\b(?:eau\s+de\s+parfum|eau\s+de\s+toilette|edp|edt|parfum|extrait|elixir|cologne|clones?|inspirations?|inspired by|original creation)\b/gi, '')
+      .trim();
+
+    const anchorPrice = Number(anchor.community_price) || 8000;
+    const targetBudget = Math.min(criteria.max_price || 2500, anchorPrice > 2500 ? Math.round(anchorPrice * 0.75) : 2500);
+    criteria.max_price = targetBudget;
+
+    // Explicitly connect conversation in sommelier speech
+    const anchorBrandFormatted = anchor.brand ? `${anchor.brand} ` : '';
+    criteria.conversational_reply = `The ${anchorBrandFormatted}${anchor.name} from earlier is a luxury benchmark (${anchor.community_price ? '₹' + Number(anchor.community_price).toLocaleString('en-IN') : 'designer pricing'}). If you're looking for that exact same sophisticated blue fresh profile on a friendlier budget, here are verified full bottles under ₹${targetBudget.toLocaleString('en-IN')} (no sample decants):`;
+
+    let cheaperQuery = supabase.from('fragrances')
+      .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+      .not('community_price', 'is', null)
+      .lte('community_price', targetBudget)
+      .order('community_price', { ascending: true });
+
+    if (cleanDna && cleanDna.length >= 3) {
+      cheaperQuery = cheaperQuery.ilike('dna_inspiration', `%${cleanDna}%`);
+    } else {
+      cheaperQuery = cheaperQuery.or(`name.ilike.%${anchor.name}%,brand.ilike.%${anchor.brand}%`);
+    }
+
+    if (anchor.id) {
+      cheaperQuery = cheaperQuery.neq('id', anchor.id);
+    }
+    if (anchor.brand && anchor.brand.length >= 3 && !['Armaf', 'Afnan', 'Lattafa', 'Al Haramain', 'Riiffs', 'Pendora Scents'].includes(anchor.brand)) {
+      cheaperQuery = cheaperQuery.neq('brand', anchor.brand);
+    }
+
+    const { data: cheaperClones } = await cheaperQuery.limit(8);
+
+    if (cheaperClones && cheaperClones.length > 0) {
+      rawMatches = cheaperClones.map(f => ({
+        ...f,
+        palette_role: `${cleanDna || anchor.name} Alternative`,
+        why: `Verified ${cleanDna || anchor.name} clone offering identical blue versatility in a full retail bottle at ₹${f.community_price}. In stock via ${f.best_bottle_seller || f.community_sellers?.[0]?.seller_name || 'verified sellers'}.`,
+        match_score: 96
+      }));
+    }
+  }
+
+  // 1.5 Direct Comparison / Review Mentions
+  if (!rawMatches) {
+    const comparisonMentions = extractComparisonOrReviewPerfumes(lastUserMsg, criteria.mentioned_fragrances || []);
+    if (criteria.intent === 'comparison_or_review' || (comparisonMentions.length > 0 && !criteria.is_discovery_mode)) {
+      const compCards = await fetchCardsForComparison(comparisonMentions, isCloneRequested);
+      if (compCards.length > 0) {
+        rawMatches = compCards;
+      }
+    }
+  }
+
+  // 1.8 First-Class Target Inspiration & Clone Retrieval (Prioritize Clone Houses over Luxury Brands)
+  if (!rawMatches && criteria.target_inspirations && criteria.target_inspirations.length > 0) {
+    const inspCards = [];
+    const seenIds = new Set();
+    for (const rawInsp of criteria.target_inspirations) {
+      const cleanInsp = rawInsp
+        .replace(/%/g, '')
+        .split(/[/,-]/)[0]
+        .replace(/\b(?:eau\s+de\s+parfum|eau\s+de\s+toilette|edp|edt|parfum|extrait|elixir|cologne|clones?|inspirations?|inspired by|original creation)\b/gi, '')
+        .trim();
+      if (!cleanInsp || cleanInsp.length < 3) continue;
+
+      let inspQuery = supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, in_seller_stock, has_decants, primary_season')
+        .ilike('dna_inspiration', `%${cleanInsp}%`);
+
+      if (isCloneRequested) {
+        inspQuery = inspQuery.not('dna_inspiration', 'ilike', '%original creation%');
+        const luxuryBrandMatch = cleanInsp.split(/\s+/)[0];
+        if (luxuryBrandMatch && luxuryBrandMatch.length >= 3) {
+          inspQuery = inspQuery.neq('brand', luxuryBrandMatch);
+        }
+      }
+
+      if (isCheaperRequested && !isDecantsRequested) {
+        inspQuery = inspQuery.not('community_price', 'is', null).lte('community_price', criteria.max_price || 3000);
+      } else {
+        inspQuery = inspQuery.or('in_seller_stock.eq.true,has_decants.eq.true');
+      }
+
+      const { data: foundInsp } = await inspQuery
+        .order(isCheaperRequested ? 'community_price' : 'rating_value', { ascending: isCheaperRequested })
+        .limit(8);
+
+      for (const f of (foundInsp || [])) {
+        if (!seenIds.has(f.id)) {
+          seenIds.add(f.id);
+          inspCards.push({
+            ...f,
+            palette_role: `${cleanInsp} Clone`,
+            why: f.why || `Outstanding community verified clone capturing the ${cleanInsp} DNA. Available via ${f.best_bottle_seller || f.community_sellers?.[0]?.seller_name || 'verified sellers'}.`,
+            match_score: 96
+          });
+        }
+      }
+    }
+
+    if (inspCards.length > 0) {
+      rawMatches = inspCards;
     }
   }
 
@@ -1954,8 +2116,8 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
           hatedNotes: criteria.exclude_notes || [],
           forbiddenAccords: criteria.exclude_accords || [],
           targetSeason: criteria.target_season || (lastUserMsg.toLowerCase().includes('summer') ? 'Summer' : (lastUserMsg.toLowerCase().includes('winter') ? 'Winter' : null)),
-          allowDirectClones: false,
-          maxBudget: criteria.max_price || null,
+          allowDirectClones: true,
+          maxBudget: (isCheaperRequested && !isDecantsRequested) ? (criteria.max_price || 3000) : (criteria.max_price || null),
           limit: 15
         });
 
@@ -2035,8 +2197,13 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       }
     }
 
-    // 6. Strict Bottle Budget
-    if (criteria.intent !== 'decant_finder' && criteria.max_price && criteria.max_price < 50000) {
+    // 6. Strict Full-Bottle Budget: When user asks for cheaper or budget, NEVER return decant-only items
+    if (isCheaperRequested && !isDecantsRequested) {
+      const bottlePrice = Number(m.community_price);
+      if (!bottlePrice || (criteria.max_price && bottlePrice > criteria.max_price)) {
+        return false;
+      }
+    } else if (criteria.intent !== 'decant_finder' && criteria.max_price && criteria.max_price < 50000) {
       const bottlePrice = Number(m.community_price);
       if (!bottlePrice || bottlePrice > criteria.max_price) {
         return false;
