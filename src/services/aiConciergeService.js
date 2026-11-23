@@ -1143,7 +1143,34 @@ async function executeMultiQuery(criteria) {
       ...(criteria.target_accords || [])
     ].filter(Boolean).map(s => String(s).replace(/%/g, '')).join(' ');
 
-    const semanticCandidates = await searchFragrancesBySemanticEmbedding(semanticText, 30);
+    let semanticCandidates = await searchFragrancesBySemanticEmbedding(semanticText, 40);
+
+    // If a budget constraint was specified, augment with candidates that strictly respect the budget
+    // so low-budget queries (< ₹1,500) aren't starved by unconstrained vector hits
+    if (criteria.max_price && criteria.max_price < 50000) {
+      const { data: budgetHits } = await supabase.from('fragrances')
+        .select('id, name, brand, community_price, lowest_decant_price, dna_inspiration, dna_type, best_bottle_seller, community_sellers, rating_value, accords, top_notes, middle_notes, base_notes, in_seller_stock, has_decants, primary_season, seasons, day_night')
+        .not('community_price', 'is', null)
+        .lte('community_price', criteria.max_price)
+        .order('rating_value', { ascending: false })
+        .limit(25);
+
+      if (budgetHits && budgetHits.length > 0) {
+        const existingIds = new Set((semanticCandidates || []).map(c => c.id));
+        const combined = [...(semanticCandidates || [])];
+        budgetHits.forEach(b => {
+          if (!existingIds.has(b.id)) {
+            combined.push({
+              ...b,
+              best_seller: b.community_sellers?.[0]?.seller_name || b.best_bottle_seller || 'Verified Seller'
+            });
+            existingIds.add(b.id);
+          }
+        });
+        semanticCandidates = combined;
+      }
+    }
+
     if (semanticCandidates && semanticCandidates.length > 0) {
       return semanticCandidates;
     }
