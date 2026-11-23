@@ -722,7 +722,7 @@ Rules:
         target_base_notes: wrap(parsed.target_base_notes),
         target_notes: wrap(parsed.target_notes),
         exclude_notes: safeExcludeNotes,
-        target_season: parsed.target_season || 'summer',
+        target_season: (parsed.target_season && parsed.target_season !== 'all') ? parsed.target_season : null,
         max_price: parsed.max_price || 15000,
         min_rating: parsed.min_rating || 3.8,
         suggestions: parsed.suggestions || [
@@ -1000,7 +1000,7 @@ export function fallbackExtractIntent(chatHistory) {
     target_base_notes: Array.from(baseNotes),
     target_notes: [...topNotes, ...middleNotes, ...baseNotes],
     exclude_notes: Array.from(excludeNotes),
-    target_season: 'summer',
+    target_season: /(?:winter|cold|cozy)/i.test(lastUserText) ? 'winter' : (/(?:summer|hot|beach)/i.test(lastUserText) ? 'summer' : null),
     max_price: 15000,
     min_rating: 3.8,
     suggestions: [
@@ -1551,10 +1551,14 @@ async function curateMatchesWithGemini(chatHistory, candidates, criteria, deltaI
 
   // Sort by algorithmic score to present the most promising 20 candidates to Gemini
   eligibleCandidates.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
-  const candidatePool = eligibleCandidates.slice(0, 20);
+  // Prefer candidates with qualifying match score (>= 60%) to prevent injecting failing profiles
+  const qualifyingCandidates = eligibleCandidates.filter(c => (c.match_score || 0) >= 60);
+  const candidatePool = (qualifyingCandidates.length > 0 ? qualifyingCandidates : eligibleCandidates).slice(0, 20);
 
   if (candidatePool.length <= 10) {
-    return await synthesizeWhys(chatHistory, candidatePool, criteria, deltaInfo, perfumesDossier);
+    const qualifiedPool = candidatePool.filter(c => (c.match_score || 0) >= 60);
+    const finalPool = qualifiedPool.length > 0 ? qualifiedPool : candidatePool.slice(0, 2);
+    return await synthesizeWhys(chatHistory, finalPool, criteria, deltaInfo, perfumesDossier);
   }
 
   const candidateSummaries = candidatePool.map(c => {
@@ -1597,7 +1601,9 @@ TASK:
 2. STRICT DISQUALIFICATION: Never, under any circumstances, select or recommend a perfume the user disliked, tried and failed, found disappointing, or said missed the mark (including ${Array.from(allDislikes || []).join(', ')}). Reject them immediately.
 3. Select and rank the TOP 10 best perfumes that strictly fulfill all user requirements (e.g. if user said "remove sweet", reject any sweet/vanilla/gourmand scent; if user wants spicy mint and lavender for summer, prioritize scents that hit those notes without sweetness).
 4. For each selected perfume, write a passionate, connoisseur 1-2 sentence "why_this_fits" sommelier explanation explaining specifically how it captures the user's refined preferences.
-5. SEASON & DAYTIME STRICTNESS: When the user requests summer, heat, or fresh, strongly prioritize perfumes with verified high Summer % and high Daytime % (e.g. 70%+ Day). NEVER rank perfumes that have warm spicy mids (like cinnamon/cardamom) or evening/night-leaning profiles above pure daytime aquatic freshies.
+5. SEASON & TIME-OF-DAY STRICTNESS:
+   - When user requests summer, heat, or fresh: strongly prioritize perfumes with verified high Summer % and high Daytime % (e.g. 70%+ Day). NEVER rank perfumes that have warm spicy mids or evening/night-leaning profiles above pure daytime aquatic freshies.
+   - When user requests winter, cold weather, cozy, or night/evening: NEVER select aquatic, marine, salty, or fleeting citrus freshies (especially those with Summer > 45% or Day > 70%). Strongly prioritize warm spicy, woody, amber, vanilla, or gourmand profiles that excel in the cold and evening.
 
 Return strictly raw JSON with this schema:
 {
@@ -1634,6 +1640,9 @@ Return strictly raw JSON with this schema:
             for (const cand of candidatePool) {
               if (curated.length >= 10) break;
               if (!addedIds.has(cand.id)) {
+                // Ensure backfilled item doesn't have a failing match score (< 60)
+                if (cand.match_score && cand.match_score < 60) continue;
+
                 // Ensure backfilled item doesn't violate budget
                 if (criteria.max_price && criteria.max_price < 50000) {
                   const bPrice = Number(cand.community_price);
@@ -2204,6 +2213,17 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
     }
   }
 
+  // Seasonal & Diurnal Intent Detection (Derived from user query & structured extraction)
+  const hasWinterKeywords = /(?:winter|cold weather|cozy|snow|fireplace|chilly)/i.test(lastUserMsg);
+  const hasSummerKeywords = /(?:summer|high heat|beach|hot weather|humid|warm weather)/i.test(lastUserMsg);
+  const wantsWinter = criteria.target_season === 'winter' || (hasWinterKeywords && !hasSummerKeywords);
+  const wantsSummer = criteria.target_season === 'summer' || (hasSummerKeywords && !hasWinterKeywords);
+
+  const hasNightKeywords = /(?:night|evening|date night|clubbing|party|nocturnal|dark)/i.test(lastUserMsg);
+  const hasDayKeywords = /(?:day|daytime|morning|office|daily|work|gym)/i.test(lastUserMsg);
+  const wantsNight = hasNightKeywords && !hasDayKeywords;
+  const wantsDay = hasDayKeywords && !hasNightKeywords;
+
   let safeMatches = (rawMatches || []).filter(m => {
     const fullText = `${m.brand} ${m.name} ${m.dna_inspiration || ''}`.toLowerCase();
 
@@ -2278,17 +2298,33 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       return false;
     }
 
-    // 8. Strict Seasonal Guard: Season match has primary weight; NEVER recommend heavy winter/fall scents for summer or fleeting citrus for deep winter
-    const wantsSummer = criteria.target_season === 'summer' || /(?:summer|high heat|beach|hot weather|humid|warm weather)/i.test(lastUserMsg);
-    const wantsWinter = criteria.target_season === 'winter' || /(?:winter|cold weather|cozy|snow|fireplace|chilly)/i.test(lastUserMsg);
+    // 8. Strict Seasonal Guard: Season match has primary weight; NEVER recommend heavy winter/fall scents for summer or fleeting aquatic citrus for deep winter
+    if (wantsWinter) {
+      const candSeason = calculateSeasonalProfile(m);
+      if (candSeason.summer > 45 && candSeason.summer > candSeason.winter) return false;
+      if (candSeason.winter < 20) return false;
+      if (['summer', 'spring'].includes((m.primary_season || '').toLowerCase()) && candSeason.winter < 30) return false;
 
-    if (wantsSummer && !wantsWinter) {
+      // Aquatic / marine / salty scents should NEVER be recommended for winter queries unless user explicitly asked
+      const accords = (m.accords || []).map(a => (a.name || '').toLowerCase());
+      const hasMarine = accords.some(a => ['aquatic', 'marine', 'ozonic', 'salty'].some(k => a.includes(k)));
+      if (hasMarine && !/(?:aquatic|marine|watery|ocean|sea)/i.test(lastUserMsg)) {
+        return false;
+      }
+    } else if (wantsSummer) {
       const candSeason = calculateSeasonalProfile(m);
       if (candSeason.winter > 40 && candSeason.winter > candSeason.summer) return false;
       if (['winter', 'fall'].includes((m.primary_season || '').toLowerCase()) && (candSeason.summer < 30)) return false;
-    } else if (wantsWinter && !wantsSummer) {
+    }
+
+    // 8b. Strict Diurnal (Day / Night) Guard
+    if (wantsNight) {
       const candSeason = calculateSeasonalProfile(m);
-      if (candSeason.summer > 55 && candSeason.summer > candSeason.winter) return false;
+      // Reject overwhelmingly daytime freshies from night queries
+      if (candSeason.day > 70 && candSeason.night < 30) return false;
+    } else if (wantsDay) {
+      const candSeason = calculateSeasonalProfile(m);
+      if (candSeason.night > 70 && candSeason.day < 30) return false;
     }
 
     // 9. Strict Watery / Aquatic Guard: If user explicitly asks for watery/marine notes, require verified aquatic elements
@@ -2352,7 +2388,7 @@ export async function sendChatMessageToKhushboo(chatHistory, sessionId) {
       ...(criteria.target_base_notes || [])
     ],
     target_accords: criteria.target_accords || [],
-    target_season: criteria.target_season || 'summer'
+    target_season: wantsWinter ? 'winter' : (wantsSummer ? 'summer' : (criteria.target_season || null))
   };
 
   try {
