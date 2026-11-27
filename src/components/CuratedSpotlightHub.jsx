@@ -27,15 +27,15 @@ export default function CuratedSpotlightHub({
     return [];
   }, [mostPreferred]);
 
-  // 1. Top Verified Price Drops (strictly sorted by latest price drop timestamp, matching Price Drops tab)
+  // 1. Top Verified Price Drops (sorted by highest percentage drop)
   const topPriceDrops = useMemo(() => {
-    const getDropTimestamp = (item) => {
-      if (item.price_change_date) {
-        const timeStr = item.price_change_time || '00:00:00';
-        return new Date(`${item.price_change_date}T${timeStr}Z`).getTime();
+    const getDropPercentage = (item) => {
+      if (typeof item.price_change_percentage === 'number' && !isNaN(item.price_change_percentage)) {
+        return item.price_change_percentage;
       }
-      if (item.price_updated_at) return new Date(item.price_updated_at).getTime();
-      if (item.discovered_at) return new Date(item.discovered_at).getTime();
+      if (item.previous_price && item.community_price) {
+        return Math.round((Math.abs(item.previous_price - item.community_price) / item.previous_price) * 100);
+      }
       return 0;
     };
 
@@ -47,12 +47,12 @@ export default function CuratedSpotlightHub({
     if (priceDrops && priceDrops.length > 0) {
       return [...priceDrops]
         .filter(f => Number(f.community_price) > 0 && !isTester(f))
-        .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
+        .sort((a, b) => getDropPercentage(b) - getDropPercentage(a))
         .slice(0, 6);
     }
     return (catalog || [])
       .filter(f => f.is_price_drop && Number(f.community_price) > 0 && !isTester(f))
-      .sort((a, b) => getDropTimestamp(b) - getDropTimestamp(a))
+      .sort((a, b) => getDropPercentage(b) - getDropPercentage(a))
       .slice(0, 6);
   }, [catalog, priceDrops]);
 

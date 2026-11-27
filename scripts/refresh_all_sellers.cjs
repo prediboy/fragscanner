@@ -2357,7 +2357,7 @@ async function runMasterRefresh() {
       seller: d.lowest_seller,
       drop_date: d.price_change_date || d.price_date,
       drop_time: d.price_change_time || null
-    })),
+    })).sort((a, b) => (b.drop_percentage || 0) - (a.drop_percentage || 0)),
     active_new_arrivals: activeNewArrivals.map(n => ({
       id: n.id,
       name: n.name,
@@ -2435,6 +2435,8 @@ async function runMasterRefresh() {
   try {
     const logsDir = path.join(__dirname, "../data/refresh_logs");
     if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true });
+    refreshEvents.overall_price_drops.sort((a, b) => (b.drop_percentage || 0) - (a.drop_percentage || 0));
+    refreshEvents.per_seller_price_drops.sort((a, b) => (b.change_percentage || 0) - (a.change_percentage || 0));
     refreshEvents.new_arrivals = activeNewArrivals.map(n => ({
       id: n.id, brand: n.brand, name: n.name, price: n.community_price, size: n.community_bottle_size, seller: n.lowest_seller
     }));
