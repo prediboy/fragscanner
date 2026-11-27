@@ -277,7 +277,7 @@ export default function PowerFragranceCard({
               ) : f.is_price_drop && !isSpecificSeller ? (
                 <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                   <TrendingDown className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  <span>Price Drop</span>
+                  <span>{f.price_change_percentage ? `-${f.price_change_percentage}%` : 'Price Drop'}</span>
                 </span>
               ) : f.is_new_arrival && f.in_seller_stock ? (
                 <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700">

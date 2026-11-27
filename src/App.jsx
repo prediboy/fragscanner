@@ -553,7 +553,7 @@ export default function App() {
                         {filterState.dealsOnly && (
                           <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded-full border bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 border-slate-200 dark:border-zinc-700">
                             {filterState.dealsOnly === 'drops'
-                              ? 'Price Drops (Latest First)'
+                              ? 'Price Drops (Highest % First)'
                               : filterState.dealsOnly === 'preferred'
                               ? 'Most Preferred (Top 12 Trending)'
                               : 'New Stock'}

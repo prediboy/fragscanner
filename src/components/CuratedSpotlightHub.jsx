@@ -30,11 +30,11 @@ export default function CuratedSpotlightHub({
   // 1. Top Verified Price Drops (sorted by highest percentage drop)
   const topPriceDrops = useMemo(() => {
     const getDropPercentage = (item) => {
+      if (item.previous_price && item.community_price && Number(item.previous_price) > 0) {
+        return ((Number(item.previous_price) - Number(item.community_price)) / Number(item.previous_price)) * 100;
+      }
       if (typeof item.price_change_percentage === 'number' && !isNaN(item.price_change_percentage)) {
         return item.price_change_percentage;
-      }
-      if (item.previous_price && item.community_price) {
-        return Math.round((Math.abs(item.previous_price - item.community_price) / item.previous_price) * 100);
       }
       return 0;
     };
