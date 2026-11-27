@@ -325,6 +325,7 @@ export async function fetchInventoryPage({
           // Price Drops are strictly ordered by percentage drop (highest % drop first)
           query = query
             .order('price_change_percentage', { ascending: false, nullsFirst: false })
+            .order('price_change', { ascending: true, nullsFirst: false })
             .order('price_change_date', { ascending: false, nullsFirst: false })
             .order('price_change_time', { ascending: false, nullsFirst: false })
             .order('price_updated_at', { ascending: false, nullsFirst: false });
