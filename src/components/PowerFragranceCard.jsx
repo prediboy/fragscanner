@@ -240,8 +240,7 @@ export default function PowerFragranceCard({
     ? `${f.brand} ${f.name}`
     : (f?.name || '');
 
-  const bottleImg = f?.image_url || f?.notes?.image_url || null;
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const bottleImg = f?.image_url || f?.notes?.image_url || f?.notes?.image_large || null;
 
   if (!f || relevantQuotes.length === 0 || !primaryQuote) return null;
 
@@ -299,13 +298,11 @@ export default function PowerFragranceCard({
           {/* Fragrance Name, Cloned DNA & Bottle Thumbnail */}
           <div className="flex items-start gap-2.5">
             {bottleImg && (
-              <div className={`w-11 h-11 rounded-lg bg-slate-50 dark:bg-[#181B26] border border-slate-200/70 dark:border-[#282D3E] p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'hidden'}`}>
+              <div className="w-11 h-11 rounded-lg bg-slate-50 dark:bg-[#181B26] border border-slate-200/70 dark:border-[#282D3E] p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs">
                 <img
                   src={bottleImg}
                   alt={f.name}
-                  loading="lazy"
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
-                  onLoad={() => setImgLoaded(true)}
                   onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
                 />
               </div>

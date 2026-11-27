@@ -308,5 +308,225 @@
     "fragrantica_id": 67364,
     "source": "fragrantica_cdn",
     "updated_at": "2026-11-27T12:35:38.210Z"
+  },
+  "fragrance-world-green-sapphire": {
+    "id": "fragrance-world-green-sapphire",
+    "brand": "Fragrance World",
+    "name": "Green Sapphire",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.92265.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.92265.jpg",
+    "fragrantica_id": 92265,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:09.517Z"
+  },
+  "apex-riiffs-bleuabsolu": {
+    "id": "apex-riiffs-bleuabsolu",
+    "brand": "Riiffs",
+    "name": "Bleu Absolu",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.90705.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.90705.jpg",
+    "fragrantica_id": 90705,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:11.779Z"
+  },
+  "carolina-herrera-212-nyc-edt-men": {
+    "id": "carolina-herrera-212-nyc-edt-men",
+    "brand": "Carolina Herrera",
+    "name": "212 Men",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.432.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.432.jpg",
+    "fragrantica_id": 432,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:13.678Z"
+  },
+  "st-9223": {
+    "id": "st-9223",
+    "brand": "Lattafa",
+    "name": "Teriaq Intense",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.98099.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.98099.jpg",
+    "fragrantica_id": 98099,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:15.107Z"
+  },
+  "afnan-tribute-blue": {
+    "id": "afnan-tribute-blue",
+    "brand": "Afnan",
+    "name": "Tribute Blue",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.55431.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.55431.jpg",
+    "fragrantica_id": 55431,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:16.264Z"
+  },
+  "rabanne-olympea-flora-edp": {
+    "id": "rabanne-olympea-flora-edp",
+    "brand": "Rabanne",
+    "name": "Olympea Flora",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.80164.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.80164.jpg",
+    "fragrantica_id": 80164,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:17.201Z"
+  },
+  "gucci-bloom-acqua-di-fiori": {
+    "id": "gucci-bloom-acqua-di-fiori",
+    "brand": "Gucci",
+    "name": "Bloom Acqua di Fiori",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.49755.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.49755.jpg",
+    "fragrantica_id": 49755,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:20.782Z"
+  },
+  "carolina-herrera-bad-boy-extreme-edp": {
+    "id": "carolina-herrera-bad-boy-extreme-edp",
+    "brand": "Carolina Herrera",
+    "name": "Bad Boy Extreme",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.78696.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.78696.jpg",
+    "fragrantica_id": 78696,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:21.619Z"
+  },
+  "paris-corner-qissa-pink": {
+    "id": "paris-corner-qissa-pink",
+    "brand": "Paris Corner",
+    "name": "Qissa Pink",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.87311.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.87311.jpg",
+    "fragrantica_id": 87311,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:22.490Z"
+  },
+  "arabiyat-prestige-portrait-azure": {
+    "id": "arabiyat-prestige-portrait-azure",
+    "brand": "Arabiyat Prestige",
+    "name": "Portrait Azure",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.91234.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.91234.jpg",
+    "fragrantica_id": 91234,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:23.367Z"
+  },
+  "fragrance-world-creme-of-clouds": {
+    "id": "fragrance-world-creme-of-clouds",
+    "brand": "Fragrance World",
+    "name": "Creme Of Clouds",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.89456.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.89456.jpg",
+    "fragrantica_id": 89456,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:24.210Z"
+  },
+  "serge-lutens-ambre-sultan": {
+    "id": "serge-lutens-ambre-sultan",
+    "brand": "Serge Lutens",
+    "name": "Ambre Sultan",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.61.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.61.jpg",
+    "fragrantica_id": 61,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:25.103Z"
+  },
+  "narciso-rodriguez-for-her-edp": {
+    "id": "narciso-rodriguez-for-her-edp",
+    "brand": "Narciso Rodriguez",
+    "name": "For Her Eau de Parfum",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.270.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.270.jpg",
+    "fragrantica_id": 270,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:25.958Z"
+  },
+  "rasasi-dhanal-oudh-nashwah": {
+    "id": "rasasi-dhanal-oudh-nashwah",
+    "brand": "Rasasi",
+    "name": "Dhanal Oudh Nashwah",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.26071.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.26071.jpg",
+    "fragrantica_id": 26071,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:26.598Z"
+  },
+  "rabanne-1-million-edt": {
+    "id": "rabanne-1-million-edt",
+    "brand": "Rabanne",
+    "name": "1 Million",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.37.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.37.jpg",
+    "fragrantica_id": 37,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:27.193Z"
+  },
+  "gucci-bloom-edt": {
+    "id": "gucci-bloom-edt",
+    "brand": "Gucci",
+    "name": "Bloom Eau de Toilette",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.72591.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.72591.jpg",
+    "fragrantica_id": 72591,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:28.268Z"
+  },
+  "lattafa-raghba": {
+    "id": "lattafa-raghba",
+    "brand": "Lattafa",
+    "name": "Raghba",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.25773.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.25773.jpg",
+    "fragrantica_id": 25773,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:28.912Z"
+  },
+  "st-9253": {
+    "id": "st-9253",
+    "brand": "Rasasi",
+    "name": "Hawas Elixir",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/rasasi-hawas-elixir-4815787.jpg?v=1760198232",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/rasasi-hawas-elixir-4815787.jpg?v=1760198232",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T13:29:32.284Z"
+  },
+  "chanel-coco-mademoiselle-edp": {
+    "id": "chanel-coco-mademoiselle-edp",
+    "brand": "Chanel",
+    "name": "Coco Mademoiselle",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.611.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.611.jpg",
+    "fragrantica_id": 611,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:32.874Z"
+  },
+  "hermes-terre-d-hermes": {
+    "id": "hermes-terre-d-hermes",
+    "brand": "Hermès",
+    "name": "Terre d'Hermès",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.17.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.17.jpg",
+    "fragrantica_id": 17,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T13:29:33.462Z"
+  },
+  "caneza-mezmar-men": {
+    "id": "caneza-mezmar-men",
+    "brand": "Caneza",
+    "name": "Mezmar Men",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/Caneza_MEZMAR_MEN.png?v=1790569292",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/Caneza_MEZMAR_MEN.png?v=1790569292",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T13:29:34.034Z"
+  },
+  "lattafa-badee-al-oud-exposed": {
+    "id": "lattafa-badee-al-oud-exposed",
+    "brand": "Lattafa",
+    "name": "Bade'e Al Oud Black Exposed",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFF_CULTURE_-_2026-09-23T152042.628.png?v=1790157260",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFF_CULTURE_-_2026-09-23T152042.628.png?v=1790157260",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T13:29:34.632Z"
   }
 }
