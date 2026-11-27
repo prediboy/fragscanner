@@ -523,10 +523,11 @@ async function runMasterRefresh() {
       seller_name: "Whiff Culture",
       type: "decant_and_bottle",
       url: "https://www.whiffculture.com",
+      api_url: "https://0dzeak-1m.myshopify.com/products.json",
       whatsapp: "9811377357",
       shipping: "Free Pan-India Delivery on orders above ₹1,499",
       dispatch: "24-48 hrs",
-      decant_sizes: ["5ml", "8ml", "10ml", "30ml"]
+      decant_sizes: ["5ml", "8ml", "10ml", "20ml", "30ml"]
     },
     {
       id: "aar_fragrances",
@@ -1446,12 +1447,12 @@ async function runMasterRefresh() {
   // ==========================================
   // SOURCE 6: WHIFF CULTURE (SHOPIFY)
   // ==========================================
-  console.log("\n--- Syncing Whiff Culture (www.whiffculture.com) ---");
+  console.log("\n--- Syncing Whiff Culture (0dzeak-1m.myshopify.com / www.whiffculture.com) ---");
   try {
     let allWcProducts = [];
     let page = 1;
     while (true) {
-      const url = `https://www.whiffculture.com/products.json?limit=100&page=${page}`;
+      const url = `https://0dzeak-1m.myshopify.com/products.json?limit=250&page=${page}`;
       const jsonStr = await fetchUrl(url);
       let data;
       try {
@@ -1462,9 +1463,10 @@ async function runMasterRefresh() {
       }
       if (!data.products || data.products.length === 0) break;
       allWcProducts.push(...data.products);
+      if (data.products.length < 250) break;
       page++;
-      if (page > 25) break;
-      await new Promise(r => setTimeout(r, 1200)); // Respect Shopify rate limit
+      if (page > 15) break;
+      await new Promise(r => setTimeout(r, 600)); // Respect Shopify rate limit
     }
     console.log(`  Fetched ${allWcProducts.length} total products from Whiff Culture.`);
 
