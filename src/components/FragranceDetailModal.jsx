@@ -931,7 +931,7 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                           <span>Ask Second Theory</span>
                         </a>
                         <a
-                          href={`https://wa.me/919716764787?text=${encodeURIComponent(`Hi FragFever, saw your seller profile on FragSeeker. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
+                          href={`https://wa.me/919971803392?text=${encodeURIComponent(`Hi FragFever, saw your seller profile on FragSeeker. I noticed ${fragrance.brand} ${fragrance.name} is not currently listed. Can you source this perfume?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
