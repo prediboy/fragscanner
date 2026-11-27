@@ -647,6 +647,7 @@ async function runMasterRefresh() {
   // Helper: Find best fragrance match in catalog (100% database & alias driven)
   function findBestMatch(brandRaw, nameRaw, inspoRaw = "", options = {}) {
     const allowDesigner = !!options.allowDesigner;
+    const noAliases = !!options.noAliases;
     if (!allowDesigner && (isDesigner(brandRaw) || isDesigner(nameRaw))) return null;
     const brand = normalizeBrand(brandRaw);
     let bClean = cleanStr(brand);
@@ -659,9 +660,9 @@ async function runMasterRefresh() {
         .replace(/\b\d{2,3}\s*m\.?l\.?\b/gi, ' ')
     );
     let nBase = getBaseName(nameRaw);
-    const fullName = brandRaw + ' ' + nameRaw;
+    const fullName = brandRaw ? (brandRaw + ' ' + nameRaw) : nameRaw;
     const fullClean = cleanStr(fullName);
-    const fullAliasClean = cleanStr(`${brand} ${nameRaw}`
+    const fullAliasClean = cleanStr(`${brand || ''} ${nameRaw}`
       .replace(/\(\s*new\s*launch\s*\)/gi, ' ')
       .replace(/\b(bnib|tester|open\s*box|without\s*cellophane|no\s*cellophane|without\s*box|no\s*box|cosmetic\s*flaw|cosmetic\s*defect|retail|partial)\b/gi, ' ')
       .replace(/\b\d{2,3}\s*m\.?l\.?\b/gi, ' '));
@@ -669,20 +670,23 @@ async function runMasterRefresh() {
 
     if (!nClean || nClean.length < 2) return null;
 
-    // Filter candidate list strictly to the matching brand
-    const brandFrags = fragrances.filter(f => {
-      const fbClean = cleanStr(f.brand);
-      if ((bClean === 'ibraq' || bClean.includes('ibrahimalqur') || bClean.includes('ibraheemalqur')) && (fbClean === 'ibraq' || fbClean.includes('ibrahimalqur') || fbClean.includes('ibraheemalqur'))) return true;
-      if (bClean.startsWith('albait') && fbClean.startsWith('albait')) return true;
-      if (bClean.startsWith('reef') && fbClean.startsWith('reef')) return true;
-      if ((bClean === 'pariscorner' || bClean === 'emir' || bClean === 'pariscorneremir' || bClean === 'pendorascents') && (fbClean === 'pariscorner' || fbClean === 'emir' || fbClean === 'pendorascents')) return true;
-      if ((bClean === 'lattafa' || bClean === 'maisonalhambra' || bClean === 'alhambra') && (fbClean === 'lattafa' || fbClean === 'maisonalhambra')) return true;
-      if ((bClean === 'fragranceworld' || bClean === 'frenchavenue') && (fbClean === 'fragranceworld' || fbClean === 'frenchavenue')) return true;
-      if ((bClean === 'arabiyat' || bClean === 'arabiyatprestige') && (fbClean === 'arabiyat' || fbClean === 'arabiyatprestige')) return true;
-      if ((bClean === 'giorgioarmani' || bClean === 'armani' || bClean === 'emporioarmani' || bClean === 'armaniprive') && (fbClean === 'giorgioarmani' || fbClean === 'armani')) return true;
-      if ((bClean === 'rabanne' || bClean === 'pacorabanne') && (fbClean === 'rabanne' || fbClean === 'pacorabanne')) return true;
-      return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
-    });
+    // Filter candidate list strictly to the matching brand if provided
+    let brandFrags = fragrances;
+    if (bClean) {
+      brandFrags = fragrances.filter(f => {
+        const fbClean = cleanStr(f.brand);
+        if ((bClean === 'ibraq' || bClean.includes('ibrahimalqur') || bClean.includes('ibraheemalqur')) && (fbClean === 'ibraq' || fbClean.includes('ibrahimalqur') || fbClean.includes('ibraheemalqur'))) return true;
+        if (bClean.startsWith('albait') && fbClean.startsWith('albait')) return true;
+        if (bClean.startsWith('reef') && fbClean.startsWith('reef')) return true;
+        if ((bClean === 'pariscorner' || bClean === 'emir' || bClean === 'pariscorneremir' || bClean === 'pendorascents') && (fbClean === 'pariscorner' || fbClean === 'emir' || fbClean === 'pendorascents')) return true;
+        if ((bClean === 'lattafa' || bClean === 'maisonalhambra' || bClean === 'alhambra') && (fbClean === 'lattafa' || fbClean === 'maisonalhambra')) return true;
+        if ((bClean === 'fragranceworld' || bClean === 'frenchavenue') && (fbClean === 'fragranceworld' || fbClean === 'frenchavenue')) return true;
+        if ((bClean === 'arabiyat' || bClean === 'arabiyatprestige') && (fbClean === 'arabiyat' || fbClean === 'arabiyatprestige')) return true;
+        if ((bClean === 'giorgioarmani' || bClean === 'armani' || bClean === 'emporioarmani' || bClean === 'armaniprive') && (fbClean === 'giorgioarmani' || fbClean === 'armani')) return true;
+        if ((bClean === 'rabanne' || bClean === 'pacorabanne') && (fbClean === 'rabanne' || fbClean === 'pacorabanne')) return true;
+        return fbClean === bClean || (fbClean.length >= 5 && bClean.includes(fbClean)) || (bClean.length >= 5 && fbClean.includes(bClean));
+      });
+    }
 
     if (brandFrags.length === 0) return null;
 
@@ -694,40 +698,44 @@ async function runMasterRefresh() {
       return incomingConc !== fragConc;
     }
 
-    // 0. Priority 0: Exact Registered Canonical Database Aliases (exact title saved in Supabase)
-    let match = brandFrags.find(f => {
-      if (!Array.isArray(f.aliases)) return false;
-      const fbClean = cleanStr(f.brand);
-      return f.aliases.some(a => {
-        const aClean = cleanStr(a);
-        if (aClean === nClean || aClean === nAliasClean || aClean === fullClean || aClean === fullAliasClean) return true;
-        if (aClean.startsWith(fbClean) && (aClean.slice(fbClean.length) === nClean || aClean.slice(fbClean.length) === nAliasClean)) return true;
-        if (aClean.startsWith(bClean) && (aClean.slice(bClean.length) === nClean || aClean.slice(bClean.length) === nAliasClean)) return true;
-        return false;
+    // 0. Priority 0: Exact Registered Canonical Database Aliases (exact title saved in Supabase - skipped if noAliases)
+    if (!noAliases) {
+      let match = brandFrags.find(f => {
+        if (!Array.isArray(f.aliases)) return false;
+        const fbClean = cleanStr(f.brand);
+        return f.aliases.some(a => {
+          const aClean = cleanStr(a);
+          if (aClean === nClean || aClean === nAliasClean || aClean === fullClean || aClean === fullAliasClean) return true;
+          if (aClean.startsWith(fbClean) && (aClean.slice(fbClean.length) === nClean || aClean.slice(fbClean.length) === nAliasClean)) return true;
+          if (aClean.startsWith(bClean) && (aClean.slice(bClean.length) === nClean || aClean.slice(bClean.length) === nAliasClean)) return true;
+          return false;
+        });
       });
-    });
-    if (match) return match;
+      if (match) return match;
+    }
 
     // 1. Priority 1: Exact Base Name Match (with strict Concentration Guard)
-    match = brandFrags.find(f => {
+    let match = brandFrags.find(f => {
       if (concentrationMismatch(f)) return false;
       const fBase = getBaseName(f.name);
       return (fBase === nBase || fBase === fullBase) && fBase.length >= 2;
     });
     if (match) return match;
 
-    // 2. Priority 2: Base alias match (with strict Concentration Guard)
-    match = brandFrags.find(f => {
-      if (concentrationMismatch(f)) return false;
-      if (!Array.isArray(f.aliases)) return false;
-      return f.aliases.some(a => {
-        const aBase = getBaseName(a);
-        return aBase.length >= 2 && (aBase === nBase || aBase === fullBase);
+    // 2. Priority 2: Base alias match (with strict Concentration Guard - skipped if noAliases)
+    if (!noAliases) {
+      match = brandFrags.find(f => {
+        if (concentrationMismatch(f)) return false;
+        if (!Array.isArray(f.aliases)) return false;
+        return f.aliases.some(a => {
+          const aBase = getBaseName(a);
+          return aBase.length >= 2 && (aBase === nBase || aBase === fullBase);
+        });
       });
-    });
-    if (match) return match;
+      if (match) return match;
+    }
 
-    // 2. Priority 2: Exact brand + clean name match
+    // 3. Priority 3: Exact brand + clean name match
     match = brandFrags.find(f => {
       if (concentrationMismatch(f)) return false;
       const fnClean = cleanStr(f.name);
@@ -735,8 +743,8 @@ async function runMasterRefresh() {
     });
     if (match) return match;
 
-    // 3. Priority 3: Exact clone inspiration match (if unique)
-    if (inspoRaw && inspoRaw.length >= 4) {
+    // 4. Priority 4: Exact clone inspiration match (if unique - skipped if noAliases)
+    if (!noAliases && inspoRaw && inspoRaw.length >= 4) {
       const iClean = cleanStr(inspoRaw);
       match = fragrances.find(f => {
         const fiClean = cleanStr(f.dna_inspiration);
@@ -1658,14 +1666,15 @@ async function runMasterRefresh() {
 
   // ==========================================
   // SOURCE 8: SCENTVERSE (Middle Eastern BNIB, Designer BNIB, Testers & Decants)
+  // Directly parsed from Google Sheets with NO alias matching or inferred house resolvers
   // ==========================================
-  console.log("\n--- Syncing ScentVerse (ME BNIB, Designer BNIB, Testers & Decants) ---");
+  console.log("\n--- Syncing ScentVerse (Direct from Google Sheets, No Aliases) ---");
   try {
     const svSeller = sellersList.find(s => s.id === "scentverse");
     if (!svSeller) {
       console.warn("  ⚠ ScentVerse configuration not found in sellersList, skipping.");
     } else {
-      // 1. Middle Eastern BNIB
+      // 1. Middle Eastern BNIB (direct from sheet, no aliases)
       try {
         console.log("  ↳ Fetching ScentVerse Middle Eastern BNIB sheet...");
         const meCsv = await fetchUrl(svSeller.sheet_url_me_bnib);
@@ -1680,7 +1689,7 @@ async function runMasterRefresh() {
           if (price < 400 || price > 50000) continue;
 
           const { brand, name } = extractBrandAndName(rawTitle, meBrandList);
-          const matched = findBestMatch(brand || "Middle Eastern", name || rawTitle, "", { allowDesigner: false });
+          const matched = findBestMatch(brand, name || rawTitle, "", { allowDesigner: false, noAliases: true });
           if (matched) {
             const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
             addBottleQuote(matched, {
@@ -1702,12 +1711,12 @@ async function runMasterRefresh() {
             meCount++;
           }
         }
-        console.log(`    ✓ Merged ${meCount} Middle Eastern BNIB bottles for ScentVerse`);
+        console.log(`    ✓ Merged ${meCount} Middle Eastern BNIB bottles for ScentVerse (Direct Match)`);
       } catch (meErr) {
         console.error("    ❌ Error syncing ScentVerse ME BNIB:", meErr.message);
       }
 
-      // 2. Designer BNIB
+      // 2. Designer BNIB (direct from sheet, no aliases, no synthetic house mappings)
       try {
         console.log("  ↳ Fetching ScentVerse Designer BNIB sheet...");
         const desCsv = await fetchUrl(svSeller.sheet_url_designer_bnib);
@@ -1721,26 +1730,8 @@ async function runMasterRefresh() {
           const price = parseInt(priceClean, 10);
           if (price < 400 || price > 50000) continue;
 
-          let { brand, name } = extractBrandAndName(rawTitle, designerBrandList);
-          if (!brand) {
-            const lower = rawTitle.toLowerCase();
-            if (/1 million|invictus|phantom|fame|black xs/i.test(lower)) brand = "Rabanne";
-            else if (/acqua di gio|code|stronger with you|my way|si\b/i.test(lower)) brand = "Giorgio Armani";
-            else if (/sauvage|fahrenheit|dior homme|jadore|miss dior/i.test(lower)) brand = "Dior";
-            else if (/bleu de chanel|allure|coco mademoiselle|chance/i.test(lower)) brand = "Chanel";
-            else if (/le male|ultra male|le beau|scandal/i.test(lower)) brand = "Jean Paul Gaultier";
-            else if (/eros|dylan blue|eau fraiche|bright crystal/i.test(lower)) brand = "Versace";
-            else if (/bad boy|good girl|212/i.test(lower)) brand = "Carolina Herrera";
-            else if (/ysl y|la nuit|myslf|black opium|libre|mon paris/i.test(lower)) brand = "Yves Saint Laurent";
-            else if (/chrome|most wanted|wanted by night/i.test(lower)) brand = "Azzaro";
-            else if (/ck be|ck one|defy|obsession|eternity/i.test(lower)) brand = "Calvin Klein";
-            else if (/hugo|boss bottled|the scent/i.test(lower)) brand = "Hugo Boss";
-            else if (/montblanc legend|explorer/i.test(lower)) brand = "Montblanc";
-            else if (/light blue|the one/i.test(lower)) brand = "Dolce & Gabbana";
-            else if (/luna rossa/i.test(lower)) brand = "Prada";
-          }
-
-          const matched = findBestMatch(brand || "Designer", name || rawTitle, "", { allowDesigner: true });
+          const { brand, name } = extractBrandAndName(rawTitle, designerBrandList);
+          const matched = findBestMatch(brand, name || rawTitle, "", { allowDesigner: true, noAliases: true });
           if (matched) {
             const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
             addBottleQuote(matched, {
@@ -1762,12 +1753,12 @@ async function runMasterRefresh() {
             desCount++;
           }
         }
-        console.log(`    ✓ Merged ${desCount} Designer BNIB bottles for ScentVerse`);
+        console.log(`    ✓ Merged ${desCount} Designer BNIB bottles for ScentVerse (Direct Match)`);
       } catch (desErr) {
         console.error("    ❌ Error syncing ScentVerse Designer BNIB:", desErr.message);
       }
 
-      // 3. Testers
+      // 3. Testers (direct from sheet, no aliases, no synthetic house mappings)
       try {
         console.log("  ↳ Fetching ScentVerse Testers sheet...");
         const testCsv = await fetchUrl(svSeller.sheet_url_testers);
@@ -1781,18 +1772,8 @@ async function runMasterRefresh() {
           const price = parseInt(priceClean, 10);
           if (price < 400 || price > 50000) continue;
 
-          let { brand, name } = extractBrandAndName(rawTitle, [...designerBrandList, ...meBrandList]);
-          if (!brand) {
-            const lower = rawTitle.toLowerCase();
-            if (/1 million|invictus|phantom/i.test(lower)) brand = "Rabanne";
-            else if (/acqua di gio|stronger with you/i.test(lower)) brand = "Giorgio Armani";
-            else if (/212|bad boy|good girl/i.test(lower)) brand = "Carolina Herrera";
-            else if (/eros|dylan blue/i.test(lower)) brand = "Versace";
-            else if (/bleu de chanel|allure/i.test(lower)) brand = "Chanel";
-            else if (/sauvage/i.test(lower)) brand = "Dior";
-          }
-
-          const matched = findBestMatch(brand || "Designer", name || rawTitle, "", { allowDesigner: true });
+          const { brand, name } = extractBrandAndName(rawTitle, [...designerBrandList, ...meBrandList]);
+          const matched = findBestMatch(brand, name || rawTitle, "", { allowDesigner: true, noAliases: true });
           if (matched) {
             const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
             const testerSize = (row[2] && row[2].trim())
@@ -1817,12 +1798,12 @@ async function runMasterRefresh() {
             testCount++;
           }
         }
-        console.log(`    ✓ Merged ${testCount} Testers for ScentVerse`);
+        console.log(`    ✓ Merged ${testCount} Testers for ScentVerse (Direct Match)`);
       } catch (testErr) {
         console.error("    ❌ Error syncing ScentVerse Testers:", testErr.message);
       }
 
-      // 4. Decants
+      // 4. Decants (directly from sheet Brand & Perfume columns, no aliases)
       try {
         console.log("  ↳ Fetching ScentVerse Decants sheet...");
         const decCsv = await fetchUrl(svSeller.sheet_url_decants);
@@ -1832,7 +1813,6 @@ async function runMasterRefresh() {
           const row = decRows[rIdx];
           const brandRaw = row[0]?.trim() || "";
           const nameRaw = row[1]?.trim() || "";
-          const inspoRaw = row[2]?.trim() || "";
           if (!brandRaw || !nameRaw || brandRaw.toLowerCase().includes("brand")) continue;
 
           const p3 = parseInt((row[3] || "").replace(/[^\d]/g, ""), 10);
@@ -1849,7 +1829,7 @@ async function runMasterRefresh() {
 
           if (decantPrices.length === 0) continue;
 
-          const matched = findBestMatch(brandRaw, nameRaw, inspoRaw, { allowDesigner: true });
+          const matched = findBestMatch(brandRaw, nameRaw, "", { allowDesigner: true, noAliases: true });
           if (matched) {
             addDecantQuote(matched, {
               seller_id: "scentverse",
@@ -1866,12 +1846,12 @@ async function runMasterRefresh() {
             decCount++;
           }
         }
-        console.log(`    ✓ Merged ${decCount} Decants for ScentVerse`);
+        console.log(`    ✓ Merged ${decCount} Decants for ScentVerse (Direct Match)`);
       } catch (decErr) {
         console.error("    ❌ Error syncing ScentVerse Decants:", decErr.message);
       }
 
-      console.log(`  ✓ ScentVerse total synced: ${stats.scentverse_bottles} bottles & ${stats.scentverse_decants} decants`);
+      console.log(`  ✓ ScentVerse total direct synced: ${stats.scentverse_bottles} bottles & ${stats.scentverse_decants} decants`);
     }
   } catch (err) {
     console.error("  ❌ Error in ScentVerse sync pipeline:", err.message);
