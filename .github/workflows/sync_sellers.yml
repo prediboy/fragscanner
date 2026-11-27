@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci --omit=dev
 
-      - name: Run Master Refresh Pipeline across All 11 Sellers
+      - name: Run Master Refresh Pipeline across All 12 Sellers
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}

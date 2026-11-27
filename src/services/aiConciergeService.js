@@ -1865,7 +1865,7 @@ export async function resolveRelaxedFallback(chatHistory, criteria, deltaInfo, a
       .order('rating_value', { ascending: false })
       .limit(8);
 
-    const verifiedSellerNames = 'FragFever, Aromatic Rabbit, Second Theory, AAR Fragrances, Enigma Perfumes, Apex Aroma, Whiff Culture, GRYV Scents, Sovereign Scents, Blue Wings Fragrances';
+    const verifiedSellerNames = 'FragFever, Aromatic Rabbit, Second Theory, AAR Fragrances, Enigma Perfumes, Apex Aroma, Whiff Culture, GRYV Scents, Sovereign Scents, Blue Wings Fragrances, ScentVerse';
     criteria.conversational_reply = `Note: "${criteria.seller_filter}" is not currently in our network of verified community sellers (${verifiedSellerNames}). To make sure you find something extraordinary, here are the top-rated community bestsellers in stock right now across our verified sellers:`;
 
     return (topBestsellers || []).map((f, idx) => ({

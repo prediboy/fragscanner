@@ -154,7 +154,7 @@ export default function AiConciergeModal({ isOpen, onClose, onSelectFragrance })
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-mono">
-                Brand Catalogs • Note Pyramids • Decants • 11 Verified Sellers
+                Brand Catalogs • Note Pyramids • Decants • 12 Verified Sellers
               </p>
             </div>
           </div>

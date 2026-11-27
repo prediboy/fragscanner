@@ -172,5 +172,26 @@
       "20ml",
       "30ml"
     ]
+  },
+  {
+    "id": "scentverse",
+    "seller_name": "ScentVerse",
+    "type": "decant_and_bottle",
+    "sheet_url_me_bnib": "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Middle%20Eastern%20BNIB",
+    "sheet_url_designer_bnib": "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Designer%20BNIB",
+    "sheet_url_testers": "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Testers%20",
+    "sheet_url_decants": "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Decants",
+    "whatsapp": "9971803392",
+    "alt_whatsapp": "8905944638",
+    "whatsapp_group": "https://chat.whatsapp.com/KpeVnpK6UyW2ys6DAp6JZv",
+    "url": "https://scentverse.in",
+    "shipping": "Free on ₹1,000+ (3+ decants) | ₹100 Flat below ₹1,000",
+    "dispatch": "24-72 hrs",
+    "decant_sizes": [
+      "3ml",
+      "5ml",
+      "10ml",
+      "30ml"
+    ]
   }
 ]

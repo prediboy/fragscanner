@@ -17,7 +17,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { Sparkles, Moon, Sun, ShieldCheck, Database, RefreshCw, Loader2, Search, TrendingDown, Flame } from 'lucide-react';
 
 const COMMUNITY_SELLERS = [
-  { id: 'all', name: 'All 11 Verified Sellers' },
+  { id: 'all', name: 'All 12 Verified Sellers' },
+  { id: 'scentverse', name: 'ScentVerse' },
   { id: 'enigma_perfumes', name: 'Enigma Perfumes' },
   { id: 'sovereign_scents', name: 'Sovereign Scents' },
   { id: 'aromatic_rabbit', name: 'Aromatic Rabbit' },
@@ -364,7 +365,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono hidden sm:block">
-                11 Community Sellers • Pan-India Verified Rates
+                {syncMetadata?.sellers_active || 12} Community Sellers • Pan-India Verified Rates
               </p>
             </div>
           </div>
@@ -390,7 +391,7 @@ export default function App() {
               title="View live catalog sync status"
             >
               <Database className="w-3.5 h-3.5 text-cyan-500" />
-              <span className="hidden md:inline">11 Sellers Synced</span>
+              <span className="hidden md:inline">{syncMetadata?.sellers_active || 12} Sellers Synced</span>
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
             </button>
 
