@@ -28,12 +28,17 @@
   {
     "id": "apex_aroma",
     "seller_name": "Apex Aroma",
-    "type": "bottle",
+    "type": "decant_and_bottle",
     "sheet_url": "https://docs.google.com/spreadsheets/d/1JDLgpguWyg2gblX3uOw1naWTVbwWPta4rqYFG5xHsos/export?format=csv&gid=1236708900",
+    "sheet_url_decants": "https://docs.google.com/spreadsheets/d/1tDL78YDZOSLOWkiOnBy3XRInvO-1ETxsuA_wJWitPJI/export?format=csv&gid=0",
     "whatsapp": "9456411103",
     "alt_whatsapp": "8279794497",
     "shipping": "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
     "dispatch": "24-48 hrs",
+    "decant_sizes": [
+      "8ml",
+      "20ml"
+    ],
     "brand_col": 0,
     "product_col": 1,
     "price_col": 2,
