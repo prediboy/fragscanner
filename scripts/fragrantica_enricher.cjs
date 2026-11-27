@@ -641,6 +641,19 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
       const embeddingText = `${brandClean} ${canonicalName}. An authentic release from ${brandClean}. Inspiration: ${nf.clone_inspiration || 'Original Creation'}. Accords: ${accordsList.map(a => a.name).join(', ')}`;
       const reviewEmbedding = await generateGeminiEmbedding(embeddingText);
 
+      const idMatch = (nf.fragrantica_url || '').match(/-(\d+)\.html/);
+      const fragId = idMatch ? parseInt(idMatch[1], 10) : null;
+      const notesObj = {
+        top: nf.notes?.top || [],
+        middle: nf.notes?.middle || [],
+        base: nf.notes?.base || [],
+        ...(fragId ? {
+          image_url: `https://fimgs.net/mdimg/perfume/m.${fragId}.jpg`,
+          image_large: `https://fimgs.net/mdimg/perfume-thumbs/375x500.${fragId}.jpg`,
+          fragrantica_id: fragId
+        } : {})
+      };
+
       const newPerfume = {
         id: cleanId,
         name: canonicalName,
@@ -658,7 +671,7 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         top_notes: nf.notes?.top || [],
         middle_notes: nf.notes?.middle || [],
         base_notes: nf.notes?.base || [],
-        notes: nf.notes || { top: [], middle: [], base: [] },
+        notes: notesObj,
         seasons: { winter: 25, fall: 25, spring: 25, summer: 25 },
         day_night: { day: 50, night: 50 },
         longevity: calcLongevity,

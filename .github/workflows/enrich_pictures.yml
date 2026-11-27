@@ -1,0 +1,74 @@
+name: Enrich Perfume Pictures (Safe Direct CDN & AI)
+
+on:
+  schedule:
+    # Runs weekly on Sunday at 03:30 AM UTC
+    - cron: '30 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of pending perfumes to enrich in this run'
+        required: true
+        default: '100'
+        type: choice
+        options:
+          - '30'
+          - '50'
+          - '100'
+          - '250'
+          - 'all'
+      force:
+        description: 'Force re-check already enriched perfumes'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  enrich-pictures:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --omit=dev
+
+      - name: Run Safe Picture Enrichment Pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || secrets.SUPABASE_ANON_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_KEY || secrets.GEMINI_API_KEY }}
+          GEMINI_KEY2: ${{ secrets.GEMINI_KEY2 || secrets.GEMINI_KEY || secrets.GEMINI_API_KEY }}
+        run: |
+          FLAGS="--limit=${{ inputs.limit || '100' }}"
+          if [ "${{ inputs.force }}" = "true" ]; then
+            FLAGS="$FLAGS --force"
+          fi
+          echo "Executing picture enrichment with flags: $FLAGS"
+          node scripts/enrich_perfume_pictures.cjs $FLAGS
+
+      - name: Commit Updated Image Cache Checkpoint
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/perfume_images.json || true
+          if git diff --staged --quiet; then
+            echo "No changes in perfume_images.json cache."
+          else
+            git commit -m "chore(cache): update perfume_images.json checkpoint [skip ci]"
+            git push origin ${{ github.ref_name }}
+          fi

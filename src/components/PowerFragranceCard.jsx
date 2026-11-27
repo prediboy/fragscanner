@@ -240,6 +240,9 @@ export default function PowerFragranceCard({
     ? `${f.brand} ${f.name}`
     : (f?.name || '');
 
+  const bottleImg = f?.image_url || f?.notes?.image_url || null;
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   if (!f || relevantQuotes.length === 0 || !primaryQuote) return null;
 
   const whatsappMessage = primaryQuote.type === 'decant'
@@ -293,20 +296,34 @@ export default function PowerFragranceCard({
             </div>
           </div>
 
-          {/* Fragrance Name & Cloned DNA */}
-          <div>
-            <h3 className="font-heading font-semibold text-base text-slate-900 dark:text-zinc-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
-              {f.name}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 truncate">
-              {f.dna_inspiration ? (
-                <span>
-                  Inspiration: <strong className="font-medium text-slate-700 dark:text-zinc-300">{f.dna_inspiration}</strong>
-                </span>
-              ) : (
-                f.dna_type || 'Verified Community Stock'
-              )}
-            </p>
+          {/* Fragrance Name, Cloned DNA & Bottle Thumbnail */}
+          <div className="flex items-start gap-2.5">
+            {bottleImg && (
+              <div className={`w-11 h-11 rounded-lg bg-slate-50 dark:bg-[#181B26] border border-slate-200/70 dark:border-[#282D3E] p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'hidden'}`}>
+                <img
+                  src={bottleImg}
+                  alt={f.name}
+                  loading="lazy"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
+                  onLoad={() => setImgLoaded(true)}
+                  onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                />
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <h3 className="font-heading font-semibold text-base text-slate-900 dark:text-zinc-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
+                {f.name}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 truncate">
+                {f.dna_inspiration ? (
+                  <span>
+                    Inspiration: <strong className="font-medium text-slate-700 dark:text-zinc-300">{f.dna_inspiration}</strong>
+                  </span>
+                ) : (
+                  f.dna_type || 'Verified Community Stock'
+                )}
+              </p>
+            </div>
           </div>
         </div>
 
