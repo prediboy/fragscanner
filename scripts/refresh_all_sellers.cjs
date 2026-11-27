@@ -453,12 +453,14 @@ async function runMasterRefresh() {
     {
       id: "apex_aroma",
       seller_name: "Apex Aroma",
-      type: "bottle",
+      type: "decant_and_bottle",
       sheet_url: "https://docs.google.com/spreadsheets/d/1JDLgpguWyg2gblX3uOw1naWTVbwWPta4rqYFG5xHsos/export?format=csv&gid=1236708900",
+      sheet_url_decants: "https://docs.google.com/spreadsheets/d/1tDL78YDZOSLOWkiOnBy3XRInvO-1ETxsuA_wJWitPJI/export?format=csv&gid=0",
       whatsapp: "9456411103",
       alt_whatsapp: "8279794497",
       shipping: "Free Pan-India Delivery (Extra ₹60 for J&K, NE)",
       dispatch: "24-48 hrs",
+      decant_sizes: ["8ml", "20ml"],
       brand_col: 0,
       product_col: 1,
       price_col: 2,
@@ -815,6 +817,7 @@ async function runMasterRefresh() {
     second_theory: 0,
     fragfever: 0,
     apex_aroma: 0,
+    apex_aroma_decants: 0,
     enigma_perfumes: 0,
     enigma_perfumes_decants: 0,
     bluewings_bottles: 0,
@@ -1857,6 +1860,85 @@ async function runMasterRefresh() {
     console.error("  ❌ Error in ScentVerse sync pipeline:", err.message);
   }
 
+  // ==========================================
+  // APEX AROMA DECANTS
+  // ==========================================
+  console.log("\n--- Syncing Apex Aroma Decants ---");
+  try {
+    const apexSeller = sellersList.find(s => s.id === 'apex_aroma');
+    if (apexSeller && apexSeller.sheet_url_decants) {
+      console.log("  ↳ Fetching Apex Aroma Decants sheet...");
+      const apexDecCsv = await fetchUrl(apexSeller.sheet_url_decants);
+      const decRows = parseCSV(apexDecCsv);
+      console.log(`    Read ${decRows.length} rows from Apex Aroma Decants sheet`);
+      let currentBrand = "";
+      let decCount = 0;
+
+      for (let rIdx = 0; rIdx < decRows.length; rIdx++) {
+        const row = decRows[rIdx];
+        const col0 = (row[0] || "").trim();
+        const col3 = (row[3] || "").trim();
+        const col4 = (row[4] || "").trim();
+        const col5 = (row[5] || "").trim();
+
+        if (!col0) continue;
+        if (/apex aroma/i.test(col0) || /decants sized/i.test(col0) || col0.toLowerCase() === "decants") continue;
+
+        const p8num = col3.replace(/[^\d]/g, "");
+        const p20num = col4.replace(/[^\d]/g, "");
+
+        // Check if it's a brand header
+        if (!p8num && !p20num) {
+          currentBrand = col0.replace(/[:\s]+$/, "").trim();
+          continue;
+        }
+
+        const p8Clean = col3.replace(/[^\d]/g, "");
+        const p20Clean = col4.replace(/[^\d]/g, "");
+        const p8Oos = col3.includes("❌") || col3 === "-" || !p8Clean;
+        const p20Oos = col4.includes("❌") || col4 === "-" || !p20Clean;
+
+        const sizes = {};
+        if (!p8Oos && p8Clean) sizes["8ml"] = parseInt(p8Clean, 10);
+        if (!p20Oos && p20Clean) sizes["20ml"] = parseInt(p20Clean, 10);
+
+        if (Object.keys(sizes).length === 0) continue; // Out of stock
+
+        let brandToUse = currentBrand;
+        if (brandToUse.toLowerCase() === 'jean lowe') brandToUse = 'Maison Alhambra';
+        if (brandToUse.toLowerCase() === 'ibraq') brandToUse = 'Ibrahim Al Qurashi';
+
+        let matched = findBestMatch(brandToUse, col0, col5, { allowDesigner: true });
+        if (!matched) {
+          const strippedName = col0.replace(new RegExp(`^${brandToUse}\\s*`, 'i'), '');
+          matched = findBestMatch(brandToUse, strippedName, col5, { allowDesigner: true });
+        }
+        if (!matched) {
+          matched = findBestMatch("", col0, col5, { allowDesigner: true });
+        }
+
+        if (matched) {
+          addDecantQuote(matched, {
+            seller_id: "apex_aroma",
+            seller_name: "Apex Aroma",
+            whatsapp: apexSeller.whatsapp,
+            shipping: apexSeller.shipping,
+            dispatch: apexSeller.dispatch,
+            sizes: sizes,
+            lowest_price: Math.min(...Object.values(sizes)),
+            in_stock: true,
+            verified: true
+          });
+          stats.apex_aroma_decants++;
+          decCount++;
+        }
+      }
+      console.log(`    ✓ Merged ${decCount} Decants for Apex Aroma (8ml & 20ml)`);
+    }
+  } catch (decErr) {
+    console.error("  ❌ Error syncing Apex Aroma Decants:", decErr.message);
+  }
+
   // Graceful fallback: If any seller has 0 quotes due to network/rate-limits, restore previous quotes
   const trackedSellers = [
     { id: "second_theory", name: "Second Theory" },
@@ -2372,7 +2454,7 @@ async function runMasterRefresh() {
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
-      apex_aroma: { name: "Apex Aroma", bottles: stats.apex_aroma, type: "Full Bottles" },
+      apex_aroma: { name: "Apex Aroma", bottles: stats.apex_aroma, decants: stats.apex_aroma_decants, type: "Dual" },
       enigma_perfumes: { name: "Enigma Perfumes", bottles: stats.enigma_perfumes, decants: stats.enigma_perfumes_decants, type: "Dual" },
       rp_decants: { name: "RP Decants", decants: stats.rp_decants, type: "Decants (2-10ml)" },
       gryv_scents: { name: "GRYV Scents", bottles: stats.gryv_scents_bottles, decants: stats.gryv_scents_decants, type: "Dual" },
@@ -2408,7 +2490,7 @@ async function runMasterRefresh() {
       seller_counts: {
         second_theory: stats.second_theory || 0,
         fragfever: stats.fragfever || 0,
-        apex_aroma: stats.apex_aroma || 0,
+        apex_aroma: (stats.apex_aroma || 0) + (stats.apex_aroma_decants || 0),
         enigma_perfumes: (stats.enigma_perfumes || 0) + (stats.enigma_perfumes_decants || 0),
         rp_decants: stats.rp_decants || 0,
         gryv_scents: (stats.gryv_scents_bottles || 0) + (stats.gryv_scents_decants || 0),
@@ -2473,7 +2555,7 @@ async function runMasterRefresh() {
   console.log("• Seller Breakdown:");
   console.log(`  - Second Theory: ${stats.second_theory} bottles`);
   console.log(`  - FragFever: ${stats.fragfever} bottles`);
-  console.log(`  - Apex Aroma: ${stats.apex_aroma} bottles`);
+  console.log(`  - Apex Aroma: ${stats.apex_aroma} bottles & ${stats.apex_aroma_decants} decants`);
   console.log(`  - Enigma Perfumes: ${stats.enigma_perfumes} bottles & ${stats.enigma_perfumes_decants} decants`);
   console.log(`  - Sovereign Scents: ${stats.sovereign_scents_bottles} bottles & ${stats.sovereign_scents_decants} decants`);
   console.log(`  - Aromatic Rabbit: ${stats.aromatic_rabbit_bottles} bottles & ${stats.aromatic_rabbit_decants} decants`);
