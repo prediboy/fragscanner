@@ -181,7 +181,7 @@ export async function fetchInventoryPage({
     let query = supabase
       .from('fragrances')
       .select(
-        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, price_updated_at, is_new_arrival, new_arrival_date, discovered_at',
+        'id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, price_updated_at, is_new_arrival, new_arrival_date, discovered_at',
         { count: 'exact' }
       );
 
@@ -624,7 +624,7 @@ export async function fetchMostPreferredFragrances(limit = 12) {
     // 2. Fetch in-stock catalog items
     const { data: frags } = await supabase
       .from('fragrances')
-      .select('id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, price_updated_at, is_new_arrival, new_arrival_date, discovered_at')
+      .select('id, name, brand, rating_value, rating_count, collection, concentration, primary_season, longevity, sillage, description, accords, top_notes, middle_notes, base_notes, notes, community_price, has_decants, lowest_decant_price, in_seller_stock, community_sellers, community_decants, dna_type, dna_inspiration, is_price_drop, previous_price, price_change, price_change_percentage, price_change_date, price_change_time, price_updated_at, is_new_arrival, new_arrival_date, discovered_at')
       .or('in_seller_stock.eq.true,has_decants.eq.true')
       .limit(1000);
 

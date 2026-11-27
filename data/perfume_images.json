@@ -1,0 +1,312 @@
+{
+  "apex-riiffs-privenoir": {
+    "id": "apex-riiffs-privenoir",
+    "brand": "Riiffs",
+    "name": "Prive Noir",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.85732.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.85732.jpg",
+    "fragrantica_id": 85732,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:31:20.170Z"
+  },
+  "st-9115": {
+    "id": "st-9115",
+    "brand": "Maison Alhambra",
+    "name": "Toscano Leather",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.78204.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.78204.jpg",
+    "fragrantica_id": 78204,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:31:21.396Z"
+  },
+  "rasasi-daarej-pour-homme": {
+    "id": "rasasi-daarej-pour-homme",
+    "brand": "Rasasi",
+    "name": "Daarej Pour Homme",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.10228.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.10228.jpg",
+    "fragrantica_id": 10228,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:31:22.397Z"
+  },
+  "apex-naseem-eclipse": {
+    "id": "apex-naseem-eclipse",
+    "brand": "Naseem",
+    "name": "Eclipse",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.81373.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.81373.jpg",
+    "fragrantica_id": 81373,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:31:23.246Z"
+  },
+  "apex-maisonasrar-milkyway": {
+    "id": "apex-maisonasrar-milkyway",
+    "brand": "Maison Asrar",
+    "name": "Milkyway",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.92390.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.92390.jpg",
+    "fragrantica_id": 92390,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:34.047Z"
+  },
+  "ralph-lauren-polo-cologne-intense": {
+    "id": "ralph-lauren-polo-cologne-intense",
+    "brand": "Ralph Lauren",
+    "name": "Polo Cologne Intense",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.67776.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.67776.jpg",
+    "fragrantica_id": 67776,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:35.899Z"
+  },
+  "mancera-french-riviera": {
+    "id": "mancera-french-riviera",
+    "brand": "Mancera",
+    "name": "French Riviera",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.83032.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.83032.jpg",
+    "fragrantica_id": 83032,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:37.078Z"
+  },
+  "armaf-club-de-nuit-milestone": {
+    "id": "armaf-club-de-nuit-milestone",
+    "brand": "Armaf",
+    "name": "Club de Nuit Milestone",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.64630.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.64630.jpg",
+    "fragrantica_id": 64630,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:39:47.622Z"
+  },
+  "apex-lattafa-fahad": {
+    "id": "apex-lattafa-fahad",
+    "brand": "Lattafa",
+    "name": "Fahad",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-07-25T162519.947.png?v=1784976928",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-07-25T162519.947.png?v=1784976928",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T12:32:39.633Z"
+  },
+  "st-9109": {
+    "id": "st-9109",
+    "brand": "Maison Alhambra",
+    "name": "Winsome",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.91702.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.91702.jpg",
+    "fragrantica_id": 91702,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:40.344Z"
+  },
+  "st-9180": {
+    "id": "st-9180",
+    "brand": "Fragrance World",
+    "name": "Barakkat Rouge 540",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.73295.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.73295.jpg",
+    "fragrantica_id": 73295,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:41.058Z"
+  },
+  "st-9129": {
+    "id": "st-9129",
+    "brand": "Armaf",
+    "name": "Odyssey Revolution",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.81966.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.81966.jpg",
+    "fragrantica_id": 81966,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:41.943Z"
+  },
+  "paris-corner-north-stag-quatre-iv": {
+    "id": "paris-corner-north-stag-quatre-iv",
+    "brand": "Paris Corner",
+    "name": "North Stag Expressions IV QUATRE",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.90787.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.90787.jpg",
+    "fragrantica_id": 90787,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:32:42.577Z"
+  },
+  "lattafa-yara-elixir": {
+    "id": "lattafa-yara-elixir",
+    "brand": "Lattafa",
+    "name": "Yara Elixir",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/rn-image_picker_lib_temp_2303db40-50e6-4726-97a0-e8152f20249c.png?v=1765615222",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/rn-image_picker_lib_temp_2303db40-50e6-4726-97a0-e8152f20249c.png?v=1765615222",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T12:35:12.655Z"
+  },
+  "carolina-herrera-bad-boy-limited-edition": {
+    "id": "carolina-herrera-bad-boy-limited-edition",
+    "brand": "Carolina Herrera",
+    "name": "Bad Boy New York Edition",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.96602.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.96602.jpg",
+    "fragrantica_id": 96602,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:14.254Z"
+  },
+  "apex-naseem-parisoud": {
+    "id": "apex-naseem-parisoud",
+    "brand": "Naseem",
+    "name": "Paris Oud",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/QWERT_29.png?v=1782325525",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/QWERT_29.png?v=1782325525",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T12:35:15.439Z"
+  },
+  "albait-aldimashqi-aventus": {
+    "id": "albait-aldimashqi-aventus",
+    "brand": "Albait Aldimashqi",
+    "name": "Aventus",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-09-04T175529.624.png?v=1788524863",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-09-04T175529.624.png?v=1788524863",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T12:35:16.330Z"
+  },
+  "elizabeth-arden-5th-avenue-edp": {
+    "id": "elizabeth-arden-5th-avenue-edp",
+    "brand": "Elizabeth Arden",
+    "name": "5th Avenue",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.1008.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.1008.jpg",
+    "fragrantica_id": 1008,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:17.285Z"
+  },
+  "st-9205": {
+    "id": "st-9205",
+    "brand": "Khadlaj",
+    "name": "Mocha Latte",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.90781.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.90781.jpg",
+    "fragrantica_id": 90781,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:17.964Z"
+  },
+  "afnan-supremacy-incense": {
+    "id": "afnan-supremacy-incense",
+    "brand": "Afnan",
+    "name": "Supremacy Incense",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.61273.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.61273.jpg",
+    "fragrantica_id": 61273,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:19.170Z"
+  },
+  "rayhaan-aquatica": {
+    "id": "rayhaan-aquatica",
+    "brand": "Rayhaan",
+    "name": "Aquatica",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.94747.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.94747.jpg",
+    "fragrantica_id": 94747,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:20.437Z"
+  },
+  "apex-riiffs-seasonsdrift": {
+    "id": "apex-riiffs-seasonsdrift",
+    "brand": "Riiffs",
+    "name": "Seasons Drift",
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-07-07T163535.620.png?v=1783422400",
+    "image_large": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/WHIFFCULTURE-2026-07-07T163535.620.png?v=1783422400",
+    "fragrantica_id": null,
+    "source": "seller_cdn",
+    "updated_at": "2026-11-27T12:35:24.988Z"
+  },
+  "rasasi-shuhrah-pour-homme": {
+    "id": "rasasi-shuhrah-pour-homme",
+    "brand": "Rasasi",
+    "name": "Shuhrah Pour Homme",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.25776.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.25776.jpg",
+    "fragrantica_id": 25776,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:27.036Z"
+  },
+  "lattafa-raghba-wood-intense": {
+    "id": "lattafa-raghba-wood-intense",
+    "brand": "Lattafa",
+    "name": "Raghba Wood Intense",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.25732.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.25732.jpg",
+    "fragrantica_id": 25732,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:27.935Z"
+  },
+  "lattafa-adeeb": {
+    "id": "lattafa-adeeb",
+    "brand": "Lattafa",
+    "name": "Adeeb",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.60515.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.60515.jpg",
+    "fragrantica_id": 60515,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:29.384Z"
+  },
+  "rabanne-million-gold-for-her": {
+    "id": "rabanne-million-gold-for-her",
+    "brand": "Rabanne",
+    "name": "Million Gold For Her",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.99042.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.99042.jpg",
+    "fragrantica_id": 99042,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:30.232Z"
+  },
+  "armaf-magnificent-pour-femme": {
+    "id": "armaf-magnificent-pour-femme",
+    "brand": "Armaf",
+    "name": "Magnificent Pour Femme",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.84105.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.84105.jpg",
+    "fragrantica_id": 84105,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:31.321Z"
+  },
+  "paris-corner-north-stag-expressions-iii-trois": {
+    "id": "paris-corner-north-stag-expressions-iii-trois",
+    "brand": "Paris Corner",
+    "name": "North Stag Expressions III Trois",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.89814.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.89814.jpg",
+    "fragrantica_id": 89814,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:32.693Z"
+  },
+  "prada-luna-rossa-ocean-eau-de-parfum": {
+    "id": "prada-luna-rossa-ocean-eau-de-parfum",
+    "brand": "Prada",
+    "name": "Luna Rossa Ocean Eau de Parfum",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.84260.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.84260.jpg",
+    "fragrantica_id": 84260,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:33.572Z"
+  },
+  "st-9006": {
+    "id": "st-9006",
+    "brand": "Mykonos",
+    "name": "Glitch",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.89088.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.89088.jpg",
+    "fragrantica_id": 89088,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:34.372Z"
+  },
+  "kayali-utopia-vanilla-coco-21": {
+    "id": "kayali-utopia-vanilla-coco-21",
+    "brand": "Kayali",
+    "name": "Utopia Vanilla Coco | 21",
+    "image_url": "https://fimgs.net/mdimg/perfume/m.67364.jpg",
+    "image_large": "https://fimgs.net/mdimg/perfume-thumbs/375x500.67364.jpg",
+    "fragrantica_id": 67364,
+    "source": "fragrantica_cdn",
+    "updated_at": "2026-11-27T12:35:38.210Z"
+  }
+}
