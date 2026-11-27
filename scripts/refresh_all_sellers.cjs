@@ -289,6 +289,46 @@ function extractBottleMetadata(brandRaw, nameRaw, defaultCatalogSize) {
   return { volume: volume || 100, label, isMini, isTester, isPartial, hasExplicitVolume };
 }
 
+function extractBrandAndName(rawTitle, defaultBrandList) {
+  const t = (rawTitle || "").trim();
+  for (const b of defaultBrandList) {
+    const pattern = new RegExp('^' + b.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\s:-]+', 'i');
+    if (pattern.test(t)) {
+      return {
+        brand: b,
+        name: t.replace(pattern, '').trim()
+      };
+    }
+  }
+  return { brand: '', name: t };
+}
+
+const meBrandList = [
+  "Ahmed Al Maghribi", "Albait Aldimashqi", "Arabiyat Prestige", "Ard Al Zaafaran",
+  "Fragrance World", "French Avenue", "Gulf Orchid", "Ibrahim Al Qureshi", "Ibraheem Al Qurashi",
+  "Maison Alhambra", "Maison Asrar", "Paris Corner", "Pendora Scents", "Rue Broca",
+  "Swiss Arabian", "Titan Skinn", "Al Haramain", "Al Majed Oud", "Al Wataniah",
+  "Al Rehab", "Al Hambra", "Albait Niche", "Arabiyat", "Afnan", "Ajmal",
+  "Anfar", "Armaf", "Assaf", "Caneza", "Dumont", "Gissah", "Ibraq",
+  "Khadlaj", "Lattafa", "Laverne", "Mykonos", "Naseem", "Nusuk", "Rasasi",
+  "Rayhaan", "Reef", "Riiffs", "Riifs", "Riffs", "Zimaya", "Bujairami",
+  "Dkhoon", "Surrati", "Emir"
+].sort((a, b) => b.length - a.length);
+
+const designerBrandList = [
+  "Giorgio Armani", "Armani", "Azzaro", "Atkinson", "Atkinsons", "Bentley", "Burberry",
+  "Bvlgari", "Bulgari", "Calvin Klein", "Carolina Herrera", "Chanel",
+  "Chopard", "Davidoff", "Dior", "Christian Dior", "Diptyque", "Dolce & Gabbana",
+  "Dolce&Gabbana", "D&G", "Elie Saab", "Elizabeth Arden", "Essential Parfums",
+  "Givenchy", "Gucci", "Guerlain", "Hermes", "Hermès", "Hugo Boss", "Hugo", "Boss", "Issey Miyake",
+  "Jean Paul Gaultier", "JPG", "Kayali", "Lancome", "Lancôme", "Mancera",
+  "Marc Jacobs", "Missoni", "Montale", "Montblanc", "Mont Blanc", "Mugler",
+  "Narciso Rodriguez", "Nautica", "Paco Rabanne", "Rabanne", "Prada", "Ralph Lauren",
+  "Tom Ford", "Versace", "Viktor & Rolf", "Yves Saint Laurent", "YSL",
+  "Moschino", "Salvatore Ferragamo", "Ferragamo", "Cartier", "Kenzo", "Lacoste", "Coach",
+  "Jimmy Choo", "Dunhill", "Mercedes-Benz", "Mercedes Benz", "Guess", "Billie Eilish"
+].sort((a, b) => b.length - a.length);
+
 async function runMasterRefresh() {
   console.log("=========================================================");
   console.log("🚀 MASTER REFRESH: ALL 6 COMMUNITY SELLERS & RESOURCES");
@@ -518,6 +558,22 @@ async function runMasterRefresh() {
       shipping: AR_META.shipping_bnib,
       dispatch: AR_META.dispatch,
       decant_sizes: ["4ml", "8ml", "10ml", "20ml", "30ml"]
+    },
+    {
+      id: "scentverse",
+      seller_name: "ScentVerse",
+      type: "decant_and_bottle",
+      sheet_url_me_bnib: "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Middle%20Eastern%20BNIB",
+      sheet_url_designer_bnib: "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Designer%20BNIB",
+      sheet_url_testers: "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Testers%20",
+      sheet_url_decants: "https://docs.google.com/spreadsheets/d/1reDOBi8XBfdeh0kSmdg28f4qJgh_2lDpqnIWWL5cQYU/gviz/tq?tqx=out:csv&sheet=Decants",
+      whatsapp: "9971803392",
+      alt_whatsapp: "8905944638",
+      whatsapp_group: "https://chat.whatsapp.com/KpeVnpK6UyW2ys6DAp6JZv",
+      url: "https://scentverse.in",
+      shipping: "Free on ₹1,000+ (3+ decants) | ₹100 Flat below ₹1,000",
+      dispatch: "24-72 hrs",
+      decant_sizes: ["3ml", "5ml", "10ml", "30ml"]
     }
   ];
   fs.writeFileSync(sellerConfigPath, JSON.stringify(sellersList, null, 2), "utf-8");
@@ -763,7 +819,9 @@ async function runMasterRefresh() {
     sovereign_scents_bottles: 0,
     sovereign_scents_decants: 0,
     aromatic_rabbit_bottles: 0,
-    aromatic_rabbit_decants: 0
+    aromatic_rabbit_decants: 0,
+    scentverse_bottles: 0,
+    scentverse_decants: 0
   };
 
   let enrichedCount = 0;
@@ -1598,6 +1656,227 @@ async function runMasterRefresh() {
     console.error("  ❌ Error syncing Aromatic Rabbit:", err.message);
   }
 
+  // ==========================================
+  // SOURCE 8: SCENTVERSE (Middle Eastern BNIB, Designer BNIB, Testers & Decants)
+  // ==========================================
+  console.log("\n--- Syncing ScentVerse (ME BNIB, Designer BNIB, Testers & Decants) ---");
+  try {
+    const svSeller = sellersList.find(s => s.id === "scentverse");
+    if (!svSeller) {
+      console.warn("  ⚠ ScentVerse configuration not found in sellersList, skipping.");
+    } else {
+      // 1. Middle Eastern BNIB
+      try {
+        console.log("  ↳ Fetching ScentVerse Middle Eastern BNIB sheet...");
+        const meCsv = await fetchUrl(svSeller.sheet_url_me_bnib);
+        const meRows = parseCSV(meCsv);
+        let meCount = 0;
+        for (let rIdx = 1; rIdx < meRows.length; rIdx++) {
+          const row = meRows[rIdx];
+          const rawTitle = row[0]?.trim() || "";
+          const priceClean = (row[2] || "").replace(/[^\d]/g, "");
+          if (!rawTitle || !priceClean || rawTitle.toLowerCase().includes("perfume name")) continue;
+          const price = parseInt(priceClean, 10);
+          if (price < 400 || price > 50000) continue;
+
+          const { brand, name } = extractBrandAndName(rawTitle, meBrandList);
+          const matched = findBestMatch(brand || "Middle Eastern", name || rawTitle, "", { allowDesigner: false });
+          if (matched) {
+            const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
+            addBottleQuote(matched, {
+              seller_id: "scentverse",
+              seller_name: "ScentVerse",
+              raw_title: rawTitle,
+              price: price,
+              size: meta.label,
+              volume_ml: meta.volume,
+              whatsapp: svSeller.whatsapp,
+              shipping: svSeller.shipping,
+              dispatch: svSeller.dispatch,
+              is_partial: meta.isPartial,
+              is_tester: meta.isTester,
+              packaging_type: meta.isPartial ? 'Partial' : (meta.isTester ? 'Tester' : 'Retail Bottle'),
+              verified: true
+            });
+            stats.scentverse_bottles++;
+            meCount++;
+          }
+        }
+        console.log(`    ✓ Merged ${meCount} Middle Eastern BNIB bottles for ScentVerse`);
+      } catch (meErr) {
+        console.error("    ❌ Error syncing ScentVerse ME BNIB:", meErr.message);
+      }
+
+      // 2. Designer BNIB
+      try {
+        console.log("  ↳ Fetching ScentVerse Designer BNIB sheet...");
+        const desCsv = await fetchUrl(svSeller.sheet_url_designer_bnib);
+        const desRows = parseCSV(desCsv);
+        let desCount = 0;
+        for (let rIdx = 1; rIdx < desRows.length; rIdx++) {
+          const row = desRows[rIdx];
+          const rawTitle = row[0]?.trim() || "";
+          const priceClean = (row[1] || "").replace(/[^\d]/g, "");
+          if (!rawTitle || !priceClean || rawTitle.toLowerCase().includes("perfume name")) continue;
+          const price = parseInt(priceClean, 10);
+          if (price < 400 || price > 50000) continue;
+
+          let { brand, name } = extractBrandAndName(rawTitle, designerBrandList);
+          if (!brand) {
+            const lower = rawTitle.toLowerCase();
+            if (/1 million|invictus|phantom|fame|black xs/i.test(lower)) brand = "Rabanne";
+            else if (/acqua di gio|code|stronger with you|my way|si\b/i.test(lower)) brand = "Giorgio Armani";
+            else if (/sauvage|fahrenheit|dior homme|jadore|miss dior/i.test(lower)) brand = "Dior";
+            else if (/bleu de chanel|allure|coco mademoiselle|chance/i.test(lower)) brand = "Chanel";
+            else if (/le male|ultra male|le beau|scandal/i.test(lower)) brand = "Jean Paul Gaultier";
+            else if (/eros|dylan blue|eau fraiche|bright crystal/i.test(lower)) brand = "Versace";
+            else if (/bad boy|good girl|212/i.test(lower)) brand = "Carolina Herrera";
+            else if (/ysl y|la nuit|myslf|black opium|libre|mon paris/i.test(lower)) brand = "Yves Saint Laurent";
+            else if (/chrome|most wanted|wanted by night/i.test(lower)) brand = "Azzaro";
+            else if (/ck be|ck one|defy|obsession|eternity/i.test(lower)) brand = "Calvin Klein";
+            else if (/hugo|boss bottled|the scent/i.test(lower)) brand = "Hugo Boss";
+            else if (/montblanc legend|explorer/i.test(lower)) brand = "Montblanc";
+            else if (/light blue|the one/i.test(lower)) brand = "Dolce & Gabbana";
+            else if (/luna rossa/i.test(lower)) brand = "Prada";
+          }
+
+          const matched = findBestMatch(brand || "Designer", name || rawTitle, "", { allowDesigner: true });
+          if (matched) {
+            const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
+            addBottleQuote(matched, {
+              seller_id: "scentverse",
+              seller_name: "ScentVerse",
+              raw_title: rawTitle,
+              price: price,
+              size: meta.label,
+              volume_ml: meta.volume,
+              whatsapp: svSeller.whatsapp,
+              shipping: svSeller.shipping,
+              dispatch: svSeller.dispatch,
+              is_partial: meta.isPartial,
+              is_tester: meta.isTester,
+              packaging_type: meta.isPartial ? 'Partial' : (meta.isTester ? 'Tester' : 'Retail Bottle'),
+              verified: true
+            });
+            stats.scentverse_bottles++;
+            desCount++;
+          }
+        }
+        console.log(`    ✓ Merged ${desCount} Designer BNIB bottles for ScentVerse`);
+      } catch (desErr) {
+        console.error("    ❌ Error syncing ScentVerse Designer BNIB:", desErr.message);
+      }
+
+      // 3. Testers
+      try {
+        console.log("  ↳ Fetching ScentVerse Testers sheet...");
+        const testCsv = await fetchUrl(svSeller.sheet_url_testers);
+        const testRows = parseCSV(testCsv);
+        let testCount = 0;
+        for (let rIdx = 1; rIdx < testRows.length; rIdx++) {
+          const row = testRows[rIdx];
+          const rawTitle = row[0]?.trim() || "";
+          const priceClean = (row[1] || "").replace(/[^\d]/g, "");
+          if (!rawTitle || !priceClean || rawTitle.toLowerCase().includes("perfume name") || rawTitle.toLowerCase() === 'dm') continue;
+          const price = parseInt(priceClean, 10);
+          if (price < 400 || price > 50000) continue;
+
+          let { brand, name } = extractBrandAndName(rawTitle, [...designerBrandList, ...meBrandList]);
+          if (!brand) {
+            const lower = rawTitle.toLowerCase();
+            if (/1 million|invictus|phantom/i.test(lower)) brand = "Rabanne";
+            else if (/acqua di gio|stronger with you/i.test(lower)) brand = "Giorgio Armani";
+            else if (/212|bad boy|good girl/i.test(lower)) brand = "Carolina Herrera";
+            else if (/eros|dylan blue/i.test(lower)) brand = "Versace";
+            else if (/bleu de chanel|allure/i.test(lower)) brand = "Chanel";
+            else if (/sauvage/i.test(lower)) brand = "Dior";
+          }
+
+          const matched = findBestMatch(brand || "Designer", name || rawTitle, "", { allowDesigner: true });
+          if (matched) {
+            const meta = extractBottleMetadata(matched.brand, name || rawTitle, matched.bottle_size);
+            const testerSize = (row[2] && row[2].trim())
+              ? (row[2].trim().toLowerCase().includes('tester') ? row[2].trim() : `${row[2].trim()} Tester`)
+              : (meta.volume ? `${meta.volume}ml Tester` : 'Tester Bottle');
+            addBottleQuote(matched, {
+              seller_id: "scentverse",
+              seller_name: "ScentVerse",
+              raw_title: rawTitle,
+              price: price,
+              size: testerSize,
+              volume_ml: meta.volume || 100,
+              whatsapp: svSeller.whatsapp,
+              shipping: svSeller.shipping,
+              dispatch: svSeller.dispatch,
+              is_partial: false,
+              is_tester: true,
+              packaging_type: 'Tester',
+              verified: true
+            });
+            stats.scentverse_bottles++;
+            testCount++;
+          }
+        }
+        console.log(`    ✓ Merged ${testCount} Testers for ScentVerse`);
+      } catch (testErr) {
+        console.error("    ❌ Error syncing ScentVerse Testers:", testErr.message);
+      }
+
+      // 4. Decants
+      try {
+        console.log("  ↳ Fetching ScentVerse Decants sheet...");
+        const decCsv = await fetchUrl(svSeller.sheet_url_decants);
+        const decRows = parseCSV(decCsv);
+        let decCount = 0;
+        for (let rIdx = 1; rIdx < decRows.length; rIdx++) {
+          const row = decRows[rIdx];
+          const brandRaw = row[0]?.trim() || "";
+          const nameRaw = row[1]?.trim() || "";
+          const inspoRaw = row[2]?.trim() || "";
+          if (!brandRaw || !nameRaw || brandRaw.toLowerCase().includes("brand")) continue;
+
+          const p3 = parseInt((row[3] || "").replace(/[^\d]/g, ""), 10);
+          const p5 = parseInt((row[4] || "").replace(/[^\d]/g, ""), 10);
+          const p10 = parseInt((row[5] || "").replace(/[^\d]/g, ""), 10);
+          const p30 = parseInt((row[6] || "").replace(/[^\d]/g, ""), 10);
+
+          const decantSizes = {};
+          const decantPrices = [];
+          if (p3 > 0) { decantSizes["3ml"] = p3; decantPrices.push(p3); }
+          if (p5 > 0) { decantSizes["5ml"] = p5; decantPrices.push(p5); }
+          if (p10 > 0) { decantSizes["10ml"] = p10; decantPrices.push(p10); }
+          if (p30 > 0) { decantSizes["30ml"] = p30; decantPrices.push(p30); }
+
+          if (decantPrices.length === 0) continue;
+
+          const matched = findBestMatch(brandRaw, nameRaw, inspoRaw, { allowDesigner: true });
+          if (matched) {
+            addDecantQuote(matched, {
+              seller_id: "scentverse",
+              seller_name: "ScentVerse",
+              whatsapp: svSeller.whatsapp,
+              shipping: svSeller.shipping,
+              dispatch: svSeller.dispatch,
+              sizes: decantSizes,
+              lowest_price: Math.min(...decantPrices),
+              in_stock: true,
+              verified: true
+            });
+            stats.scentverse_decants++;
+            decCount++;
+          }
+        }
+        console.log(`    ✓ Merged ${decCount} Decants for ScentVerse`);
+      } catch (decErr) {
+        console.error("    ❌ Error syncing ScentVerse Decants:", decErr.message);
+      }
+
+      console.log(`  ✓ ScentVerse total synced: ${stats.scentverse_bottles} bottles & ${stats.scentverse_decants} decants`);
+    }
+  } catch (err) {
+    console.error("  ❌ Error in ScentVerse sync pipeline:", err.message);
+  }
+
   // Graceful fallback: If any seller has 0 quotes due to network/rate-limits, restore previous quotes
   const trackedSellers = [
     { id: "second_theory", name: "Second Theory" },
@@ -1610,7 +1889,8 @@ async function runMasterRefresh() {
     { id: "whiffculture", name: "Whiff Culture" },
     { id: "aar_fragrances", name: "AAR Fragrances" },
     { id: "sovereign_scents", name: "Sovereign Scents" },
-    { id: "aromatic_rabbit", name: "Aromatic Rabbit" }
+    { id: "aromatic_rabbit", name: "Aromatic Rabbit" },
+    { id: "scentverse", name: "ScentVerse" }
   ];
 
   trackedSellers.forEach(s => {
@@ -2108,7 +2388,7 @@ async function runMasterRefresh() {
       added_date: n.new_arrival_date || n.price_date,
       added_timestamp: n.new_arrival_timestamp || n.price_updated_at || null
     })),
-    sellers_active: 11,
+    sellers_active: 12,
     seller_breakdown: {
       second_theory: { name: "Second Theory", bottles: stats.second_theory, type: "Full Bottles" },
       fragfever: { name: "FragFever", bottles: stats.fragfever, type: "Full Bottles" },
@@ -2120,7 +2400,8 @@ async function runMasterRefresh() {
       aromatic_rabbit: { name: "Aromatic Rabbit", bottles: stats.aromatic_rabbit_bottles, decants: stats.aromatic_rabbit_decants, type: "Dual" },
       bluewings: { name: "Blue Wings Fragrances", bottles: stats.bluewings_bottles, decants: stats.bluewings_decants, type: "Dual" },
       whiffculture: { name: "Whiff Culture", bottles: stats.whiffculture_bottles, decants: stats.whiffculture_decants, type: "Dual" },
-      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" }
+      aar_fragrances: { name: "AAR Fragrances", bottles: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances')).length, type: "Full Bottles" },
+      scentverse: { name: "ScentVerse", bottles: stats.scentverse_bottles, decants: stats.scentverse_decants, type: "Dual" }
     }
   };
   try {
@@ -2155,7 +2436,8 @@ async function runMasterRefresh() {
         aromatic_rabbit: (stats.aromatic_rabbit_bottles || 0) + (stats.aromatic_rabbit_decants || 0),
         bluewings: (stats.bluewings_bottles || 0) + (stats.bluewings_decants || 0),
         whiffculture: (stats.whiffculture_bottles || 0) + (stats.whiffculture_decants || 0),
-        aar_fragrances: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances') || (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length
+        aar_fragrances: fragrances.filter(f => (f.community_sellers || []).some(s => s.seller_id === 'aar_fragrances') || (f.community_decants || []).some(d => d.seller_id === 'aar_fragrances')).length,
+        scentverse: (stats.scentverse_bottles || 0) + (stats.scentverse_decants || 0)
       },
       updated_at: new Date().toISOString()
     }], { onConflict: 'id' });
@@ -2215,6 +2497,7 @@ async function runMasterRefresh() {
   console.log(`  - Aromatic Rabbit: ${stats.aromatic_rabbit_bottles} bottles & ${stats.aromatic_rabbit_decants} decants`);
   console.log(`  - Blue Wings: ${stats.bluewings_bottles} bottles & ${stats.bluewings_decants} decants`);
   console.log(`  - Whiff Culture: ${stats.whiffculture_bottles} bottles & ${stats.whiffculture_decants} decants`);
+  console.log(`  - ScentVerse: ${stats.scentverse_bottles} bottles & ${stats.scentverse_decants} decants`);
   console.log("---------------------------------------------------------");
   console.log(`📉 PRICE DROP & CHANGE AUDIT:`);
   console.log(`  • Active Overall Best Drops (48h): ${refreshEvents.overall_price_drops.length}`);
