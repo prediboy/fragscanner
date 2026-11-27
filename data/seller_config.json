@@ -122,6 +122,7 @@
     "seller_name": "Whiff Culture",
     "type": "decant_and_bottle",
     "url": "https://www.whiffculture.com",
+    "api_url": "https://0dzeak-1m.myshopify.com/products.json",
     "whatsapp": "9811377357",
     "shipping": "Free Pan-India Delivery on orders above ₹1,499",
     "dispatch": "24-48 hrs",
@@ -129,6 +130,7 @@
       "5ml",
       "8ml",
       "10ml",
+      "20ml",
       "30ml"
     ]
   },
