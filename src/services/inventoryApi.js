@@ -264,7 +264,9 @@ export async function fetchInventoryPage({
 
       const scored = activeData.map(item => ({ item, score: scoreRelevance(item, tokens) }));
 
-      if (sortBy === 'price_desc') {
+      if (dealsOnly === 'drops') {
+        scored.sort((a, b) => (Number(b.item.price_change_percentage) || 0) - (Number(a.item.price_change_percentage) || 0));
+      } else if (sortBy === 'price_desc') {
         if (isDecantOnly) {
           scored.sort((a, b) => (getBestDecantRate(b.item)?.perMl || 0) - (getBestDecantRate(a.item)?.perMl || 0));
         } else {
@@ -320,8 +322,9 @@ export async function fetchInventoryPage({
       } else {
         // For general catalog browsing, sort and paginate directly in Postgres
         if (dealsOnly === 'drops' && sortBy !== 'price_desc' && sortBy !== 'rating') {
-          // Price Drops are strictly ordered by latest price drop date and time
+          // Price Drops are strictly ordered by percentage drop (highest % drop first)
           query = query
+            .order('price_change_percentage', { ascending: false, nullsFirst: false })
             .order('price_change_date', { ascending: false, nullsFirst: false })
             .order('price_change_time', { ascending: false, nullsFirst: false })
             .order('price_updated_at', { ascending: false, nullsFirst: false });
