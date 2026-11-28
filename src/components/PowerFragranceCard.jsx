@@ -240,7 +240,7 @@ export default function PowerFragranceCard({
     ? `${f.brand} ${f.name}`
     : (f?.name || '');
 
-  const bottleImg = f?.image_url || f?.notes?.image_url || f?.notes?.image_large || null;
+  const bottleImg = f?.image_data || f?.notes?.image_data || f?.image_url || f?.notes?.image_url || f?.notes?.image_large || null;
 
   if (!f || relevantQuotes.length === 0 || !primaryQuote) return null;
 
