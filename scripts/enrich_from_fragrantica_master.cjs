@@ -52,15 +52,15 @@ const stmtBrandPrefix = db.prepare('SELECT id, slug, brand, name, year, gender, 
 const stmtById = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE id = ? LIMIT 1');
 
 const BRAND_MAP = {
-  'lattafa': ['Lattafa Perfumes', 'Maison Alhambra'],
+  'lattafa': ['Lattafa Perfumes', 'Maison Alhambra', 'Asdaaf'],
   'al haramain': ['Al Haramain Perfumes', 'Orientica'],
   'paris corner': ['PARIS CORNER', 'Pendora Scents', 'Emir', 'Ministry of Oud', 'Killer Oud'],
-  'armaf': ['Armaf'],
+  'armaf': ['Armaf', 'Hamidi', 'Hamidi Oud & Perfumes', 'Oros'],
   'afnan': ['Afnan', 'Zimaya'],
   'rasasi': ['Rasasi'],
   'ajmal': ['Ajmal'],
   'fragrance world': ['Fragrance World', 'French Avenue', 'Fa Paris'],
-  'french avenue': ['French Avenue', 'Fragrance World'],
+  'french avenue': ['French Avenue', 'Aromatix X French Avenue', 'Fragrance World'],
   'ibrahim al qureshi': ['Ibrahim Al Qurashi', 'Ibraheem AlQurashi'],
   'ibrahim al qurashi': ['Ibrahim Al Qurashi', 'Ibraheem AlQurashi'],
   'khadlaj': ['Khadlaj Perfumes', 'Khadlaj'],
@@ -77,6 +77,7 @@ const BRAND_MAP = {
   'viktor & rolf': ['Viktor&Rolf', 'Viktor & Rolf'],
   'viktor rolf': ['Viktor&Rolf'],
   'rayhaan': ['Rayhaan'],
+  'guerlain': ['Guerlain'],
   'parfums de marly': ['Parfums de Marly'],
   'tom ford': ['Tom Ford'],
   'creed': ['Creed'],
@@ -91,24 +92,33 @@ const BRAND_MAP = {
 };
 
 function cleanStr(s) {
-  return (s || '').toLowerCase()
+  return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/extacy/g, 'extasy')
     .replace(/blu\b/g, 'blue')
+    .replace(/rifaqat/g, 'rifaaqat')
+    .replace(/immortel/g, 'immortal')
+    .replace(/maitre/g, 'matiere')
+    .replace(/tehebak/g, 'tehbak')
     .replace(/[^a-z0-9]/g, '')
     .trim();
 }
 
 function cleanBrand(b) {
-  let s = (b || '').trim().toLowerCase();
+  let s = (b || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
   s = s.replace(/\b(perfumes|parfums|paris|fragrances|dubai|london|milano)\b/gi, '').trim();
   return s;
 }
 
 function normalizeTitle(t) {
-  return (t || '').toLowerCase()
+  return (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/\b(emir|factory edition:?)\s*/gi, '')
     .replace(/\bno\.?\s*/gi, '')
     .replace(/extacy/g, 'extasy')
     .replace(/blu\b/g, 'blue')
+    .replace(/rifaqat/g, 'rifaaqat')
+    .replace(/immortel/g, 'immortal')
+    .replace(/maitre/g, 'matiere')
+    .replace(/tehebak/g, 'tehbak')
     .replace(/\b(pour homme|pour femme|for men|for women|men|women|edp|edt|eau de parfum|eau de toilette|parfum|extrait|cologne)\b/gi, '')
     .replace(/[^a-z0-9]/g, '')
     .trim();
@@ -127,7 +137,39 @@ const CANONICAL_OVERRIDES = {
   'lattafa-his-confession': 96866,
   'afnan-tribute-blue': 71174,
   'afnan-modest-une': 69256,
-  'creed-aventus': 9828
+  'creed-aventus': 9828,
+  'st-9240': 79930,
+  'st-9239': 99060,
+  'paris-corner-rifaqat': 99060,
+  'maison-alhambra-jean-lowe-maitre': 94060,
+  'st-9041': 83666,
+  'maison-alhambra-jean-lowe-immortel': 83666,
+  'st-9115': 79942,
+  'st-9101': 83311,
+  'st-9112': 92617,
+  'french-avenue-aromatix-royal-taboo': 99330,
+  'french-avenue-aromatix-carnal-desire': 99331,
+  'apex-frenchavenue-aromatixteasme': 117532,
+  'rasasi-hawas-eclat': 112708,
+  'rasasi-roohy-tehebak': 19686,
+  'rasasi-taa': 47932,
+  'rasasi-la-yuqawam': 19668,
+  'rasasi-la-yuqawam-pour-femme': 19669,
+  'armaf-opus-men': 50332,
+  'armaf-tag-uomo-rosso': 90407,
+  'armaf-tag-donna-colorata': 90408,
+  'armaf-infinity-silver': 98715,
+  'armaf-club-de-nuit-white-imperiale': 78474,
+  'armaf-club-de-nuit-precieux-1': 93272,
+  'guerlain-l-homme-ideal-eau-de-toilette': 25780,
+  'guerlain-l-homme-ideal-cologne': 30620,
+  'guerlain-l-homme-ideal-l-intense': 49416,
+  'guerlain-l-homme-ideal-extreme': 60284,
+  'guerlain-l-homme-ideal-platine-prive': 80691,
+  'guerlain-l-homme-ideal-parfum': 90803,
+  'paris-corner-emir-wild-tobacco': 113928,
+  'paris-corner-emir-just-bergamot': 113930,
+  'paris-corner-emir-frenetic-deliceuse': 109939
 };
 
 function findInMaster(item) {
