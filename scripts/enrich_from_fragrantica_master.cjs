@@ -33,23 +33,51 @@ if (fs.existsSync(envPath)) {
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 const DB_PATH = path.join(__dirname, '../data/fragrantica_master.sqlite');
+const GZ_PATH = path.join(__dirname, '../data/fragrantica_master.sqlite.gz');
 const CACHE_PATH = path.join(__dirname, '../data/perfume_images.json');
 
-if (!fs.existsSync(DB_PATH)) {
-  console.error(`❌ Master SQLite database not found at ${DB_PATH}`);
-  process.exit(1);
-}
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const db = new DatabaseSync(DB_PATH);
 
-// Ensure indexes
-db.exec('CREATE INDEX IF NOT EXISTS idx_perfumes_brand_nocase ON perfumes(brand COLLATE NOCASE)');
-db.exec('CREATE INDEX IF NOT EXISTS idx_perfumes_name_nocase ON perfumes(name COLLATE NOCASE)');
+let db = null;
+let stmtExact = null;
+let stmtBrandPrefix = null;
+let stmtById = null;
 
-const stmtExact = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE brand = ? COLLATE NOCASE AND name = ? COLLATE NOCASE LIMIT 1');
-const stmtBrandPrefix = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE brand LIKE ? COLLATE NOCASE LIMIT 1200');
-const stmtById = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE id = ? LIMIT 1');
+function ensureDb() {
+  if (db) return true;
+
+  if (!fs.existsSync(DB_PATH)) {
+    if (fs.existsSync(GZ_PATH)) {
+      console.log(`📦 Uncompressing ${GZ_PATH} to ${DB_PATH}...`);
+      try {
+        const zlib = require('zlib');
+        const input = fs.readFileSync(GZ_PATH);
+        const unzipped = zlib.gunzipSync(input);
+        fs.writeFileSync(DB_PATH, unzipped);
+        console.log(`✓ Master SQLite database ready (${(unzipped.length / 1024 / 1024).toFixed(1)} MB)!`);
+      } catch (err) {
+        console.warn(`⚠️ Failed to uncompress ${GZ_PATH}:`, err.message);
+        return false;
+      }
+    } else {
+      console.warn(`⚠️ Master Fragrantica SQLite database not found at ${DB_PATH} or ${GZ_PATH}.`);
+      return false;
+    }
+  }
+
+  try {
+    db = new DatabaseSync(DB_PATH);
+    db.exec('CREATE INDEX IF NOT EXISTS idx_perfumes_brand_nocase ON perfumes(brand COLLATE NOCASE)');
+    db.exec('CREATE INDEX IF NOT EXISTS idx_perfumes_name_nocase ON perfumes(name COLLATE NOCASE)');
+    stmtExact = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE brand = ? COLLATE NOCASE AND name = ? COLLATE NOCASE LIMIT 1');
+    stmtBrandPrefix = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE brand LIKE ? COLLATE NOCASE LIMIT 1200');
+    stmtById = db.prepare('SELECT id, slug, brand, name, year, gender, rating, votes, picture, thumbnail FROM perfumes WHERE id = ? LIMIT 1');
+    return true;
+  } catch (dbErr) {
+    console.warn(`⚠️ Error opening Master SQLite database:`, dbErr.message);
+    return false;
+  }
+}
 
 const BRAND_MAP = {
   'lattafa': ['Lattafa Perfumes', 'Maison Alhambra', 'Asdaaf'],
@@ -173,6 +201,8 @@ const CANONICAL_OVERRIDES = {
 };
 
 function findInMaster(item) {
+  if (!ensureDb()) return null;
+
   if (CANONICAL_OVERRIDES[item.id]) {
     const row = stmtById.get(CANONICAL_OVERRIDES[item.id]);
     if (row) return row;
@@ -441,7 +471,10 @@ async function main(opts = {}) {
   } catch (err) {
     console.error('Fatal error during Fragrantica master enrichment:', err);
   } finally {
-    try { db.close(); } catch (e) {}
+    if (db) {
+      try { db.close(); } catch (e) {}
+      db = null;
+    }
   }
 }
 

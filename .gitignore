@@ -28,4 +28,5 @@ data/flankers/
 *.csv
 *.xlsx
 *.sqlite
+!data/fragrantica_master.sqlite.gz
 data/fragrantica_*.csv
