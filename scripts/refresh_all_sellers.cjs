@@ -2590,6 +2590,17 @@ async function runMasterRefresh() {
       console.log(`     ↳ Price: ₹${p.community_price} (${p.community_bottle_size}) by ${p.lowest_seller}`);
     });
   }
+
+  // STAGE 7: In-Database Fragrantica Picture & URL Enrichment Pipeline
+  console.log("\n=========================================================");
+  console.log("🌸 STAGE 7: IN-DATABASE FRAGRANTICA PICTURE & URL ENRICHMENT");
+  console.log("=========================================================");
+  try {
+    const { runFragranticaEnrichment } = require("./enrich_from_fragrantica_master.cjs");
+    await runFragranticaEnrichment({ limit: Infinity });
+  } catch (enrichErr) {
+    console.warn("  [Enrichment Warning]:", enrichErr.message);
+  }
 }
 
 runMasterRefresh().catch(err => {
