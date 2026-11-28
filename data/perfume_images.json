@@ -24601,5 +24601,15 @@
     "image_large": "https://fimgs.net/mdimg/perfume/375x500.110554.jpg",
     "source": "fragrantica_in_db_base64",
     "updated_at": "2026-11-28T07:45:41.200Z"
+  },
+  "rasasi-hawas-boa": {
+    "id": "rasasi-hawas-boa",
+    "brand": "Rasasi",
+    "name": "Hawas Boa",
+    "fragrantica_id": null,
+    "fragrantica_url": null,
+    "image_url": "https://cdn.shopify.com/s/files/1/0890/1073/3424/files/rn-image_picker_lib_temp_a1489a27-168b-48ca-901e-ec05b9a7800d_300x.png",
+    "source": "whiffculture_cdn_base64",
+    "updated_at": "2026-11-28T07:50:20.599Z"
   }
 }
