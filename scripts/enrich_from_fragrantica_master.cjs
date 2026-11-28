@@ -11,7 +11,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { DatabaseSync } = require('node:sqlite');
+let DatabaseSync = null;
+try {
+  DatabaseSync = require('node:sqlite').DatabaseSync;
+} catch (e) {
+  // Handled in ensureDb
+}
 const { createClient } = require('@supabase/supabase-js');
 
 // Auto-load .env
@@ -45,6 +50,11 @@ let stmtById = null;
 
 function ensureDb() {
   if (db) return true;
+
+  if (!DatabaseSync) {
+    console.warn(`⚠️ node:sqlite is not supported in this Node environment (${process.version}). Skipping master DB lookups.`);
+    return false;
+  }
 
   if (!fs.existsSync(DB_PATH)) {
     if (fs.existsSync(GZ_PATH)) {
@@ -346,6 +356,12 @@ async function main(opts = {}) {
     page++;
   }
   console.log(`  Total catalog fragrances loaded: ${catalog.length}\n`);
+
+  // Check database availability
+  if (!ensureDb()) {
+    console.warn('⚠️ Master SQLite database unavailable. Skipping in-database picture enrichment in this run.');
+    return;
+  }
 
   // Filter items needing in-db image or fragrantica_url
   const pending = catalog.filter(f => {
