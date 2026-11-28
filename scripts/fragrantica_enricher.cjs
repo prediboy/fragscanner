@@ -818,6 +818,9 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         if (masterMatch) {
           const imgUrl = `https://fimgs.net/mdimg/perfume/m.${masterMatch.id}.jpg`;
           base64Image = await downloadAsBase64(imgUrl);
+          if (!base64Image) {
+            base64Image = await downloadAsBase64(`https://fimgs.net/mdimg/perfume/375x500.${masterMatch.id}.jpg`);
+          }
         }
       } catch (mErr) {
         console.warn('  [Master Match Warning]:', mErr.message);
@@ -851,10 +854,10 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
         name: canonicalName,
         brand: brandClean,
         collection: 'Classic Collection',
-        rating_value: nf.rating_value || 4.3,
-        rating_count: nf.rating_count || 350,
+        rating_value: (masterMatch && masterMatch.rating) ? Math.round(masterMatch.rating * 100) / 100 : (nf.rating_value || 4.3),
+        rating_count: (masterMatch && masterMatch.votes) ? masterMatch.votes : (nf.rating_count || 350),
         gender: nf.gender || 'Unisex',
-        release_year: nf.release_year || new Date().getFullYear(),
+        release_year: (masterMatch && masterMatch.year) ? masterMatch.year : (nf.release_year || new Date().getFullYear()),
         concentration: nf.concentration || 'Eau de Parfum',
         primary_season: nf.primary_season || 'Fall',
         dna_inspiration: nf.clone_inspiration || 'Original Creation',
