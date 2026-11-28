@@ -209,11 +209,34 @@ function findInMaster(item) {
       }
     }
 
-    if (nameClean.length >= 5) {
-      for (const c of candidates) {
-        const cClean = cleanStr(c.name);
-        if (cClean.includes(nameClean) || nameClean.includes(cClean)) return c;
+    // 4. Flanker-aware token scoring (prioritizes distinguishing flanker keywords)
+    const inputWords = (item.name || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length >= 3);
+    const lastWord = inputWords[inputWords.length - 1];
+    let bestCandidate = null;
+    let maxScore = 0;
+
+    for (const c of candidates) {
+      const cWords = (c.name || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length >= 3);
+      let score = 0;
+      if (lastWord && cWords.includes(lastWord)) score += 50;
+
+      let matchedTokens = 0;
+      for (const w of inputWords) {
+        if (cWords.includes(w)) {
+          score += 15;
+          matchedTokens++;
+        }
       }
+      score -= Math.abs(cWords.length - inputWords.length) * 2;
+
+      if (matchedTokens >= Math.min(2, inputWords.length) && score > maxScore) {
+        maxScore = score;
+        bestCandidate = c;
+      }
+    }
+
+    if (bestCandidate && maxScore >= 30) {
+      return bestCandidate;
     }
   }
 
