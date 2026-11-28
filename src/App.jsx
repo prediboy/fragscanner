@@ -352,8 +352,12 @@ export default function App() {
           
           {/* Logo & Platform Title */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={resetAllFilters}>
-            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 flex items-center justify-center font-bold text-sm shadow-sm font-mono">
-              FS
+            <div className="w-10 h-10 rounded-xl bg-slate-900/5 dark:bg-zinc-800/60 border border-slate-200/80 dark:border-zinc-700/60 flex items-center justify-center shadow-xs overflow-hidden p-1 transition-transform hover:scale-105">
+              <img 
+                src="/favicon.png" 
+                alt="FragSeeker Icon" 
+                className="w-full h-full object-contain filter drop-shadow-xs"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">
