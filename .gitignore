@@ -27,3 +27,5 @@ data/refresh_logs/
 data/flankers/
 *.csv
 *.xlsx
+*.sqlite
+data/fragrantica_*.csv

@@ -576,10 +576,10 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
         {/* Header Bar */}
         <div className="p-6 border-b border-slate-800 bg-[#131d31] flex items-start justify-between gap-4">
           <div className="flex items-start gap-4 min-w-0">
-            {(fragrance.image_url || fragrance.notes?.image_large || fragrance.notes?.image_url) && (
+            {(fragrance.image_data || fragrance.notes?.image_data || fragrance.image_url || fragrance.notes?.image_large || fragrance.notes?.image_url) && (
               <div className="w-16 h-20 sm:w-20 sm:h-24 rounded-2xl bg-[#0b1322] border border-slate-700/80 p-1.5 flex items-center justify-center shrink-0 overflow-hidden shadow-md">
                 <img
-                  src={fragrance.image_url || fragrance.notes?.image_large || fragrance.notes?.image_url}
+                  src={fragrance.image_data || fragrance.notes?.image_data || fragrance.image_url || fragrance.notes?.image_large || fragrance.notes?.image_url}
                   alt={fragrance.name}
                   className="w-full h-full object-contain"
                   onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
@@ -617,6 +617,20 @@ export default function FragranceDetailModal({ fragrance, allFragrances = [], on
                   <>
                     <span>•</span>
                     <span>Released {fragrance.release_year}</span>
+                  </>
+                )}
+                {fragrance.notes?.fragrantica_url && (
+                  <>
+                    <span>•</span>
+                    <a
+                      href={fragrance.notes.fragrantica_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-400 hover:text-amber-300 underline underline-offset-2 inline-flex items-center gap-0.5 font-medium transition-colors"
+                      title="Open on Fragrantica"
+                    >
+                      Fragrantica ↗
+                    </a>
                   </>
                 )}
               </div>
