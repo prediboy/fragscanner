@@ -641,17 +641,41 @@ async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, ca
       const embeddingText = `${brandClean} ${canonicalName}. An authentic release from ${brandClean}. Inspiration: ${nf.clone_inspiration || 'Original Creation'}. Accords: ${accordsList.map(a => a.name).join(', ')}`;
       const reviewEmbedding = await generateGeminiEmbedding(embeddingText);
 
+      // Check authentic Fragrantica master database
+      let masterMatch = null;
+      let base64Image = null;
+      try {
+        const { findInMaster, downloadAsBase64 } = require('./enrich_from_fragrantica_master.cjs');
+        masterMatch = findInMaster({ id: cleanId, brand: brandClean, name: canonicalName });
+        if (masterMatch) {
+          const imgUrl = `https://fimgs.net/mdimg/perfume/m.${masterMatch.id}.jpg`;
+          base64Image = await downloadAsBase64(imgUrl);
+        }
+      } catch (mErr) {
+        console.warn('  [Master Match Warning]:', mErr.message);
+      }
+
       const idMatch = (nf.fragrantica_url || '').match(/-(\d+)\.html/);
-      const fragId = idMatch ? parseInt(idMatch[1], 10) : null;
+      const fragId = masterMatch ? masterMatch.id : (idMatch ? parseInt(idMatch[1], 10) : null);
+      const fragUrl = masterMatch ? `https://www.fragrantica.com/perfume/${masterMatch.slug}-${masterMatch.id}.html` : (nf.fragrantica_url || null);
+
       const notesObj = {
         top: nf.notes?.top || [],
         middle: nf.notes?.middle || [],
         base: nf.notes?.base || [],
         ...(fragId ? {
+          image_data: base64Image, // STORED DIRECTLY IN DB!
           image_url: `https://fimgs.net/mdimg/perfume/m.${fragId}.jpg`,
-          image_large: `https://fimgs.net/mdimg/perfume-thumbs/375x500.${fragId}.jpg`,
-          fragrantica_id: fragId
-        } : {})
+          image_large: `https://fimgs.net/mdimg/perfume/375x500.${fragId}.jpg`,
+          fragrantica_id: fragId,
+          fragrantica_url: fragUrl,
+          needs_image_refresh: !base64Image,
+          image_status: base64Image ? 'enriched' : 'to_be_refreshed_from_fragrantica'
+        } : {
+          needs_image_refresh: true,
+          image_status: 'to_be_refreshed_from_fragrantica',
+          fetch_target: 'fragrantica'
+        })
       };
 
       const newPerfume = {

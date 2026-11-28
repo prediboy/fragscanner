@@ -250,10 +250,10 @@ async function mapConcurrent(items, concurrency, fn) {
   return results;
 }
 
-async function main() {
+async function main(opts = {}) {
   const args = process.argv.slice(2);
-  let limit = Infinity;
-  let force = false;
+  let limit = opts.limit !== undefined ? opts.limit : Infinity;
+  let force = opts.force !== undefined ? opts.force : false;
 
   for (const a of args) {
     if (a.startsWith('--limit=')) limit = parseInt(a.split('=')[1], 10);
@@ -266,8 +266,9 @@ async function main() {
   console.log(`   Corpus: 140,228 Fragrantica records | Limit: ${limit === Infinity ? 'ALL' : limit} | Force: ${force}`);
   console.log('================================================================\n');
 
-  let cache = {};
-  if (fs.existsSync(CACHE_PATH)) {
+  try {
+    let cache = {};
+    if (fs.existsSync(CACHE_PATH)) {
     try { cache = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8')); } catch (e) {}
   }
 
@@ -350,7 +351,9 @@ async function main() {
         image_url: imgThumbnail,
         image_large: imgLarge,
         picture: imgLarge,
-        thumbnail: imgThumbnail
+        thumbnail: imgThumbnail,
+        needs_image_refresh: false,
+        image_status: 'enriched'
       };
 
       const payload = {
@@ -412,10 +415,22 @@ async function main() {
     console.log(`\n[3/3] No updates to commit.`);
   }
 
-  db.close();
+  } catch (err) {
+    console.error('Fatal error during Fragrantica master enrichment:', err);
+  } finally {
+    try { db.close(); } catch (e) {}
+  }
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+module.exports = {
+  runFragranticaEnrichment: main,
+  findInMaster,
+  downloadAsBase64
+};
+
+if (require.main === module) {
+  main().catch(err => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+  });
+}
