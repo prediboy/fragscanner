@@ -162,59 +162,13 @@ function normalizeTitle(t) {
     .trim();
 }
 
-// Canonical ID overrides for known tricky items
-const CANONICAL_OVERRIDES = {
-  'rasasi-daarej-pour-homme': 19688,
-  'armaf-club-de-nuit-milestone': 64104,
-  'rasasi-fattan-pour-homme': 53484,
-  'rasasi-hawas': 46890,
-  'afnan-9-pm': 65521,
-  'lattafa-khamrah': 75805,
-  'armaf-club-de-nuit-intense-man': 34696,
-  'lattafa-khamrah-qahwa': 88175,
-  'lattafa-his-confession': 96866,
-  'afnan-tribute-blue': 71174,
-  'afnan-modest-une': 69256,
-  'creed-aventus': 9828,
-  'st-9240': 79930,
-  'st-9239': 99060,
-  'paris-corner-rifaqat': 99060,
-  'maison-alhambra-jean-lowe-maitre': 94060,
-  'st-9041': 83666,
-  'maison-alhambra-jean-lowe-immortel': 83666,
-  'st-9115': 79942,
-  'st-9101': 83311,
-  'st-9112': 92617,
-  'french-avenue-aromatix-royal-taboo': 99330,
-  'french-avenue-aromatix-carnal-desire': 99331,
-  'apex-frenchavenue-aromatixteasme': 117532,
-  'rasasi-hawas-eclat': 112708,
-  'rasasi-roohy-tehebak': 19686,
-  'rasasi-taa': 47932,
-  'rasasi-la-yuqawam': 19668,
-  'rasasi-la-yuqawam-pour-femme': 19669,
-  'armaf-opus-men': 50332,
-  'armaf-tag-uomo-rosso': 90407,
-  'armaf-tag-donna-colorata': 90408,
-  'armaf-infinity-silver': 98715,
-  'armaf-club-de-nuit-white-imperiale': 78474,
-  'armaf-club-de-nuit-precieux-1': 93272,
-  'guerlain-l-homme-ideal-eau-de-toilette': 25780,
-  'guerlain-l-homme-ideal-cologne': 30620,
-  'guerlain-l-homme-ideal-l-intense': 49416,
-  'guerlain-l-homme-ideal-extreme': 60284,
-  'guerlain-l-homme-ideal-platine-prive': 80691,
-  'guerlain-l-homme-ideal-parfum': 90803,
-  'paris-corner-emir-wild-tobacco': 113928,
-  'paris-corner-emir-just-bergamot': 113930,
-  'paris-corner-emir-frenetic-deliceuse': 109939
-};
-
 function findInMaster(item) {
   if (!ensureDb()) return null;
 
-  if (CANONICAL_OVERRIDES[item.id]) {
-    const row = stmtById.get(CANONICAL_OVERRIDES[item.id]);
+  // Direct lookup if explicit fragrantica_id is already known
+  const fid = item.fragrantica_id || (item.notes && item.notes.fragrantica_id);
+  if (fid) {
+    const row = stmtById.get(fid);
     if (row) return row;
   }
 
