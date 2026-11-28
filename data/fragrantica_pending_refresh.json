@@ -1,0 +1,3258 @@
+[
+  {
+    "id": "albait-aldimashqi-alexandria-ii",
+    "brand": "Albait Aldimashqi",
+    "name": "Alexandria II",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-specialamouageoutlands",
+    "brand": "Albait Aldimashqi",
+    "name": "Special Amouage Outlands",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-frenchavenue-venon",
+    "brand": "French Avenue",
+    "name": "Venon",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-braziliantobacco",
+    "brand": "Ibraq",
+    "name": "Brazilian Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-whiteregentdiamond",
+    "brand": "Ibraq",
+    "name": "White Regent Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9204",
+    "brand": "Khadlaj",
+    "name": "Cafe Latte",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ard-al-khaleej-sheikh-zayed-blue",
+    "brand": "Ard Al Khaleej",
+    "name": "Sheikh Zayed Blue",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-bluediamondaqua",
+    "brand": "Ibraq",
+    "name": "Blue Diamond Aqua",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-allurehommesportsuperleggera",
+    "brand": "Albait Aldimashqi",
+    "name": "Allure homme sport super leggera",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-superman",
+    "brand": "Armaf",
+    "name": "Superman",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-khadlaj-zayaangali",
+    "brand": "Khadlaj",
+    "name": "Zayaan Gali",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyatprestige-qissatalnajahnedavi",
+    "brand": "Arabiyat Prestige",
+    "name": "Qissat Al Najah Nedavi",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-powder",
+    "brand": "Ibraq",
+    "name": "Musk Powder",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-blueberrymusk",
+    "brand": "Ibraq",
+    "name": "Blueberry Musk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9206",
+    "brand": "Khadlaj",
+    "name": "Vanilla Dunes EDP",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "hugo-boss-the-scent-parfum-edition-for-him",
+    "brand": "Hugo Boss",
+    "name": "The Scent Parfum Edition for Him",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-miqaaat",
+    "brand": "Naseem",
+    "name": "Miqaaat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-jamaican-tobacco",
+    "brand": "Ibraq",
+    "name": "Jamaican Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "afnan-his-highness-black",
+    "brand": "Afnan",
+    "name": "His Highness Black",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-ocean-whisper",
+    "brand": "Ibraq",
+    "name": "Ocean Whisper",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-sea-breeze",
+    "brand": "Ibraq",
+    "name": "Sea Breeze",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-erba-pura",
+    "brand": "Albait Aldimashqi",
+    "name": "Erba Pura",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-declaration",
+    "brand": "Albait Aldimashqi",
+    "name": "Declaration",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-elysium-pour-homme",
+    "brand": "Albait Aldimashqi",
+    "name": "Elysium Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-dastoor-lil-nissa",
+    "brand": "French Avenue",
+    "name": "Dastoor Lil Nissa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-guilty-parfum",
+    "brand": "Albait Aldimashqi",
+    "name": "Guilty Parfum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-l-nuit",
+    "brand": "Albait Aldimashqi",
+    "name": "L'Nuit",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-afnan-mysticbouquet",
+    "brand": "Afnan",
+    "name": "Mystic Bouquet",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-noble",
+    "brand": "Rayhaan",
+    "name": "Rayhaan Noble",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ahmedalmaghribi-lathani",
+    "brand": "Ahmed Al Maghribi",
+    "name": "Lathani",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-prisca",
+    "brand": "Caneza",
+    "name": "Prisca",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-rooh-al-rooh-silver",
+    "brand": "Lattafa",
+    "name": "Rooh Al Rooh Silver",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-hamidi-addiction-intense",
+    "brand": "Armaf",
+    "name": "Hamidi Addiction Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-acquadigio",
+    "brand": "Albait Aldimashqi",
+    "name": "Acqua di gio",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ajmal-oud-musk",
+    "brand": "Ajmal",
+    "name": "Oud Musk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "arabiyat-prestige-al-dahab",
+    "brand": "Arabiyat Prestige",
+    "name": "Al Dahab",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-tobacco-myth",
+    "brand": "Fragrance World",
+    "name": "Tobacco Myth",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "al-wataniah-serpentine-noir",
+    "brand": "Al Wataniah",
+    "name": "Serpentine Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-muskalqamar",
+    "brand": "Ibraq",
+    "name": "Musk Al Qamar",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-spanishtobacco",
+    "brand": "Ibraq",
+    "name": "Spanish Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-apple-brandy",
+    "brand": "Albait Aldimashqi",
+    "name": "Apple Brandy",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-bad-boy-cobalt-electrique",
+    "brand": "Albait Aldimashqi",
+    "name": "Bad Boy Cobalt Electrique",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-gentlemen-reserve-prive",
+    "brand": "Albait Aldimashqi",
+    "name": "Gentlemen Reserve Prive",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-homme-intense",
+    "brand": "Albait Aldimashqi",
+    "name": "Homme Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-madhaldhahab",
+    "brand": "Arabiyat",
+    "name": "Madh al Dhahab",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-invictus-platinum",
+    "brand": "Albait Aldimashqi",
+    "name": "Invictus Platinum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-myself-men",
+    "brand": "Albait Aldimashqi",
+    "name": "Myself Men",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-divine-oud",
+    "brand": "Lattafa",
+    "name": "Divine Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyatprestige-ariz",
+    "brand": "Arabiyat Prestige",
+    "name": "Ariz",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-niche-tam-dao",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Tam Dao",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-noir-amber",
+    "brand": "Albait Aldimashqi",
+    "name": "Noir Amber",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-paradox",
+    "brand": "Albait Aldimashqi",
+    "name": "Paradox",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-sauvage",
+    "brand": "Albait Aldimashqi",
+    "name": "Sauvage",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-the-one-men",
+    "brand": "Albait Aldimashqi",
+    "name": "The One Men",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-pentagram",
+    "brand": "Scentedelic",
+    "name": "Pentagram",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "alezz-oud-hersh-zero-degree-celsius",
+    "brand": "Alezz Oud",
+    "name": "Hersh Zero Degree Celsius",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-shk-3",
+    "brand": "Armaf",
+    "name": "SHK 3",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-afnan-stardust",
+    "brand": "Afnan",
+    "name": "Stardust",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-sultan",
+    "brand": "Caneza",
+    "name": "Sultan",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-hypnotic",
+    "brand": "Caneza",
+    "name": "Hypnotic",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-candlelightindecember",
+    "brand": "Naseem",
+    "name": "Candle Light In December",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ajmal-miskrijali",
+    "brand": "Ajmal",
+    "name": "Misk Rijali",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-leen",
+    "brand": "Naseem",
+    "name": "Leen",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-bleudechanellexclusif",
+    "brand": "Albait Aldimashqi",
+    "name": "Bleu de chanel l'exclusif",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-silvermountainwater",
+    "brand": "Albait Aldimashqi",
+    "name": "Silver Mountain water",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-specialamouagepurpose",
+    "brand": "Albait Aldimashqi",
+    "name": "Special Amouage Purpose",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-specialoudispahan",
+    "brand": "Albait Aldimashqi",
+    "name": "Special Oud Ispahan",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-theicebetweenus",
+    "brand": "Naseem",
+    "name": "The Ice Between Us",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-ysly",
+    "brand": "Albait Aldimashqi",
+    "name": "Ysl Y Edp",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rayhaan-noctourno",
+    "brand": "Rayhaan",
+    "name": "Noctourno",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-alrehab-frenchcoffee",
+    "brand": "Al Rehab",
+    "name": "French coffee",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "al-majed-oud-prestige-black",
+    "brand": "Al Majed Oud",
+    "name": "Prestige Black",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-la-nuit",
+    "brand": "Albait Aldimashqi",
+    "name": "La Nuit",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-le-beau-man",
+    "brand": "Albait Aldimashqi",
+    "name": "Le Beau Man",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-ameeralhubgold",
+    "brand": "Arabiyat",
+    "name": "Ameer Al Hub Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-riiffs-priveblue",
+    "brand": "Riiffs",
+    "name": "Prive Blue",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-lostinwoods",
+    "brand": "Naseem",
+    "name": "Lost In Woods",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-prestigemarasi",
+    "brand": "Arabiyat",
+    "name": "Prestige Marasi",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-poison-girl",
+    "brand": "Albait Aldimashqi",
+    "name": "Poison Girl",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dunhill-pure",
+    "brand": "Dunhill",
+    "name": "Pure",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-riviera-sunset",
+    "brand": "Ibraq",
+    "name": "Riviera Sunset",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dkny-dkny-nectar-love",
+    "brand": "DKNY",
+    "name": "DKNY Nectar Love",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-scandal-pour-man",
+    "brand": "Albait Aldimashqi",
+    "name": "Scandal Pour Man",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-chasing-waves",
+    "brand": "Ibraq",
+    "name": "Chasing Waves",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-le-sel-d-issey",
+    "brand": "Albait Aldimashqi",
+    "name": "Le Sel D'Issey",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-frenchavenue-aromatixmagnitq",
+    "brand": "French Avenue",
+    "name": "Aromatix Magnitq",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-al-fajr",
+    "brand": "Ibraq",
+    "name": "Musk Al Fajr",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-dastoor-lil-rijal",
+    "brand": "French Avenue",
+    "name": "Dastoor Lil Rijal",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-frenchtobacco",
+    "brand": "Ibraq",
+    "name": "French Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-lean-dissey-noir-amber",
+    "brand": "Albait Aldimashqi",
+    "name": "Lean Dissey Noir Amber",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-muskkashmir",
+    "brand": "Ibraq",
+    "name": "Musk Kashmir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-vicunalthr",
+    "brand": "Ibraq",
+    "name": "Vicuna LTHR",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ruebroca-theoremmatrix",
+    "brand": "Rue Broca",
+    "name": "Theorem Matrix",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "mykonos-nautilus",
+    "brand": "Mykonos",
+    "name": "Nautilus",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-nude-coral-diamond",
+    "brand": "Ibraq",
+    "name": "Nude Coral Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-vulcan-beiu",
+    "brand": "French Avenue",
+    "name": "Vulcan Beiu",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibrahim-al-qurashi-malayan",
+    "brand": "Ibrahim Al Qurashi",
+    "name": "Malayan",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dunhill-51-3-n",
+    "brand": "Dunhill",
+    "name": "51.3 N",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-armaf-3100",
+    "brand": "Armaf",
+    "name": "3100",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-black-carbon-diamond",
+    "brand": "Ibraq",
+    "name": "Black Carbon Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rasasi-fawar",
+    "brand": "Rasasi",
+    "name": "Fawar",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-divin-musk",
+    "brand": "Fragrance World",
+    "name": "Divin Musk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-mocha-blend",
+    "brand": "Caneza",
+    "name": "Mocha Blend",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rayhaan-amazonica",
+    "brand": "Rayhaan",
+    "name": "Amazonica",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-equilibrium-aqua",
+    "brand": "Scentedelic",
+    "name": "Equilibrium Aqua",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-rouge-tobacco",
+    "brand": "Fragrance World",
+    "name": "Rouge Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-shk-2",
+    "brand": "Armaf",
+    "name": "SHK 2",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9094",
+    "brand": "Ajmal",
+    "name": "Wave",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "trussardi-uomo-intense",
+    "brand": "Trussardi",
+    "name": "Uomo Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "arabiyat-prestige-al-faris",
+    "brand": "Arabiyat Prestige",
+    "name": "Al Faris",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9252",
+    "brand": "Rasasi",
+    "name": "La yuqawam all variants",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-stronger-with-you-tobacco",
+    "brand": "Albait Aldimashqi",
+    "name": "Stronger with you tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "hugo-boss-the-scent-magnetic-for-him",
+    "brand": "Hugo Boss",
+    "name": "The Scent Magnetic for Him",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-elite-pour-homme",
+    "brand": "Armaf",
+    "name": "Elite Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-spicebombextreme",
+    "brand": "Albait Aldimashqi",
+    "name": "Spicebomb extreme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "khadlaj-epoque-artistique",
+    "brand": "Khadlaj",
+    "name": "Epoque Artistique",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-batman",
+    "brand": "Armaf",
+    "name": "Batman",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-specialtfombreleather",
+    "brand": "Albait Aldimashqi",
+    "name": "Special TF Ombre Leather",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9114",
+    "brand": "Maison Alhambra",
+    "name": "Lovely Cherrie",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-guinea",
+    "brand": "Lattafa",
+    "name": "Guinea",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-odyssey-mega-2023",
+    "brand": "Armaf",
+    "name": "Odyssey Mega 2023",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-cullinandiamondiris",
+    "brand": "Ibraq",
+    "name": "Cullinan Diamond Iris",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-oros-sacre-bleu",
+    "brand": "Armaf",
+    "name": "Oros Sacre Bleu",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-rooh-al-rooh-gold",
+    "brand": "Lattafa",
+    "name": "Rooh Al Rooh Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-al-shams",
+    "brand": "Ibraq",
+    "name": "Musk Al Shams",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-pink-diamond-sakura",
+    "brand": "Ibraq",
+    "name": "Pink Diamond Sakura",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "al-wataniah-kayaan-midnight",
+    "brand": "Al Wataniah",
+    "name": "Kayaan Midnight",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9221",
+    "brand": "Lattafa",
+    "name": "Kingdom Men",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-oud-vanille",
+    "brand": "Paris Corner",
+    "name": "Emir Oud & Vanille",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-oud-essence",
+    "brand": "Caneza",
+    "name": "Oud Essence",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "afnan-mukhallat-abiyad",
+    "brand": "Afnan",
+    "name": "Mukhallat Abiyad",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dunhill-egyptian-smoke",
+    "brand": "Dunhill",
+    "name": "Egyptian Smoke",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-equinox",
+    "brand": "Rayhaan",
+    "name": "Equinox",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-autobiography-supreme-gold",
+    "brand": "Paris Corner",
+    "name": "Autobiography Supreme Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "laverne-amber-royal",
+    "brand": "Laverne",
+    "name": "Amber Royal",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-tag-uomo-nero",
+    "brand": "Armaf",
+    "name": "Tag Uomo Nero",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-al-athal-lattafa",
+    "brand": "Lattafa",
+    "name": "Al Athal Lattafa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9192",
+    "brand": "Ibrahim Al Qureshi",
+    "name": "Black Incense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-naseemmidnightsaphire",
+    "brand": "Naseem",
+    "name": "Naseem Midnight Saphire",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-blackdiamondincense",
+    "brand": "Ibraq",
+    "name": "Black Diamond Incense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-naseemnoir",
+    "brand": "Naseem",
+    "name": "Naseem Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-sea-breeze",
+    "brand": "French Avenue",
+    "name": "Sea Breeze",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "bujairami-dubai-crush",
+    "brand": "Bujairami",
+    "name": "Dubai Crush",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-abaq-pomegranate",
+    "brand": "Ibraq",
+    "name": "Musk Abaq Pomegranate",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-mezmar-women",
+    "brand": "Caneza",
+    "name": "Mezmar Women",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-specialpdmalthair",
+    "brand": "Albait Aldimashqi",
+    "name": "Special PDM Althair",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-f-edp",
+    "brand": "Fragrance World",
+    "name": "F EDP",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9170",
+    "brand": "Fragrance World",
+    "name": "Genuine Man vany Reserve",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyatprestige-kohlluminious",
+    "brand": "Arabiyat Prestige",
+    "name": "Kohl Luminious",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-attar-al-mohabba-for-her",
+    "brand": "Rasasi",
+    "name": "Attar Al Mohabba For Her",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-farfasha",
+    "brand": "Lattafa",
+    "name": "Asdaaf Farfasha",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-iconic-oudh",
+    "brand": "Lattafa",
+    "name": "Iconic Oudh",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-solaris",
+    "brand": "Rayhaan",
+    "name": "Solaris",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-greek-tobacco",
+    "brand": "Ibraq",
+    "name": "Greek Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-under-the-influence-9-0",
+    "brand": "Scentedelic",
+    "name": "Under The Influence 9.0",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dkhoon-oud",
+    "brand": "Dkhoon",
+    "name": "Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-emir-voux-elegante",
+    "brand": "Fragrance World",
+    "name": "Emir Voux Elegante",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "floris-london-leather-oud",
+    "brand": "Floris London",
+    "name": "Leather Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-swissarabian-shagafoud",
+    "brand": "Swiss Arabian",
+    "name": "Shagaf Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-barakkat-amber-eve",
+    "brand": "Fragrance World",
+    "name": "Barakkat Amber Eve",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-wrappedincashmere",
+    "brand": "Naseem",
+    "name": "Wrapped In Cashmere",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-mark-victor-eau-de-flora",
+    "brand": "Fragrance World",
+    "name": "Mark & Victor Eau De Flora",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-cardamom",
+    "brand": "Ibraq",
+    "name": "Musk Cardamom",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-faqat-lil-nissa",
+    "brand": "Rasasi",
+    "name": "Faqat Lil Nissa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-destinations",
+    "brand": "Fragrance World",
+    "name": "Destinations",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-juicy-shrooms-4-0",
+    "brand": "Scentedelic",
+    "name": "Juicy Shrooms 4.0",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-shk-1",
+    "brand": "Armaf",
+    "name": "SHK 1",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "laverne-dare-7am",
+    "brand": "Laverne",
+    "name": "Dare 7AM",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rayhaan-pharoah",
+    "brand": "Rayhaan",
+    "name": "Pharoah",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-bombshell",
+    "brand": "Albait Aldimashqi",
+    "name": "Bombshell",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-qasamat-morhaf",
+    "brand": "Rasasi",
+    "name": "Qasamat Morhaf",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-eros",
+    "brand": "Albait Aldimashqi",
+    "name": "Eros",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-emerald-soul-diamond",
+    "brand": "Ibraq",
+    "name": "Emerald Soul Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-emir-luer-d-espoir-noche",
+    "brand": "Fragrance World",
+    "name": "Emir Luer D'Espoir Noche",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-purple-heart-diamond",
+    "brand": "Ibraq",
+    "name": "Purple Heart Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-red-coral",
+    "brand": "Ibraq",
+    "name": "Red Coral",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "oman-luxury-royal-incense",
+    "brand": "Oman Luxury",
+    "name": "Royal Incense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-uomo",
+    "brand": "Caneza",
+    "name": "Uomo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "kilian-black-phantom",
+    "brand": "Kilian",
+    "name": "Black Phantom",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "naseem-french-vanilla",
+    "brand": "Naseem",
+    "name": "French Vanilla",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-autobiography-rich-leather",
+    "brand": "Paris Corner",
+    "name": "Autobiography Rich Leather",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-enchantment-blue-intense",
+    "brand": "Pendora Scents",
+    "name": "Enchantment Blue Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-khaltat-al-arabia-royal-blends-gold",
+    "brand": "Lattafa",
+    "name": "Khaltat Al Arabia Royal Blends Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-mafatin-prestige",
+    "brand": "Lattafa",
+    "name": "Mafatin Prestige",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-nasamaat",
+    "brand": "Lattafa",
+    "name": "Nasamaat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "hamidi-intense-silver",
+    "brand": "Hamidi",
+    "name": "Intense Silver",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "prada-candy-edp",
+    "brand": "Prada",
+    "name": "Candy EDP",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "khadlaj-oud-klassic",
+    "brand": "Khadlaj",
+    "name": "Oud Klassic",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-rave-now",
+    "brand": "Lattafa",
+    "name": "Rave Now",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9047",
+    "brand": "Assaf",
+    "name": "Frankel Aventus",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-rouat-ajial",
+    "brand": "Lattafa",
+    "name": "Rouat Ajial",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-pristine",
+    "brand": "Titan Skinn",
+    "name": "Pristine",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-femme-noir",
+    "brand": "Pendora Scents",
+    "name": "Femme Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-aureum",
+    "brand": "Rayhaan",
+    "name": "Aureum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "laverne-heritage-bakhur-150ml",
+    "brand": "Laverne",
+    "name": "Heritage Bakhur 150ML",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-leaders-choice",
+    "brand": "Pendora Scents",
+    "name": "Leaders Choice",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-california-sunshine",
+    "brand": "Scentedelic",
+    "name": "California Sunshine",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-trillium",
+    "brand": "Paris Corner",
+    "name": "Emir Trillium",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "nusuk-abrar",
+    "brand": "Nusuk",
+    "name": "Abrar",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "mancera-black-intensive-aoud",
+    "brand": "Mancera",
+    "name": "Black Intensive Aoud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-3-impressions",
+    "brand": "Pendora Scents",
+    "name": "3 Impressions",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "oman-luxury-caden",
+    "brand": "Oman Luxury",
+    "name": "Caden",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-velvet",
+    "brand": "Titan Skinn",
+    "name": "Velvet",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "mykonos-st-moritz",
+    "brand": "Mykonos",
+    "name": "St. Moritz",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "naseem-pink-eclat",
+    "brand": "Naseem",
+    "name": "Pink Eclat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "nusuk-mukhtalif-extrait",
+    "brand": "Nusuk",
+    "name": "Mukhtalif Extrait",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "nusuk-mayar",
+    "brand": "Nusuk",
+    "name": "Mayar",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-khadlaj-caflatte",
+    "brand": "Khadlaj",
+    "name": "Café Latte",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9079",
+    "brand": "Ahmed Al Maghribi",
+    "name": "Bin Sheikh",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-arabian-incense",
+    "brand": "Albait Aldimashqi",
+    "name": "Arabian Incense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-triumphant-sapphire",
+    "brand": "Paris Corner",
+    "name": "Emir The Triumphant Sapphire",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-timeless-4-1",
+    "brand": "Scentedelic",
+    "name": "Timeless 4.1",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "narciso-rodriguez-for-her-edp-intense",
+    "brand": "Narciso Rodriguez",
+    "name": "For Her Eau de Parfum Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-chiranjivi-instinct",
+    "brand": "Scentedelic",
+    "name": "Chiranjivi Instinct",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9172",
+    "brand": "Fragrance World",
+    "name": "Hartnell",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-noir-en-leather",
+    "brand": "Paris Corner",
+    "name": "Noir En Leather",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-casella-noir",
+    "brand": "Pendora Scents",
+    "name": "Casella Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-deja-vu-2-0",
+    "brand": "Scentedelic",
+    "name": "Deja Vu 2.0",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "nusuk-fahwa",
+    "brand": "Nusuk",
+    "name": "Fahwa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-club-de-nuit-overdose",
+    "brand": "Armaf",
+    "name": "Club de Nuit Overdose",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-acqua-di-gio-profondo",
+    "brand": "Albait Aldimashqi",
+    "name": "Acqua Di Gio Profondo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-pure-male",
+    "brand": "Pendora Scents",
+    "name": "Pure Male",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-prestigeladida",
+    "brand": "Arabiyat",
+    "name": "Prestige La-Di-Da",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-psychoactive-vetiver",
+    "brand": "Scentedelic",
+    "name": "Psychoactive Vetiver",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-flavia-vanilla-tobacco",
+    "brand": "Armaf",
+    "name": "Flavia Vanilla & Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-monster-black-oud",
+    "brand": "Paris Corner",
+    "name": "Monster Black Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "police-extreme-edt",
+    "brand": "Police",
+    "name": "Extreme EDT",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-valor-chaos-in-the-ocean",
+    "brand": "Paris Corner",
+    "name": "Emir Valor Chaos in the Ocean",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-allusion-eau-d-sport-extreme",
+    "brand": "Pendora Scents",
+    "name": "Allusion Eau D'Sport Extreme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-classico-de-profondo",
+    "brand": "Pendora Scents",
+    "name": "Classico De Profondo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-eau-blue",
+    "brand": "Pendora Scents",
+    "name": "Eau Blue Parfum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-solar-spectrum-3-0",
+    "brand": "Scentedelic",
+    "name": "Solar Spectrum 3.0",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-intensity-pour-homme",
+    "brand": "Pendora Scents",
+    "name": "Intensity Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-thrill",
+    "brand": "Pendora Scents",
+    "name": "Thrill",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9227",
+    "brand": "Lattafa",
+    "name": "Nebris",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-arabian-tobacco",
+    "brand": "Ibraq",
+    "name": "Arabian Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-grey-pearl-diamond",
+    "brand": "Ibraq",
+    "name": "Grey Pearl Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-sunrise-melody",
+    "brand": "Ibraq",
+    "name": "Sunrise Melody",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-nafaeis-al-shaghaf-maraya-pour-homme",
+    "brand": "Rasasi",
+    "name": "Nafaeis Al Shaghaf Maraya Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-mexicantobacco",
+    "brand": "Ibraq",
+    "name": "Mexican Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-dubaichoclate",
+    "brand": "Arabiyat",
+    "name": "Dubai Choclate",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-bluetiful",
+    "brand": "Rayhaan",
+    "name": "Bluetiful",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-astral-traveller",
+    "brand": "Scentedelic",
+    "name": "Astral Traveller",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9261",
+    "brand": "Reef",
+    "name": "Bluest",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9176",
+    "brand": "Fragrance World",
+    "name": "Sedley",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-bruce-wayne-2021",
+    "brand": "Armaf",
+    "name": "Bruce Wayne 2021",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-pentagram-3-0",
+    "brand": "Scentedelic",
+    "name": "Pentagram 3.0",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-under-the-influence-2",
+    "brand": "Scentedelic",
+    "name": "Under The Influence 2",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9097",
+    "brand": "Ajmal",
+    "name": "Chapter series",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9109",
+    "brand": "Maison Alhambra",
+    "name": "Winsome",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-giorgio-black-special-edition",
+    "brand": "Fragrance World",
+    "name": "Giorgio Black Special Edition",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "swiss-arabian-shaghaf-royale",
+    "brand": "Swiss Arabian",
+    "name": "Shaghaf Royale",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-shuhrah-boisee",
+    "brand": "Rasasi",
+    "name": "Shuhrah Boisee",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9124",
+    "brand": "Armaf",
+    "name": "Soul",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-waaw",
+    "brand": "Rasasi",
+    "name": "Waaw",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-corvus",
+    "brand": "Rayhaan",
+    "name": "Corvus",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9160",
+    "brand": "Assaf",
+    "name": "Risk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ahmed-al-maghribi-sapphire",
+    "brand": "Ahmed Al Maghribi",
+    "name": "Sapphire",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9189",
+    "brand": "Ibrahim Al Qureshi",
+    "name": "Blue Aqua Diamond",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-dark-absolu",
+    "brand": "Rayhaan",
+    "name": "Dark Absolu",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9212",
+    "brand": "Lattafa",
+    "name": "Badee Al Oud Noble Lush",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "mykonos-pistachio-milk",
+    "brand": "Mykonos",
+    "name": "Pistachio Milk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "elie-saab-l-homme-edt",
+    "brand": "Elie Saab",
+    "name": "Elie Saab L'Eau Parfumée",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-tales-oslo",
+    "brand": "Titan Skinn",
+    "name": "Tales Oslo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-tales-rio",
+    "brand": "Titan Skinn",
+    "name": "Tales Rio",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-waves-of-sound",
+    "brand": "Scentedelic",
+    "name": "Waves of Sound",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-skinn-extreme",
+    "brand": "Titan Skinn",
+    "name": "Skinn Extreme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dkny-be-tempted-eau-so-blush",
+    "brand": "DKNY",
+    "name": "Be Tempted Eau So Blush",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9048",
+    "brand": "Assaf",
+    "name": "Frankel Imagination",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9062",
+    "brand": "Afnan",
+    "name": "Discovery kit",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "valentino-born-in-roma-eau-de-parfum-intense",
+    "brand": "Valentino",
+    "name": "Born In Roma Eau de Parfum Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-f-le-parfum",
+    "brand": "Fragrance World",
+    "name": "F Le Parfum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9102",
+    "brand": "Maison Alhambra",
+    "name": "Avent",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-oudh-al-abiyad",
+    "brand": "Rasasi",
+    "name": "Oudh Al Abiyad",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-dream-catcher",
+    "brand": "Paris Corner",
+    "name": "Dream Catcher",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-another-loop-in-the-wall",
+    "brand": "Scentedelic",
+    "name": "Another Loop in the Wall",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "mykonos-moroccan-sunset",
+    "brand": "Mykonos",
+    "name": "Moroccan Sunset",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9130",
+    "brand": "Armaf",
+    "name": "Odyssey Coffee Toffee",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-roses-vanille",
+    "brand": "Paris Corner",
+    "name": "Emir Roses & Vanille",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "maison-alhambra-jean-lowe-fraiche",
+    "brand": "Maison Alhambra",
+    "name": "Jean Lowe Fraiche",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-goddess",
+    "brand": "Albait Aldimashqi",
+    "name": "Goddess",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-musk-hareer",
+    "brand": "Rasasi",
+    "name": "Musk Hareer",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9225",
+    "brand": "Lattafa",
+    "name": "Mashrabaya",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-mademoiselle",
+    "brand": "Albait Aldimashqi",
+    "name": "Mademoiselle",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "valentino-donna-born-in-roma-extradose",
+    "brand": "Valentino",
+    "name": "Donna Born In Roma Extradose",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-enchanted-trend",
+    "brand": "Armaf",
+    "name": "Enchanted Trend",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-flower-power",
+    "brand": "Scentedelic",
+    "name": "Flower Power",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-seen",
+    "brand": "Rasasi",
+    "name": "Seen",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-megaron",
+    "brand": "Pendora Scents",
+    "name": "Megaron",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-leather-essence",
+    "brand": "Pendora Scents",
+    "name": "Leather Essence",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "kilian-straight-to-heaven",
+    "brand": "Kilian",
+    "name": "Straight to Heaven",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-barcode-autograph",
+    "brand": "Paris Corner",
+    "name": "Barcode Autograph",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-musk-naqaya",
+    "brand": "Rasasi",
+    "name": "Musk Naqaya",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-sweettreatsinbed",
+    "brand": "Naseem",
+    "name": "Sweet Treats In Bed",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-special",
+    "brand": "Ibraq",
+    "name": "Musk Special",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-chanteur",
+    "brand": "Pendora Scents",
+    "name": "Chanteur",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-black-optra",
+    "brand": "Pendora Scents",
+    "name": "Black Optra",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-tales-ibiza",
+    "brand": "Titan Skinn",
+    "name": "Tales Ibiza",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9288",
+    "brand": "Riiffs",
+    "name": "Inspiro man",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-code-absolu",
+    "brand": "Albait Aldimashqi",
+    "name": "Code Absolu",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "al-rehab-choco-musk",
+    "brand": "Al Rehab",
+    "name": "Choco Musk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-hundred-silent-ways",
+    "brand": "Albait Aldimashqi",
+    "name": "Hundred Silent Ways",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-enchanted-club",
+    "brand": "Armaf",
+    "name": "Enchanted Club",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-niche-santal-33",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Santal 33",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "nusuk-amber-oud",
+    "brand": "Nusuk",
+    "name": "Amber Oud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-gentlemenreserve",
+    "brand": "Albait Aldimashqi",
+    "name": "Gentlemen Reserve",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-sauvageelixir",
+    "brand": "Albait Aldimashqi",
+    "name": "Sauvage Elixir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-legion",
+    "brand": "Pendora Scents",
+    "name": "Legion",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-bleu-noir-edp",
+    "brand": "Albait Aldimashqi",
+    "name": "Bleu Noir EDP",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-niche-wood-sage-and-sea",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Wood Sage and Sea",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-themostwanted",
+    "brand": "Albait Aldimashqi",
+    "name": "The Most wanted parfum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "narciso-rodriguez-musc-noir-for-her",
+    "brand": "Narciso Rodriguez",
+    "name": "For Her Musc Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-lattafa-beyondprecious",
+    "brand": "Lattafa",
+    "name": "Beyond Precious",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-rehlat",
+    "brand": "Lattafa",
+    "name": "Rehlat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-lattafa-givemegourmandmallowmadness",
+    "brand": "Lattafa",
+    "name": "Give Me Gourmand- Mallow Madness",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-alwataniah-kayanclassic",
+    "brand": "Al Wataniah",
+    "name": "Kayan Classic",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-luban",
+    "brand": "Ibraq",
+    "name": "Musk Luban",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "scentedelic-as-long-as-it-burns",
+    "brand": "Scentedelic",
+    "name": "As Long As It Burns",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9095",
+    "brand": "Ajmal",
+    "name": "Evoke Gold Edition",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-raspberrymusk",
+    "brand": "Ibraq",
+    "name": "Raspberry Musk",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-miss-blooming-bouquet",
+    "brand": "Albait Aldimashqi",
+    "name": "Miss Blooming Bouquet",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-al-layl",
+    "brand": "Ibraq",
+    "name": "Musk Al Layl",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "khadlaj-fursan-velvet",
+    "brand": "Khadlaj",
+    "name": "Fursan Velvet",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9116",
+    "brand": "Maison Alhambra",
+    "name": "Opulence leather",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-arabiyat-malikatalhubgold",
+    "brand": "Arabiyat",
+    "name": "Malikat Al Hub Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-barcode-signature",
+    "brand": "Paris Corner",
+    "name": "Barcode Signature",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9110",
+    "brand": "Maison Alhambra",
+    "name": "Torro",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-blend-afgano",
+    "brand": "Paris Corner",
+    "name": "Blend Afgano",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "united-colors-of-benetton-united-dreams-men-go-far",
+    "brand": "United Colors of Benetton",
+    "name": "United Dreams Men Go Far",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibrahim-al-qurashi-masai",
+    "brand": "Ibrahim Al Qurashi",
+    "name": "Masai",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-emir-vertex",
+    "brand": "Paris Corner",
+    "name": "Emir Vertex",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-afternoon-swim",
+    "brand": "Albait Aldimashqi",
+    "name": "Afternoon Swim",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-chanel-no-5",
+    "brand": "Albait Aldimashqi",
+    "name": "Chanel No 5",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-hacivat",
+    "brand": "Albait Aldimashqi",
+    "name": "Hacivat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "artisan-perfumery-arabian-incense",
+    "brand": "Artisan Perfumery",
+    "name": "Arabian Incense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rasasi-fayiz",
+    "brand": "Rasasi",
+    "name": "Fayiz",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "guerlain-tobac-sahara",
+    "brand": "Guerlain",
+    "name": "Tobac Sahara",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-genuine-man-society",
+    "brand": "Fragrance World",
+    "name": "Genuine Man Society",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-bleu-de-chanel",
+    "brand": "Albait Aldimashqi",
+    "name": "Bleu de Chanel",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-khalta-lattafa",
+    "brand": "Lattafa",
+    "name": "Khalta Lattafa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-eau-de-blanc-pour-homme",
+    "brand": "Pendora Scents",
+    "name": "Eau De Blanc Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "matiere-premiere-encens-suave",
+    "brand": "Matiere Premiere",
+    "name": "Encens Suave",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-darklavender",
+    "brand": "Ibraq",
+    "name": "Dark Lavender",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ahmed-al-maghribi-jree",
+    "brand": "Ahmed Al Maghribi",
+    "name": "Jree",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-veracious-pour-homme",
+    "brand": "Pendora Scents",
+    "name": "Veracious Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-acqua-di-gio-profumo",
+    "brand": "Albait Aldimashqi",
+    "name": "Acqua Di Gio Profumo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9105",
+    "brand": "Maison Alhambra",
+    "name": "La Rouge Barouque",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "narciso-rodriguez-for-her-musc-noir-rose",
+    "brand": "Narciso Rodriguez",
+    "name": "For Her Musc Noir Rose",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-you-re-mine",
+    "brand": "Pendora Scents",
+    "name": "You're Mine",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rayhaan-vantage",
+    "brand": "Rayhaan",
+    "name": "Vantage",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9107",
+    "brand": "Maison Alhambra",
+    "name": "Black Orgami",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "chanel-le-lion-de-chanel",
+    "brand": "Chanel",
+    "name": "Le Lion de Chanel",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "fragrance-world-urban-man-amaze",
+    "brand": "Fragrance World",
+    "name": "Urban Man Amaze",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "ibraq-musk-sugar",
+    "brand": "Ibraq",
+    "name": "Musk Sugar",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "maison-alhambra-jubilant-rose",
+    "brand": "Maison Alhambra",
+    "name": "Jubilant Rose",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "oman-luxury-oud-aquilaria",
+    "brand": "Oman Luxury",
+    "name": "Oud Aquilaria",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-raa",
+    "brand": "Rasasi",
+    "name": "Raa'",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-opus-women",
+    "brand": "Armaf",
+    "name": "Opus Women",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9148",
+    "brand": "Arabiyat Prestige",
+    "name": "Lutfa Light in the Heart",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "maison-alhambra-smoky",
+    "brand": "Maison Alhambra",
+    "name": "Smoky",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "naseem-sublime-tonka",
+    "brand": "Naseem",
+    "name": "Sublime Tonka",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-kun-mukhtalifan-for-her",
+    "brand": "Rasasi",
+    "name": "Kun Mukhtalifan For Her",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-salwa",
+    "brand": "Lattafa",
+    "name": "Asdaaf Salwa",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-uomo-bold",
+    "brand": "Caneza",
+    "name": "Uomo Bold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9035",
+    "brand": "Arabiyat Prestige",
+    "name": "Mahd Al Dahab Extrait de Parfum",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-nicheombrenomad",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Ombre Nomad",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "burberry-brit-sheer-for-her-edt",
+    "brand": "Burberry",
+    "name": "Brit Sheer for Her",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-albaitaldimashqi-yslmyslf",
+    "brand": "Albait Aldimashqi",
+    "name": "Ysl Myslf",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-musk-sharqi",
+    "brand": "Rasasi",
+    "name": "Musk Sharqi",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-nabateih",
+    "brand": "French Avenue",
+    "name": "Nabateih",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-ramz-gold",
+    "brand": "Lattafa",
+    "name": "Ramz Gold",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rasasi-hawasog",
+    "brand": "Rasasi",
+    "name": "Hawas OG",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "gucci-gucci-sport-pour-homme",
+    "brand": "Gucci",
+    "name": "Gucci Sport Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-niche-oud-wood",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Oud Wood",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-stronger-with-you-amber",
+    "brand": "Albait Aldimashqi",
+    "name": "Stronger with you amber",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-uomo-intense",
+    "brand": "Albait Aldimashqi",
+    "name": "Uomo Intense",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-tasmeen",
+    "brand": "Rasasi",
+    "name": "Tasmeen",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rue-broca-penthouse-versailles",
+    "brand": "Rue Broca",
+    "name": "Penthouse Versailles",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-veleno",
+    "brand": "Caneza",
+    "name": "Veleno",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "afnan-faten-maroon",
+    "brand": "Afnan",
+    "name": "Faten Maroon",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-fabulous-noir",
+    "brand": "Pendora Scents",
+    "name": "Fabulous Noir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "french-avenue-azzure-aoud",
+    "brand": "French Avenue",
+    "name": "Azzure Aoud",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-niche-percival",
+    "brand": "Albait Aldimashqi",
+    "name": "Niche Percival",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-yazan",
+    "brand": "Rasasi",
+    "name": "Yazan",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-rasasi-dareez",
+    "brand": "Rasasi",
+    "name": "DAREEZ Extrait",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-armor-code-uomo",
+    "brand": "Pendora Scents",
+    "name": "Armor Code Uomo",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "st-9163",
+    "brand": "Arabiyat Prestige",
+    "name": "Aswad",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-platinum-egoiste",
+    "brand": "Albait Aldimashqi",
+    "name": "Platinum Egoiste",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-idyll",
+    "brand": "Pendora Scents",
+    "name": "Idyll",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "pendora-scents-brown-original",
+    "brand": "Pendora Scents",
+    "name": "Brown Original",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dkny-dkny-golden-delicious",
+    "brand": "DKNY",
+    "name": "DKNY Golden Delicious",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-1-million-elixir",
+    "brand": "Albait Aldimashqi",
+    "name": "1 Million Elixir",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-mezmar-men",
+    "brand": "Caneza",
+    "name": "Mezmar Men",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "rasasi-attar-al-mohabba-pour-homme",
+    "brand": "Rasasi",
+    "name": "Attar Al Mohabba Pour Homme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-naseemregent",
+    "brand": "Naseem",
+    "name": "Naseem Regent",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "lattafa-musk-al-aroos",
+    "brand": "Lattafa",
+    "name": "Musk Al Aroos",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-the-pride-of-armaf-white-pour-femme",
+    "brand": "Armaf",
+    "name": "The Pride Of Armaf White Pour Femme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "titan-skinn-tales-malaga",
+    "brand": "Titan Skinn",
+    "name": "Tales Malaga",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "caneza-cafe-vanilla",
+    "brand": "Caneza",
+    "name": "Café Vanilla",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-cubantobacco",
+    "brand": "Ibraq",
+    "name": "Cuban Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "armaf-elite-femme",
+    "brand": "Armaf",
+    "name": "Elite Femme",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "afnan-her-highness-red",
+    "brand": "Afnan",
+    "name": "Her Highness Red",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "dunhill-custom",
+    "brand": "Dunhill",
+    "name": "Custom",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-naseem-naseemwhiteeclat",
+    "brand": "Naseem",
+    "name": "Naseem White Eclat",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "albait-aldimashqi-aventus",
+    "brand": "Albait Aldimashqi",
+    "name": "Aventus",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "paris-corner-noir-d-arabie",
+    "brand": "Paris Corner",
+    "name": "Noir d'Arabie",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  },
+  {
+    "id": "apex-ibraq-dominicantobacco",
+    "brand": "Ibraq",
+    "name": "Dominican Tobacco",
+    "status": "to_be_refreshed_from_fragrantica",
+    "needs_image_refresh": true,
+    "refresh_requested_at": "2026-11-28T07:53:07.042Z"
+  }
+]
