@@ -400,7 +400,175 @@ CRITICAL DOMAIN RULES:
 async function enrichAndAddPerfume(brandRaw, nameRaw, price, size, sellerObj, candidates = []) {
   console.log(`\n🔍 [AI-Enrich] Uncataloged Listing Detected: "${brandRaw} ${nameRaw}" (₹${price}, ${size})`);
 
-  // 1. Fetch brand candidates if not passed in
+  // 1. FAST LOCAL RESOLUTION: Check 140,228 Fragrantica master database first!
+  try {
+    const { findInMaster, downloadAsBase64 } = require('./enrich_from_fragrantica_master.cjs');
+    const cleanSearchName = nameRaw.replace(/\b(\d+ml|retail|bottle|tester|edp|edt|extrait|parfum|bnib|spray)\b/gi, '').replace(/\s+/g, ' ').trim();
+    let masterMatch = findInMaster({ id: '', brand: brandRaw, name: nameRaw }) ||
+                      findInMaster({ id: '', brand: brandRaw, name: cleanSearchName });
+
+    if (!masterMatch) {
+      const parts = cleanSearchName.split(/\s+/);
+      if (parts.length > 2) {
+        const subName = parts[0] + ' ' + parts[parts.length - 1];
+        masterMatch = findInMaster({ id: '', brand: brandRaw, name: subName });
+      }
+    }
+
+    if (masterMatch) {
+      console.log(`   ✓ Instant Master Match found in 140k Fragrantica DB: [${masterMatch.brand} - ${masterMatch.name}] (ID: ${masterMatch.id})`);
+      const canonicalBrand = masterMatch.brand;
+      const canonicalName = masterMatch.name;
+      const canonicalId = (canonicalBrand + ' ' + canonicalName)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+
+      if (supabase) {
+        const { data: existingFrag } = await supabase
+          .from('fragrances')
+          .select('*')
+          .eq('id', canonicalId)
+          .maybeSingle();
+
+        const vol = parseInt(size, 10) || 100;
+        const isTester = /tester/i.test(size || '') || /tester/i.test(nameRaw);
+        const pkgType = isTester ? 'Tester' : 'Retail Bottle';
+        const label = size || (isTester ? `${vol}ml Tester` : `${vol}ml Retail Bottle`);
+        const todayDate = new Date().toISOString().split('T')[0];
+        const nowIso = new Date().toISOString();
+
+        if (existingFrag) {
+          console.log(`   ✓ Matched to existing canonical perfume: [${canonicalId}]. Attaching quote and learning alias.`);
+          const existingAliases = Array.isArray(existingFrag.aliases) ? existingFrag.aliases : [];
+          const rawClean = nameRaw.toLowerCase().trim();
+          if (!existingAliases.includes(rawClean)) existingAliases.push(rawClean);
+
+          const sellers = Array.isArray(existingFrag.community_sellers) ? existingFrag.community_sellers : [];
+          const existingSellerIdx = sellers.findIndex(s => s.seller_id === sellerObj.id && s.size === label);
+          if (existingSellerIdx >= 0) {
+            sellers[existingSellerIdx].price = price;
+          } else {
+            sellers.push({
+              seller_id: sellerObj.id,
+              seller_name: sellerObj.seller_name,
+              price,
+              size: label,
+              volume_ml: vol,
+              whatsapp: sellerObj.whatsapp,
+              shipping: sellerObj.shipping,
+              dispatch: sellerObj.dispatch,
+              is_tester: isTester,
+              packaging_type: pkgType,
+              verified: true
+            });
+          }
+          sellers.sort((a,b) => a.price - b.price);
+          const lowest = sellers[0]?.price || price;
+
+          await supabase.from('fragrances').update({
+            aliases: existingAliases,
+            community_sellers: sellers,
+            in_seller_stock: true,
+            community_price: lowest,
+            best_bottle_seller: sellers[0]?.seller_name || sellerObj.seller_name,
+            price_updated_at: nowIso
+          }).eq('id', canonicalId);
+
+          return existingFrag;
+        } else {
+          console.log(`   ✨ Creating NEW Canonical Entry from Master DB: "${canonicalBrand} - ${canonicalName}" [${canonicalId}]`);
+          const imgThumbnail = `https://fimgs.net/mdimg/perfume/m.${masterMatch.id}.jpg`;
+          const imgLarge = `https://fimgs.net/mdimg/perfume/375x500.${masterMatch.id}.jpg`;
+          const base64Data = await downloadAsBase64(imgThumbnail);
+
+          let top = [], middle = [], base = [], accords = [];
+          try { top = JSON.parse(masterMatch.top_notes || '[]'); } catch (e) {}
+          try { middle = JSON.parse(masterMatch.middle_notes || '[]'); } catch (e) {}
+          try { base = JSON.parse(masterMatch.base_notes || '[]'); } catch (e) {}
+          try {
+            const accRaw = JSON.parse(masterMatch.accords || '[]');
+            accords = accRaw.slice(0, 5).map((a, i) => ({
+              name: a.charAt(0).toUpperCase() + a.slice(1),
+              score: 95 - (i * 12),
+              color: '#10b981'
+            }));
+          } catch (e) {}
+
+          const newPerfume = {
+            id: canonicalId,
+            name: canonicalName,
+            brand: canonicalBrand,
+            collection: `${canonicalBrand} Collection`,
+            concentration: 'Eau de Parfum',
+            rating_value: Math.round((masterMatch.rating || 4.2) * 100) / 100,
+            rating_count: masterMatch.votes || 500,
+            release_year: masterMatch.year || new Date().getFullYear(),
+            gender: masterMatch.gender === 'female' ? 'Women' : (masterMatch.gender === 'male' ? 'Men' : 'Unisex'),
+            dna_type: 'Original Creation',
+            dna_inspiration: 'Original Creation',
+            description: `${canonicalBrand} ${canonicalName} is an authentic release cataloged on Fragrantica.`,
+            top_notes: top,
+            middle_notes: middle,
+            base_notes: base,
+            accords: accords,
+            notes: {
+              top,
+              middle,
+              base,
+              fragrantica_id: masterMatch.id,
+              fragrantica_url: `https://www.fragrantica.com/perfume/${masterMatch.slug}-${masterMatch.id}.html`,
+              image_data: base64Data,
+              image_url: imgThumbnail,
+              image_large: imgLarge,
+              needs_image_refresh: false,
+              image_status: 'enriched'
+            },
+            aliases: [nameRaw.toLowerCase().trim(), canonicalName.toLowerCase().trim(), `${canonicalBrand.toLowerCase()} ${canonicalName.toLowerCase()}`],
+            in_seller_stock: true,
+            community_price: price,
+            best_bottle_seller: sellerObj.seller_name,
+            price_updated_at: nowIso,
+            discovered_at: nowIso,
+            is_new_arrival: true,
+            new_arrival_date: todayDate,
+            community_sellers: [
+              {
+                seller_id: sellerObj.id,
+                seller_name: sellerObj.seller_name,
+                price,
+                size: label,
+                volume_ml: vol,
+                whatsapp: sellerObj.whatsapp,
+                shipping: sellerObj.shipping,
+                dispatch: sellerObj.dispatch,
+                is_tester: isTester,
+                packaging_type: pkgType,
+                verified: true
+              }
+            ],
+            price_history: [
+              {
+                date: todayDate,
+                price,
+                size: label,
+                seller: sellerObj.seller_name,
+                seller_id: sellerObj.id
+              }
+            ]
+          };
+
+          await supabase.from('fragrances').upsert([newPerfume], { onConflict: 'id' });
+          console.log(`   ✓ Saved new canonical perfume [${canonicalId}] to Supabase!`);
+          return newPerfume;
+        }
+      }
+    }
+  } catch (mErr) {
+    console.warn('  [Master DB Lookup Notice]:', mErr.message);
+  }
+
+  // 2. Fetch brand candidates if not passed in
   let brandCandidates = candidates || [];
   if (brandCandidates.length === 0 && supabase) {
     try {
